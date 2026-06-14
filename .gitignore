@@ -106,3 +106,41 @@ dist
 # OS files
 .DS_Store
 Thumbs.db
+
+# Local Python environments
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+
+# Local/generated working files
+tmp/
+
+# Downloaded icon datasets: keep manifests, metadata, and scripts in git;
+# keep bulk image/font/PDF assets out of git.
+icon_data/downloads/
+icon_data/iconsets/**/*.svg
+icon_data/iconsets/**/*.png
+icon_data/iconsets/**/*.jpg
+icon_data/iconsets/**/*.jpeg
+icon_data/iconsets/**/*.gif
+icon_data/iconsets/**/*.eps
+icon_data/iconsets/**/*.pdf
+icon_data/iconsets/**/*.ttf
+icon_data/iconsets/**/*.otf
+icon_data/iconsets/**/*.woff
+icon_data/iconsets/**/*.woff2
+icon_data/iconsets/**/*.eot
+icon_data/iconsets/**/*.ico
+icon_data/metadata/sha256sums.txt
+
+!icon_data/
+!icon_data/MANIFEST.md
+!icon_data/iconsets/
+!icon_data/iconsets/**/
+!icon_data/iconsets/**/README.md
+!icon_data/iconsets/**/LOCAL_SOURCE_NOTE.md
+!icon_data/iconsets/**/*.json
+!icon_data/iconsets/**/*.txt
+!icon_data/metadata/
+!icon_data/metadata/**/*.json

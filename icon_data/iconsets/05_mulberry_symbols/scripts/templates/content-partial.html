@@ -1,0 +1,73 @@
+<style>
+  html body {
+    padding: 0;
+    margin: 0;
+    font-family: sans-serif;
+  }
+
+  .container {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+
+  .category {
+    page-break-before: always;
+    break-before: always;
+  }
+
+  .icon {
+    width: 60px;
+    margin: 9px;
+    text-align: center;
+    page-break-inside: avoid;
+    break-inside: avoid;
+  }
+
+  .icon__svg {
+    width: 60px ;
+    height: 60px;
+    page-break-inside: inherit;
+    break-inside: inherit;
+  }
+
+  .icon__title {
+    font-size: 15px;
+    page-break-inside: inherit;
+    break-inside: inherit;
+  }
+
+  .permalink {
+    font-size: 10pt;
+    margin-left: 4px;
+    color: #666;
+    font-weight: bold;
+    vertical-align: middle;
+  }
+</style>
+<div>
+  {{#each categories}}
+  <h2 id="{{ this.anchor }}" class="category">
+    {{ @key }}
+    <a
+      href="#{{ this.anchor }}"
+      aria-label="Permalink for {{ @key }} category of mulberry symbols"
+      title="Permalink for {{ @key }} category of mulberry symbols"
+    >
+      <span class="permalink">§</span>
+    </a>
+  </h2>
+  <div class="container">
+    {{#each this.symbols}}
+    <div class="icon">
+      <img
+        class="icon__svg"
+        src="data:image/svg+xml;utf8,{{{ this.content }}}"
+        alt="{{ this.name }} symbol"
+      />
+      <div class="icon__title">{{ this.name }}</div>
+    </div>
+    {{/each}}
+  </div>
+  {{/each}}
+</div>

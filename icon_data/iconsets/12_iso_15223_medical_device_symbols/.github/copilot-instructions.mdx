@@ -1,0 +1,347 @@
+# Medical Device Symbols Package - Copilot Instructions
+
+## How This Package Works
+
+This is a medical device symbols package that provides internationally recognized medical device symbols as React components based on ISO 15223-1:2021.
+
+### Architecture Overview
+
+The package follows an automated generation approach where all React components are dynamically created from SVG files:
+
+1. **SVG Icons Storage**: All icons are stored as individual SVG files in `src/icons/`
+2. **Automated Generation**: A build script (`scripts/generate-index.js`) automatically generates the main export file
+3. **Component Creation**: Each SVG becomes a React component with proper TypeScript support
+4. **Build Process**: TypeScript compilation creates the final distributable package
+
+### File Structure
+
+```
+src/
+  icons/           # All SVG source files
+  index.tsx        # Auto-generated exports (DO NOT EDIT MANUALLY)
+scripts/
+  generate-index.js # Script that generates src/index.tsx
+lib/               # Compiled output (auto-generated)
+```
+
+### How to Add or Modify Icons
+
+1. **Adding New Icons**:
+
+   - Add new SVG files to `src/icons/` directory
+   - Use kebab-case naming (e.g., `new-symbol.svg`)
+   - Run `npm run generate` to regenerate components
+   - Run `npm run build` to compile
+
+2. **Modifying Existing Icons**:
+
+   - Edit the SVG file directly in `src/icons/`
+   - Run `npm run generate && npm run build`
+
+3. **Component Naming Convention**:
+   - File: `my-icon.svg` → Component: `MyIconIcon`
+   - File: `liquid-filter-with-pore-size.svg` → Component: `LiquidFilterWithPoreSizeIcon`
+   - **Best Practice**: Use descriptive kebab-case names instead of numbers to avoid awkward component names
+
+### Build Process
+
+The build process consists of:
+
+1. **Generation Step** (`npm run generate`):
+
+   - Scans `src/icons/` for all `.svg` files
+   - Extracts SVG content and viewBox
+   - Generates React components with proper TypeScript types
+   - Creates `src/index.tsx` with all exports
+
+2. **Compilation Step** (`tsc`):
+   - Compiles TypeScript to JavaScript
+   - Generates type definitions
+   - Outputs to `lib/` directory
+
+### Component Generation Script Details
+
+The `scripts/generate-index.js` script:
+
+- **Cleans SVG Content**: Removes XML declarations, comments, style tags
+- **Extracts ViewBox**: Preserves original viewBox for proper scaling
+- **Handles Edge Cases**: Prefixes components starting with numbers
+- **Creates Constants**: Generates `ICON_NAMES` object for programmatic access
+- **TypeScript Support**: Generates proper interfaces and types
+
+### Key Features
+
+1. **Automatic Exports**: All components are automatically exported
+2. **Type Safety**: Full TypeScript support with proper interfaces
+3. **Consistent API**: All components follow the same props interface
+4. **Performance**: Tree-shakeable exports for optimal bundle size
+5. **Maintainability**: Adding icons requires no code changes
+
+### Package Scripts
+
+- `npm run generate`: Regenerate src/index.tsx from SVG files
+- `npm run build`: Full build (generate + compile)
+- `npm run deploy:patch`: Patch version bump and publish
+
+### Important Notes
+
+- **Never manually edit `src/index.tsx`** - it's auto-generated
+- **Always run `npm run generate`** after adding/modifying SVG files
+- **SVG files must be valid** - the script doesn't validate SVG syntax
+- **Use descriptive kebab-case names** - avoid starting filenames with numbers
+- **Component names are derived from filenames** - use descriptive kebab-case names
+
+### TypeScript Interface
+
+All icon components extend this interface:
+
+```typescript
+interface IconProps extends React.SVGProps<SVGSVGElement> {
+  size?: number | string;
+}
+```
+
+### Usage Examples
+
+```tsx
+import { CautionIcon, ManufacturerIcon } from "medical-device-symbols";
+
+// Basic usage
+<CautionIcon />
+
+// With custom size
+<CautionIcon size={32} />
+
+// With custom styling
+<CautionIcon style={{ color: "red" }} />
+
+// All SVG props supported
+<CautionIcon fill="blue" onClick={handleClick} />
+```
+
+### Regulatory Compliance
+
+All symbols are based on ISO 15223-1:2021 and support:
+
+- EU MDR/IVDR compliance
+- FDA 21 CFR Part 801 requirements
+- International medical device regulations
+
+### Troubleshooting
+
+1. **Build Errors**: Usually caused by invalid SVG syntax or naming issues
+2. **Missing Components**: Ensure `npm run generate` was run after adding SVGs
+3. **TypeScript Errors**: Check that component names don't start with numbers (auto-prefixed with "Icon")
+4. **Size Issues**: Verify SVG viewBox is properly set in source files
+
+This automated approach ensures consistency, reduces maintenance overhead, and makes it easy to add new medical device symbols as they become available or required.
+
+### Testing
+
+```bash
+node test-icons.js     # Test all icon components
+cd examples && npm run node-extraction  # Test Node.js compatibility
+```
+
+### Publishing
+
+```bash
+npm run deploy:patch   # Patch version bump + publish
+npm run deploy:minor   # Minor version bump + publish
+npm run deploy:major   # Major version bump + publish
+```
+
+## 📝 Code Patterns & Standards
+
+### Icon Component Creation Pattern
+
+All icons follow this exact pattern in `src/index.tsx`:
+
+```tsx
+// 1. SVG content extraction
+const iconNameSvgContent = `<g>
+  <path d="...svg path data..." />
+</g>`;
+
+// 2. Component creation
+export const IconNameIcon = createIcon(
+  "IconNameIcon", // Display name
+  iconNameSvgContent, // SVG content
+  "0 0 viewBox dimensions" // ViewBox (varies per icon)
+);
+```
+
+### Component Factory Pattern
+
+```tsx
+const createIcon = (
+  displayName: string,
+  svgContent: string,
+  viewBox: string = "0 0 24 24"
+) => {
+  const IconComponent = React.forwardRef<SVGSVGElement, IconProps>(
+    ({ size = 24, ...props }, ref) => {
+      return React.createElement("svg", {
+        ref,
+        width: size,
+        height: size,
+        viewBox,
+        fill: "currentColor",
+        xmlns: "http://www.w3.org/2000/svg",
+        ...props,
+        dangerouslySetInnerHTML: { __html: svgContent },
+      });
+    }
+  );
+
+  IconComponent.displayName = displayName;
+  return IconComponent;
+};
+```
+
+### TypeScript Interface
+
+```tsx
+export interface IconProps extends React.SVGProps<SVGSVGElement> {
+  size?: number | string;
+}
+```
+
+## ✅ Pre-Contribution Checklist
+
+### Before Making Changes
+
+- [ ] **Understand the MDR context**: These are medical device regulation icons, accuracy is critical
+- [ ] **Check existing patterns**: Follow the established icon component pattern
+- [ ] **Verify SVG content**: Ensure SVG paths are valid and properly formatted
+- [ ] **Test TypeScript**: Run `npm run build` to verify TypeScript compilation
+
+### Code Quality Checks
+
+- [ ] **No hardcoded dimensions**: Use `size` prop, default to 24
+- [ ] **Proper naming**: Icon components end with "Icon" (e.g., `CautionIcon`)
+- [ ] **ViewBox accuracy**: Each icon has its correct viewBox dimensions
+- [ ] **SVG cleanliness**: Remove unnecessary SVG attributes, keep only paths
+- [ ] **forwardRef usage**: All components use `React.forwardRef` for ref passing
+
+### Adding New Icons
+
+- [ ] **MDR compliance**: Verify the icon is an official MDR 2017/745 symbol
+- [ ] **SVG optimization**: Remove unnecessary elements, keep only essential paths
+- [ ] **ViewBox extraction**: Get correct dimensions from original SVG
+- [ ] **Naming convention**: Use descriptive, consistent names
+- [ ] **Export addition**: Add to both individual export and `icons` object
+
+## 🚨 Pre-Publish Checklist
+
+### Critical Checks Before Publishing
+
+- [ ] **Version bump**: Use semantic versioning (patch/minor/major)
+- [ ] **Build success**: `npm run build` completes without errors
+- [ ] **All icons work**: `node test-icons.js` passes for all 9 icons
+- [ ] **TypeScript definitions**: `lib/index.d.ts` generated correctly
+- [ ] **Examples work**: React examples compile without TypeScript errors
+- [ ] **Package.json metadata**: Verify description, keywords, author, repository
+- [ ] **README accuracy**: Ensure documentation matches current API
+- [ ] **License included**: MIT license file present and correct
+
+### File Verification
+
+- [ ] **lib/ directory**: Contains compiled JS and TypeScript definitions
+- [ ] **src/index.tsx**: All icons properly exported
+- [ ] **package.json**: Correct main, types, and files fields
+- [ ] **No dev files**: Ensure src/ and examples/ not included in npm package
+- [ ] **.npmignore**: Excludes unnecessary files from package
+
+### Testing Checklist
+
+- [ ] **Import test**: `import { CautionIcon } from 'medical-device-symbols'` works
+- [ ] **Component render**: Icons render as SVG elements in React
+- [ ] **Props work**: Size, className, onClick, and other SVG props function
+- [ ] **TypeScript support**: No type errors in TypeScript projects
+- [ ] **Tree shaking**: Individual imports don't pull entire library
+
+## ⚠️ Common Pitfalls to Avoid
+
+### SVG Content Issues
+
+- ❌ **Don't include `<svg>` tags** in svgContent (only inner elements)
+- ❌ **Don't use external dependencies** for SVG processing
+- ❌ **Don't modify viewBox arbitrarily** (respect original proportions)
+- ❌ **Don't include styling attributes** in SVG paths (use CSS/props instead)
+
+### Component Creation Issues
+
+- ❌ **Don't forget forwardRef** (required for ref passing)
+- ❌ **Don't hardcode sizes** (always use size prop)
+- ❌ **Don't skip displayName** (needed for debugging)
+- ❌ **Don't modify the createIcon factory** without careful consideration
+
+### Build & Publish Issues
+
+- ❌ **Don't commit lib/ changes** (auto-generated on build)
+- ❌ **Don't publish without testing** (run test-icons.js first)
+- ❌ **Don't skip version bumping** (use npm version commands)
+- ❌ **Don't modify package.json files array** without understanding impact
+
+### Breaking Changes
+
+- ❌ **Don't rename existing icons** (breaking change for users)
+- ❌ **Don't change component API** (props, ref behavior)
+- ❌ **Don't remove icons** (use deprecation notices instead)
+- ❌ **Don't change default behaviors** (size, fill, etc.)
+
+## 🔍 Debugging Guide
+
+### Build Issues
+
+```bash
+# Clear and rebuild
+rm -rf lib/
+npm run build
+
+# Check TypeScript errors
+npx tsc --noEmit
+```
+
+### Icon Testing
+
+```bash
+# Test all components
+node test-icons.js
+
+# Test specific usage
+cd examples
+npm run node-extraction
+```
+
+### Type Issues
+
+```bash
+# Verify generated types
+cat lib/index.d.ts
+
+# Test with examples
+cd examples/react
+npx tsc --noEmit MedicalDeviceLabel.tsx
+```
+
+## 📚 Resources
+
+- [MDR 2017/745 Official Regulation](https://eur-lex.europa.eu/eli/reg/2017/745/oj)
+- [React forwardRef Documentation](https://react.dev/reference/react/forwardRef)
+- [SVG Accessibility Guidelines](https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/Roles/img_role)
+
+## 🤝 Contribution Philosophy
+
+This package prioritizes:
+
+1. **Medical Accuracy**: Icons must be faithful to MDR specifications
+2. **Developer Experience**: Simple, predictable API following React conventions
+3. **Performance**: Minimal bundle impact through tree-shaking
+4. **Reliability**: Thorough testing and TypeScript safety
+5. **Accessibility**: Proper ARIA support and semantic HTML
+
+---
+
+**Remember**: This package serves medical device manufacturers who must comply with strict regulations. Accuracy and reliability are paramount.

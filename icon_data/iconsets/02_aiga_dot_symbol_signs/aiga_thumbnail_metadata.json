@@ -1,0 +1,408 @@
+{
+  "source_category": "https://commons.wikimedia.org/wiki/Category:AIGA_symbol_signs",
+  "candidate_svg_files": 80,
+  "downloaded_png_512": 80,
+  "failed": [],
+  "files": [
+    {
+      "title": "File:Aiga immigration.svg",
+      "thumbnail_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Aiga%20immigration.svg?width=512",
+      "local_file": "icon_data/iconsets/02_aiga_dot_symbol_signs/png_512/Aiga_immigration.png"
+    },
+    {
+      "title": "File:20 airtransportation.svg",
+      "thumbnail_url": "https://commons.wikimedia.org/wiki/Special:FilePath/20%20airtransportation.svg?width=512",
+      "local_file": "icon_data/iconsets/02_aiga_dot_symbol_signs/png_512/20_airtransportation.png"
+    },
+    {
+      "title": "File:Aiga arrivingflights.svg",
+      "thumbnail_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Aiga%20arrivingflights.svg?width=512",
+      "local_file": "icon_data/iconsets/02_aiga_dot_symbol_signs/png_512/Aiga_arrivingflights.png"
+    },
+    {
+      "title": "File:Aiga baggage check in.svg",
+      "thumbnail_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Aiga%20baggage%20check%20in.svg?width=512",
+      "local_file": "icon_data/iconsets/02_aiga_dot_symbol_signs/png_512/Aiga_baggage_check_in.png"
+    },
+    {
+      "title": "File:Aiga baggagelockers.svg",
+      "thumbnail_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Aiga%20baggagelockers.svg?width=512",
+      "local_file": "icon_data/iconsets/02_aiga_dot_symbol_signs/png_512/Aiga_baggagelockers.png"
+    },
+    {
+      "title": "File:Aiga bar (reduced).svg",
+      "thumbnail_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Aiga%20bar%20%28reduced%29.svg?width=512",
+      "local_file": "icon_data/iconsets/02_aiga_dot_symbol_signs/png_512/Aiga_bar_reduced_.png"
+    },
+    {
+      "title": "File:Aiga bar.svg",
+      "thumbnail_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Aiga%20bar.svg?width=512",
+      "local_file": "icon_data/iconsets/02_aiga_dot_symbol_signs/png_512/Aiga_bar.png"
+    },
+    {
+      "title": "File:Aiga BarberShop-BeautySalon.svg",
+      "thumbnail_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Aiga%20BarberShop-BeautySalon.svg?width=512",
+      "local_file": "icon_data/iconsets/02_aiga_dot_symbol_signs/png_512/Aiga_BarberShop-BeautySalon.png"
+    },
+    {
+      "title": "File:Aiga BarberShop.svg",
+      "thumbnail_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Aiga%20BarberShop.svg?width=512",
+      "local_file": "icon_data/iconsets/02_aiga_dot_symbol_signs/png_512/Aiga_BarberShop.png"
+    },
+    {
+      "title": "File:Aiga BeautySalon.svg",
+      "thumbnail_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Aiga%20BeautySalon.svg?width=512",
+      "local_file": "icon_data/iconsets/02_aiga_dot_symbol_signs/png_512/Aiga_BeautySalon.png"
+    },
+    {
+      "title": "File:Aiga bus trans.svg",
+      "thumbnail_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Aiga%20bus%20trans.svg?width=512",
+      "local_file": "icon_data/iconsets/02_aiga_dot_symbol_signs/png_512/Aiga_bus_trans.png"
+    },
+    {
+      "title": "File:Aiga bus.svg",
+      "thumbnail_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Aiga%20bus.svg?width=512",
+      "local_file": "icon_data/iconsets/02_aiga_dot_symbol_signs/png_512/Aiga_bus.png"
+    },
+    {
+      "title": "File:Aiga carrental.svg",
+      "thumbnail_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Aiga%20carrental.svg?width=512",
+      "local_file": "icon_data/iconsets/02_aiga_dot_symbol_signs/png_512/Aiga_carrental.png"
+    },
+    {
+      "title": "File:Aiga cashier.svg",
+      "thumbnail_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Aiga%20cashier.svg?width=512",
+      "local_file": "icon_data/iconsets/02_aiga_dot_symbol_signs/png_512/Aiga_cashier.png"
+    },
+    {
+      "title": "File:Aiga coatcheck.svg",
+      "thumbnail_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Aiga%20coatcheck.svg?width=512",
+      "local_file": "icon_data/iconsets/02_aiga_dot_symbol_signs/png_512/Aiga_coatcheck.png"
+    },
+    {
+      "title": "File:Aiga coffeeshop.svg",
+      "thumbnail_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Aiga%20coffeeshop.svg?width=512",
+      "local_file": "icon_data/iconsets/02_aiga_dot_symbol_signs/png_512/Aiga_coffeeshop.png"
+    },
+    {
+      "title": "File:Aiga currencyexchange.svg",
+      "thumbnail_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Aiga%20currencyexchange.svg?width=512",
+      "local_file": "icon_data/iconsets/02_aiga_dot_symbol_signs/png_512/Aiga_currencyexchange.png"
+    },
+    {
+      "title": "File:Aiga customs.svg",
+      "thumbnail_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Aiga%20customs.svg?width=512",
+      "local_file": "icon_data/iconsets/02_aiga_dot_symbol_signs/png_512/Aiga_customs.png"
+    },
+    {
+      "title": "File:Aiga departingflights.svg",
+      "thumbnail_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Aiga%20departingflights.svg?width=512",
+      "local_file": "icon_data/iconsets/02_aiga_dot_symbol_signs/png_512/Aiga_departingflights.png"
+    },
+    {
+      "title": "File:Aiga drinkingfountain.svg",
+      "thumbnail_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Aiga%20drinkingfountain.svg?width=512",
+      "local_file": "icon_data/iconsets/02_aiga_dot_symbol_signs/png_512/Aiga_drinkingfountain.png"
+    },
+    {
+      "title": "File:Aiga elevator.svg",
+      "thumbnail_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Aiga%20elevator.svg?width=512",
+      "local_file": "icon_data/iconsets/02_aiga_dot_symbol_signs/png_512/Aiga_elevator.png"
+    },
+    {
+      "title": "File:Aiga escalator down mirror.svg",
+      "thumbnail_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Aiga%20escalator%20down%20mirror.svg?width=512",
+      "local_file": "icon_data/iconsets/02_aiga_dot_symbol_signs/png_512/Aiga_escalator_down_mirror.png"
+    },
+    {
+      "title": "File:Aiga escalator down.svg",
+      "thumbnail_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Aiga%20escalator%20down.svg?width=512",
+      "local_file": "icon_data/iconsets/02_aiga_dot_symbol_signs/png_512/Aiga_escalator_down.png"
+    },
+    {
+      "title": "File:Aiga escalator mirror.svg",
+      "thumbnail_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Aiga%20escalator%20mirror.svg?width=512",
+      "local_file": "icon_data/iconsets/02_aiga_dot_symbol_signs/png_512/Aiga_escalator_mirror.png"
+    },
+    {
+      "title": "File:Aiga escalator up mirror.svg",
+      "thumbnail_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Aiga%20escalator%20up%20mirror.svg?width=512",
+      "local_file": "icon_data/iconsets/02_aiga_dot_symbol_signs/png_512/Aiga_escalator_up_mirror.png"
+    },
+    {
+      "title": "File:Aiga escalator up.svg",
+      "thumbnail_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Aiga%20escalator%20up.svg?width=512",
+      "local_file": "icon_data/iconsets/02_aiga_dot_symbol_signs/png_512/Aiga_escalator_up.png"
+    },
+    {
+      "title": "File:Aiga escalator.svg",
+      "thumbnail_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Aiga%20escalator.svg?width=512",
+      "local_file": "icon_data/iconsets/02_aiga_dot_symbol_signs/png_512/Aiga_escalator.png"
+    },
+    {
+      "title": "File:Aiga Exit - Green.svg",
+      "thumbnail_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Aiga%20Exit%20-%20Green.svg?width=512",
+      "local_file": "icon_data/iconsets/02_aiga_dot_symbol_signs/png_512/Aiga_Exit_-_Green.png"
+    },
+    {
+      "title": "File:Aiga exit.svg",
+      "thumbnail_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Aiga%20exit.svg?width=512",
+      "local_file": "icon_data/iconsets/02_aiga_dot_symbol_signs/png_512/Aiga_exit.png"
+    },
+    {
+      "title": "File:Aiga fire extinguisher.svg",
+      "thumbnail_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Aiga%20fire%20extinguisher.svg?width=512",
+      "local_file": "icon_data/iconsets/02_aiga_dot_symbol_signs/png_512/Aiga_fire_extinguisher.png"
+    },
+    {
+      "title": "File:Aiga FirstAid - Red.svg",
+      "thumbnail_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Aiga%20FirstAid%20-%20Red.svg?width=512",
+      "local_file": "icon_data/iconsets/02_aiga_dot_symbol_signs/png_512/Aiga_FirstAid_-_Red.png"
+    },
+    {
+      "title": "File:Aiga firstaid.svg",
+      "thumbnail_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Aiga%20firstaid.svg?width=512",
+      "local_file": "icon_data/iconsets/02_aiga_dot_symbol_signs/png_512/Aiga_firstaid.png"
+    },
+    {
+      "title": "File:Aiga groundtransportation.svg",
+      "thumbnail_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Aiga%20groundtransportation.svg?width=512",
+      "local_file": "icon_data/iconsets/02_aiga_dot_symbol_signs/png_512/Aiga_groundtransportation.png"
+    },
+    {
+      "title": "File:Aiga heliport.svg",
+      "thumbnail_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Aiga%20heliport.svg?width=512",
+      "local_file": "icon_data/iconsets/02_aiga_dot_symbol_signs/png_512/Aiga_heliport.png"
+    },
+    {
+      "title": "File:Aiga hotelinformation.svg",
+      "thumbnail_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Aiga%20hotelinformation.svg?width=512",
+      "local_file": "icon_data/iconsets/02_aiga_dot_symbol_signs/png_512/Aiga_hotelinformation.png"
+    },
+    {
+      "title": "File:AIGA information.svg",
+      "thumbnail_url": "https://commons.wikimedia.org/wiki/Special:FilePath/AIGA%20information.svg?width=512",
+      "local_file": "icon_data/iconsets/02_aiga_dot_symbol_signs/png_512/AIGA_information.png"
+    },
+    {
+      "title": "File:Aiga litterdisposal.svg",
+      "thumbnail_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Aiga%20litterdisposal.svg?width=512",
+      "local_file": "icon_data/iconsets/02_aiga_dot_symbol_signs/png_512/Aiga_litterdisposal.png"
+    },
+    {
+      "title": "File:Aiga lostandfound.svg",
+      "thumbnail_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Aiga%20lostandfound.svg?width=512",
+      "local_file": "icon_data/iconsets/02_aiga_dot_symbol_signs/png_512/Aiga_lostandfound.png"
+    },
+    {
+      "title": "File:Aiga mail white.svg",
+      "thumbnail_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Aiga%20mail%20white.svg?width=512",
+      "local_file": "icon_data/iconsets/02_aiga_dot_symbol_signs/png_512/Aiga_mail_white.png"
+    },
+    {
+      "title": "File:Aiga mail.svg",
+      "thumbnail_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Aiga%20mail.svg?width=512",
+      "local_file": "icon_data/iconsets/02_aiga_dot_symbol_signs/png_512/Aiga_mail.png"
+    },
+    {
+      "title": "File:Aiga No-Entry - Red.svg",
+      "thumbnail_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Aiga%20No-Entry%20-%20Red.svg?width=512",
+      "local_file": "icon_data/iconsets/02_aiga_dot_symbol_signs/png_512/Aiga_No-Entry_-_Red.png"
+    },
+    {
+      "title": "File:Aiga No-Smoking - Red.svg",
+      "thumbnail_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Aiga%20No-Smoking%20-%20Red.svg?width=512",
+      "local_file": "icon_data/iconsets/02_aiga_dot_symbol_signs/png_512/Aiga_No-Smoking_-_Red.png"
+    },
+    {
+      "title": "File:Aiga NoDogs - Red.svg",
+      "thumbnail_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Aiga%20NoDogs%20-%20Red.svg?width=512",
+      "local_file": "icon_data/iconsets/02_aiga_dot_symbol_signs/png_512/Aiga_NoDogs_-_Red.png"
+    },
+    {
+      "title": "File:Aiga nodogs.svg",
+      "thumbnail_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Aiga%20nodogs.svg?width=512",
+      "local_file": "icon_data/iconsets/02_aiga_dot_symbol_signs/png_512/Aiga_nodogs.png"
+    },
+    {
+      "title": "File:Aiga noentry.svg",
+      "thumbnail_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Aiga%20noentry.svg?width=512",
+      "local_file": "icon_data/iconsets/02_aiga_dot_symbol_signs/png_512/Aiga_noentry.png"
+    },
+    {
+      "title": "File:Aiga NoParking - Red.svg",
+      "thumbnail_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Aiga%20NoParking%20-%20Red.svg?width=512",
+      "local_file": "icon_data/iconsets/02_aiga_dot_symbol_signs/png_512/Aiga_NoParking_-_Red.png"
+    },
+    {
+      "title": "File:Aiga noparking.svg",
+      "thumbnail_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Aiga%20noparking.svg?width=512",
+      "local_file": "icon_data/iconsets/02_aiga_dot_symbol_signs/png_512/Aiga_noparking.png"
+    },
+    {
+      "title": "File:Aiga nosmoking.svg",
+      "thumbnail_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Aiga%20nosmoking.svg?width=512",
+      "local_file": "icon_data/iconsets/02_aiga_dot_symbol_signs/png_512/Aiga_nosmoking.png"
+    },
+    {
+      "title": "File:Aiga nursery.svg",
+      "thumbnail_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Aiga%20nursery.svg?width=512",
+      "local_file": "icon_data/iconsets/02_aiga_dot_symbol_signs/png_512/Aiga_nursery.png"
+    },
+    {
+      "title": "File:Aiga parking.svg",
+      "thumbnail_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Aiga%20parking.svg?width=512",
+      "local_file": "icon_data/iconsets/02_aiga_dot_symbol_signs/png_512/Aiga_parking.png"
+    },
+    {
+      "title": "File:Aiga railtransportation 25 white.svg",
+      "thumbnail_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Aiga%20railtransportation%2025%20white.svg?width=512",
+      "local_file": "icon_data/iconsets/02_aiga_dot_symbol_signs/png_512/Aiga_railtransportation_25_white.png"
+    },
+    {
+      "title": "File:Aiga railtransportation 25.svg",
+      "thumbnail_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Aiga%20railtransportation%2025.svg?width=512",
+      "local_file": "icon_data/iconsets/02_aiga_dot_symbol_signs/png_512/Aiga_railtransportation_25.png"
+    },
+    {
+      "title": "File:Aiga railtransportation.svg",
+      "thumbnail_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Aiga%20railtransportation.svg?width=512",
+      "local_file": "icon_data/iconsets/02_aiga_dot_symbol_signs/png_512/Aiga_railtransportation.png"
+    },
+    {
+      "title": "File:Aiga restaurant 2.svg",
+      "thumbnail_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Aiga%20restaurant%202.svg?width=512",
+      "local_file": "icon_data/iconsets/02_aiga_dot_symbol_signs/png_512/Aiga_restaurant_2.png"
+    },
+    {
+      "title": "File:Aiga restaurant.svg",
+      "thumbnail_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Aiga%20restaurant.svg?width=512",
+      "local_file": "icon_data/iconsets/02_aiga_dot_symbol_signs/png_512/Aiga_restaurant.png"
+    },
+    {
+      "title": "File:Aiga shops.svg",
+      "thumbnail_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Aiga%20shops.svg?width=512",
+      "local_file": "icon_data/iconsets/02_aiga_dot_symbol_signs/png_512/Aiga_shops.png"
+    },
+    {
+      "title": "File:Aiga stairs.svg",
+      "thumbnail_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Aiga%20stairs.svg?width=512",
+      "local_file": "icon_data/iconsets/02_aiga_dot_symbol_signs/png_512/Aiga_stairs.png"
+    },
+    {
+      "title": "File:Aiga taxi.svg",
+      "thumbnail_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Aiga%20taxi.svg?width=512",
+      "local_file": "icon_data/iconsets/02_aiga_dot_symbol_signs/png_512/Aiga_taxi.png"
+    },
+    {
+      "title": "File:Aiga telephone.svg",
+      "thumbnail_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Aiga%20telephone.svg?width=512",
+      "local_file": "icon_data/iconsets/02_aiga_dot_symbol_signs/png_512/Aiga_telephone.png"
+    },
+    {
+      "title": "File:Aiga ticketpurchase.svg",
+      "thumbnail_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Aiga%20ticketpurchase.svg?width=512",
+      "local_file": "icon_data/iconsets/02_aiga_dot_symbol_signs/png_512/Aiga_ticketpurchase.png"
+    },
+    {
+      "title": "File:Aiga toiletsq men.svg",
+      "thumbnail_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Aiga%20toiletsq%20men.svg?width=512",
+      "local_file": "icon_data/iconsets/02_aiga_dot_symbol_signs/png_512/Aiga_toiletsq_men.png"
+    },
+    {
+      "title": "File:Aiga waitingroom.svg",
+      "thumbnail_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Aiga%20waitingroom.svg?width=512",
+      "local_file": "icon_data/iconsets/02_aiga_dot_symbol_signs/png_512/Aiga_waitingroom.png"
+    },
+    {
+      "title": "File:Aiga watertransportation.svg",
+      "thumbnail_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Aiga%20watertransportation.svg?width=512",
+      "local_file": "icon_data/iconsets/02_aiga_dot_symbol_signs/png_512/Aiga_watertransportation.png"
+    },
+    {
+      "title": "File:Aiga-no-parking.svg",
+      "thumbnail_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Aiga-no-parking.svg?width=512",
+      "local_file": "icon_data/iconsets/02_aiga_dot_symbol_signs/png_512/Aiga-no-parking.png"
+    },
+    {
+      "title": "File:Aiga uparrow.svg",
+      "thumbnail_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Aiga%20uparrow.svg?width=512",
+      "local_file": "icon_data/iconsets/02_aiga_dot_symbol_signs/png_512/Aiga_uparrow.png"
+    },
+    {
+      "title": "File:Aiga forwardandrightarrow.svg",
+      "thumbnail_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Aiga%20forwardandrightarrow.svg?width=512",
+      "local_file": "icon_data/iconsets/02_aiga_dot_symbol_signs/png_512/Aiga_forwardandrightarrow.png"
+    },
+    {
+      "title": "File:Aiga rightarrow.svg",
+      "thumbnail_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Aiga%20rightarrow.svg?width=512",
+      "local_file": "icon_data/iconsets/02_aiga_dot_symbol_signs/png_512/Aiga_rightarrow.png"
+    },
+    {
+      "title": "File:Aiga rightanddownarrow.svg",
+      "thumbnail_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Aiga%20rightanddownarrow.svg?width=512",
+      "local_file": "icon_data/iconsets/02_aiga_dot_symbol_signs/png_512/Aiga_rightanddownarrow.png"
+    },
+    {
+      "title": "File:Aiga downarrow.svg",
+      "thumbnail_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Aiga%20downarrow.svg?width=512",
+      "local_file": "icon_data/iconsets/02_aiga_dot_symbol_signs/png_512/Aiga_downarrow.png"
+    },
+    {
+      "title": "File:Aiga leftanddownarrow.svg",
+      "thumbnail_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Aiga%20leftanddownarrow.svg?width=512",
+      "local_file": "icon_data/iconsets/02_aiga_dot_symbol_signs/png_512/Aiga_leftanddownarrow.png"
+    },
+    {
+      "title": "File:Aiga leftarrow.svg",
+      "thumbnail_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Aiga%20leftarrow.svg?width=512",
+      "local_file": "icon_data/iconsets/02_aiga_dot_symbol_signs/png_512/Aiga_leftarrow.png"
+    },
+    {
+      "title": "File:Aiga forwardandleftarrow.svg",
+      "thumbnail_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Aiga%20forwardandleftarrow.svg?width=512",
+      "local_file": "icon_data/iconsets/02_aiga_dot_symbol_signs/png_512/Aiga_forwardandleftarrow.png"
+    },
+    {
+      "title": "File:BSicon lBUS white.svg",
+      "thumbnail_url": "https://commons.wikimedia.org/wiki/Special:FilePath/BSicon%20lBUS%20white.svg?width=512",
+      "local_file": "icon_data/iconsets/02_aiga_dot_symbol_signs/png_512/BSicon_lBUS_white.png"
+    },
+    {
+      "title": "File:BSicon lBUS.svg",
+      "thumbnail_url": "https://commons.wikimedia.org/wiki/Special:FilePath/BSicon%20lBUS.svg?width=512",
+      "local_file": "icon_data/iconsets/02_aiga_dot_symbol_signs/png_512/BSicon_lBUS.png"
+    },
+    {
+      "title": "File:BSicon PASSPORT.svg",
+      "thumbnail_url": "https://commons.wikimedia.org/wiki/Special:FilePath/BSicon%20PASSPORT.svg?width=512",
+      "local_file": "icon_data/iconsets/02_aiga_dot_symbol_signs/png_512/BSicon_PASSPORT.png"
+    },
+    {
+      "title": "File:BSicon RENTALCAR.svg",
+      "thumbnail_url": "https://commons.wikimedia.org/wiki/Special:FilePath/BSicon%20RENTALCAR.svg?width=512",
+      "local_file": "icon_data/iconsets/02_aiga_dot_symbol_signs/png_512/BSicon_RENTALCAR.png"
+    },
+    {
+      "title": "File:Smoking AIGA symbol.svg",
+      "thumbnail_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Smoking%20AIGA%20symbol.svg?width=512",
+      "local_file": "icon_data/iconsets/02_aiga_dot_symbol_signs/png_512/Smoking_AIGA_symbol.png"
+    },
+    {
+      "title": "File:Toilet women.svg",
+      "thumbnail_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Toilet%20women.svg?width=512",
+      "local_file": "icon_data/iconsets/02_aiga_dot_symbol_signs/png_512/Toilet_women.png"
+    },
+    {
+      "title": "File:Toilets unisex.svg",
+      "thumbnail_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Toilets%20unisex.svg?width=512",
+      "local_file": "icon_data/iconsets/02_aiga_dot_symbol_signs/png_512/Toilets_unisex.png"
+    },
+    {
+      "title": "File:Translink Qld bus icon with roundel 2022.svg",
+      "thumbnail_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Translink%20Qld%20bus%20icon%20with%20roundel%202022.svg?width=512",
+      "local_file": "icon_data/iconsets/02_aiga_dot_symbol_signs/png_512/Translink_Qld_bus_icon_with_roundel_2022.png"
+    }
+  ]
+}

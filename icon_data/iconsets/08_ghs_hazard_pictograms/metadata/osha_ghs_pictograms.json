@@ -1,0 +1,65 @@
+[
+  {
+    "name": "flame_over_circle",
+    "url": "https://www.osha.gov/sites/default/files/inline-images/image1.png",
+    "file": "png_osha/flame_over_circle.png",
+    "bytes": 24062,
+    "content_type": "image/png"
+  },
+  {
+    "name": "flame",
+    "url": "https://www.osha.gov/sites/default/files/inline-images/image2.png",
+    "file": "png_osha/flame.png",
+    "bytes": 21483,
+    "content_type": "image/png"
+  },
+  {
+    "name": "exploding_bomb",
+    "url": "https://www.osha.gov/sites/default/files/inline-images/image3.png",
+    "file": "png_osha/exploding_bomb.png",
+    "bytes": 31554,
+    "content_type": "image/png"
+  },
+  {
+    "name": "skull_and_crossbones",
+    "url": "https://www.osha.gov/sites/default/files/inline-images/image4.png",
+    "file": "png_osha/skull_and_crossbones.png",
+    "bytes": 31753,
+    "content_type": "image/png"
+  },
+  {
+    "name": "corrosion",
+    "url": "https://www.osha.gov/sites/default/files/inline-images/image5.png",
+    "file": "png_osha/corrosion.png",
+    "bytes": 25401,
+    "content_type": "image/png"
+  },
+  {
+    "name": "gas_cylinder",
+    "url": "https://www.osha.gov/sites/default/files/inline-images/image6.png",
+    "file": "png_osha/gas_cylinder.png",
+    "bytes": 14435,
+    "content_type": "image/png"
+  },
+  {
+    "name": "health_hazard",
+    "url": "https://www.osha.gov/sites/default/files/inline-images/image7.png",
+    "file": "png_osha/health_hazard.png",
+    "bytes": 28901,
+    "content_type": "image/png"
+  },
+  {
+    "name": "environment",
+    "url": "https://www.osha.gov/sites/default/files/inline-images/image8.png",
+    "file": "png_osha/environment.png",
+    "bytes": 500527,
+    "content_type": "image/png"
+  },
+  {
+    "name": "exclamation_mark",
+    "url": "https://www.osha.gov/sites/default/files/inline-images/image9.png",
+    "file": "png_osha/exclamation_mark.png",
+    "bytes": 15414,
+    "content_type": "image/png"
+  }
+]

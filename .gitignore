@@ -119,6 +119,7 @@ tmp/
 # Downloaded icon datasets: keep manifests, metadata, and scripts in git;
 # keep bulk image/font/PDF assets out of git.
 icon_data/downloads/
+icon_data/normalized_256/
 icon_data/iconsets/**/*.svg
 icon_data/iconsets/**/*.png
 icon_data/iconsets/**/*.jpg
@@ -144,3 +145,6 @@ icon_data/metadata/sha256sums.txt
 !icon_data/iconsets/**/*.txt
 !icon_data/metadata/
 !icon_data/metadata/**/*.json
+!icon_data/analysis/
+!icon_data/analysis/**/*.csv
+!icon_data/analysis/**/*.md

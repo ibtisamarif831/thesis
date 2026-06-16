@@ -1,0 +1,19 @@
+{
+  "input": "icon_data/analysis/features.csv",
+  "row_count": 855,
+  "feature_columns": [
+    "foreground_area_ratio",
+    "canny_edge_density",
+    "connected_components",
+    "quadtree_leaf_count",
+    "quadtree_structural_variability",
+    "quadtree_mean_leaf_size"
+  ],
+  "standardization": "StandardScaler over feature columns",
+  "distance_metrics": [
+    "euclidean",
+    "cosine"
+  ],
+  "neighbors_per_icon": 5,
+  "closest_pair_limit": 100
+}

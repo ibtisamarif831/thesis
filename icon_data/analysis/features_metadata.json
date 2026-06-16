@@ -1,0 +1,39 @@
+{
+  "input": "icon_data/analysis/dataset.csv",
+  "output": "icon_data/analysis/features.csv",
+  "row_count": 855,
+  "selected_row_count": 855,
+  "per_set_limit": 100,
+  "dependencies": {
+    "opencv_available": true,
+    "opencv_version": "4.13.0"
+  },
+  "features": [
+    {
+      "name": "foreground_area_ratio",
+      "columns": [
+        "foreground_area_ratio"
+      ]
+    },
+    {
+      "name": "canny_edge_density",
+      "columns": [
+        "canny_edge_density"
+      ]
+    },
+    {
+      "name": "connected_components",
+      "columns": [
+        "connected_components"
+      ]
+    },
+    {
+      "name": "quadtree_structural_variability",
+      "columns": [
+        "quadtree_leaf_count",
+        "quadtree_structural_variability",
+        "quadtree_mean_leaf_size"
+      ]
+    }
+  ]
+}

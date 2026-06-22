@@ -13,8 +13,8 @@ OUTPUT_DIR = ROOT / "icon_data/iconsets/01_mcdougall_symbol_icon_set/extracted_i
 LEFT_X = 205
 RIGHT_X = 900
 CROP_W = 330
-ROW_YS = [495, 835, 1175, 1515, 1855]
-CROP_H_BY_ROW = [225, 225, 225, 225, 255]
+ROW_YS = [425, 765, 1105, 1445, 1815]
+CROP_H_BY_ROW = [295, 295, 295, 295, 295]
 
 
 def component_boxes(mask, width, height):
@@ -93,6 +93,27 @@ def extract_icon(page_image, x, y, width, height, row_index):
 
     if not keep:
         return Image.new("RGB", (256, 256), "white")
+
+    anchors = [
+        (x1, y1, x2, y2)
+        for x1, y1, x2, y2 in keep
+        if (x2 - x1) >= 22 or (y2 - y1) >= 22 or (x2 - x1) * (y2 - y1) >= 220
+    ]
+    if anchors:
+        anchor_x1 = max(0, min(box[0] for box in anchors) - 35)
+        anchor_y1 = max(0, min(box[1] for box in anchors) - 35)
+        anchor_x2 = min(width, max(box[2] for box in anchors) + 35)
+        anchor_y2 = min(height, max(box[3] for box in anchors) + 35)
+        keep = [
+            box
+            for box in keep
+            if not (
+                box[2] < anchor_x1
+                or box[0] > anchor_x2
+                or box[3] < anchor_y1
+                or box[1] > anchor_y2
+            )
+        ]
 
     min_x = max(0, min(box[0] for box in keep) - 8)
     min_y = max(0, min(box[1] for box in keep) - 8)

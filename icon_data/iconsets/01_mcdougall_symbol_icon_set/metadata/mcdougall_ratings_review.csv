@@ -1,0 +1,605 @@
+appendix_item,source_page,field,value,confidence,reason
+1,9,label,Add task,93.87,item_number_not_confirmed
+1,9,semantic_distance,2.08 -> 2.03,79.75,explicit_ocr_correction
+1,9,semantic_distance,2.03,79.75,low_confidence
+2,9,concreteness,2.27,73.12,low_confidence
+2,9,familiarity,1.80 -> 1.93,64.76,explicit_ocr_correction
+2,9,familiarity,1.93,64.76,low_confidence
+2,9,name_agreement,7.50,78.50,low_confidence
+3,9,complexity,1.55,72.24,low_confidence
+3,9,meaningfulness,2938.00 -> 2.93,70.00,fallback_from:2938
+3,9,meaningfulness,2.93,70.00,low_confidence
+3,9,semantic_distance,2.50,71.13,low_confidence
+4,9,concreteness,4.85,81.09,low_confidence
+4,9,familiarity,1.75,64.83,low_confidence
+4,9,semantic_distance,1.56,65.96,low_confidence
+4,9,concept_agreement,0.00,78.47,low_confidence
+5,9,concept_agreement,7.50,71.15,low_confidence
+6,9,complexity,1.18,83.08,low_confidence
+6,9,meaningfulness,2.65,67.29,low_confidence
+6,9,semantic_distance,1.57,80.85,low_confidence
+7,9,common_response,,94.99,missing_common_response
+8,9,name_agreement,17.50,78.17,low_confidence
+9,9,meaningfulness,2.28,70.00,low_confidence
+9,9,semantic_distance,4.60,77.33,low_confidence
+10,9,familiarity,1.98,67.15,low_confidence
+10,9,meaningfulness,1.70,78.82,low_confidence
+10,9,common_response,,95.81,missing_common_response
+11,10,label,Arc ignition by contact,86.18,item_number_not_confirmed
+11,10,complexity,2.37,80.33,low_confidence
+11,10,meaningfulness,2.35,80.06,low_confidence
+12,10,concreteness,2.15,81.68,low_confidence
+14,10,complexity,2.73,82.85,low_confidence
+14,10,familiarity,1.93,80.60,low_confidence
+14,10,semantic_distance,1.39,84.18,low_confidence
+15,10,complexity,1.25,69.07,low_confidence
+15,10,familiarity,3.12,77.48,low_confidence
+15,10,concept_agreement,40.00,65.38,low_confidence
+15,10,common_response,,93.56,missing_common_response
+16,10,familiarity,4.13,72.03,low_confidence
+16,10,name_agreement,55.00,70.17,low_confidence
+16,10,common_response,,83.29,missing_common_response
+17,10,familiarity,2.60,81.20,low_confidence
+17,10,common_response,,95.82,missing_common_response
+18,10,concreteness,2.55,82.05,low_confidence
+18,10,familiarity,1.65,68.29,low_confidence
+19,10,concept_agreement,0.00,75.67,low_confidence
+20,10,name_agreement,2.50,79.98,low_confidence
+20,10,common_response,,0.00,missing_common_response
+21,11,familiarity,2.45,84.22,low_confidence
+21,11,common_response,,0.00,missing_common_response
+22,11,meaningfulness,1.85,80.93,low_confidence
+22,11,common_response,,0.00,missing_common_response
+23,11,complexity,2.93,78.94,low_confidence
+24,11,complexity,1.13,79.24,low_confidence
+24,11,familiarity,4.33,83.70,low_confidence
+24,11,semantic_distance,1.35,81.13,low_confidence
+26,11,concreteness,2.12,80.26,low_confidence
+26,11,familiarity,2.87,76.85,low_confidence
+26,11,common_response,,90.79,missing_common_response
+27,11,meaningfulness,1.95,83.43,low_confidence
+28,11,complexity_metric,14 -> 11,70.00,fallback_from:14
+28,11,common_response,,94.66,missing_common_response
+29,11,meaningfulness,1.95,83.39,low_confidence
+29,11,concept_agreement,17.50,70.00,low_confidence
+29,11,common_response,,0.00,missing_common_response
+30,11,concreteness,4.30,73.15,low_confidence
+30,11,concept_agreement,22.50 -> 22.00,70.00,fallback_from:22.50
+30,11,concept_agreement,22.00,70.00,low_confidence
+30,11,common_response,,0.00,missing_common_response
+31,12,concept_agreement,12.50,71.50,low_confidence
+31,12,name_agreement,0.00 -> 90.00,70.00,fallback_from:$0.00
+31,12,name_agreement,90.00,70.00,low_confidence
+32,12,semantic_distance,2.10,73.11,low_confidence
+33,12,label,CD-interactive,11.00,item_number_not_confirmed
+33,12,name_agreement,17.50,72.51,low_confidence
+34,12,complexity_metric,5 -> 2,70.00,fallback_from:5
+35,12,complexity,2.55,74.28,low_confidence
+35,12,semantic_distance,1.76,78.77,low_confidence
+36,12,familiarity,3.58,75.18,low_confidence
+37,12,familiarity,2.95,79.28,low_confidence
+37,12,concept_agreement,42.50,62.96,low_confidence
+37,12,common_response,,92.05,missing_common_response
+38,12,meaningfulness,3.78,83.89,low_confidence
+38,12,common_response,,95.15,missing_common_response
+39,12,familiarity,4.45,79.68,low_confidence
+39,12,semantic_distance,4.38,73.19,low_confidence
+39,12,common_response,,0.00,missing_common_response
+40,12,semantic_distance,41.90 -> 1.90,70.00,fallback_from:41.90
+40,12,semantic_distance,1.90,70.00,low_confidence
+40,12,common_response,,0.00,missing_common_response
+41,13,concreteness,4.50,79.28,low_confidence
+41,13,complexity,3.95,62.20,low_confidence
+41,13,meaningfulness,4.10,84.76,low_confidence
+42,13,semantic_distance,1.38,81.79,low_confidence
+43,13,meaningfulness,1.57,78.02,low_confidence
+45,13,complexity,2.38,75.71,low_confidence
+46,13,concreteness,4.35,80.22,low_confidence
+47,13,semantic_distance,2.55,77.90,low_confidence
+48,13,semantic_distance,2.95,78.57,low_confidence
+49,13,semantic_distance,1.81,68.18,low_confidence
+50,13,concreteness,4.30,83.14,low_confidence
+50,13,complexity,1.93,73.22,low_confidence
+51,14,concreteness,3.55,72.36,low_confidence
+51,14,complexity,4.23,82.96,low_confidence
+51,14,name_agreement,65.00,75.42,low_confidence
+52,14,familiarity,1.45,76.50,low_confidence
+52,14,common_response,,0.00,missing_common_response
+53,14,complexity,2.90,76.31,low_confidence
+53,14,semantic_distance,3.34,74.84,low_confidence
+53,14,concept_agreement,25.00,67.63,low_confidence
+53,14,common_response,,0.00,missing_common_response
+54,14,semantic_distance,1.55,68.03,low_confidence
+55,14,concreteness,2.65,75.44,low_confidence
+55,14,complexity,1.40,79.18,low_confidence
+55,14,familiarity,2.45,81.90,low_confidence
+55,14,semantic_distance,2.71,83.83,low_confidence
+55,14,common_response,,92.42,missing_common_response
+56,14,concreteness,1.00,69.22,low_confidence
+56,14,familiarity,1.83,78.41,low_confidence
+56,14,semantic_distance,4.17 -> 1.17,70.00,fallback_from:417
+56,14,semantic_distance,1.17,70.00,low_confidence
+57,14,concreteness,1.87,77.45,low_confidence
+57,14,meaningfulness,1.38,78.97,low_confidence
+57,14,common_response,,95.80,missing_common_response
+58,14,concept_agreement,35.00,61.76,low_confidence
+58,14,common_response,,92.60,missing_common_response
+60,14,common_response,,0.00,missing_common_response
+62,15,complexity,4.00,73.45,low_confidence
+62,15,meaningfulness,3.55,76.02,low_confidence
+63,15,label,D ebug,77.72,item_number_not_confirmed
+63,15,concreteness,4.33,82.18,low_confidence
+64,15,complexity,4.20,22.14,low_confidence
+64,15,familiarity,1.80,83.66,low_confidence
+64,15,semantic_distance,1.06 -> 1.95,70.00,fallback_from:1.06
+64,15,semantic_distance,1.95,70.00,low_confidence
+65,15,concreteness,1.82,74.87,low_confidence
+65,15,complexity,2.18,76.80,low_confidence
+65,15,semantic_distance,4.00 -> 1.41,70.00,fallback_from:V4
+65,15,semantic_distance,1.41,70.00,low_confidence
+65,15,common_response,,92.39,missing_common_response
+66,15,semantic_distance,2.67,84.67,low_confidence
+67,15,familiarity,2.40,69.99,low_confidence
+67,15,name_agreement,45.00,72.05,low_confidence
+67,15,common_response,,84.32,missing_common_response
+68,15,complexity,1.95,82.61,low_confidence
+69,15,complexity,2.35,68.80,low_confidence
+69,15,familiarity,2.98,68.99,low_confidence
+70,15,concreteness,2.15,78.10,low_confidence
+70,15,complexity,2.38,77.66,low_confidence
+72,16,common_response,,0.00,missing_common_response
+73,16,complexity,2.25,75.34,low_confidence
+73,16,semantic_distance,3.12,81.83,low_confidence
+73,16,name_agreement,30.00,73.94,low_confidence
+74,16,meaningfulness,2.85,77.06,low_confidence
+74,16,common_response,,0.00,missing_common_response
+75,16,complexity,2.55,77.48,low_confidence
+75,16,semantic_distance,3.50,73.11,low_confidence
+76,16,meaningfulness,4.20,74.21,low_confidence
+77,16,semantic_distance,1.95,80.86,low_confidence
+78,16,concreteness,2.25,73.43,low_confidence
+78,16,familiarity,1.92,76.60,low_confidence
+78,16,meaningfulness,2.16,77.91,low_confidence
+78,16,semantic_distance, -> 1.17,70.00,fallback_from:blank
+78,16,semantic_distance,1.17,70.00,low_confidence
+79,16,concreteness,1.92,84.07,low_confidence
+79,16,semantic_distance,2417.00 -> 2.17,70.00,fallback_from:2417
+79,16,semantic_distance,2.17,70.00,low_confidence
+80,16,semantic_distance,1.92,84.07,low_confidence
+81,17,concreteness,2.85,83.24,low_confidence
+81,17,complexity,2.85,83.24,low_confidence
+81,17,common_response,,0.00,missing_common_response
+82,17,common_response,,0.00,missing_common_response
+83,17,concreteness,2.40,74.62,low_confidence
+83,17,semantic_distance,2.78,70.00,low_confidence
+84,17,complexity,3.15,84.87,low_confidence
+84,17,semantic_distance,2.43 -> 2.13,70.00,fallback_from:2.43
+84,17,semantic_distance,2.13,70.00,low_confidence
+84,17,name_agreement,2.50,68.97,low_confidence
+84,17,common_response,,0.00,missing_common_response
+85,17,familiarity,1.98,83.37,low_confidence
+85,17,name_agreement,2.50,76.00,low_confidence
+85,17,common_response,,86.13,missing_common_response
+86,17,concreteness,2.30,68.93,low_confidence
+86,17,meaningfulness,1.77,77.15,low_confidence
+86,17,concept_agreement,0.00,75.71,low_confidence
+87,17,complexity,2.65,77.85,low_confidence
+88,17,familiarity,2.35,69.93,low_confidence
+88,17,common_response,,96.16,missing_common_response
+89,17,concreteness,2.30,82.34,low_confidence
+89,17,familiarity,1.88,80.99,low_confidence
+89,17,semantic_distance,1.14,78.49,low_confidence
+90,17,name_agreement,52.50,77.42,low_confidence
+91,18,meaningfulness,3.95,78.67,low_confidence
+91,18,name_agreement,62.50,75.62,low_confidence
+91,18,common_response,,0.00,missing_common_response
+92,18,name_agreement,50.00,77.44,low_confidence
+92,18,common_response,,0.00,missing_common_response
+93,18,complexity,2.73,79.70,low_confidence
+93,18,concept_agreement,60.00,67.03,low_confidence
+93,18,common_response,,0.00,missing_common_response
+94,18,concreteness,4.50,76.34,low_confidence
+94,18,name_agreement,55.00 -> 50.00,70.00,fallback_from:55.00
+94,18,name_agreement,50.00,70.00,low_confidence
+94,18,common_response,,0.00,missing_common_response
+95,18,meaningfulness,3.35,65.33,low_confidence
+96,18,familiarity,4.55,82.47,low_confidence
+96,18,name_agreement,80.00,77.27,low_confidence
+96,18,common_response,,86.65,missing_common_response
+98,18,complexity,4.17,71.83,low_confidence
+98,18,familiarity,4.80,79.47,low_confidence
+98,18,semantic_distance,2.29,83.74,low_confidence
+98,18,name_agreement,3.00 -> 30.00,70.00,fallback_from:3.00
+98,18,name_agreement,30.00,70.00,low_confidence
+99,18,complexity,2.75,75.51,low_confidence
+99,18,meaningfulness,1.70,78.38,low_confidence
+101,19,label,Food processing industry,94.95,item_number_not_confirmed
+101,19,semantic_distance,2.76,81.10,low_confidence
+101,19,name_agreement,4.00,78.17,low_confidence
+102,19,concreteness,4.93,73.21,low_confidence
+102,19,complexity,3.03,82.50,low_confidence
+102,19,semantic_distance,4.83,83.10,low_confidence
+102,19,common_response,,0.00,missing_common_response
+103,19,semantic_distance,2.31,82.47,low_confidence
+104,19,concreteness,4.80,82.38,low_confidence
+104,19,common_response,,0.00,missing_common_response
+105,19,name_agreement,36.00,69.81,low_confidence
+106,19,name_agreement,72.50,70.00,low_confidence
+107,19,concreteness,4.35,84.98,low_confidence
+107,19,complexity,4.35,72.59,low_confidence
+107,19,familiarity,4.95,84.17,low_confidence
+107,19,semantic_distance,3.33,75.87,low_confidence
+107,19,concept_agreement,55.00,72.53,low_confidence
+107,19,common_response,,95.57,missing_common_response
+108,19,familiarity,4.05,80.90,low_confidence
+108,19,meaningfulness,4.05,81.54,low_confidence
+108,19,semantic_distance,3.71,82.36,low_confidence
+109,19,common_response,,0.00,missing_common_response
+110,19,meaningfulness,2.68,73.48,low_confidence
+111,20,concreteness,2.95,83.73,low_confidence
+111,20,concept_agreement,7.50,72.75,low_confidence
+111,20,name_agreement,15.00,73.74,low_confidence
+112,20,familiarity,2.75,73.66,low_confidence
+112,20,common_response,,0.00,missing_common_response
+113,20,concreteness,4.13,78.40,low_confidence
+113,20,familiarity,3.20,65.59,low_confidence
+115,20,label,Hierarchy,87.95,item_number_not_confirmed
+115,20,concreteness,2.43,84.49,low_confidence
+116,20,familiarity,3.85,69.82,low_confidence
+118,20,semantic_distance,1.33,70.95,low_confidence
+119,20,concreteness,2.10,84.17,low_confidence
+119,20,semantic_distance,1.71,70.00,low_confidence
+122,21,concreteness,2.30,84.92,low_confidence
+122,21,complexity,2.30,84.92,low_confidence
+123,21,label,lonising radiation,88.38,item_number_not_confirmed
+123,21,complexity,1.53,83.06,low_confidence
+123,21,meaningfulness,4.10,78.11,low_confidence
+123,21,name_agreement,50.00,72.85,low_confidence
+123,21,common_response,,0.00,missing_common_response
+124,21,concreteness,2.85,75.99,low_confidence
+126,21,familiarity,1.38,68.46,low_confidence
+126,21,common_response,,96.39,missing_common_response
+127,21,concreteness,4.18,79.41,low_confidence
+127,21,familiarity,3.88,79.66,low_confidence
+128,21,complexity,4.20,79.17,low_confidence
+128,21,common_response,,89.51,missing_common_response
+129,21,concreteness,3.28,79.59,low_confidence
+129,21,complexity,1.15,77.91,low_confidence
+130,21,concreteness,2.93,74.43,low_confidence
+130,21,complexity,2.93,74.43,low_confidence
+130,21,concept_agreement,0.00,62.71,low_confidence
+131,22,label,Library,92.01,item_number_not_confirmed
+131,22,semantic_distance,3.40,74.55,low_confidence
+131,22,name_agreement,27.50,72.34,low_confidence
+131,22,common_response,,0.00,missing_common_response
+132,22,common_response,,0.00,missing_common_response
+133,22,concept_agreement,0.00,70.02,low_confidence
+136,22,concept_agreement,70.00,70.00,low_confidence
+136,22,common_response,,95.73,missing_common_response
+137,22,concreteness,3.70,74.70,low_confidence
+137,22,complexity,1.13,77.61,low_confidence
+137,22,common_response,,94.11,missing_common_response
+139,22,familiarity,2.95,82.13,low_confidence
+139,22,meaningfulness,3.35,80.88,low_confidence
+139,22,common_response,,87.05,missing_common_response
+140,22,label,Macrobiotics,57.60,item_number_not_confirmed
+141,23,meaningfulness,2.40,76.53,low_confidence
+141,23,complexity_metric,1 -> 14,70.00,fallback_from:“1
+143,23,meaningfulness,4.43,83.57,low_confidence
+143,23,common_response,,0.00,missing_common_response
+144,23,concreteness,4.20,47.40,low_confidence
+144,23,meaningfulness,3.03,81.01,low_confidence
+145,23,concreteness,3.48,69.01,low_confidence
+145,23,common_response,,95.42,missing_common_response
+146,23,concreteness,4.83,75.83,low_confidence
+146,23,complexity,2.87,81.64,low_confidence
+146,23,familiarity,4.20,82.95,low_confidence
+146,23,semantic_distance,4.86,79.74,low_confidence
+146,23,common_response,,89.34,missing_common_response
+147,23,concreteness,3.28,76.09,low_confidence
+148,23,concreteness,2.80,82.89,low_confidence
+148,23,common_response,,95.80,missing_common_response
+149,23,semantic_distance,1.50,70.66,low_confidence
+150,23,common_response,,0.00,missing_common_response
+151,24,complexity,2.37,81.22,low_confidence
+151,24,concept_agreement,22.50 -> 22.90,70.00,fallback_from:22.50
+151,24,concept_agreement,22.90,70.00,low_confidence
+151,24,common_response,,0.00,missing_common_response
+152,24,complexity,3.25,84.59,low_confidence
+152,24,concept_agreement,52.50,76.09,low_confidence
+152,24,common_response,,0.00,missing_common_response
+153,24,concreteness,2.15,74.18,low_confidence
+153,24,complexity,2.73,74.83,low_confidence
+156,24,label,No entry,93.87,item_number_not_confirmed
+156,24,concreteness,4.65,78.43,low_confidence
+156,24,common_response,,96.41,missing_common_response
+157,24,label,No entry,94.29,item_number_not_confirmed
+157,24,concreteness,4.43,79.43,low_confidence
+157,24,meaningfulness,4.40,79.08,low_confidence
+157,24,common_response,,94.58,missing_common_response
+158,24,label,No entry,94.08,item_number_not_confirmed
+158,24,semantic_distance,1.71,69.05,low_confidence
+159,24,name_agreement, -> 10.00,70.00,fallback_from:blank
+159,24,name_agreement,10.00,70.00,low_confidence
+159,24,common_response,,0.00,missing_common_response
+160,24,name_agreement, -> 135.00,70.00,fallback_from:blank
+160,24,name_agreement,135.00 -> 15.00,70.00,explicit_ocr_correction
+160,24,name_agreement,15.00,70.00,low_confidence
+160,24,common_response,,0.00,missing_common_response
+162,25,concreteness,4.45,82.97,low_confidence
+162,25,semantic_distance,3.95,82.09,low_confidence
+162,25,complexity_metric,5,45.93,low_confidence
+162,25,name_agreement,47.50,69.09,low_confidence
+162,25,common_response,,0.00,missing_common_response
+163,25,familiarity,1.83,76.48,low_confidence
+163,25,meaningfulness,1.98,75.66,low_confidence
+163,25,concept_agreement,9.00,68.28,low_confidence
+164,25,familiarity,1.90,70.12,low_confidence
+164,25,meaningfulness,1.59,79.42,low_confidence
+164,25,name_agreement,5.00,75.82,low_confidence
+165,25,concreteness,4.05,81.85,low_confidence
+166,25,meaningfulness,1.30,64.20,low_confidence
+166,25,common_response,,92.63,missing_common_response
+167,25,familiarity,4.85,78.69,low_confidence
+168,25,concreteness,3.78,82.14,low_confidence
+169,25,familiarity,3.18,83.86,low_confidence
+169,25,common_response,,0.00,missing_common_response
+170,25,concept_agreement,37.50,65.74,low_confidence
+170,25,common_response,,0.00,missing_common_response
+171,26,concreteness,2.10,69.18,low_confidence
+171,26,complexity,2.10,69.18,low_confidence
+171,26,familiarity,4.30,79.72,low_confidence
+171,26,common_response,,0.00,missing_common_response
+172,26,concept_agreement,57.50,78.12,low_confidence
+172,26,name_agreement,57.50,70.91,low_confidence
+172,26,common_response,,0.00,missing_common_response
+174,26,complexity_metric,1 -> 11,70.00,"fallback_from:1"""
+174,26,name_agreement,10.00,76.04,low_confidence
+175,26,complexity,1.95,82.40,low_confidence
+175,26,meaningfulness,2.03,71.89,low_confidence
+177,26,familiarity,2.03,70.93,low_confidence
+177,26,name_agreement,5.00,77.77,low_confidence
+178,26,concreteness,2.23 -> 2.00,70.00,fallback_from:223
+178,26,concreteness,2.00,70.00,low_confidence
+181,27,complexity,2.53,71.34,low_confidence
+181,27,complexity_metric, -> 25,0.00,explicit_ocr_correction
+181,27,complexity_metric,25,0.00,low_confidence
+182,27,label,Random Access Memory (RAM),94.74,item_number_not_confirmed
+182,27,complexity,3.50,82.04,low_confidence
+183,27,common_response,,0.00,missing_common_response
+184,27,meaningfulness,3.70,62.07,low_confidence
+184,27,semantic_distance,2.43,79.65,low_confidence
+185,27,meaningfulness,1.55,82.92,low_confidence
+185,27,semantic_distance,1.55,84.89,low_confidence
+185,27,common_response,,95.44,missing_common_response
+186,27,meaningfulness,3.15,62.90,low_confidence
+186,27,concept_agreement,15.00,70.00,low_confidence
+186,27,common_response,,96.35,missing_common_response
+187,27,familiarity,2.97,70.28,low_confidence
+187,27,common_response,,91.48,missing_common_response
+189,27,semantic_distance,1.87,74.71,low_confidence
+189,27,name_agreement,7.50,73.78,low_confidence
+190,27,complexity,1.95,68.20,low_confidence
+190,27,complexity_metric,9,48.29,low_confidence
+191,28,concreteness,4.83,81.21,low_confidence
+191,28,meaningfulness,4.62,74.03,low_confidence
+191,28,semantic_distance,4.62,74.03,low_confidence
+191,28,name_agreement,77.50,65.55,low_confidence
+191,28,common_response,,0.00,missing_common_response
+193,28,concreteness,2.17,83.52,low_confidence
+193,28,common_response,,0.00,missing_common_response
+194,28,concreteness,2412.00 -> 2.12,76.69,explicit_ocr_correction
+194,28,concreteness,2.12,76.69,low_confidence
+194,28,complexity,3.08,81.50,low_confidence
+194,28,familiarity,1.87,80.23,low_confidence
+195,28,semantic_distance,4.23,79.35,low_confidence
+195,28,common_response,,95.96,missing_common_response
+196,28,familiarity,1.58,77.52,low_confidence
+196,28,common_response,,91.61,missing_common_response
+197,28,familiarity,2.15,77.59,low_confidence
+197,28,semantic_distance,2.70,81.31,low_confidence
+197,28,concept_agreement, -> 0.00,70.00,fallback_from:blank
+197,28,concept_agreement,0.00,70.00,low_confidence
+197,28,name_agreement, -> 32.50,70.00,fallback_from:blank
+197,28,name_agreement,32.50,70.00,low_confidence
+197,28,common_response,,0.00,missing_common_response
+198,28,semantic_distance,3.29,84.70,low_confidence
+198,28,complexity_metric, -> 21,70.00,fallback_from:blank
+198,28,concept_agreement, -> 0.00,70.00,fallback_from:blank
+198,28,concept_agreement,0.00,70.00,low_confidence
+198,28,name_agreement, -> 65.00,70.00,fallback_from:blank
+198,28,name_agreement,65.00,70.00,low_confidence
+198,28,common_response,,0.00,missing_common_response
+199,28,label,Search,0.00,item_number_not_confirmed
+199,28,concreteness, -> 2.98,70.00,fallback_from:blank
+199,28,concreteness,2.98 -> 4.62,70.00,explicit_ocr_correction
+199,28,concreteness,4.62,70.00,low_confidence
+199,28,complexity, -> 3.65,70.00,fallback_from:blank
+199,28,complexity,3.65 -> 2.58,70.00,explicit_ocr_correction
+199,28,complexity,2.58,70.00,low_confidence
+199,28,familiarity, -> 3.79,70.00,fallback_from:blank
+199,28,familiarity,3.79 -> 3.65,70.00,explicit_ocr_correction
+199,28,familiarity,3.65,70.00,low_confidence
+199,28,meaningfulness, -> 2.43,70.00,fallback_from:blank
+199,28,meaningfulness,2.43 -> 3.75,70.00,explicit_ocr_correction
+199,28,meaningfulness,3.75,70.00,low_confidence
+199,28,semantic_distance, -> 4.00,70.00,fallback_from:blank
+199,28,semantic_distance,4.00 -> 2.43,70.00,explicit_ocr_correction
+199,28,semantic_distance,2.43,70.00,low_confidence
+199,28,complexity_metric, -> 0,70.00,fallback_from:blank
+199,28,complexity_metric,0 -> 4,70.00,explicit_ocr_correction
+199,28,concept_agreement, -> 70.00,70.00,fallback_from:blank
+199,28,concept_agreement,70.00 -> 0.00,70.00,explicit_ocr_correction
+199,28,concept_agreement,0.00,70.00,low_confidence
+199,28,name_agreement, -> 70.00,0.00,explicit_ocr_correction
+199,28,name_agreement,70.00,0.00,low_confidence
+200,28,label,Select irregular area,0.00,item_number_not_confirmed
+200,28,concreteness, -> 2.85,70.00,fallback_from:blank
+200,28,concreteness,2.85 -> 2.20,70.00,explicit_ocr_correction
+200,28,concreteness,2.20,70.00,low_confidence
+200,28,complexity, -> 2.28,70.00,fallback_from:blank
+200,28,complexity,2.28 -> 2.85,70.00,explicit_ocr_correction
+200,28,complexity,2.85,70.00,low_confidence
+200,28,familiarity, -> 1.88,70.00,fallback_from:blank
+200,28,familiarity,1.88 -> 2.28,70.00,explicit_ocr_correction
+200,28,familiarity,2.28,70.00,low_confidence
+200,28,meaningfulness, -> 1.79,70.00,fallback_from:blank
+200,28,meaningfulness,1.79 -> 1.88,70.00,explicit_ocr_correction
+200,28,meaningfulness,1.88,70.00,low_confidence
+200,28,semantic_distance, -> 1.00,70.00,fallback_from:blank
+200,28,semantic_distance,1.00 -> 1.79,70.00,explicit_ocr_correction
+200,28,semantic_distance,1.79,70.00,low_confidence
+200,28,complexity_metric, -> 0,70.00,fallback_from:blank
+200,28,complexity_metric,0 -> 10,70.00,explicit_ocr_correction
+200,28,concept_agreement, -> 20.00,70.00,fallback_from:blank
+200,28,concept_agreement,20.00 -> 0.00,70.00,explicit_ocr_correction
+200,28,concept_agreement,0.00,70.00,low_confidence
+200,28,name_agreement, -> 20.00,0.00,explicit_ocr_correction
+200,28,name_agreement,20.00,0.00,low_confidence
+201,29,complexity,3.12,79.63,low_confidence
+202,29,familiarity,3.45,80.06,low_confidence
+203,29,concreteness,2.95,76.42,low_confidence
+203,29,complexity,4.30,83.32,low_confidence
+203,29,semantic_distance,1.50,80.01,low_confidence
+203,29,complexity_metric, -> 41,70.00,fallback_from:blank
+203,29,name_agreement,12.50,73.30,low_confidence
+204,29,concreteness,4.35,75.64,low_confidence
+205,29,concreteness,2.75,85.00,low_confidence
+205,29,common_response,,95.65,missing_common_response
+206,29,concept_agreement,0.00,70.00,low_confidence
+207,29,common_response,,95.87,missing_common_response
+208,29,name_agreement,7.50,68.49,low_confidence
+210,29,concreteness,1.95,81.40,low_confidence
+210,29,familiarity,1.52,82.61,low_confidence
+210,29,common_response,,95.50,missing_common_response
+211,30,semantic_distance,3.45,83.15,low_confidence
+212,30,concept_agreement,72.50 -> 12.50,70.00,fallback_from:72.50
+212,30,concept_agreement,12.50,70.00,low_confidence
+212,30,name_agreement,72.50,72.40,low_confidence
+212,30,common_response,,0.00,missing_common_response
+213,30,familiarity,3.30,84.03,low_confidence
+213,30,semantic_distance,2.69,82.34,low_confidence
+214,30,complexity,4.18,73.52,low_confidence
+214,30,meaningfulness,4.25,67.91,low_confidence
+214,30,common_response,,0.00,missing_common_response
+215,30,complexity,2.75,79.50,low_confidence
+216,30,semantic_distance,2.95,84.28,low_confidence
+216,30,common_response,,94.85,missing_common_response
+217,30,complexity,2.85,80.88,low_confidence
+217,30,name_agreement,0.00 -> 30.00,70.00,fallback_from:$0.00
+217,30,name_agreement,30.00,70.00,low_confidence
+217,30,common_response,,64.17,missing_common_response
+218,30,familiarity,3.95 -> 3.60,70.00,fallback_from:3.95
+218,30,familiarity,3.60,70.00,low_confidence
+219,30,familiarity,1.98,75.41,low_confidence
+219,30,meaningfulness,2.35,82.94,low_confidence
+220,30,complexity_metric,9,63.49,low_confidence
+220,30,common_response,,0.00,missing_common_response
+221,31,meaningfulness,2.75,77.74,low_confidence
+222,31,name_agreement,47.50,69.35,low_confidence
+223,31,name_agreement,47.50,79.00,low_confidence
+223,31,common_response,,0.00,missing_common_response
+225,31,meaningfulness,3.85,75.23,low_confidence
+225,31,name_agreement, -> 9.00,70.00,fallback_from:blank
+225,31,name_agreement,9.00,70.00,low_confidence
+225,31,common_response,,0.00,missing_common_response
+226,31,concept_agreement, -> 2.50,0.00,explicit_ocr_correction
+226,31,concept_agreement,2.50,0.00,low_confidence
+226,31,name_agreement, -> 27.50,0.00,explicit_ocr_correction
+226,31,name_agreement,27.50,0.00,low_confidence
+226,31,common_response,,0.00,missing_common_response
+227,31,label,Vertebrates,0.00,item_number_not_confirmed
+227,31,concreteness, -> 2.80,70.00,fallback_from:blank
+227,31,concreteness,2.80,70.00,low_confidence
+227,31,complexity, -> 1.55,70.00,fallback_from:blank
+227,31,complexity,1.55,70.00,low_confidence
+227,31,familiarity, -> 2.49,70.00,fallback_from:blank
+227,31,familiarity,2.49 -> 2.45,70.00,explicit_ocr_correction
+227,31,familiarity,2.45,70.00,low_confidence
+227,31,meaningfulness, -> 2.00,70.00,fallback_from:blank
+227,31,meaningfulness,2.00 -> 2.55,70.00,explicit_ocr_correction
+227,31,meaningfulness,2.55,70.00,low_confidence
+227,31,semantic_distance, -> 2.12,70.00,fallback_from:blank
+227,31,semantic_distance,2.12,70.00,low_confidence
+227,31,complexity_metric, -> 1,70.00,fallback_from:blank
+227,31,concept_agreement, -> 0.00,70.00,fallback_from:blank
+227,31,concept_agreement,0.00,70.00,low_confidence
+227,31,name_agreement, -> 62.50,70.00,fallback_from:blank
+227,31,name_agreement,62.50,70.00,low_confidence
+228,31,label,Vibrate,0.00,item_number_not_confirmed
+228,31,concreteness, -> 2.02,70.00,fallback_from:blank
+228,31,concreteness,2.02,70.00,low_confidence
+228,31,complexity, -> 2.40,70.00,fallback_from:blank
+228,31,complexity,2.40,70.00,low_confidence
+228,31,familiarity, -> 1.80,70.00,fallback_from:blank
+228,31,familiarity,1.80,70.00,low_confidence
+228,31,meaningfulness, -> 1.57,70.00,fallback_from:blank
+228,31,meaningfulness,1.57,70.00,low_confidence
+228,31,semantic_distance, -> 2.46,70.00,fallback_from:blank
+228,31,semantic_distance,2.46 -> 2.76,70.00,explicit_ocr_correction
+228,31,semantic_distance,2.76,70.00,low_confidence
+228,31,complexity_metric, -> 7,70.00,fallback_from:blank
+228,31,concept_agreement, -> 2.00,70.00,fallback_from:blank
+228,31,concept_agreement,2.00 -> 5.00,70.00,explicit_ocr_correction
+228,31,concept_agreement,5.00,70.00,low_confidence
+228,31,name_agreement, -> 7.00,70.00,fallback_from:blank
+228,31,name_agreement,7.00 -> 7.50,70.00,explicit_ocr_correction
+228,31,name_agreement,7.50,70.00,low_confidence
+229,31,label,Video camera,0.00,item_number_not_confirmed
+229,31,concreteness, -> 3.08,70.00,fallback_from:blank
+229,31,concreteness,3.08 -> 4.83,70.00,explicit_ocr_correction
+229,31,concreteness,4.83,70.00,low_confidence
+229,31,complexity, -> 3.28,0.00,explicit_ocr_correction
+229,31,complexity,3.28,0.00,low_confidence
+229,31,familiarity, -> 3.60,70.00,fallback_from:blank
+229,31,familiarity,3.60 -> 3.90,70.00,explicit_ocr_correction
+229,31,familiarity,3.90,70.00,low_confidence
+229,31,meaningfulness, -> 3.92,0.00,explicit_ocr_correction
+229,31,meaningfulness,3.92,0.00,low_confidence
+229,31,semantic_distance, -> 4.69,0.00,explicit_ocr_correction
+229,31,semantic_distance,4.69,0.00,low_confidence
+229,31,complexity_metric, -> 9,0.00,explicit_ocr_correction
+229,31,complexity_metric,9,0.00,low_confidence
+229,31,concept_agreement, -> 57.50,0.00,explicit_ocr_correction
+229,31,concept_agreement,57.50,0.00,low_confidence
+229,31,name_agreement, -> 57.50,0.00,explicit_ocr_correction
+229,31,name_agreement,57.50,0.00,low_confidence
+229,31,common_response,,0.00,missing_common_response
+230,31,label,Wall,0.00,item_number_not_confirmed
+230,31,concreteness, -> 3.95,0.00,explicit_ocr_correction
+230,31,concreteness,3.95,0.00,low_confidence
+230,31,complexity, -> 3.00,70.00,fallback_from:blank
+230,31,complexity,3.00 -> 2.78,70.00,explicit_ocr_correction
+230,31,complexity,2.78,70.00,low_confidence
+230,31,familiarity, -> 3.43,70.00,fallback_from:blank
+230,31,familiarity,3.43 -> 3.00,70.00,explicit_ocr_correction
+230,31,familiarity,3.00,70.00,low_confidence
+230,31,meaningfulness, -> 3.13,0.00,explicit_ocr_correction
+230,31,meaningfulness,3.13,0.00,low_confidence
+230,31,semantic_distance, -> 4.40,0.00,explicit_ocr_correction
+230,31,semantic_distance,4.40,0.00,low_confidence
+230,31,complexity_metric, -> 12,0.00,explicit_ocr_correction
+230,31,complexity_metric,12,0.00,low_confidence
+230,31,concept_agreement, -> 60.00,0.00,explicit_ocr_correction
+230,31,concept_agreement,60.00,0.00,low_confidence
+230,31,name_agreement, -> 0.00,70.00,fallback_from:blank
+230,31,name_agreement,0.00 -> 60.00,70.00,explicit_ocr_correction
+230,31,name_agreement,60.00,70.00,low_confidence
+230,31,common_response,,0.00,missing_common_response
+231,32,familiarity,2.90,83.77,low_confidence
+231,32,meaningfulness,2.18,71.19,low_confidence
+232,32,meaningfulness,2.40,76.47,low_confidence
+232,32,complexity_metric,1 -> 4,70.00,fallback_from:1
+233,32,concreteness,4.58,80.40,low_confidence
+234,32,familiarity,2.05,77.96,low_confidence
+234,32,name_agreement,15.00,78.20,low_confidence
+234,32,common_response,,96.44,missing_common_response
+235,32,familiarity,2.83,71.58,low_confidence
+235,32,meaningfulness,2.40,79.70,low_confidence
+235,32,semantic_distance,4.48,68.60,low_confidence
+235,32,common_response,,95.66,missing_common_response
+236,32,common_response,,92.87,missing_common_response
+237,32,name_agreement,35.00,76.40,low_confidence
+238,32,familiarity,1.60 -> 1.95,70.00,fallback_from:16
+238,32,familiarity,1.95,70.00,low_confidence
+239,32,familiarity,1.73,65.30,low_confidence

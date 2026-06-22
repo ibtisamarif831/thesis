@@ -132,6 +132,22 @@ def load_openmoji_metadata():
     return out
 
 
+def load_mcdougall_metadata():
+    path = ICONSETS_DIR / "01_mcdougall_symbol_icon_set/metadata/mcdougall_ratings.csv"
+    if not path.exists():
+        return {}
+    with path.open(newline="") as file:
+        records = csv.DictReader(file)
+        return {
+            row["appendix_item"]: {
+                "label": row.get("label", ""),
+                "notes": f"appendix_item={row['appendix_item']}",
+            }
+            for row in records
+            if row.get("appendix_item")
+        }
+
+
 def infer_category(set_id: str, relative_parts: tuple[str, ...]) -> str:
     if set_id == "03_mapbox_maki_icons":
         return "cartography / point of interest"
@@ -200,6 +216,7 @@ def normalized_output_path(relative_path: Path) -> Path:
 def build_rows():
     arasaac_meta = load_arasaac_metadata()
     openmoji_meta = load_openmoji_metadata()
+    mcdougall_meta = load_mcdougall_metadata()
     rows = []
 
     for path in sorted(ICONSETS_DIR.rglob("*")):
@@ -233,8 +250,10 @@ def build_rows():
         elif set_id == "01_mcdougall_symbol_icon_set":
             match = re.search(r"mcdougall_(\d+)", path.stem)
             if match:
-                label = f"McDougall item {int(match.group(1))}"
-                notes = f"appendix_item={int(match.group(1))}"
+                appendix_item = str(int(match.group(1)))
+                item = mcdougall_meta.get(appendix_item, {})
+                label = item.get("label") or f"McDougall item {appendix_item}"
+                notes = item.get("notes", f"appendix_item={appendix_item}")
         elif set_id == "06_blissymbolics":
             label = re.sub(r"__[0-9a-f]{12}$", "", path.stem)
             label = slug_to_label(label)

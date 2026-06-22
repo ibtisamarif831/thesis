@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMinYMid" class="bliss-svg" viewBox="-8 -8 304 336"><style>
+.bliss-line,.bliss-disc,.bliss-dot{stroke:#000;stroke-linejoin:round;stroke-linecap:round;stroke-width:8}
+.bliss-line{fill:none}
+.bliss-disc,.bliss-dot{fill:#000}
+.bliss-text{font-family:"Helvetica Neue",Helvetica,Arial,"Liberation Sans",sans-serif;fill:#000}
+</style><g><circle class="bliss-line" cx="64" cy="192" r="64"/><circle class="bliss-line" cx="64" cy="192" r="32"/><circle class="bliss-dot" cx="64" cy="192" r="4"/><line class="bliss-line" x1="48" y1="64" x2="48" y2="96"/><line class="bliss-line" x1="48" y1="64" x2="80" y2="64"/><line class="bliss-line" x1="48" y1="96" x2="80" y2="96"/><line class="bliss-line" x1="80" y1="64" x2="80" y2="96"/><path class="bliss-line" d="M 192,208 A 16,16 0 0,0 160,208"/><line class="bliss-line" x1="160" y1="256" x2="192" y2="208"/><line class="bliss-line" x1="160" y1="256" x2="192" y2="256"/><circle class="bliss-line" cx="256" cy="224" r="32"/><line class="bliss-line" x1="233.37258300203" y1="246.62741699797" x2="278.62741699793" y2="201.37258300206997"/><line class="bliss-line" x1="233.37258300203" y1="201.37258300206997" x2="278.62741699793" y2="246.62741699797"/></g></svg>

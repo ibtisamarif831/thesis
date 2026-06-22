@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMinYMid" class="bliss-svg" viewBox="-8 -8 240 336"><style>
+.bliss-line,.bliss-disc,.bliss-dot{stroke:#000;stroke-linejoin:round;stroke-linecap:round;stroke-width:8}
+.bliss-line{fill:none}
+.bliss-disc,.bliss-dot{fill:#000}
+.bliss-text{font-family:"Helvetica Neue",Helvetica,Arial,"Liberation Sans",sans-serif;fill:#000}
+</style><g><line class="bliss-line" x1="0" y1="256" x2="64" y2="192"/><line class="bliss-line" x1="0" y1="192" x2="64" y2="256"/><line class="bliss-line" x1="96" y1="128" x2="96" y2="256"/><line class="bliss-line" x1="80" y1="64" x2="80" y2="96"/><line class="bliss-line" x1="80" y1="64" x2="112" y2="64"/><line class="bliss-line" x1="80" y1="96" x2="112" y2="96"/><line class="bliss-line" x1="112" y1="64" x2="112" y2="96"/><circle class="bliss-line" cx="160" cy="192" r="32"/><circle class="bliss-line" cx="192" cy="192" r="32"/></g></svg>

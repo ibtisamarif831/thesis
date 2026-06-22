@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMinYMid" class="bliss-svg" viewBox="-8 -8 416 336"><style>
+.bliss-line,.bliss-disc,.bliss-dot{stroke:#000;stroke-linejoin:round;stroke-linecap:round;stroke-width:8}
+.bliss-line{fill:none}
+.bliss-disc,.bliss-dot{fill:#000}
+.bliss-text{font-family:"Helvetica Neue",Helvetica,Arial,"Liberation Sans",sans-serif;fill:#000}
+</style><g><path class="bliss-line" d="M 0,208 A 20,20 0 0,0 0,176"/><path class="bliss-line" d="M 16,256 A 80,80 0 0,0 16,128"/><path class="bliss-line" d="M 16,224 A 40,40 0 0,0 16,160"/><line class="bliss-line" x1="80" y1="128" x2="80" y2="256"/><circle class="bliss-dot" cx="112" cy="256" r="4"/><circle class="bliss-dot" cx="144" cy="256" r="4"/><circle class="bliss-dot" cx="176" cy="256" r="4"/><line class="bliss-line" x1="208" y1="128" x2="208" y2="256"/><line class="bliss-line" x1="240" y1="192" x2="368" y2="192"/><line class="bliss-line" x1="336" y1="160" x2="368" y2="192"/><line class="bliss-line" x1="336" y1="224" x2="368" y2="192"/><line class="bliss-line" x1="400" y1="160" x2="400" y2="208"/><circle class="bliss-dot" cx="400" cy="224" r="4"/></g></svg>

@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMinYMid" class="bliss-svg" viewBox="-8 -8 424 336"><style>
+.bliss-line,.bliss-disc,.bliss-dot{stroke:#000;stroke-linejoin:round;stroke-linecap:round;stroke-width:8}
+.bliss-line{fill:none}
+.bliss-disc,.bliss-dot{fill:#000}
+.bliss-text{font-family:"Helvetica Neue",Helvetica,Arial,"Liberation Sans",sans-serif;fill:#000}
+</style><g><circle class="bliss-line" cx="32" cy="192" r="32"/><path class="bliss-line" d="M 96,160 A 32,32 0 0,0 32,160"/><path class="bliss-line" d="M 32,256 Q 96,208 96,160"/><line class="bliss-line" x1="96" y1="256" x2="224" y2="256"/><line class="bliss-line" x1="160" y1="128" x2="160" y2="256"/><line class="bliss-line" x1="160" y1="128" x2="224" y2="128"/><line class="bliss-line" x1="160" y1="192" x2="224" y2="192"/><line class="bliss-line" x1="224" y1="128" x2="224" y2="192"/><text class="bliss-text" text-anchor="middle" x="278.85699999999997" y="256" style="font-size:88">R</text><text class="bliss-text" text-anchor="middle" x="334.85699999999997" y="256" style="font-size:88">O</text><text class="bliss-text" text-anchor="middle" x="390.85699999999997" y="256" style="font-size:88">U</text></g></svg>

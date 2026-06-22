@@ -43,6 +43,11 @@ SET_INFO = {
         "source": "Mulberry Symbols GitHub",
         "source_url": "https://github.com/mulberrysymbols/mulberry-symbols",
     },
+    "06_blissymbolics": {
+        "name": "Blissymbolics",
+        "source": "Blissymbolics GitHub",
+        "source_url": "https://github.com/blissymbolics/blissymbols",
+    },
     "07_arasaac_pictograms": {
         "name": "ARASAAC Pictograms",
         "source": "ARASAAC API/static pictograms",
@@ -72,6 +77,11 @@ SET_INFO = {
         "name": "ISO 15223 Medical Device Symbols",
         "source": "medical-device-symbols GitHub",
         "source_url": "https://github.com/t4dhg/medical-device-symbols",
+    },
+    "13_usp_pictograms_manual": {
+        "name": "USP Pictograms",
+        "source": "USP Pictograms",
+        "source_url": "https://www.usp.org/health-quality-safety/usp-pictograms",
     },
 }
 
@@ -129,6 +139,8 @@ def infer_category(set_id: str, relative_parts: tuple[str, ...]) -> str:
         return relative_parts[1].removeprefix("humanitarian-icons-v2-1-") if len(relative_parts) > 1 else ""
     if set_id == "05_mulberry_symbols":
         return relative_parts[1] if len(relative_parts) > 1 else "AAC"
+    if set_id == "06_blissymbolics":
+        return "Blissymbolics " + relative_parts[4].removesuffix("s") if len(relative_parts) > 4 else "Blissymbolics"
     if set_id == "08_ghs_hazard_pictograms":
         return "chemical hazard"
     if set_id == "09_universal_symbols_healthcare_webfont":
@@ -137,6 +149,8 @@ def infer_category(set_id: str, relative_parts: tuple[str, ...]) -> str:
         return relative_parts[1] if len(relative_parts) > 1 else "safety sign"
     if set_id == "12_iso_15223_medical_device_symbols":
         return "medical device label"
+    if set_id == "13_usp_pictograms_manual":
+        return "medication instruction"
     return ""
 
 
@@ -154,6 +168,11 @@ def is_canonical_icon(path: Path, set_id: str) -> bool:
         return rel.startswith("humanitarian-icons-v2-1-svg/") and path.suffix.lower() == ".svg"
     if set_id == "05_mulberry_symbols":
         return rel.startswith("EN/") and path.suffix.lower() == ".svg"
+    if set_id == "06_blissymbolics":
+        return (
+            (rel.startswith("rendered_svg/chars/") or rel.startswith("rendered_svg/words/"))
+            and path.suffix.lower() == ".svg"
+        )
     if set_id == "07_arasaac_pictograms":
         return rel.startswith("png_300/") and path.suffix.lower() == ".png"
     if set_id == "08_ghs_hazard_pictograms":
@@ -166,6 +185,8 @@ def is_canonical_icon(path: Path, set_id: str) -> bool:
         return "Warning Symbols/" in rel and path.suffix.lower() == ".svg" and "_Original" not in path.stem
     if set_id == "12_iso_15223_medical_device_symbols":
         return rel.startswith("src/icons/") and path.suffix.lower() == ".svg"
+    if set_id == "13_usp_pictograms_manual":
+        return rel.startswith("gif/pictogif/") and path.suffix.lower() == ".gif"
     return False
 
 
@@ -214,6 +235,11 @@ def build_rows():
             if match:
                 label = f"McDougall item {int(match.group(1))}"
                 notes = f"appendix_item={int(match.group(1))}"
+        elif set_id == "06_blissymbolics":
+            label = re.sub(r"__[0-9a-f]{12}$", "", path.stem)
+            label = slug_to_label(label)
+            kind = "char" if parts[4] == "chars" else "word"
+            notes = f"bliss_kind={kind}"
 
         info = SET_INFO[set_id]
         normalized = normalized_output_path(relative_path)

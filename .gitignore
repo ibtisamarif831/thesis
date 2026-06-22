@@ -143,6 +143,7 @@ icon_data/metadata/sha256sums.txt
 !icon_data/iconsets/**/LOCAL_SOURCE_NOTE.md
 !icon_data/iconsets/**/*.json
 !icon_data/iconsets/**/*.txt
+!icon_data/iconsets/06_blissymbolics/rendered_svg/**/*.svg
 !icon_data/metadata/
 !icon_data/metadata/**/*.json
 !icon_data/analysis/

@@ -20,9 +20,19 @@
     label { display: block; font-size: 13px; margin: 7px 0; }
     select, input[type="range"] { width: 100%; }
     select { min-height: 30px; border: 1px solid var(--border); border-radius: 6px; background: white; padding: 4px 6px; }
+    button { border: 1px solid var(--border); border-radius: 6px; background: white; padding: 6px 9px; color: #18202f; cursor: pointer; }
+    button:hover { background: var(--panel); }
+    .button-row { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 8px; }
+    .selected-pills { display: flex; gap: 5px; flex-wrap: wrap; margin: 6px 0 10px; min-height: 20px; }
+    .filter-pill { display: inline-flex; align-items: center; gap: 5px; max-width: 100%; padding: 3px 7px; border: 1px solid #cbd2de; border-radius: 999px; background: #eef2f7; font-size: 12px; color: #18202f; }
+    .filter-pill button { border: 0; background: transparent; padding: 0; width: 16px; height: 16px; line-height: 14px; font-size: 14px; color: #4d5665; }
+    .filter-pill button:hover { background: #dde3ec; border-radius: 999px; }
     .checklist { border: 1px solid var(--border); border-radius: 6px; padding: 6px 8px; max-height: 180px; overflow: auto; background: white; }
     .plot-wrap { padding: 10px; min-width: 0; }
     #scatter { width: 100%; height: calc(100vh - 76px); }
+    #hoverPreview { position: fixed; z-index: 20; display: none; pointer-events: none; max-width: 260px; padding: 8px; border: 1px solid var(--border); border-radius: 8px; background: rgba(255,255,255,.98); box-shadow: 0 8px 24px rgba(20,30,45,.16); font-size: 12px; }
+    #hoverPreview img { width: 72px; height: 72px; object-fit: contain; border: 1px solid var(--border); background: white; float: left; margin-right: 8px; }
+    #hoverPreview b { font-size: 13px; }
     .detail-img { width: 96px; height: 96px; object-fit: contain; border: 1px solid var(--border); background: white; }
     .muted { color: var(--muted); }
     .pill { display: inline-block; padding: 2px 6px; border: 1px solid var(--border); border-radius: 999px; margin: 2px; font-size: 12px; background: var(--panel); }
@@ -47,7 +57,9 @@
       </section>
       <section class="control">
         <h2>Clustering</h2>
-        <label>Method<select id="methodSelect"><option value="kmeans">K-Means</option><option value="hierarchical">Hierarchical</option></select></label>
+        <div hidden>
+          <label>Method<select id="methodSelect"><option value="kmeans">K-Means</option><option value="hierarchical">Hierarchical</option></select></label>
+        </div>
         <label>Cluster count<select id="kSelect"></select></label>
         <label>Color by<select id="colorSelect"></select></label>
       </section>
@@ -58,8 +70,17 @@
       <section class="control">
         <h2>Filters</h2>
         <label>Icon sets<select id="setFilter" multiple size="8"></select></label>
-        <label>Category<select id="categoryFilter"><option value="">All categories</option></select></label>
-        <label>Style<select id="styleFilter"><option value="">All styles</option></select></label>
+        <div class="selected-pills" id="setFilterPills"></div>
+        <div hidden>
+          <label>Categories<select id="categoryFilter" multiple size="8"></select></label>
+          <div class="selected-pills" id="categoryFilterPills"></div>
+          <label>Styles<select id="styleFilter" multiple size="5"></select></label>
+          <div class="selected-pills" id="styleFilterPills"></div>
+        </div>
+        <div class="button-row">
+          <button type="button" id="clearSetFilter">Clear sets</button>
+          <button type="button" id="resetFilters">Reset filters</button>
+        </div>
       </section>
     </aside>
     <div class="plot-wrap"><div id="scatter"></div></div>
@@ -74,6 +95,7 @@
       </section>
     </aside>
   </main>
+  <div id="hoverPreview"></div>
   <script>
     let dashboard = null;
     let selectedIconId = null;
@@ -86,8 +108,8 @@
       color: "cluster",
       activeFeatures: new Set(),
       setFilter: new Set(),
-      categoryFilter: "",
-      styleFilter: ""
+      categoryFilter: new Set(),
+      styleFilter: new Set()
     };
 
     fetch("dashboard_data.json").then(r => r.json()).then(data => {
@@ -122,8 +144,11 @@
       const categories = unique(dashboard.records.map(r => r.category)).sort();
       const styles = unique(dashboard.records.map(r => r.style_label)).sort();
       fillSelect("setFilter", sets.map(v => [v, v]), "", true);
-      fillSelect("categoryFilter", [["", "All categories"], ...categories.map(v => [v, v])], "");
-      fillSelect("styleFilter", [["", "All styles"], ...styles.map(v => [v, v])], "");
+      fillSelect("categoryFilter", categories.map(v => [v, v]), "", true);
+      fillSelect("styleFilter", styles.map(v => [v, v]), "", true);
+      installToggleMultiSelect("setFilter", "setFilter");
+      installToggleMultiSelect("categoryFilter", "categoryFilter");
+      installToggleMultiSelect("styleFilter", "styleFilter");
 
       document.getElementById("variantSelect").addEventListener("change", e => { state.variant = e.target.value; render(); });
       document.getElementById("methodSelect").addEventListener("change", e => { state.method = e.target.value; render(); });
@@ -131,14 +156,28 @@
       document.getElementById("colorSelect").addEventListener("change", e => { state.color = e.target.value; render(); });
       document.getElementById("setFilter").addEventListener("change", e => {
         state.setFilter = new Set(Array.from(e.target.selectedOptions).map(o => o.value));
+        renderFilterPills();
         render();
       });
-      document.getElementById("categoryFilter").addEventListener("change", e => { state.categoryFilter = e.target.value; render(); });
-      document.getElementById("styleFilter").addEventListener("change", e => { state.styleFilter = e.target.value; render(); });
+      document.getElementById("categoryFilter").addEventListener("change", e => {
+        state.categoryFilter = new Set(Array.from(e.target.selectedOptions).map(o => o.value));
+        renderFilterPills();
+        render();
+      });
+      document.getElementById("styleFilter").addEventListener("change", e => {
+        state.styleFilter = new Set(Array.from(e.target.selectedOptions).map(o => o.value));
+        renderFilterPills();
+        render();
+      });
+      document.getElementById("clearSetFilter").addEventListener("click", () => clearSelectFilter("setFilter", "setFilter"));
+      document.getElementById("clearCategoryFilter").addEventListener("click", () => clearSelectFilter("categoryFilter", "categoryFilter"));
+      document.getElementById("clearStyleFilter").addEventListener("click", () => clearSelectFilter("styleFilter", "styleFilter"));
+      document.getElementById("resetFilters").addEventListener("click", resetFilters);
       featureChecks.addEventListener("change", () => {
         state.activeFeatures = new Set(Array.from(featureChecks.querySelectorAll("input:checked")).map(i => i.value));
         render();
       });
+      renderFilterPills();
     }
 
     function render() {
@@ -170,6 +209,13 @@
         selectedIconId = event.points[0].customdata[0];
         renderDetail(labels);
       });
+      document.getElementById("scatter").on("plotly_hover", event => {
+        const point = event.points[0];
+        const iconId = point.customdata[0];
+        const record = dashboard.records.find(item => item.icon_id === iconId);
+        if (record) renderHoverPreview(record, labels[dashboard.records.indexOf(record)], event.event);
+      });
+      document.getElementById("scatter").on("plotly_unhover", hideHoverPreview);
       renderDetail(labels);
       renderClusterSummary(labels, filtered);
     }
@@ -195,9 +241,67 @@
 
     function passesFilters(record) {
       if (state.setFilter.size && !state.setFilter.has(record.set_name)) return false;
-      if (state.categoryFilter && record.category !== state.categoryFilter) return false;
-      if (state.styleFilter && record.style_label !== state.styleFilter) return false;
+      if (state.categoryFilter.size && !state.categoryFilter.has(record.category)) return false;
+      if (state.styleFilter.size && !state.styleFilter.has(record.style_label)) return false;
       return true;
+    }
+
+    function clearSelectFilter(selectId, stateKey) {
+      Array.from(document.getElementById(selectId).options).forEach(option => option.selected = false);
+      state[stateKey] = new Set();
+      renderFilterPills();
+      render();
+    }
+
+    function resetFilters() {
+      clearSelectFilter("setFilter", "setFilter");
+      clearSelectFilter("categoryFilter", "categoryFilter");
+      clearSelectFilter("styleFilter", "styleFilter");
+    }
+
+    function installToggleMultiSelect(selectId, stateKey) {
+      const select = document.getElementById(selectId);
+      select.addEventListener("mousedown", event => {
+        if (event.target.tagName !== "OPTION") return;
+        event.preventDefault();
+        event.target.selected = !event.target.selected;
+        state[stateKey] = new Set(Array.from(select.selectedOptions).map(option => option.value));
+        renderFilterPills();
+        render();
+      });
+    }
+
+    function removeFilterValue(selectId, stateKey, value) {
+      const select = document.getElementById(selectId);
+      Array.from(select.options).forEach(option => {
+        if (option.value === value) option.selected = false;
+      });
+      state[stateKey].delete(value);
+      renderFilterPills();
+      render();
+    }
+
+    function renderFilterPills() {
+      renderPillGroup("setFilterPills", "setFilter", "setFilter");
+      renderPillGroup("categoryFilterPills", "categoryFilter", "categoryFilter");
+      renderPillGroup("styleFilterPills", "styleFilter", "styleFilter");
+    }
+
+    function renderPillGroup(containerId, selectId, stateKey) {
+      const container = document.getElementById(containerId);
+      const values = Array.from(state[stateKey]).sort();
+      if (!values.length) {
+        container.innerHTML = '<span class="muted">All</span>';
+        return;
+      }
+      container.innerHTML = values.map(value => `
+        <span class="filter-pill">
+          <span>${escapeHtml(value)}</span>
+          <button type="button" aria-label="Remove ${escapeHtml(value)}" data-value="${escapeHtml(value)}">x</button>
+        </span>`).join("");
+      container.querySelectorAll("button").forEach(button => {
+        button.addEventListener("click", () => removeFilterValue(selectId, stateKey, button.dataset.value));
+      });
     }
 
     function colorValue(record, cluster) {
@@ -219,6 +323,26 @@
     function hoverText(record, cluster) {
       const features = Array.from(state.activeFeatures).map(f => `${title(f)}: ${record.image_features[f]}`).join("<br>");
       return `<b>${escapeHtml(record.label)}</b><br>${escapeHtml(record.set_name)}<br>${escapeHtml(record.category)}<br>Cluster: ${cluster}<br>${features}`;
+    }
+
+    function renderHoverPreview(record, cluster, event) {
+      const preview = document.getElementById("hoverPreview");
+      preview.innerHTML = `
+        <img src="${record.normalized_path}" alt="">
+        <b>${escapeHtml(record.label)}</b><br>
+        <span class="muted">${escapeHtml(record.set_name)}</span><br>
+        <span>${escapeHtml(record.category || "Uncategorized")}</span><br>
+        <span>Cluster: ${cluster}</span>
+        <div style="clear: both;"></div>`;
+      const x = Math.min(event.clientX + 14, window.innerWidth - 280);
+      const y = Math.min(event.clientY + 14, window.innerHeight - 150);
+      preview.style.left = `${Math.max(8, x)}px`;
+      preview.style.top = `${Math.max(8, y)}px`;
+      preview.style.display = "block";
+    }
+
+    function hideHoverPreview() {
+      document.getElementById("hoverPreview").style.display = "none";
     }
 
     function renderDetail(labels) {

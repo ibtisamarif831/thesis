@@ -51,11 +51,11 @@ Each point represents one icon. The 2D position is based on PCA coordinates for 
 The left sidebar controls the analysis view:
 
 - **Feature Variant** switches between image-only, metadata-only, and combined feature spaces.
-- **Clustering Method** switches between k-means and hierarchical clustering.
+- **Clustering Method** is currently fixed to k-means in the visible UI. Hierarchical clustering outputs are still generated and stored in the backend data.
 - **Cluster Count** switches between the precomputed values 3, 5, 7, and 10.
 - **Color By** changes how points are colored.
 - **Image Features** lets image features be selected or deselected.
-- **Filters** restrict the view by icon set, category, or style.
+- **Filters** currently show icon-set filtering only. Selected icon sets appear as pills below the filter, and each pill can be removed with its `x` button. Category and style metadata are still present in the data, but their filter controls are hidden for now.
 
 The right sidebar shows:
 
@@ -134,4 +134,3 @@ It does not overwrite the older `icon_data/analysis/features.csv` or `icon_data/
 - Hierarchical clustering currently uses precomputed cluster labels/cuts, not a full interactive tree.
 - The dashboard is optimized for the 1,038-icon sample, not the full 28,749-icon dataset.
 - Human verification is not included in this dashboard.
-

@@ -96,7 +96,9 @@ Updated: 2026-06-22
   - k-means and hierarchical cluster switching;
   - k/cut selection;
   - coloring by cluster, icon set, category, style label, or numeric image feature;
-  - filtering by icon set, category, and style;
+  - multi-select filtering by icon set, category, and style;
+  - selected-filter pills with `x` removal for icon sets, categories, and styles;
+  - clearing individual filters and resetting all filters;
   - icon detail inspection;
   - cluster summary panels.
 - Local verification server:

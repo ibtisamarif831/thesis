@@ -1,0 +1,33 @@
+{
+  "expected_outputs": [
+    "sample_metadata.csv",
+    "features_image.csv",
+    "features_metadata.csv",
+    "features_combined.csv",
+    "clusters_kmeans.csv",
+    "clusters_hierarchical.csv",
+    "cluster_summary.csv",
+    "dashboard_data.json",
+    "index.html"
+  ],
+  "missing_category": 0,
+  "missing_metadata_tokens": 0,
+  "missing_normalized_paths": 0,
+  "per_set_limit": 100,
+  "rows": 1038,
+  "set_counts": {
+    "01_mcdougall_symbol_icon_set": 100,
+    "02_aiga_dot_symbol_signs": 80,
+    "03_mapbox_maki_icons": 100,
+    "04_ocha_humanitarian_icons": 100,
+    "05_mulberry_symbols": 100,
+    "06_blissymbolics": 100,
+    "07_arasaac_pictograms": 100,
+    "08_ghs_hazard_pictograms": 9,
+    "09_universal_symbols_healthcare_webfont": 100,
+    "10_openmoji": 100,
+    "11_iso_7010_safety_signs": 37,
+    "12_iso_15223_medical_device_symbols": 29,
+    "13_usp_pictograms_manual": 83
+  }
+}

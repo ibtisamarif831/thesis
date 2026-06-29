@@ -29,7 +29,7 @@ Updated: 2026-06-22
 
 - Task 1 is complete.
 - Created a reproducible metadata builder:
-  - `scripts/build_clustering_metadata_sample.py`
+  - `code/build_clustering_metadata_sample.py`
 - Generated the clustering metadata sample:
   - `icon_data/analysis/clustering_metadata_sample.csv`
 - Generated the metadata coverage report:
@@ -53,7 +53,7 @@ Updated: 2026-06-22
 - Remaining metadata gaps are notes-only gaps in some sets; these do not block clustering because every row has category information and `metadata_tokens`.
 - Analysis dashboard implementation has started and the proposed Plotly direction is implemented as a first working static dashboard.
 - Added a new analysis dashboard builder:
-  - `scripts/build_analysis_dashboard.py`
+  - `code/build_analysis_dashboard.py`
 - Generated new dashboard outputs under:
   - `icon_data/analysis/analysis_dashboard/`
 - The analysis sample uses max 100 icons per set and now includes all 13 icon sets:

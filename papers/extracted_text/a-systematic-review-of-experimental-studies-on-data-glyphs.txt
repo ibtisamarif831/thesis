@@ -1,0 +1,1272 @@
+--- PAGE 1 ---
+IEEE TRANSACTIONS ON VISUALIZATION AND COMPUTER GRAPHICS, VOL. 23, NO. 7, JULY 2017 1863
+A Systematic Review of Experimental
+Studies on Data Glyphs
+Johannes Fuchs, Petra Isenberg, Anastasia Bezerianos, and Daniel Keim
+Abstract—We systematically reviewed 64 user-study papers on data glyphs to help researchers and practitioners gain an informed
+understanding of tradeoffs in the glyph design space. The glyphs we consider are individual representations of multi-dimensional data
+points, often meant to be shown in small-multiple settings. Over the past 60 years many different glyph designs were proposed and
+many of these designs have been subjected to perceptual or comparative evaluations. Yet, a systematic overview of the types of
+glyphs and design variations tested, the tasks under which they were analyzed, or even the study goals and results does not yet exist.
+In this paper we provide such an overview by systematically sampling and tabulating the literature on data glyph studies, listing their
+designs, questions, data, and tasks. In addition we present a concise overview of the types of glyphs and their design characteristics
+analyzed by researchers in the past, and a synthesis of the study results. Based on our meta analysis of all results we further contribute
+a set of design implications and a discussion on open research directions.
+Index Terms—Survey, glyphs, quantitative evaluation, glyph design
+Ç
+1 INTRODUCTION
+REPRESENTING multi-dimensional data is a common task selecting among existing ones. Yet, while many user studies
+in data visualization and, thus, a multitude of techni- in the literature have investigated different data glyph
+ques has been developed [1]. Data glyphs are one such tech- designs and their variations, a systematic overview of these
+nique, in which single data points are encoded individually studies and what they pertain to, is so far missing.
+by assigning their dimensions to one or more marks and With this paper we contribute such a systematic overview
+their visual variables. Data glyphs have a long history, going of the user-study literature on data glyphs, focusing on the
+back to the 1950s, with metroglyphs being one of the first analysis of 64 papers with quantitative controlled studies. In
+designs using line length to encode data [2]. A somewhat contrast to their qualitative counterpart, controlled experi-
+infamous, and thus well researched, example of data glyphs ments are more easily comparable and summarizable, as
+are Chernoff faces [3] which encode data values in 2D facial they test concrete hypotheses regarding design choices and
+features such as the length of the nose or the orientation of isolate factors in the glyph designs [8]. We focus on data
+eyebrows. Star Glyphs are another type of glyph-based glyphs that: use different visual channels to encode multiple
+encoding that has received research attention [4] and has attribute dimensions, that can be independently spatially
+been used in various applications [5], [6], [7]. arranged, and that can vary in size (see Section 3.1). We cate-
+Over the years, many different glyph variations were gorize the studies we found according to a number of criteria
+introduced to better fit certain data types, or to solve specific that are meant to help researchers and practitioners choose
+tasks more effectively. Yet, while many designs have already amongst the most relevant literature to read, and ultimately
+been explored, the mapping possibilities of data dimensions to make informed choices about glyph use, design, and
+to visual glyph encodings is nearly endless [1] and many potential future studies. These criteria include glyph types
+more designs are certainly imaginable. This flexibility allows (see Fig. 1 for an overview), presentation settings, datasets,
+designers to come up with new and innovative glyph repre- tasks, and study goals. We extend this characterization with
+sentations for specific data, tasks, or contexts. However, a summary of study outcomes to help practitioners select the
+without any guidance, this freedom and large design space most appropriate data glyphs according to different criteria
+can become overwhelming. Knowledge of when and which like visual design, data density, or task. By tabulating exist-
+types of designs work best or are preferred by viewers, could ing studies according to these criteria we provide a novel
+aid designers and practitioners in creating new designs or in user-study-centric view on the design space and study out-
+comes, and contribute a discussion on open research areas
+(cid:1) J. Fuchs and D. Keim are with the University of Konstanz, Konstanz 78464, that will help to further our understanding of data glyphs.
+Germany. E-mail: fuchs@dbvis.inf.uni-konstanz.de, keim@uni-konstanz.de.
+(cid:1) P. Isenberg is with Inria, Paris, France. E-mail: petra.isenberg@inria.fr. 2 RELATED WORK
+(cid:1) A. Bezerianos is with Univ Paris Sud, CNRS & Inria, Paris, France.
+E-mail: anastasiab@gmail.com. In this section we provide an overview of glyph-related sur-
+Manuscript received 27 July 2015; revised 15 July 2016; accepted 19 Mar. vey- or meta-papers that, similar to ours, have attempted to
+2016. Date of publication 31 Mar. 2016; date of current version 26 May 2017. structure existing glyphs according to various criteria. Since
+Recommended for acceptance by F.J.J. van Ham. a large number of glyph designs have been proposed in the
+For information on obtaining reprints of this article, please send e-mail to:
+past, a tabulation of existing individual designs is beyond
+reprints@ieee.org, and reference the Digital Object Identifier below.
+Digital Object Identifier no. 10.1109/TVCG.2016.2549018 the scope of this section.
+1077-2626 (cid:1) 2016 IEEE. Personal use is permitted, but republication/redistribution requires IEEE permission.
+See http://www.ieee.org/publications_standards/publications/rights/index.html for more information.
+Authorized licensed use limited to: Bernd Froehlich. Downloaded on August 01,2024 at 06:49:49 UTC from IEEE Xplore. Restrictions apply.
+
+--- PAGE 2 ---
+1864 IEEE TRANSACTIONS ON VISUALIZATION AND COMPUTER GRAPHICS, VOL. 23, NO. 7, JULY 2017
+their survey, their focus is on design study papers showing
+the applicability of data glyphs to different data sets and
+tasks. In contrast to this work, we provide an overview of
+performance assessments from quantitative user studies.
+A more data-specific survey on glyphs in the medical
+domain was presented by Ropinski et al. [15]. The authors
+classified glyph-based visualizations for medical data into
+two groups: pre-attentively and attentively identifiable glyph
+designs. Based on this grouping the authors further derive
+design guidelines for developing glyphs for this domain, but
+provide no additional empirical results from user studies.
+While there is no systematic assessment of glyph user-
+studies that we know of, some researchers have categorized
+subsets of the study design space. Nelson [16], for example,
+discusses the history of Chernoff faces [3] with its many var-
+iations such as the Flury-Rydwiel [17] or Kabulov faces [18].
+She also discusses studies investigating performance changes
+for different data types or visual variations. We took this
+Fig. 1. Data glyphs: A selection of the different data glyph designs used work as inspiration, but provide a much more comprehen-
+in the quantitative experiments we analyzed. sive view on the study design space. Ware’s [Ch. 5] [19]
+discussion on “Glyphs and Multivariate Discrete Data” is
+Ward [9], [10] was one of the first to provide a structure related to our work in that he categorizes two types of user
+of the glyph design space by classifying different layout possi- study tasks for glyphs. He focuses on tasks designed to find
+bilities into data-driven and structure-driven layouts. In a out which display dimensions are perceived holistically (inte-
+data-driven arrangement spatial position is determined by gral) or perceived separately (separable): restricted classifica-
+data: this can either be the raw data used as in a scatterplot, or tion tasks and speeded classification tasks. Among others, we
+a projection-based approach such as PCA. A structure-driven include both types of tasks in our discussion based on slightly
+layout makes use of relations between the data points to calcu- different terminology [20]: similarity search tasks (related to
+late a layout. For example, hierarchical information can be restricted classification) and lookup tasks (similar to speeded
+used to lay out glyphs in a tree structure. Ward extended this classification).
+work with a categorization of the visual characteristics of data In summary, while there are several overview papers on
+glyphs. He structured data glyphs based on their mapping of data glyphs, we know of no prior work, such as ours, that
+data to visual attributes into three different classes: a many-to- provides a systematic review of glyph user studies, study
+one mapping where each data dimension is mapped to the designs, and results.
+same visual variable (e.g., profile glyph [11]); a one-to-one map-
+ping showing each data attribute with a different visual vari- 3 METHODOLOGY
+able (e.g., Chernoff faces [3]); and a one-to-many mapping
+For our systematic review we focused on sampling user stud-
+representing the data dimensions redundantly with many dif-
+ies in which participants performed controlled, quantitatively
+ferent visual attributes (e.g., compound glyph [12]). In this
+measured tasks with data glyphs. These quantitative meas-
+paper, we use this categorization to structure our own catego-
+urements could (but did not have to) be accompanied by a
+rization of data glyph user-studies.
+subjective assessment of the tested glyphs (e.g., according to
+In contract, Chung et al. [13] proposed a categorization
+aesthetics, confidence, etc.) Next, we categorized the found
+based on the visual channels used to represent the data and
+studies according to the criteria discussed in this section.
+the spatial dimensionality of the glyph (2D, 2.5D, and 3D).
+The authors also discussed critical design aspects and
+guidelines for glyph visualizations, such as the normaliza- 3.1 Data Glyphs: Sampling Characteristics
+tion of data input for each dimension, the use of redundant During our previous work on data glyphs we noticed that
+mappings, and the visual orthogonality of different glyph definitions of data glyphs vary in the literature. Yet, we
+components to ensure best performance. Since some of needed to base our systematic literature search on a more for-
+these guidelines cannot be followed for a high number of mal, grounded understanding of existing data glyph defini-
+dimensions, designers have to choose between few single tions. We, thus, extracted definitions from survey- and meta-
+complex glyph designs, or many simple designs. Addition- papers on glyphs, several books on visualization, many
+ally, they suggested using halos to limit the negative effect papers in the literature that used the word “glyph,” and
+of overplotting. In our survey we extend this list of guide- interviewed several visualization experts on their under-
+lines based on our review of experimental results and pro- standing of the term glyph.
+vide further open research questions. We found that in early years the term “glyph” was often
+An extensive survey on data glyphs was presented by used as a synonym for the metroglyph [11], [21] but that with
+Borgo et al. [14]. The authors cover different glyph represen- increasing numbers of different glyph designs published,
+tations and propose guidelines for designing data glyphs more abstract definitions of a data glyph emerged. To com-
+based on a collection of design principles in the literature. pare how researchers have defined the term, we extracted
+While Borgo et al. also include several empirical studies in descriptive keywords from published definitions, and
+Authorized licensed use limited to: Bernd Froehlich. Downloaded on August 01,2024 at 06:49:49 UTC from IEEE Xplore. Restrictions apply.
+
+--- PAGE 3 ---
+FUCHS ET AL.: A SYSTEMATIC REVIEW OF EXPERIMENTAL STUDIES ON DATA GLYPHS 1865
+TABLE 1 3.3 Analyzed Study Characteristics
+Overview of Defining Glyph Characteristics In the design of any quantitative user study several charac-
+Mentioned in the Literature
+teristics are important: the tasks to be performed, the col-
+lected measures, the presentation of the stimuli (glyphs),
+Data glyph characteristics
+the size and type of data visualized, the general presenta-
+References small/ encodes different uses different
+tion setting, and the study goals (or main research ques-
+compact attribute dimensions visual channels
+tions) [8]. We categorized the 64 study papers using these
+[14] X X X
+characteristics as explained in more detail next.
+[24] X X -
+[25] X X -
+[26] - X X 3.3.1 Glyph Types and Data Encoding
+[27] - X X
+We used Ward’s data mapping taxonomy [10] to distin-
+[28] - X X
+[29] - X X guish between glyphs using many-to-one and one-to-one
+[1] - X X mappings (see Section 2). The rows and columns of Table 3
+[15] - X X give an overview of this categorization. We only found two
+[19] - X X occurrences of Ward’s third group: one-to-many mappings.
+[10] - X -
+Thus, we do not highlight this group as a category in our
+[30] - - X
+result table. The two studies we found ([32] and [33]) are,
+[31] - - X
+however, discussed throughout the paper.
+Since the many-to-one group encodes multiple data point
+summarized in which publications they appeared in Table 1.
+dimensions using the same visual variable, we further split
+While Table 1 is certainly not exhaustive, it serves to show the
+this group into categories based on the visual variables used:
+wide variety of ways researchers think of, and define, data
+position/length, color saturation, and orientation/angle (see
+glyphs, an observation corroborated recently by Munzner [1].
+Table 3). We also distinguished whether or not a linear or cir-
+After a careful assessment of these definitions, we app-
+cular layout was chosen to lay out the dimensions.
+roached the paper sampling as follows: first, we included all
+The category of one-to-one mapping was structured
+user studies that used the word “glyph”. In a second step we
+slightly differently as it includes a wide variety of design
+excluded all papers which used the term glyph as a synonym
+choices. As we mostly found facial glyph representations or
+for simple data marks (e.g., [22], [23]), such as points in a
+three-dimensional designs, the result table includes these
+scatterplot. We chose this exclusion criteria because we
+two categories: Faces and 3D Glyphs. A third category on car
+wanted to focus our assessment on glyphs that encode multi-
+glyphs was added, since in one paper [34] faces were com-
+ple attribute dimensions at once. This notion of a data glyph
+pared against unique car glyph representations. Car glyphs
+as a multi-dimensional encoding also aligns with the major-
+are abstract two dimensional representations of vehicles,
+ity of historical data glyph definitions. We, thus, chose stud-
+which use unique characteristics (size of the trunk or hood)
+ies in which glyphs fit the following general definition:
+to encode data.
+Data glyphs are data-driven visual entities, which make use
+of different visual channels to encode multiple attribute dimen- We additionally found 12 studies that tested unique glyph
+sions. They can be independently spatially arranged and can designs that were not compared to alternative representa-
+vary in size. tions: PlanningLines [35], weather vanes [36], [37], shapes
+After this filtering we categorized the tested glyph [38], [39], roses [40], themes [41], arrows [42], Motifs [43], [44],
+designs according to the main descriptive criteria we found flowers [45], and MILSTD2525 glyphs [46]. Rather they were
+in the literature: visual channels, encoded dimensions, and either compared against textual information, tested on vary-
+presentation size (see Table 1). ing backgrounds (changes in the topological level of detail),
+or against different types of visualizations. Since they were
+3.2 Paper Sampling and Collection not compared to other designs in the table, we positioned
+To find relevant papers for our review we used a snowball them slightly apart in the “One-to-One Mapping” category.
+sampling technique in which we first searched for the key-
+word “glyph” in the title, abstract, and keywords in the the 3.3.2 Glyph Presentation Setting
+ACM digital library (leading to 80 potential results), the
+For the examined studies, we categorized how many glyphs
+IEEE Xplore digital library (leading to 255 potential results),
+were presented to a viewer on the screen: individual glyphs,
+the EG digital library (leading to 66 potential results), and
+multiple glyphs of fixed number, or multiple glyphs of
+the DBLP computer science bibliography (leading to 134
+varying numbers. In the category of multiple glyphs we
+potential results).
+further noted how the glyphs were arranged on the screen,
+In a next step we excluded papers that did not include at
+as grids, scatterplots, node-link diagrams, on geographic
+least one user study with quantitative measures or did not
+maps, or other layouts.
+study glyphs that fit our definition. This filtering step
+removed 505 of the 535 candidate papers, leaving 30 relevant
+3.3.3 Datasets
+papers for our survey. From this initial set of papers we
+recursively scanned references for further user studies about The glyphs used in the studies all encoded either multi-
+data glyphs. Using this approach we collected 64 papers dimensional data of a general nature, or time-series data.
+from the visualization literature as well as work from statis- Additionally, we noted how many dimensions a glyph
+tics and psychology. encoded. The number of dimensions is related to the visual
+Authorized licensed use limited to: Bernd Froehlich. Downloaded on August 01,2024 at 06:49:49 UTC from IEEE Xplore. Restrictions apply.
+
+--- PAGE 4 ---
+1866 IEEE TRANSACTIONS ON VISUALIZATION AND COMPUTER GRAPHICS, VOL. 23, NO. 7, JULY 2017
+complexity of a glyph. Independent of data type and den-
+sity we further recorded whether the data was synthetically
+created, or if real data was used in the study.
+3.3.4 Tasks and Measures
+Important for understanding any study results is the nature
+of the task participants had to perform. We group tasks in
+broad categories, differentiating between tasks involving the
+glyph as a whole (synoptic tasks [20]) and tasks where partici-
+pants had to focus on single specific characteristics of a glyph
+(elementary tasks [20]). An elementary task is typically a
+lookup task during which participants focus on single dimen-
+Fig. 2. Statistics: Ratio of papers evaluating different visual encodings
+sions of a glyph and read individual values.
+(distinguished by color). Low saturation indicates experiments evaluat-
+We further subdivided synoptic tasks into three catego- ing design variations of this encoding, and high saturation other experi-
+ries: 1) visual search where participants had to find a glyph ments (e.g., comparisons to other encodings).
+differing from others, or tell whether a specific glyph is
+diagonal of Table 3,1 the majority of studies (39/64,
+present or not; 2) similarity search where participants had to
+60.94 percent) tested case b) or c). Design variations within
+compare the overall structure of glyphs and group similar
+a glyph category were more frequently tested against each
+representations; and 3) trend detection tasks where partici-
+other (32/39, 82.05 percent) than glyphs versus a common
+pants had to keep track of the development of data values
+data table or text description (7/39, 17.95 percent). The latter
+across dimensions.
+group was most often used to motivate the use of visuals
+over text descriptions or data tables [21], [64], [84], [85], [86].
+3.3.5 Study Goals
+To measure participant performance all studies but one
+We found three different general study goals: 1) a compari- [44] recorded accuracy scores, additionally 65.63% measured
+son of various glyph designs according to their performance completion time (42/64), and 29.69 percent collected qualita-
+and a ranking of designs based on it; 2) a comparison of dif- tive feedback (19/64) as well. It is interesting to note that par-
+ferent variations of a single glyph, to detect visual features ticipants’ preferences did not always match with their
+improving a specific glyph design; and 3) a comparison of performance [56], [58], [60], [90]. Therefore, a preferred design
+single glyphs versus data tables, to motivate the use of these was not always a guarantee for a good user performance.
+visual objects over textual representations. Summary: We found similar study goals across many
+experiments, yet varied were factors like number of data
+3.3.6 Study Results points and dimensions, task, or glyph design. These varia-
+We summarized study outcomes on a high level, reporting tions make individual study outcomes hard to compare.
+findings on the impact of presentation settings, number of Thus, we will discuss the individual factors in the following
+data points and dimensions on the tested glyphs. We fur- sections before discussing the study outcomes in Section 4.6.
+ther report overall ranking of different glyph types, offering
+explanations to seemingly contradictory results across stud- 4.2 Glyph Types and Data Encoding
+ies. We do not enter into detail on findings regarding varia- Table 3 summarizes evaluated glyph types and their encod-
+tions of a single glyph type. Our goal is to provide ings based on Ward’s data mapping taxonomy outlined in
+researchers and practitioners with a better grasp of the over- Section 3. The table is meant to be read like a matrix. The
+all picture of the performance of different glyphs, and to intersections of rows and columns show which glyph types
+point to individual papers for detailed study results. and encodings a particular study compared against each
+other. The diagonal (top left to bottom right) of the table
+4 RESULTS: STATE-OF-THE-ART IN GLYPH contains references to studies that tested design variations
+EVALUATION of the same glyph category, or an evaluation of one specific
+design against plain text or data tables (marked with a * in
+In this section we discuss the findings from our systematic
+the table). Empty cells indicate new research possibilities.
+review based on the characteristics discussed in the previ-
+Fig. 2 shows that face glyphs were evaluated most fre-
+ous section. A summary of the results is presented in indi-
+quently (39.06 percent), followed by glyphs with position/
+vidual tables and in highlighted paragraphs throughout the
+length encodings (linear: 17.19 percent, circular: 18.75 per-
+section. Many study descriptions did not include all infor-
+cent), and 3D glyph designs (14.06 percent). We note that
+mation needed for our characterization and subsequently
+from the studies involving position/length encodings or 3D
+our counts do not always add up to 64–the total number of
+glyphs (27 in total), 8 were in fact compared to faces
+papers examined.
+(Table 3). Color (linear: 9.38 percent, circular: 3.13 percent)
+and orientation encodings (linear: 3.13 percent, circular:
+4.1 Study Goals
+0 percent) have received little research attention.
+We found three higher-level study goals—all related to dif-
+ferent types of comparisons: a) comparison of glyph
+1. The flower [45] and theme [41] glyphs also fit into this category,
+designs, b) comparison of glyph variations, and c) compari-
+however, due to their visual encoding they are not represented on the
+son of glyphs with data tables or text. As can be seen in the diagonal.
+Authorized licensed use limited to: Bernd Froehlich. Downloaded on August 01,2024 at 06:49:49 UTC from IEEE Xplore. Restrictions apply.
+
+--- PAGE 5 ---
+FUCHS ET AL.: A SYSTEMATIC REVIEW OF EXPERIMENTAL STUDIES ON DATA GLYPHS 1867
+Fig. 3. Glyph design table: Columns represent the different categories of glyph encodings, replicated in rows with glyph examples for each category.
+Additionally, color is used to visually separate the different categories. References refer to articles in our study bibliography that compare glyph varia-
+tions from the respective row and column. Studies placed in the diagonal evaluate either variations of the same glyph type, or comparisons of the
+glyph with data tables (starred *). Note that papers can fall in multiple cells. Since PlanningLines [35], weather vanes [36], [37], shapes [38], [39],
+roses [40], themes [41], arrows [42], Motifs [43], [44], flowers [45], and MILSTD2525 glyphs [46] use a unique encoding and are not compared to
+other glyphs, we positioned them slightly apart in the “One-to-One Mapping” category.
+The high number–28.13 percent–of user studies on face We found only two studies [54], [55] that compared dif-
+variations, stands out compared to studies that only focus ferent linear position/length design variations. This is an
+on other variations, e.g., circular position/length encodings interesting research gap given that profile glyphs that use
+(14.06 percent), 3D glyphs (7.81 percent), linear color this encoding are well established in practice (i.e., sparklines
+(6.25 percent), or linear orientation encoding (1.56 percent). [93], profiles [11]). In general, we only found three main cat-
+A possible reason for this imbalance are the many ways one egories of visual variables used to encode data in glyphs
+can design faces and their data mappings (e.g., Chernoff with many-to-one mappings (Position/Length, Color, Ori-
+faces [3], Rydwiel-Flury faces [17], Kabulov faces [18]). entation). Almost all glyph designs in these studies mapped
+Authorized licensed use limited to: Bernd Froehlich. Downloaded on August 01,2024 at 06:49:49 UTC from IEEE Xplore. Restrictions apply.
+
+--- PAGE 6 ---
+1868 IEEE TRANSACTIONS ON VISUALIZATION AND COMPUTER GRAPHICS, VOL. 23, NO. 7, JULY 2017
+TABLE 2 TABLE 3
+Datasets: This Table Illustrates Detailed Information about Presentation Setting: This Table Distinguishes between the
+the Real Datasets used in the Experiments Number of Data Points Shown to the Participants During the
+Studies and the used Layout
+Dataset Availability
+Anthropometrical data [95]
+about twins [17], [76]
+Patients rated by Minnesota Multiphasic
+psychiatrists [21] Personality Inventory
+Medical data [32] unknown
+Medical images [56] unknown
+Cars dataset [34] http://davis.wpi.edu/
+xmdv/datasets/cars.html
+Project plans [35] unknown
+MM5 weather unknown
+information [36]
+Weather information [37] NCEP forecast model
+Weather information [42] Operational Regional
+Atmospheric Prediction System
+Modified U.S. census unknown
+data [38]
+Financial data [40] Investment in education
+USA (2008)
+Financial data [84] Wall Street Journal
+Index (1974 and 1975)
+Financial data [85] Standard and Poor’s
+firm list (1974 and 1975) For the 46 studies that tested a fixed number of multiple
+Classical music data [41] unknown glyphs at a time, we found five types of layouts. The most
+k data [43] Lostpedia wiki edits
+frequent was a common small-multiples grid (65.22 per-
+Network data [44] 10 best ranked movies (IMDb)
+cent), followed by geographic maps (17.39 percent), scatter-
+Google search results [45] http://www.google.de
+Marathon runners [50] unknown plots (6.52 percent), node-link diagrams (4.35 percent), and
+Power plant statistics [53] unknown other layouts (6.52 percent) like different 3D environments
+Audio information [62] One laptop per child (see Fig. 4).
+sound library The goal of most of the studies with varying number of
+Biological data [70] unknown
+glyphs was to investigate changes in performance when
+Economic variables [77] U.S. Department of
+increasing the number of visible data points in grid layouts
+commerce & labor
+[79], [82], [83], geographic maps [42], [81], and node-link
+Tensor data [92] DTI dataset
+diagrams [63]. The amount of glyphs visible to participants
+changed from 5–50 [79]; 5–15 [82], [83]; 6–18 [46]; 9–23 [81];
+quantitative information to visual variables. The only excep- 4–300 [42]; and 30–48 [63]. In all seven studies participants
+tion was Lee et al.’s work [66] which compares star glyphs, were affected negatively by an increasing number of data
+faces, and 2D projected data points using bivariate data. points, as we discuss in Section 4.6.2. In the studies con-
+Here bivariate information, however, was still mapped ducted by Aigner et al. [35], Dunne et al. [43], Cayli et al.
+[44], and Zhang et al. [92] the varying number of data points
+either to the length of the whiskers (star glyph) or to differ-
+was not treated as a factor in the analysis.
+ent face characteristics.
+In seven studies (10.94 percent) a single data point was
+Summary: Faces and circular profiles have been investi-
+shown to participants at a time [48], [49], [50], [54], [55], [64],
+gated in detail, in contrast to color value and orientation
+[91]. These studies tried to control all parameters and avoid
+encodings on glyphs that only few studies investigated. Sur-
+prisingly, we found only two studies comparing different
+variations of linear profiles.
+4.3 Glyph Presentation Settings
+Presentation settings can be characterized by the number of
+glyphs presented to viewers, as well as by how the glyphs are
+layed out in space. We identified three types of studies when
+considering the number of glyphs presented (Table 3): those
+that presented only individual glyphs to the viewers (7/64,
+10.94 percent), those that presented a fixed number of more
+than one glyph at a time (46/64, 71.88 percent), and those in
+which the number of presented glyphs varied but was always
+Fig. 4. Statistics: Ratio of papers evaluating different glyph layouts (dis-
+higher than one (11/64, 17.19 percent). Seven papers did not
+tinguished by color). Low saturation indicates experiments evaluating a
+report the exact number of glyphs represented on the screen:
+varying number of data glyphs, and high saturation a fixed number of
+[35], [37], [41], [43], [44], [45], [56]. data glyphs.
+Authorized licensed use limited to: Bernd Froehlich. Downloaded on August 01,2024 at 06:49:49 UTC from IEEE Xplore. Restrictions apply.
+
+--- PAGE 7 ---
+FUCHS ET AL.: A SYSTEMATIC REVIEW OF EXPERIMENTAL STUDIES ON DATA GLYPHS 1869
+TABLE 4 conducted with a fixed number of glyphs arranged in a grid
+Number of Dimensions: This Table Illustrates the Different
+layout. Surprisingly, only four papers investigated the influ-
+Data Dimension Densities used in the Studies
+ence of different background information and layout on
+reading data glyphs [36], [39], [55], [62].
+4.4 Datasets & Number of Dimensions
+The number of data dimensions tested can help us compare
+results across studies, and inform us of the imagined use-
+case setting for data glyphs. Only four studies (6.25 percent)
+used the number of dimensions itself as a study factor and
+thus varied between glyphs with different dimension
+counts [24], [47], [58], [63]. The remaining 60 studies tested
+glyphs with various fixed numbers of dimensions. Of these,
+44 tested less than 10 dimensions. An overview of different
+dimensionality settings is provided in Table 4. Three papers
+did not report about the number of dimensions encoded by
+the glyph designs [43], [55], [62].
+In the vast majority of studies (54/64, 84.38 percent)
+possible confounding factors, so as to better reason about
+glyphs encoded general multi-dimensional data, both real
+changes in performance when modifying specific aspects of
+and synthetic. Eight studies tested glyphs encoding time-
+the same design [91], or when comparing it with other repre-
+series data (8/64, 12.5 percent) and in two experiments [43],
+sentations [48], [49], [50], [54], [64], or layouts [55].
+[44] glyphs were used to represent network topologies.
+Regardless of whether a fixed or changing number of
+Only a small number of studies (24/64, 37.5 percent)
+glyphs was tested, the vast majority of studies (56.25 per-
+used real data to investigate the performance of different
+cent) arranged glyphs in a grid layout, followed by geo-
+glyph designs. The respective papers and real datasets can
+graphic arrangements (15.63 percent), node-link diagrams
+be found in Table 2. For the other experiments (41/64,
+(7.81 percent), and scatterplots (4.69 percent) (see Fig. 4).
+64.06 percent) the data was created synthetically.
+The choice of a grid layout for quantitative studies is under-
+Summary: Overall, most studies used synthetically cre-
+standable. Grids can help to avoid confounding factors in
+ated multi-dimensional data (41/64, 64.06 percent). The
+visual search, comparison, or classification tasks. For exam-
+majority (44/64, 68.75 percent) of studies used glyphs
+ple, the information provided by a background, e.g., an
+encoding less than 10 dimensions.
+underlying geographic map, may influence the perception
+of glyphs. The background color, for example may influence
+the perception color hues [94], while topology (e.g., rivers, 4.5 Task Space
+mountains, land borders) may act as grouping enclosures or We used the Andrienko & Andrienko task taxonomy [20] to
+as reference structures for reading data values of glyphs. distinguish between two higher-level tasks as discussed in
+We only found a single study [36] that examined the influ- Section 3. Synoptic tasks (i.e., similarity search, visual
+ence of reading data glyphs with different geographic back- search, trend detection) were the most common type of task
+grounds; and one [39] that studied how the reading of a used in the studies (44/64, 68.75 percent). This is perhaps
+glyph is affected by the presence of other glyphs around it. not surprising as glyphs are often meant to provide quick
+We discuss their results in Section 4.6.1. overviews over a large number of varying multi-dimen-
+Summary: Only a small number of user studies varied the sional data points—and the use of synoptic tasks may reflect
+amount of data glyphs as a study factor. Most studies were the authors’ desire to test glyphs in a realistic use context.
+TABLE 5
+Data and Tasks: Most Studies were Conducted using a Lookup or Similarity Search Task with Multi-dimensional Data
+Data Type Task Description
+Elementary Task Synoptic Task
+Lookup 3D Navigation Trend Detection Similarity Search Visual Search
+(distance
+calculation)
+Multi-dimensional [21], [34], [36], [32] [38], [84], [85] [17], [33], [45], [47], [37], [39], [40],
+[37], [38], [40], [52], [57], [58], [59], [56], [65], [67],
+[42], [45], [46], [61], [63], [64], [66], [71], [81], [82],
+[48], [49], [50], [73], [74], [75], [76], [83]
+[51], [53], [60], [77], [78], [80], [86],
+[65], [72], [79], [87], [89], [92]
+[88], [90], [91]
+Time-series data [24], [35], [54], [24], [55], [68], [54], [62], [70]
+[55] [69]
+Authorized licensed use limited to: Bernd Froehlich. Downloaded on August 01,2024 at 06:49:49 UTC from IEEE Xplore. Restrictions apply.
+
+--- PAGE 8 ---
+1870 IEEE TRANSACTIONS ON VISUALIZATION AND COMPUTER GRAPHICS, VOL. 23, NO. 7, JULY 2017
+As shown in Table 5, we found the following classes of user study to compare different layout possibilities of
+synoptic tasks: similarity search (23/44, 52.27%), followed glyphs within sentences [55]. Surprisingly, there was no sig-
+by visual search (14/44, 31.82 percent), and trend detection nificant effect on accuracy or reading performance for the
+tasks (7/44, 15.91 percent). An example of a similarity different layouts. However, participants preferred the glyph
+search task can be found in two studies by Klippel et al.: being positioned above the words.
+Using a visualization tool showing 81 glyphs each repre- The influence of reading data glyphs with different geo-
+senting one car, participants had to group these glyphs into graphic backgrounds was investigated in only one study
+different categories based on their attributes [33], [59]. conducted by Martin [36]. He measured the performance of
+In contrast to these synoptic tasks, 26/64 studies participants working with weather vane glyphs while vary-
+(40.63 percent) used elementary tasks, i.e., lookup (25/26, ing the underlying geographic map. Surprisingly, his results
+96.15 percent) and 3D distance calculation (1/26, 3.85 per- indicated the background had no influence on the perfor-
+cent). These studies focused on more perception-related mance of reading data-glyphs. However, the glyphs in his
+questions such as the reading accuracy for visual variables study were arranged in a grid on top of a map, and not
+used to encode a data value. In these studies, participants according to their geographic position. Using different
+did not focus on reading the entire shape of the glyph, but glyph designs or an irregular layout may, nevertheless,
+on single glyph characteristics. For example in the user influence their performance.
+study conducted by MacGregor and Slovic [50] participants Healey and Enns conducted an experiment to compare
+had to read the completion time of 48 marathon runners the interaction of different visual features in the surround-
+from bar chart glyphs, faces, and star glyphs. Faces per- ings of the glyph stimulus for a visual search task [39].
+formed best, followed by bar chart glyphs and star glyphs. Results indicated that color variations due to the presence
+Summary: Most studies used a similarity search or a
+of other glyphs in the neighborhood of the stimulus glyph,
+direct lookup task to measure the performance of glyph
+caused a significant interference effect when participants
+designs.
+had to judge heights of glyphs or density patterns. How-
+ever, different densities in the surroundings of the stimulus
+4.6 Study Outcomes or heights of neighboring glyphs had no effect on the detec-
+While we cannot discuss the study results individually for tion of colored glyphs.
+all 64 papers, we collected higher-level observations on Summary: The influence of background and layout on
+study outcomes. Results on the study of factors such as reading data glyphs has so far received little research atten-
+number of dimensions and datapoints tested, is consistent tion. The limited evidence from this work suggests that the
+across experiments. Nevertheless, when it comes to a gen- background and neighborhood of a glyph did not affect
+eral ranking, experimental results apply to a study’s specific glyph readability. Nevertheless more work is needed to
+setting and should be generalized with caution. We discuss determine the perceptual difficulties of reading glyphs
+these results next. depending on their background and layout.
+4.6.2 Influence of Number of Data Points
+4.6.1 Influence of Background Information and Layout
+Seven studies varied the number of visible data points as a
+Understanding the influence of layout strategies or addi-
+factor. The glyphs used in these experiments were either
+tional context information is crucial since data glyphs can
+faces [79], [81], [82], [83], unique glyph designs (i.e.,
+be arranged in various different ways and settings. Four
+MILSTD2525 [46], arrow glyphs [42]), or star glyphs [63].
+studies investigated the influence of positioning or back-
+For the studies involving face glyphs, participants had to
+ground information on the performance of data glyphs [36],
+perform visual search tasks and find a certain stimulus in a
+[39], [55], [62].
+A common setting for data glyphs was the positioning in growing set of data points. The researchers tested whether
+scatterplots, or projections from a high dimensional dataset pre-attentive identification was possible, in which case
+to a two dimensional space. Frisson et al. used a visual search time would not have been seriously impacted by
+search task to examine the benefits of a two dimensional increasing the number of glyphs. Yet, in all studies the per-
+projection compared to a grid layout used in small multiple formance dropped with an increasing number of data
+settings [62]. Performance was lower for the two dimen- points independent from the mapping of data to face char-
+sional projection, since after projection, some data glyphs acteristics. Based on this outcome Siva and co-authors con-
+ended up overlapping each other, which caused a loss of cluded that participants performed a serial search and were
+information making it difficult to detect the stimulus. In a not able to pre-attentively identify the stimulus [82], [83].
+follow-up study, the authors added a proximity grid [97] as Therefore, the perception of abstract data glyph faces com-
+an additional layout to the study setting. Results indicated pared to human faces was shown to be different. This is an
+that participants performed best in a visual search task interesting finding, which lessens the basic motivation for
+when using the proximity grid. using abstract faces. However, researchers could also show
+Glyphs were also used in textual documents to commu- that a redundant visual mapping of data to face characteris-
+nicate statistical data not only with words but visually. tics improved the performance [79].
+Sparklines are a famous example of such small visual repre- Summary: Increasing the number of data points nega-
+sentations [93], which are usually positioned in the reading tively affects search within a set of data glyphs, indicat-
+direction next to the statistics (e.g., on the right hand side). ing that they—even face glyphs—cannot be read pre-
+To backup this design decision, Goffin et al. conducted a attentively.
+Authorized licensed use limited to: Bernd Froehlich. Downloaded on August 01,2024 at 06:49:49 UTC from IEEE Xplore. Restrictions apply.
+
+--- PAGE 9 ---
+FUCHS ET AL.: A SYSTEMATIC REVIEW OF EXPERIMENTAL STUDIES ON DATA GLYPHS 1871
+TABLE 6 TABLE 7
+Studies and their Result Rankings: Studies and their Result Rankings:
+Faces versus Circular Profiles Faces versus Linear Profiles
+studies with lookup tasks also compared faces against poly-
+4.6.3 Influence of Number of Dimensions gons (with polygons performing best [48]), faces against
+The results of studies varying the number of dimensions as star glyphs (with faces performing best [50]), and faces
+a factor showed that different designs were impacted to dif- against whisker glyphs (with whisker glyphs performing
+ferent extents. In a study by Fuchs et al., for example, the best [65]). It seems that star glyphs compared to faces are
+performance of star glyphs dropped significantly in a more suitable for synoptic tasks. However, the whiskers
+lookup task when increasing the number of dimensions glyph had the best performance independent from the
+from 24 to 96, whereas the performance of line glyphs underlying task. This finding has partially been confirmed
+stayed stable [24]. for a similarity search [58] but not for lookup tasks.
+Another example where glyph rankings change based on
+Wilkinson also varied the number of dimensions to
+study characteristics can be found when comparing faces
+investigate changes in performance for different glyph rep-
+against linear profiles (Table 7). In three studies faces
+resentations. His results indicated that increasing the num-
+performed best [47], [50], [52], in the fourth study, profiles
+ber of dimensions had no significant effect on the ranking of
+[48]. Again, the four studies used different tasks: lookup
+tested glyph designs [47], although there was a drop in per-
+tasks [48], [50] and a similarity search task [47], [52]. When
+formance overall.
+comparing the two lookup tasks the ranking of the two
+However, it is interesting to note that even slight varia-
+glyph designs is still different although they use a similar
+tions of a glyph design can be affected differently by the
+number of dimensions (4 [50] and 5 [48] dimensions), and
+number of dimensions. Fuchs et al. tested the effect of
+just show one data point at a time. Yet, a major difference
+increasing the number of dimensions on whisker glyphs
+can be found when reading the task description more care-
+(star glyphs without a contour line), traditional star glyphs
+fully. Although both tasks are a lookup task, participants
+and polygon variations. Although the performance dropped
+had to either read a one-dimensional value [50] or detect
+for all variations, whisker glyphs were affected the least [58].
+when one dimension changes significantly compared to the
+Summary: Increasing the number of dimensions negatively
+other dimensions for a single data point [48].
+affects the performance of data glyphs [24], [47], [58], [63].
+When comparing linear and circular position/length
+encodings, we found glyph ranking differences in 8 studies
+4.6.4 Influence of Tasks and Visual Encoding
+[24], [47], [48], [49], [50], [51], [52], [53] (Table 8). In four, the
+The outcome of individual user studies often involved a rank- linear design outperformed the radial [48], [50], [52], [53],
+ing of data glyphs based on their performance in the study. while in two, circular designs were better [49], [51], and in
+These rankings were not always consistent for the same the last one performance varied according to the underlying
+designs tested, and they changed, for example, based on tasks task [24]. However, only three out of these seven had a simi-
+and details of the visual encoding. Table 6–Table 9 summarize lar experimental setting with respect to design variations,
+the outcomes of the different experiments. The “>” symbol presentation setting, number of dimensions and task [48],
+indicates that the glyph on the left outperforms the design on [49], [51]. These three all compare bar charts with polygons
+the right (either in terms of completion time or accuracy). in a lookup task, using low dimensional data and present-
+Seven studies compared faces against circular position/ ing only one data point at a time. Surprisingly, the perfor-
+length encodings [47], [48], [50], [52], [61], [65], [66] (Table 6). mance was still different: polygons ranked best in two of
+In four, faces performed best [47], [50], [52], [61], while cir-
+cular position/length encodings performed best in the
+TABLE 8
+remaining three [48], [65], [66]. These seemingly contradic-
+Studies and their Result Rankings:
+tory results are reconciled when we consider the tasks par- Linear versus Circular Profiles
+ticipants had to perform and how the glyphs were
+designed. In five of these studies the participants performed
+a synoptic task [47], [52], [61], [65], [66], in the other three a
+lookup task [48], [50], [65]. From the five synoptic task stud-
+ies, in the three where faces performed best, the circular
+position/length encoding was a polygon (i.e., star glyph
+without whiskers, but only a contour) [47], [52], [61], while
+in the remaining two where faces performed worst the cir-
+cular encoding was a star glyph with [66] and without con-
+tour line (i.e., whisker glyph) [65]. The remaining three
+Authorized licensed use limited to: Bernd Froehlich. Downloaded on August 01,2024 at 06:49:49 UTC from IEEE Xplore. Restrictions apply.
+
+--- PAGE 10 ---
+1872 IEEE TRANSACTIONS ON VISUALIZATION AND COMPUTER GRAPHICS, VOL. 23, NO. 7, JULY 2017
+TABLE 9 4.6.5 Influence of Metaphoric Glyph Design
+Studies and their Result Rankings:
+One goal of information visualization is to present the under-
+Color Saturati on versus Profiles
+lying data in a way that can be easily understood by users.
+Thus, researchers have tried to improve intuitive understand-
+ability of visualizations, by using metaphors when mapping
+data to visual representations. One such example can be
+found for weather forecasts. In such a scenario weather status
+is communicated with small icons on top of a geographic
+map. These icons are metaphoric representations of the real
+environment to facilitate their understanding. Small cloud
+icons represent cloudy areas, rain drops encode rainy areas,
+and little suns illustrate sunshine in specific regions.
+While data glyphs are different from icons [14], the gen-
+eral concept of representing the underlying data using
+metaphors can also be applied here. Since the visual repre-
+sentation of a glyph is data driven the idea is not to use a
+different glyph design for each individual data point (like
+them [49], [51] and bar charts performed best in the third
+in the weather forecast example), but to use certain glyph
+[48]. Again, we have to look at the studies more carefully to
+characteristics to display the data while being consistent
+come to a conclusion. In the two studies where polygons
+with the metaphor.
+performed best, the bars in the bar charts were shown with-
+However, it is not clear whether such metaphor-based
+out a common baseline. This was not true for the third study
+representations are better than more abstract ones. Siirtola
+were bar charts outperformed the polygons. We assume
+has attempted to provide an answer to this problem by intro-
+that a common baseline increases the performance of the
+ducing metaphoric glyph designs and comparing them with
+linear profiles, a finding which is proposed as a design
+more abstract ones [34]. In his experiment he visualized car
+guideline from a study by Fuchs et al. [24]. However, a user
+related data with abstract face representations, and with met-
+study comparing linear profiles with and without a com-
+aphoric car glyphs [34]. Car glyphs were created by mapping
+mon baseline has, to the best of our knowledge, not yet been
+data to parts of the glyph with related meaning. For example
+conducted.
+the attribute horsepower was mapped to the size of the
+Additionally, it is interesting to note that there were
+engine of the car, which is metaphorically reflected in a big-
+changes in performance depending on the kind of elemen-
+ger hood. In his user study participants had to answer car
+tary task. For reading exact data values linear profiles out-
+related questions when working with either faces or car
+performed star glyphs, however, when reading the position
+glyphs. The metaphor helped the participants in under-
+of an attribute dimension (e.g., a certain point in time for
+standing the data. As a result, they performed better when
+time-series data) star glyphs ranked first. [24]
+working with car glyphs compared to faces.
+Data glyph designs using color saturation to encode data
+Li et al. [40] provided another example where metaphors
+values have not received much attention. We only found
+were used. In their quantitative experiment they compared
+two papers, which report on results from quantitative RoseShape glyphs against abstract polygons to visualize
+experiments comparing these glyphs against alternative multi-dimensional data about the education level in the US.
+representations [24], [65] (Table 9). The glyphs were positioned on top of a geographic map
+For overview visualizations focusing on the overall and participants had to either read data values or search for
+appearance of a glyph, color value encodings were not certain characteristics. Results suggest that participants
+found to be effective. In three out of four user studies par- were more accurate and more confident of their answers
+ticipants performed better using a position encoding (i.e., when working with the metaphoric designs.
+linear and circular profiles) in synoptic tasks. In the fourth In a study conducted by Flury and Riedwyl, data col-
+experiment the color encodings were visually enhanced to lected about monozygotic and dizygotic twins, such as their
+help participants solve certain tasks and outperformed lin- height or weight was mapped to two types of face glyphs
+ear profiles. Only faces performed worse. However, it is [17]. Using abstract face representations (i.e., Chernoff faces)
+more difficult to draw conclusions for elementary tasks. or more realistic faces (i.e., Flury Riedwyl faces) participants
+When pursuing a direct lookup task (e.g., reading data val- had to look at a glyph for each twin and rate whether or not
+ues) radial color value encodings have outperformed star the two glyphs showed data about monozygotic twins. The
+glyphs and faces [24], [65]. Whisker glyphs on the other results indicated that participants were more accurate when
+hand have been shown to be as accurate as color value working with the more realistic faces.
+encodings but more efficient [65]. However, linear profiles Jacob [21] gave another example where he tested the per-
+were most accurate and, therefore, the best choice for formance of a single metaphoric glyph design. He displayed
+direct lookup tasks [24]. data from patients having a certain psychological condition
+Summary: Study results differed based on individual fac- (e.g., depression, paranoia etc.) using faces. The abstract faces
+tors like number of dimensions, task, number of data points, were created to show facial expressions resembling those of
+or slight variations to the designs. Our summary tables can the human faces of the patients. Participants in his study had
+be considered as a performance overview pinpointing to to judge which face corresponds to which behavior without
+relevant literature. being trained or knowing the patients. The results indicated
+Authorized licensed use limited to: Bernd Froehlich. Downloaded on August 01,2024 at 06:49:49 UTC from IEEE Xplore. Restrictions apply.
+
+--- PAGE 11 ---
+FUCHS ET AL.: A SYSTEMATIC REVIEW OF EXPERIMENTAL STUDIES ON DATA GLYPHS 1873
+that people were able to name the correct psychological ill- these studies only included faces, arrows, star glyphs and
+ness without knowing the mapping criteria of data to face MILSTD2525 glyphs.
+representations. Faces have possible value (5). Many experiments with dif-
+Metaphors may help to explain the results obtained in a ferent study designs have been conducted comparing faces
+study conducted by Fuchs et al. [24]. The researchers ran a against other data glyph design. Based on the underlying
+quantitative study using time-series data. Participants had to study setting the ranking of the tested designs was differ-
+locate specific points in time using glyphs with either a linear ent. However, in at least five studies faces outperformed
+dimension layout (e.g., sparklines) or a radial arrangement the alternatives [47], [50], [52], [61], [87].
+(e.g., star glyphs). Surprisingly, participants were more accu- Consider metaphoric designs (5). Five studies investigated
+rate when working with circular glyphs. This is interesting the usefulness of metaphoric data glyph designs. The
+since the visual variable position (used in linear layouts) is results indicate that metaphors helped participants in ana-
+considered more accurate compared to orientation (used in lyzing data. However, the type of metaphors and type of
+circular glyphs) [98]. However, participants argued that they data are closely related, making the past studies somewhat
+were reminded of a clock when working with radial glyph limited. This a fruitful area for further research.
+designs, which facilitated locating certain points in time. Linear data glyph designs profit from a similar baseline (3). In
+Summary: A small number of previous studies suggest three studies comparing linear against circular profiles, lin-
+that metaphors may help to better understand the underly- ear designs were most effective when the dimensions where
+ing data. aligned to a common baseline. However, this finding has
+not been directly investigated by an experimental compari-
+4.6.6 Summary son of linear profiles with and without a common baseline.
+In linear designs color encodings should be avoided, whereas
+While we found and reported on 64 papers, the vast design
+they seem to be beneficial for circular layouts (3). Since only four
+space of data glyphs and the possibility to test only a limited
+studies have been conducted using color saturation to
+set of factors in a controlled user study makes it difficult to
+encode data values, this guideline has to be considered with
+recommend a single best-of glyph design. Glyph performance
+caution [24], [65]. It seems that in circular layouts with posi-
+depends on many different factors, such as the task used, the
+tion/length encodings (i.e., star glyps) the mental rotation
+number of data points, or slight variations to the designs used
+required for comparisons affects participants more strongly
+across studies. Our analysis in Section 4.6.4 presents a sum-
+than color comparisons that can be conducted without a
+mary of rankings from the articles we analyzed, and discusses
+common axis. For linear designs the ranking of visual varia-
+how these factors can explain seemingly contradictory results.
+bles from Cleveland and McGill seems to hold [98].
+We were able to draw general conclusions when it comes
+Pick line glyphs for lookup tasks with a large number of dimen-
+to number of dimensions and glyphs. Some study results
+sions (2): Studies suggest that data glyph designs are influ-
+indicate that increasing the number of data dimensions
+enced negatively by an increasing number of dimensions.
+affects the performance of glyph designs negatively [24],
+However, the line glyph seems to be affected the least. For
+[47], [58], [63] with position encodings (linear and circular
+similarity search tasks one study found the whiskers glyph
+profiles) being more robust compared to color encodings in
+to be most effective in a high-dimensional setting.
+high-density situations [24]. As with the number of dimen-
+sions, there is evidence that performance drops with
+6 DISCUSSION AND OPEN RESEARCH AREAS
+increasing the amount of visible glyphs on the screen [42],
+[46], [63], [79], [81], [82], [83]. This seems like a logical con- In this section we identify and discuss directions for future
+clusion due to the required additional effort in visual search research based on our analysis. The proposed research
+involving a higher number of entities. In addition, a small directions are ordered roughly according to their scope.
+number of past studies indicate that metaphoric glyph
+designs increase performance. 6.1 Types of User Studies
+Finally, it has to be noted that our analysis was made dif- Even though we focused on user studies with quantitative
+ficult by a lack of standard for reporting study details on components for this paper, we found only a few qualitative
+glyphs. For example specific information (e.g., stimuli size, studies that considered how glyphs are used in practice
+viewing distance, number of visible data points, etc.), that within real applications. One such exception is the experi-
+could shed light on differences across experiments, were ment conducted by Sreng et al. [99] where participants used
+often missing. a 3D automotive assembly tool and answered questions
+about the perceived usefulness of the embedded glyphs.
+5 IMPLICATIONS FOR DATA GLYPH DESIGN Although this study provided qualitative observations in
+the form of questionnaires, we can envision more elaborate
+In this section we abstract and summarize the study out- field experiments and observational studies on real use of
+comes in the form of design considerations. We indicate the glyphs. Observers could thus gather information on how
+number of papers supporting each design consideration in people use glyph-based visualizations in real contexts, for
+brackets to indicate the extent of generalizability, and order which tasks, and with what kind of results. Such studies
+them based on this support. could inform our understanding of how glyph-based appli-
+Do not expect glyphs to be perceived pre-attentively (7). All cations are adopted and used in practice and could, thus,
+seven studies considering the scalability as a factor come provide new insights on which to base design choices.
+to the conclusion that the performance drops significantly Summary: Adding qualitative evaluations observing ana-
+when increasing the number of data points. However, lysts working with different glyph designs, datasets, and
+Authorized licensed use limited to: Bernd Froehlich. Downloaded on August 01,2024 at 06:49:49 UTC from IEEE Xplore. Restrictions apply.
+
+--- PAGE 12 ---
+1874 IEEE TRANSACTIONS ON VISUALIZATION AND COMPUTER GRAPHICS, VOL. 23, NO. 7, JULY 2017
+tasks, would help to better understand the glyphs design scientific visualization, glyphs are often used on 3D volumet-
+space. In particular, information about subjective preferen- ric surfaces or to represent 2D flow fields in order to indicate
+ces and the applicability of specific glyph designs in practice data at specific sampling points. These glyphs are approxi-
+would be useful. It would be interesting to capture which mately uniformly spaced apart, but this relative spacing
+design analysts choose to solve which analysis task. changes depending on the view’s magnification factor, mak-
+ing them appear more or less densely packed together. There
+6.2 Data to be Tested is very little to no guidance from controlled user studies on
+how this apparent density affects their performance.
+There are several pros and cons for choosing real versus
+Moreover, we know little about the influence of the back-
+synthetic datasets for a study. On the one hand, real data
+ground information on the performance of glyphs. Only
+has the advantage that it can demonstrate which visual
+one study investigated performance changes for glyph
+representation performs best in realistic situations, provid-
+designs when placed on top of different geographic maps
+ing valuable results for analysts of this data. However, real
+[36], and one other their performance close to neighboring
+data often contains unique characteristics (e.g., size, struc-
+glyphs [39]. Many questions remain unanswered, for exam-
+ture, number of dimensions), that make the results noisy
+ple, we do not know if glyphs are perceived differently
+and hard to generalize.
+when arranged in uniform grids compared to other arrange-
+On the other hand, one may argue that synthetic data
+ments, such as treemaps, that vary their relative distance.
+does not always represent a real world scenario or problem
+It is also unclear what effect the glyphs have on the under-
+well (ecological validity), making results again hard to gen-
+standing of the underlying visualization itself: for example, it
+eralize. However, artificial data can be easily controlled and
+would be interesting to investigate if rectangular treemaps
+focused on answering specific questions. Additionally, pos-
+are more effective compared to circular treemaps when add-
+sible confounding factors due to the underlying data are
+ing glyph designs; or if people are distracted by the additional
+excluded (e.g., visual search time according to the number
+context information in the form of glyphs in 3D environments.
+of data points).
+There is certainly much space for further research.
+Given the above pros and cons, it seems an interesting
+Summary: Since data glyphs cannot only be positioned in
+open research question to see how glyphs behave when
+small multiple grids, evaluating different arrangements of
+they undergo study using both synthetic and real data, simi-
+more complex layouts (i.e., treemaps, etc.), would help to
+lar to the approach taken by Caban [56].
+better understand the influence of specific data glyph
+Summary: Running quantitative experiments, using both
+designs on the context and vice versa.
+datasets from synthetic to real world and vice versa will
+enhance our knowledge on the behavior of data glyphs in
+6.5 Glyph Types and Data Encodings
+different situations.
+Understand redundant encodings: Using Ward’s glyph design
+categorization [10], we found only two studies that used
+6.3 Study Tasks and Measures
+glyphs with a one-to-many mapping (i.e., a redundant encod-
+In the majority of studies participants had to perform syn-
+ing). Ware [19], however, discusses interesting perceptual
+optic tasks (Table 5). This is not surprising given that glyphs
+study approaches to learn how dimension encodings can be
+are often used to provide quick overviews over a large num-
+separable or integral. A better understanding of how redun-
+ber of multi-dimensional data points. Nevertheless, there
+dant encodings work together, and could enforce data read-
+are glyph designs (e.g., some 3D glyphs) that have not or
+ing, would prove beneficial to glyph design.
+rarely been looked at for synoptic tasks, an interesting topic
+Study missing mappings: In Table 3 we refer to 50 of the 64
+for further study.
+studies examined, having left out the two one-to-many
+Although results from specific tasks, such as these synop-
+mappings [32], [33] and the twelve that were not compared
+tic ones, are valuable, a common visualization task is free
+to other designs [35], [36], [37], [38], [39], [40], [41], [42], [43],
+exploration, insight generation and hypothesis forming.
+[44], [45], [46]. Looking at the table there is still clearly an
+Inspired by recent work on insight based evaluation [100], it
+imbalance in what kind of data encodings have been com-
+would be worthwhile to investigate the performance of dif-
+paratively tested. Many cells remain empty, and there are
+ferent glyph designs in such contexts.
+several sparsely populated ones. One of the first things to
+Summary: Adding exploration tasks or extracting insights
+notice is that there is no single study on circular orientation
+from an unknown dataset are realistic real-world analysis
+encodings, although they are used in visualization applica-
+tasks. They should, therefore, be added to the repertoire of
+tions: representatives of this category are the compound
+user study tasks in glyph evaluation to further reason about
+glyph used in network graphs [12], pie chart glyphs for ana-
+the practical applicability of data glyphs.
+lyzing multi-dimensional data (e.g., global material compo-
+sition [101], or biological binding properties [102] ), or as
+6.4 Glyph Presentation Setting provided in visualization toolkits (e.g., JIT2). Perhaps this
+A large number of studies presented glyphs as small multi- type of encoding is a-priori deemed inferior based on Cleve-
+ples using a grid layout. There were no studies on glyphs land and McGill’s [98] work that ranks orientation low for
+nested inside treemaps, or other types of representations quantitative data representation. Given past use of these
+apart from maps, scatterplots, node-link diagrams, and two encodings however, it is certainly worthwhile to confirm
+3D representations in the medical domain. This is interesting, that Cleveland and McGill’s ranking does hold for circular-
+as it is not clear that grid layouts present the most commonly
+assumed usage context for glyphs. For example, in the area of 2. JavaScript InfoVis Toolkit http://philogb.github.io/jit/
+Authorized licensed use limited to: Bernd Froehlich. Downloaded on August 01,2024 at 06:49:49 UTC from IEEE Xplore. Restrictions apply.
+
+--- PAGE 13 ---
+FUCHS ET AL.: A SYSTEMATIC REVIEW OF EXPERIMENTAL STUDIES ON DATA GLYPHS 1875
+TABLE 10
+Overall Summary: This Table is a Collection of All Design Considerations, Open Research Gaps,
+and Findings Proposed throughout the Paper
+Section Summary
+4.1 We found similar study goals across many experiments, yet varied were factors like number of
+data points and dimensions, task, or glyph design. These variations make individual study
+outcomes hard to compare.
+4.2 Faces and circular profiles have been investigated in detail, in contrast to color value and
+orientation encodings on glyphs that only few studies investigated. Surprisingly, we found
+Study only two studies comparing different variations of linear profiles.
+Settings 4.3 Only a small number of user studies varied the amount of data glyphs as a study factor. Most
+studies were conducted with a fixed number of glyphs arranged in a grid layout. Surprisingly,
+only four papers investigated the influence of different background information and layout on
+reading data glyphs [36], [39], [55], [62].
+4.4 Overall, most studies used synthetically created multi-dimensional data (41/64, 64.06%).
+The majority (44/64, 68.75%) of studies used glyphs encoding less than 10 dimensions.
+4.5 Most studies used a similarity search or a direct lookup task to measure the performance
+of glyph designs.
+4.6.1 The influence of background and layout on reading data glyphs has so far received little
+research attention. The limited evidence from this work suggests that the background and
+neighborhood of a glyph did not affect glyph readability. Nevertheless more work is needed
+to determine the perceptual difficulties of reading glyphs depending on their background
+and layout.
+4.6.2 Increasing the number of data points negatively affects search within a set of data glyphs,
+Study indicating that they— even face glyphs—cannot be read pre-attentively.
+Outcomes 4.6.3 Increasing the number of dimensions negatively affects the performance of data glyphs
+[24], [47], [58], [63].
+4.6.4 Study results differed based on individual factors like number of dimensions, task, number
+of data points, or slight variations to the designs. Our summary tables can be considered as a
+performance overview pinpointing to relevant literature.
+4.6.5 A small number of previous studies suggest that metaphors may help to better understand
+the underlying data.
+6 Adding qualitative evaluations observing analysts working with different glyph designs,
+datasets, and tasks, would help to better understand the glyphs design space. In particular,
+information about subjective preferences and the applicability of specific glyph designs in
+practice would be useful. It would be interesting to capture which design analysts choose to
+solve which analysis task.
+6 Running quantitative experiments, using both datasets from synthetic to real world and vice
+Open versa will enhance our knowledge on the behavior of data glyphs in different situations.
+Research Gaps 6 Adding exploration tasks or extracting insights from an unknown dataset are realistic real-world
+analysis tasks. They should, therefore, be added to the repertoire of user study tasks in glyph
+evaluation to further reason about the practical applicability of data glyphs.
+6 Since data glyphs cannot only be positioned in small multiple grids, evaluating different
+arrangements of more complex layouts (i.e., treemaps, etc.), would help to better understand
+the influence of specific data glyph designs on the context and vice versa.
+6 Quantitative user studies should be conducted to compare data glyph designs which have not
+yet received much research attention (i.e., pie chart glyphs). The number of dimensions should
+be varied during the experiment and considered as a factor for analysis, to better understand
+glyph scalability.
+orientation encodings in glyphs, in particular in the context been considered inferior but there are no recent studies or
+of real multi-dimensional data. Similarly, several other cells replications of earlier studies to confirm this. Given that
+of Table 3 are empty or populated by studies from a single some past studies showed good performance, it may be
+paper. As discussed in Section 4.6, the ranking of glyph worthwhile to try and reproduce some earlier studies to
+designs or their variations often depends on tasks and confirm that they are indeed not as good as their current
+encodings, and as such more studies are needed to be able reputation in the community suggests.
+to provide reliable guidance for general glyph use and Test larger number of dimensions: In addition to the data
+design. Especially glyph designs, which have not received encoding, the number of glyph dimensions may highly
+much research attention but are used in practice (i.e., pie influence performance. As we saw in Table 4 the vast major-
+chart glyphs, or variations of linear profiles) should be pri- ity of studies only examined glyphs under a fixed number
+oritized in future studies. of dimensions, often less than 10 data dimensions. Only
+Replicate studies on face glyphs: Many studies have been four varied the number of dimensions systematically in
+conducted investigating the performance of faces. Most of their studies. To reliably understand how glyph perfor-
+these studies were conducted in the 70s, and 80s when faces mance scales, we need to further explore how glyph designs
+were newly introduced. In recent years face glyphs have fare under different dimensions.
+Authorized licensed use limited to: Bernd Froehlich. Downloaded on August 01,2024 at 06:49:49 UTC from IEEE Xplore. Restrictions apply.
+
+--- PAGE 14 ---
+1876 IEEE TRANSACTIONS ON VISUALIZATION AND COMPUTER GRAPHICS, VOL. 23, NO. 7, JULY 2017
+Summary: Quantitative user studies should be conducted glyphs are used in practice [103]. Moreover, only two works
+to compare data glyph designs which have not yet received [54], [55] have compared design variations of glyphs using
+much research attention (i.e., pie chart glyphs). The number linear position or length encodings, that are well established
+of dimensions should be varied during the experiment and in practice (i.e., sparklines [93] or profiles [11])—although
+considered as a factor for analysis, to better understand some more have been compared to faces. We were also
+glyph scalability. unable to find any study on circular orientation/angle
+encodings as already used in applications (e.g., [12]). At the
+6.6 Summary present time we caution against making overly general rec-
+This section motivated promising open research directions ommendation for using one type of glyph over another
+for future experiments on data glyphs. In this summary, given in particular the many criteria we needed to use to
+we revisit the most important gaps we identified and most distinguish and categorize past studies (e.g., datasets, tasks,
+promising research directions. Firstly, we need to give pri- encodings). There are still several years of research possible
+ority to experiments investigating glyph designs, which to understand how humans perceive and use glyphs. We
+have not received much research attention, yet. For exam- outlined many opportunities for design and evaluation and
+ple, there is only little knowledge about the performance hope this work encourages researchers to pursue them.
+of radial layouts, such as pie chart glyphs. Having more
+evaluations about data glyph designs will help to better ACKNOWLEDGMENTS
+generalize the outcomes and argue about the performance
+This work has been supported by the Consensus project and
+of visual variables.
+has been partly funded by the European Commission’s 7th
+Additionally, different presentation settings need to be
+Framework Programme through theme ICT-2013.5.4 ICT for
+tested in more detail, since a big advantage of data glyphs is
+Governance and Policy Modelling under contract no. 611688.
+their flexible arrangement on the screen. In most experi-
+ments the data glyphs were positioned in a regular grid lay-
+REFERENCES
+out, however, data glyphs can also be arranged in more
+complex layouts like treemaps. Currently, there is only little [1] T. Munzner, Visualization Analysis & Design. Boca Raton, FL,
+USA: CRC Press, 2015.
+guidance whether the performance of data glyphs will
+[2] E. Anderson, “A Semigraphical method for the analysis of com-
+change according to context information or layout. plex problems,” Proc. Nat. Academy Sci. United States Amer.,
+A wider variety of experimental factors should be con- vol. 43, no. 10, pp. 923–927, 1957.
+sidered such as: multiple datasets (i. e., synthetic data and [3] H. Chernoff, “The use of faces to represent points in K-dimen-
+sional space graphically,” J. Amer. Statist. Assoc., vol. 68, no. 342,
+real world data), different analysis tasks (e.g., exploration
+pp. 361–368, 1973.
+or insight generation), and different study types (i.e., quali- [4] J. Siegel, E. Farrell, R. Goldwyn, and H. Friedman, “The surgical
+tative and quantitative) to get a deeper understanding of implications of physiologic patterns in myocardial infarction
+the utility and performance of data glyphs. shock,” Surgery, vol. 72, no. 1, pp. 126–141, 1972.
+[5] W. Peng, M. Ward, and E. Rundensteiner, “Clutter reduction in
+multi-dimensional data visualization using dimension reord-
+7 CONCLUSION ering,” in Proc. IEEE Symp. Inform. Vis., 2004, pp. 89–96.
+[6] J. Yang, W. Peng, M. O. Ward, and E. A. Rundensteiner,
+In this paper we contribute a systematic review of research “Interactive hierarchical dimension ordering, spacing and filter-
+papers focusing on the evaluation of data glyphs in quantita- ing for exploration of high dimensional datasets,” in Proc. IEEE
+Symp. Inform. Vis., 2003, pp. 105–112. [Online]. Available: http://
+tive user studies. We organize this work using several
+dl.acm.org/citation.cfm?id=1947368.1947390
+criteria, such as glyph types, study presentation settings, [7] Y.-H. Chan, C. Correa, and K.-L. Ma, “The generalized sensitivity
+datasets and tasks used. An overall summary of the most scatterplot,” IEEE Trans. Vis. Comput. Graphics, vol. 19, no. 10,
+interesting findings can be found in Table 10. Our goal is to: pp. 1768–1781, Oct. 2013.
+[8] D. W. Cunningham and C. Wallraven, Experimental Design: From
+first, help researchers and practitioners identify relevant pre-
+User Studies to Psychophysics. Boca Raton, FL, USA: CRC Press,
+vious studies that give insights into glyph design tradeoffs, 2012.
+and get inspired by previous study setups; second, provide a [9] M. O. Ward, “A taxonomy of glyph placement strategies for mul-
+meta analysis of the study outcomes; and third, pinpoint tidimensional data visualization,” Inform. Vis., vol. 1, no. 3/4,
+pp. 194–210, Dec. 2002. [Online]. Available: http://dx.doi.org/
+open research directions for the study of data glyphs.
+10.1057/palgrave.ivs.9500025
+In summary, we found that faces and their variations [10] M. Ward, “Multivariate data glyphs: Principles and practice,” in
+were the most studied glyphs, followed by circular position Handbook of Data Visualization, Berlin, Germany: Springer, 2008,
+pp. 179–198. [Online]. Available: http://dx.doi.org/10.1007/
+encoding glyphs (e.g., star glyphs), which were often also
+978-3-540-33037-0_8
+compared to faces. Our analysis showed that at first glance
+[11] S. H. Du Toit, A. G. W. Steyn, and R. H. Stumpf, Graphical Explor-
+performance rankings differ across studies. Yet, we discuss atory Data Analysis. Berlin, Germany: Springer, 1986.
+how some of these seemingly contradictory results can be [12] J. Pearlman and P. Rheingans, “Visualizing network security
+events using compound glyphs from a service-oriented
+explained by differences in the study criteria, such as the
+perspective,” in Proc. Workshop Vis. Comput. Security, 2007,
+tasks, density and variations of glyphs tested. Our categori-
+pp. 131–146.
+zation provides readers with references to past studies that [13] D. H. Chung, R. S. Laramee, J. Kehrer, and H. Hauser, “Glyph-
+can not only serve as specific design considerations but also based multi-field visualization,” in Proc. Sci. Vis., 2014, pp. 129–
+137.
+be an inspiration to design one’s own user study.
+[14] R. Borgo, J. Kehrer, D. H. Chung, E. Maguire, R. S. Laramee,
+Our work also aims to highlight gaps in the literature on
+H. Hauser, M. Ward, and M. Chen, “Glyph-based visualization:
+data glyph evaluation. Few papers have evaluated varia- Foundations, design guidelines, techniques and applications,” in
+tions of glyphs using color encoding, even though such Proc. Int. Conf. Eurographics State Art Rep., 2013, pp. 39–63.
+Authorized licensed use limited to: Bernd Froehlich. Downloaded on August 01,2024 at 06:49:49 UTC from IEEE Xplore. Restrictions apply.
+
+--- PAGE 15 ---
+FUCHS ET AL.: A SYSTEMATIC REVIEW OF EXPERIMENTAL STUDIES ON DATA GLYPHS 1877
+[15] T. Ropinski, S. Oeltze, and B. Preim, “Survey of glyph-based [39] C. G. Healey and J. T. Enns, “Large datasets at a glance: Combin-
+visualization techniques for spatial multivariate medical data,” ing textures and colors in scientific visualization,” IEEE Trans.
+Comput. Graph., vol. 35, no. 2, pp. 392–401, 2011. Vis. Comput. Graph., vol. 5, no. 2, pp. 145–167, Apr./Jun. 1999.
+[16] E. S. Nelson, “The face symbol: Research issues and cartographic [40] Y.-N. Li, D.-J. Li, and K. Zhang, “Metaphoric transfer effect in
+potential,” Cartographica, vol. 42, no. 1, pp. 53–64, 2007. information visualization using glyphs,” in Proc. 8th Int. Symp.
+[17] B. Flury and H. Riedwyl, “Graphical representation of multivari- Vis. Inform. Commun. Interaction, 2015, pp. 121–130. [Online].
+ate data by means of asymmetrical faces,” J. Amer. Stat. Assoc., Available: http://doi.acm.org/10.1145/2801040.2801062
+vol. 76, no. 376, pp. 757–765, 1981. [Online]. Available: http:// [41] W.-Y. Chan, H. Qu, and W.-H. Mak, “Visualizing the semantic
+www.jstor.org/stable/2287565 structure in classical music works,” IEEE Trans. Vis. Comput.
+[18] B. Kabulov, “A method for constructing chernoff faces oriented Graph., vol. 16, no. 1, pp. 161–173, Jan./Feb. 2010.
+toward interval estimates of the parameters,” Soviet J. Comput. [42] C. M. Wittenbrink, A. T. Pang, and S. K. Lodha, “Glyphs for visu-
+Syst. Sci., vol. 30, no. 3, pp. 94–97, 1992. alizing uncertainty in vector fields,” IEEE Trans. Vis. Comput.
+[19] C. Ware, Information Visualization: Perception for Design. San Graph., vol. 2, no. 3, pp. 266–279, Sep. 1996.
+Mateo, CA, USA: Morgan Kaufmann, 2004. [43] C. Dunne and B. Shneiderman, “Motif simplification: Improving
+[20] N. Andrienko and G. Andrienko, Exploratory Analysis of Spatial network visualization readability with fan, connector, and clique
+and Temporal data. Berlin, Germany: Springer, 2006. glyphs,” in Proc. SIGCHI Conf. Human Factors Comput. Syst., 2013,
+[21] R. Jacob, “Facial representation of multivariate data,” in Proc. pp. 3247–3256. [Online]. Available: http://doi.acm.org/10.1145/
+Graph. Representation Multivariate Data, 1978, pp. 143–168. 2470654.2466444
+[22] J. Miller, C. Quammen, and M. Fleenor, “Interactive visualization [44] M. Cayli, M. C. Cobanoglu, and S. Balcisoy, “Glyphlink: An
+of intercluster galaxy structures in the horologium-reticulum interactive visualization approach for semantic graphs,” J. Vis.
+supercluster,” IEEE Trans. Vis. Comput. Graph., vol. 12, no. 5, Languages Comput., vol. 24, no. 6, pp. 463–471, 2013. [Online].
+pp. 1149–1156, Sep. 2006. [Online]. Available: http://dx.doi.org/ Available: http://www.sciencedirect.com/science/article/pii/
+10.1109/TVCG.2006.155 S1045926X13000542
+[23] L. Micallef, P. Dragicevic, and J. Fekete, “Assessing the effect of [45] M. Chau, “Visualizing web search results using glyphs: Design
+visualizations on Bayesian reasoning through crowdsourcing,” and evaluation of a flower metaphor,” ACM Trans. Manag.
+IEEE Trans. Vis. Comput. Graph., vol. 18, no. 12, pp. 2536–2545, Inform. Syst., vol. 2, no. 1, pp. 1–27, Mar. 2011. [Online]. Avail-
+Dec 2012. able: http://doi.acm.org/10.1145/1929916.1929918
+[24] J. Fuchs, F. Fischer, F. Mansmann, E. Bertini, and P. Isenberg, [46] N. Siva, A. Chaparro, and E. Palmer, “Evaluation of MILSTD
+“Evaluation of alternative glyph designs for time series data in a 2525 glyph features in a visual search paradigm,” Proc. Human
+small multiple setting,” in Proc. SIGCHI Conf. Human Factors Factors Ergonomics Soc. Annu. Meet., 2014, pp. 1189–1193.
+Comput. Syst., 2013, pp. 3237–3246. [Online]. Available: http:// [Online]. Available: http://pro.sagepub.com/content/58/1/
+doi.acm.org/10.1145/2470654.2466443 1189.abstract
+[25] E. Maguire, P. Rocca-Serra, S.-A. Sansone, J. Davies, and [47] L. Wilkinson, “An experimental evaluation of multivariate
+M. Chen, “Taxonomy-based glyph design with a case study on graphical point representations,” in Proc. Conf. Human Factors
+visualizing workflows of biological experiments,” IEEE Trans. Comput. Syst., 1982, pp. 202–209. [Online]. Available: http://doi.
+Vis. Comput. Graphics, vol. 18, no. 12, pp. 2603–2612, Dec. 2012. acm.org/10.1145/800049.801781
+[26] U. Brandes, B. Nick, B. Rockstroh, and A. Steffen, “Gestaltlines,” [48] E. J. Casey, “Visual display representation of multidimensional
+in Proc. EuroVis, Eurographics, 2013, pp. 171–180. systems: The effect of system structure: And display integrality,”
+[27] D. H. S. Chung, P. A. Legg, M. L. Parry, R. Bown, I. W. Griffiths, Proc. Human Factors Ergonom. Soc. Annu. Meet., 1987, pp. 112–115.
+R. S. Laramee, and M. Chen, “Glyph sorting: Interactive visuali- [Online]. Available: http://pro.sagepub.com/content/31/1/
+zation for multi-dimensional data,” Inform. Vis., vol. 14, pp. 76– 112.abstract
+90, 2015. [49] P. M. Jones, C. D. Wickens, and S. J. Deutsch, “The display of
+[28] H. Levkowitz, “Color icons—Merging color and texture percep- multivariate information: An experimental study of an informa-
+tion for integrated visualization of multiple parameters,” in Proc. tion integration task,” Human Perform., vol. 3, no. 1, pp. 1–17,
+IEEE VIS, Oct. 1991, pp. 164–170. 1990. [Online]. Available: http://www.tandfonline.com/doi/
+[29] A. E. Lie, J. Kehrer, and H. Hauser, “Critical design and realiza- abs/10.1207/s15327043hup0301_1
+tion aspects of glyph-based 3D data visualization,” in Proc. 25th [50] D. MacGregor and P. Slovic, “Graphic representation of judg-
+Spring Conf. Comput. Graphics, 2009, pp. 19–26. [Online]. mental information,” Human Comput. Interaction, vol. 2, no. 3,
+Available: http://doi.acm.org/10.1145/1980462.1980470 pp. 179–200, 1986. [Online]. Available: http://www.tandfonline.
+[30] M. Chuah and S. Eick, “Information rich glyphs for software com/doi/abs/10.1207/s15327051hci0203_1
+management data,” IEEE Comput. Graph. Appl., vol. 18, no. 4, [51] M. C. Carswell and C. D. Wickens, “Information integration and
+pp. 24–29, Jul. 1998. the object display: An interaction of task demands and display
+[31] W. Ribarsky, E. Ayers, J. Eble, and S. Mukherjea, “Glyphmaker: superiority,” Ergonomics, vol. 30, no. 3, pp. 511–527, 1987. [Online].
+Creating customized visualizations of complex data,” Computer, Available: http://dx.doi.org/10.1080/00140138708969741
+vol. 27, no. 7, pp. 57–64, Jul. 1994. [52] J. E. Mezzich and D. R. L. Worthington, “A comparison of graphical
+[32] C. Dick, R. Burgkart, and R. Westermann, “Distance visualiza- representations of multidimensional psychiatric diagnostic data,”
+tion for Interactive 3D implant planning,” IEEE Trans. Vis. Com- Graph. Representation Multivariate Data, pp. 123–141, 1978.
+put. Graphics, vol. 17, no. 12, pp. 2173–2182, Dec. 2011. [53] R. J. Petersen, W. W. Banks, and D. I. Gertman, “Performance-
+[33] A. Klippel, F. Hardisty, R. Li, and C. Weaver, “Colour-enhanced based evaluation of graphic displays for nuclear power plant
+star plot glyphs: Can salient shape characteristics be overcome?” control rooms,” in Proc. Conf. Human Factors Comput. Syst., 1982,
+Cartographica, vol. 44, no. 3, pp. 217–231, 2009. pp. 182–189. [Online]. Available: http://doi.acm.org/10.1145/
+[34] H. Siirtola, “The Effect of data-relatedness in interactive glyphs,” 800049.801778
+in Proc. 9th Int. Conf. Inform. Vis., Jul. 2005, pp. 869–876. [54] D. Albers, M. Correll, and M. Gleicher, “Task-driven evaluation
+[35] W. Aigner, S. Miksch, B. Thurnher, and S. Biffl, “Planninglines: of aggregation in time series visualization,” in Proc. Conf. Human
+Novel glyphs for representing temporal uncertainties and their Factors Comput. Syst., 2014, pp. 551–560. [Online]. Available:
+evaluation,” in Proc. 9th Int. Conf. Inform. Vis., Jul. 2005, pp. 457–463. http://doi.acm.org/10.1145/2556288.2557200
+[36] J. P. Martin, J. E. Swan, R. J. Moorhead, Z. Liu, and S. Cai, [55] P. Goffin, W. Willett, A. Bezerianos, and P. Isenberg, “Exploring
+“Results of a user study on 2D hurricane visualization,” Comput. the effect of word-scale visualizations on reading behavior,” in
+Graph. Forum, vol. 27, no. 3, pp. 991–998, 2008. [Online]. Proc. Conf. Human Factors Comput. Syst. Work-In-Progress, 2015,
+Available: http://dx.doi.org/10.1111/j.1467-8659.2008.01234.x pp. 1827–1832.
+[37] D. H. Pilar and C. Ware, “Representing flow patterns by using [56] J. Caban, P. Rheingans, and T. Yoo, “An evaluation of visualiza-
+streamlines with glyphs,” IEEE Trans. Vis. Comput. Graph., tion techniques to illustrate statistical deformation models,”
+vol. 19, no. 8, pp. 1331–1341, Aug. 2013. Comput. Graph. Forum, vol. 30, no. 3, pp. 821–830, 2011.
+[38] B. Yost and C. North, “Single complex glyphs versus multiple [57] I. Borg and T. Staufenbiel, “Performance of snow flakes, suns, and
+simple glyphs,” in Proc. Extended Abstracts Human Factors Com- factorial suns in the graphical representation of multivariate data,”
+put. Syst., 2005, pp. 1889–1892. [Online]. Available: http://doi. Multivariate Behavioral Res., vol. 27, no. 1, pp. 43–55, 1992. [Online].
+acm.org/10.1145/1056808.1057048 Available: http://dx.doi.org/10.1207/s15327906mbr2701_4
+Authorized licensed use limited to: Bernd Froehlich. Downloaded on August 01,2024 at 06:49:49 UTC from IEEE Xplore. Restrictions apply.
+
+--- PAGE 16 ---
+1878 IEEE TRANSACTIONS ON VISUALIZATION AND COMPUTER GRAPHICS, VOL. 23, NO. 7, JULY 2017
+[58] J. Fuchs, P. Isenberg, A. Bezerianos, F. Fischer, and E. Bertini, [78] R. Jacob, “Investigating the Space of Chernoff faces,” Recent Adv.
+“The influence of contour on similarity perception of star Statist., Academic Press, New York, pp. 449–468, 1983.
+glyphs,” IEEE Trans. Vis. Comput. Graphics, vol. 20, no. 12, [79] C. J. Morris, D. S. Ebert, and P. L. Rheingans, “Experimental anal-
+pp. 2251–2260, Dec. 2014. ysis of the effectiveness of features in chernoff faces,” Proc. SPIE
+[59] A. Klippel, F. Hardisty, and C. Weaver, “Star plots: How shape Int. Soc. Opt. Eng., vol. 3905, pp. 12–17, 2000. [Online]. Available:
+characteristics influence classification tasks,” Cartography Geo- http://dx.doi.org/10.1117/12.384865
+graph. Inform. Sci., vol. 36, no. 2, pp. 149–163, 2009. [Online]. [80] M. Naveh-Benjamin and R. G. Pachella, “The effect of complexity
+Available: http://dx.doi.org/10.1559/152304009788188808 on interpreting “Chernoff” faces,” Human Factors, vol. 24, no. 1,
+[60] C. Weigle and R. Taylor, “Visualizing intersecting surfaces with pp. 11–18, 1982. [Online]. Available: http://hfs.sagepub.com/
+nested-surface techniques,” in Proc. IEEE Vis., Oct. 2005, pp. 503– content/24/1/11.abstract
+510. [81] E. S. Nelson, D. Dow, C. Lukinbeal, and R. Farley, “Visual search
+[61] R. Jacob and E. Howard, “The face as a data display,” Human processes and the multivariate point symbol,” Cartographica,
+Factors, vol. 18, no. 2, pp. 189–200, 1976. vol. 34, no. 4, pp. 19–33, 1997.
+[62] C. Frisson, S. Dupont, W. Yvart, N. Riche, X. Siebert, and [82] N. Siva, A. Chaparro, D. Nguyen, and E. Palmer, “Visual search
+T. Dutoit, “Audiometro: Directing search for sound designers efficiency for features in chernoff faces,” J. Vision, vol. 13, no. 9,
+through content-based cues,” in Proc. 9th Audio Mostly: A Conf. pp. 689–, 2013. [Online]. Available: http://www.journalofvision.
+Interaction Sound, 2014, pp. 1:1–1:8. [Online]. Available: http:// org/content/13/9/689.abstract
+doi.acm.org/10.1145/2636879.2636880 [83] N. Sivagnanasundaram, A. Chaparro, and E. Palmer,
+[63] Y. Wu and M. Takatsuka, “Visualizing multivariate networks: “Evaluation of the presence of a face search advantage in chern-
+A hybrid approach,” in Proc. IEEE Pacific Vis. Symp., Mar. 2008, off faces,” Proc. Human Factors Ergonomics Soc. Annu. Meet.,
+pp. 223–230. vol. 57, no. 1, pp. 1610–1614, 2013. [Online]. Available: http://
+[64] M. D. Boulette, B. G. Coury, and N. A. Bezar, “Classification of pro.sagepub.com/content/57/1/1610.abstract
+multidimensional data under time constraints: Evaluating digital [84] S. Moriarity, “Communicating financial information through
+and configural display representations,” Proc. Human Factors multidimensional graphics,” J. Accounting Res., vol. 17, no. 1,
+Ergonomics Soc. Annu. Meet., vol. 31, no. 1, pp. 116–120, 1987. pp. 205–224, 1979. [Online]. Available: http://www.jstor.org/
+[Online]. Available: http://pro.sagepub.com/content/31/1/ stable/2490314
+116.abstract [85] D. Stock and C. J. Watson, “Human judgment accuracy, multidi-
+[65] E. Nelson and P. Gilmartin, “An evaluation of multivariate, mensional graphics, and humans versus models,” J. Account.
+quantitative point symbols for maps,” in C. Wood and P. Keller Res., vol. 22, no. 1, pp. 192–206, 1984. [Online]. Available: http://
+(eds). Cartographic Design: Theoretical Practical Perspectives, www.jstor.org/stable/2490708
+Wiley & Sons, London, pp. 191–203, 1996. [86] P. C. Saxena and K. Navaneetham, “Comparison of Chernoff-type
+[66] M. D. Lee, R. E. Reilly, and M. E. Butavicius, “An Empirical eval- face and non-graphical methods for clustering multivariate obser-
+uation of chernoff faces, star glyphs, and spatial visualizations vations,” Comput. Stat. Data Anal., vol. 15, no. 1, pp. 63–79, 1993.
+for binary data,” in Proc. Asia-Pacific Symp. Inform. Vis., 2003, [87] R. L. Brown, “Methods for the graphic representation of systems
+pp. 1–10. [Online]. Available: http://dl.acm.org/citation.cfm? simulated data,” Ergonomics, vol. 28, no. 10, pp. 1439–1454, 1985.
+id=857080.857081 [Online]. Available: http://dx.doi.org/10.1080/00140138508963269
+[67] C. Forsell, S. Seipel, and M. Lind, “Surface glyphs for efficient [88] E. Chlan and P. Rheingans, “Multivariate glyphs for multi-
+visualization of spatial multivariate data,” Inform. Vis., vol. 5, object clusters,” in Proc. IEEE Symp. Inform. Vis., Oct. 2005,
+no. 2, pp. 112–124, 2006. [Online]. Available: http://ivi.sagepub. pp. 141–148.
+com/content/5/2/112.abstract [89] C. D. Shaw, J. A. Hall, C. Blahut, D. S. Ebert, and D. A. Roberts,
+[68] M. Livingston and J. Decker, “Evaluation of trend localization “Using shape to visualize multivariate data,” in Proc. Workshop
+with multi-variate visualizations,” IEEE Trans. Vis. Comput. New Paradigms Inform. Vis. Manipulation Conjunction 8th ACM Int.
+Graphics, vol. 17, no. 12, pp. 2053–2062, Dec 2011. Conf. Inform. Knowl. Manag., 1999, pp. 17–20. [Online]. Available:
+[69] M. A. Livingston and J. W. Decker, “Evaluation of multivariate http://doi.acm.org/10.1145/331770.331777
+visualizations: A case study of refinements and user experience,” [90] D. Feng, Y. Lee, L. Kwock, and R. M. Taylor, II, “Evaluation of
+Proc. SPIE Int. Soc. Opt. Eng., vol. 8294, pp. 82 940G–82 940G–12, glyph-based multivariate scalar volume visualization
+2012. [Online]. Available: http://dx.doi.org/10.1117/12.912192 techniques,” in Proc. 6th Symp. Appl. Perception Graphics Vis.,
+[70] P. Saraiya, C. North, and K. Duca, “Comparing benchmark task 2009, pp. 61–68. [Online]. Available: http://doi.acm.org/
+and insight evaluation methods on timeseries graph visual- 10.1145/1620993.1621006
+izations,” in Proc. 3rd BELIV Workshop: BEyond Time Errors: Novel [91] T. Jankun-Kelly, Y. Lanka, and J. Swan, “An evaluation of glyph
+Eval. Methods Inform. Vis., 2010, pp. 55–62. [Online]. Available: perception for real symmetric traceless tensor properties,” Com-
+http://doi.acm.org/10.1145/2110192.2110201 put. Graph. Forum, vol. 29, no. 3, pp. 1133–1142, 2010. [Online].
+[71] C. Forsell, S. Seipel, and M. Lind, “Simple 3D glyphs for spatial Available: http://dx.doi.org/10.1111/j.1467-8659.2009.01711.x
+multivariate data,” in Proc. IEEE Symp. Inform. Vis., Oct. 2005, [92] C. Zhang, T. Schultz, K. Lawonn, E. Eisemann, and A. Vilanova,
+pp. 119–124. “Glyph-based comparative visualization for diffusion tensor
+[72] M. A. Livingston, J. Decker, and Z. Ai, “An evaluation of meth- fields,” IEEE Trans. Vis. Comput. Graph., vol. 22, no. 1, pp. 797–
+ods for encoding multiple 2D spatial data,” Proc. SPIE, vol. 7868, 806, Jan. 2016.
+pp. 78 680C–78 680C–12, 2011. [Online]. Available: http://dx. [93] E. Tufte, Beautiful Evidence, Graphics Press, New York, 2006.
+doi.org/10.1117/12.872576 [94] M. Stone, A field guide to digital color. Boca Raton, FL, USA: CRC
+[73] H. Chernoff and M. H. Rizvi, “Effect on classification error of Press, 2013.
+random permutations of features in representing multivariate [95] F. Vogel and G. Wendt, “Zwillingsuntersuchung u€ber die
+data by faces,” J. Amer. Stat. Assoc., vol. 70, no. 351, pp. 548–554, erblichkeit einiger anthropologischer maße und
+1975. [Online]. Available: http://www.jstor.org/stable/2285931 konstitutionsindices,” Z. Menschl. Vererb. Konstitutionslehre,
+[74] G. De Soete and W. Do Corte, “On the perceptual salience of fea- vol. 33, pp. 425–446, 1956.
+tures of chernoff faces for representing multivariate data,” Appl. [96] D. S. Ebert, R. M. Rohrer, C. D. Shaw, P. Panda, J. M. Kukla, and
+Psychological Meas., vol. 9, no. 3, pp. 275–280, 1985. [Online]. D. A. Roberts, “Procedural shape generation for multi-dimen-
+Available: http://apm.sagepub.com/content/9/3/275.abstract sional data visualization,” Comput. Graph., vol. 24, no. 3, pp. 375–
+[75] G. De Soete, “A Perceptual study of the Flury-Riedwyl faces for 384, 2000.
+graphically displaying multivariate data,” Int. J. Man-Mach. [97] K. Rodden, W. Basalaj, D. Sinclair, and K. Wood, “Does organisa-
+Stud., vol. 25, no. 5, pp. 549–555, 1986. tion by similarity assist image browsing?” in Proc. Conf. Human
+[76] C. G. Hamner, D. W. Turner, and D. M. Young, “Comparisons of Factors Comput. Syst., 2001, pp. 190–197. [Online]. Available:
+several graphical methods for representing multivariate data,” http://doi.acm.org/10.1145/365024.365097
+Comput. Math. Appl., vol. 13, no. 7, pp. 647–655, 1987. [98] W. Cleveland and R. McGill, “Graphical perception: Theory,
+[77] D. L. Huff and W. Black, “A multivariate graphic display for experimentation, and application to the development of
+regional analysis,” in Graphical Representation of Multivariate Data, graphical methods,” J. Am. Statist. Assoc., vol. 79, no. 387,
+Orlando, FL, USA: Academic, 1978, pp. 199–218. pp. 531–554, 1984.
+Authorized licensed use limited to: Bernd Froehlich. Downloaded on August 01,2024 at 06:49:49 UTC from IEEE Xplore. Restrictions apply.
+
+--- PAGE 17 ---
+FUCHS ET AL.: A SYSTEMATIC REVIEW OF EXPERIMENTAL STUDIES ON DATA GLYPHS 1879
+[99] J. Sreng, A. Lecuyer, C. Megard, and C. Andriot, “Using visual Anastasia Bezerianos received the PhD degree
+cues of contact to improve interactive manipulation of virtual in computer science from the University of Tor-
+objects in industrial assembly/maintenance simulations,” IEEE onto, Canada. She is currebtly an assistant pro-
+Trans. Vis. Comput. Graphics, vol. 12, no. 5, pp. 1013–1020, fessor at the Univ Paris-Sud, France, and a
+Sep. 2006. member of the HCC (LRI) and ILDA (INRIA)
+[100] P. Saraiya, C. North, and K. Duca, “An Insight-based methodol- teams. Her research interests include interaction
+ogy for evaluating bioinformatics visualizations,” IEEE Trans. and visualization designs for large displays,
+Vis. Comput. Graphics, vol. 11, no. 4, pp. 443–456, Jul. 2005. visual perception and user evaluation.
+[101] A. Amirkhanov, B. Fro€hler, J. Kastner, E. Gro€ller, and C. Heinzl,
+“Inspectr: Multi-modal exploration, visualization, and analysis
+of spectral data,” Comput. Graph. Forum, vol. 33, no. 3,
+pp. 91–100, 2014.
+[102] S. Oeltze, W. Freiler, R. Hillert, H. Doleisch, B. Preim, and Daniel A. Keim is a full professor and the head to
+W. Schubert, “Interactive, graph-based visual analysis of high- the Information Visualization and Data Analysis
+dimensional, multi-parameter fluorescence microscopy data in Research Group at the University of Konstanz.
+toponomics,” IEEE Trans. Vis. Comput. Graphics, vol. 17, no. 12, Keim received a habilitation in computer science
+pp. 1882–1891, Dec. 2011. from the University of Munich and has been pro-
+[103] J. Yang, A. Patro, H. Shiping, N. Mehta, M. Ward, and E. Run- gram cochair of the IEEE InfoVis, the IEEE
+densteiner, “Value and relation display for interactive explora- VAST, and the ACM SIGKDD Conference.
+tion of high dimensional datasets,” in Proc. IEEE Symp. Inform.
+Vis., 2004, pp. 73–80.
+Johannes Fuchs is a research scientist and lec-
+turer at the University of Konstanz. He is currently
+working toward the PhD degree at the University " For more information on this or any other computing topic,
+of Konstanz. His main research interests include please visit our Digital Library at www.computer.org/publications/dlib.
+the area of visual analytics and information visu-
+alization with a special focus on data glyph design
+and evaluation.
+Petra Isenberg received the PhD degree in com-
+puter science from the University of Calgary. He
+is a research scientist in Inria’s Aviz Research
+Team. Her research interests include information
+visualization and visual analytics with a focus on
+novel contexts for visualization application, evalu-
+ation in visualization, and interaction.
+Authorized licensed use limited to: Bernd Froehlich. Downloaded on August 01,2024 at 06:49:49 UTC from IEEE Xplore. Restrictions apply.

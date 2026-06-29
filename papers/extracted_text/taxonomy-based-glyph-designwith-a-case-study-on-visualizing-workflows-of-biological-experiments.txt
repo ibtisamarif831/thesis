@@ -1,0 +1,888 @@
+--- PAGE 1 ---
+IEEE TRANSACTIONS ON VISUALIZATION AND COMPUTER GRAPHICS, VOL. 18, NO. 12, DECEMBER 2012 2603
+Taxonomy-Based Glyph Design—with a Case Study on Visualizing
+Workflows of Biological Experiments
+Eamonn Maguire, Philippe Rocca-Serra, Susanna-Assunta Sansone, Jim Davies, and Min Chen
+mRNA extraction NZ_0hrs_Sa b m io p ti l n e_1_Extract biotin labeling NZ_0hrs_Sample_1_Labeled hybridization NZ_0hrs_Sample_1_Labeled_Hyb1 scanning NZ_0hrs_Sample_1_Labeled_Hyb1_Scan1
+mRNA extraction NZ_1hrs_Drug b _ i S o a ti m n ple_1_Extract biotin labeling NZ_1hrs_Drug_Sample_1_Extract_Labeled hybridization NZ_1hrs_Drug_Sample_1_Extract_Labeled_Hyb3 scanning NZ_1hrs_Drug_Sample_1_Extract_Labeled_Hyb3_Scan3
+mRNA extraction NZ_2hrs_Drug b _ i S o a ti m n ple_1_Extract biotin labeling NZ_2hrs_Drug_Sample_1_Extract_Labeled hybridization NZ_2hrs_Drug_Sample_1_Extract_Labeled_Hyb7 scanning NZ_2hrs_Drug_Sample_1_Extract_Labeled_Hyb7_Scan7
+Saccharomyces cerevisiae FY1679 growth NZ_0hrs_Grow_1 mRNA extraction NZ_4hrs_Drug b _ i S o a ti m n ple_1_Extract biotin labeling NZ_4hrs_Drug_Sample_1_Extract_Labeled hybridization NZ_4hrs_Drug_Sample_1_Extract_Labeled_Hyb11 scanning NZ_4hrs_Drug_Sample_1_Extract_Labeled_Hyb11_Scan11
+mRNA extraction NZ_2hrs_Vehicl b e i _ o S ti a n mple_1_Extract biotin labeling NZ_2hrs_Vehicle_Sample_1_Extract_Labeled hybridization NZ_2hrs_Vehicle_Sample_1_Extract_Labeled_Hyb9 scanning NZ_2hrs_Vehicle_Sample_1_Extract_Labeled_Hyb9_Scan9
+mRNA extraction NZ_4hrs_Vehicl b e i _ o S ti a n mple_1_Extract biotin labeling NZ_4hrs_Vehicle_Sample_1_Extract_Labeled hybridization NZ_4hrs_Vehicle_Sample_1_Extract_Labeled_Hyb13 scanning NZ_4hrs_Vehicle_Sample_1_Extract_Labeled_Hyb13_Scan13
+mRNA extraction NZ_4hrs_ b V i e o h t i i c n le_Sample_1_Extract biotin labeling NZ_4hrs_Vehicle_Sample_1_Extract_Labeled hybridization NZ_4hrs_Vehicle_Sample_1_Extract_Labeled_Hyb5 scanning NZ_4hrs_Vehicle_Sample_1_Extract_Labeled_Hyb5_Scan5
+E-MAXD-4-processed-data-1342566476.txt data processing E-MAXD-4-raw-data-426648549.txt feature extraction
+E-MAXD-4-processed-data-1342566476.txt data processing E-MAXD-4-raw-data-426648567.txt feature extraction
+E-MAXD-4-processed-data-1342566476.txt data processing E-MAXD-4-raw-data-426648585.txt feature extraction
+E-MAXD-4-processed-data-1342566476.txt data processing E-MAXD-4-raw-data-426648603.txt feature extraction
+E-MAXD-4-processed-data-1342566476.txt data processing E-MAXD-4-raw-data-426648639.txt feature extraction
+E-MAXD-4-processed-data-1342566476.txt data processing E-MAXD-4-raw-data-426648657.txt feature extraction
+E-MAXD-4-processed-data-1342566476.txt data processing E-MAXD-4-raw-data-426648621.txt feature extraction
+Fig. 1. a) Workflow as rendered currently using toolkits such as GraphViz. b) We propose to replace the textual labels with glyphs,
+while allowing interactive access to detailed descriptions. This makes it easy to gain an overview, search components and compare
+workflows. The screenshot shows a prototype developed within ISAcreator, a system for capturing biological experiment metadata.
+Abstract—Glyph-based visualization can offer elegant and concise presentation of multivariate information while enhancing speed
+and ease in visual search experienced by users. As with icon designs, glyphs are usually created based on the designers’ experience
+and intuition, often in a spontaneous manner. Such a process does not scale well with the requirements of applications where a large
+number of concepts are to be encoded using glyphs. To alleviate such limitations, we propose a new systematic process for glyph
+design by exploring the parallel between the hierarchy of concept categorization and the ordering of discriminative capacity of visual
+channels. We examine the feasibility of this approach in an application where there is a pressing need for an efficient and effective
+means to visualize workflows of biological experiments. By processing thousands of workflow records in a public archive of biological
+experiments, we demonstrate that a cost-effective glyph design can be obtained by following a process of formulating a taxonomy
+with the aid of computation, identifying visual channels hierarchically, and defining application-specific abstraction and metaphors.
+Index Terms—Glyph-based techniques, taxonomies, design methodologies, bioinformatics visualization.
+1 INTRODUCTION Most accepted designs have undergone an enduring process of evolu-
+tion, refinement and standardization. One could not and should not
+Glyph-based visualization is a class of visual representations where a
+remove the necessity for such processes in glyph design. Meanwhile,
+collection of small visual objects (referred to as glyphs) are used to
+the design process for a glyph set usually relies on an assortment of
+encode different attribute dimensions of an input data space. A good
+creativity, artistic skill, domain knowledge, intuition about users, and
+glyph design can enable users to conduct visual search more efficiently
+sometimes personal preference. While most of these qualities are ab-
+during interactive visualization, and facilitate effective learning, mem-
+solutely helpful and some are inevitable, it is highly desirable to intro-
+orizing and using the visual encoding scheme. A less effective visual
+duce “systematicism” and objectivity into the design process.
+design may suffer from various shortcomings such as being percep-
+tually confusing, semantically ambiguous, difficult to learn and re- To demonstrate our approach, we elected the field of experimental
+member, or unable to accommodate low-resolution display devices. biology as a test bed for developing a systematic methodology to cre-
+ate a glyph-based visual mapping for visualizing experimental design
+and experimental processes. While experimental design is at the heart
+of biological data evidence gathering, representation of such informa-
+Eamonn Maguire is with Oxford e-Research Centre and Department of
+• tion is confined to either verbose description or ineffective represen-
+Computer Science, University of Oxford, UK. E-mail:
+tations. This claim is backed by a survey of public biodata repos-
+eamonn.maguire@st-annes.ox.ac.uk.
+itories, devised to ensure data perennity, scientific scrutiny and re-
+Philippe Rocca-Serra, Susanna-Assunta Sansone and Min Chen are with
+• producibility. As illustrated in Fig. 1(a), workflows are traditionally
+Oxford e-Research Centre, University of Oxford, UK. E-mail: philippe.
+{ drawn as text-based diagrams. Text labels are indices of concepts, and
+rocca-serra,susanna-assunta.sansone,min.chen @oerc.ox.ac.uk.
+} usually they do not encode multivariate information directly. Text-
+Jim Davies is with Department of Computer Science, University of Oxford,
+• labeled boxes are costly in terms of display space usage as well as
+UK. E-mail: jim.davies@cs.ox.ac.uk.
+time required for visual search since parsing and interpretation of text
+Manuscript received 31 March 2012; accepted 1 August 2012; posted online is a slow post-attentive process [59]. They are particularly ineffective
+14 October 2012; mailed on 5 October 2012.
+when one needs to compare between different workflows or to identify
+For information on obtaining reprints of this article, please send
+unusual or missing components in a workflow.
+e-mail to: tvcg@computer.org.
+Therefore, exploring an alternative in the form of glyph based rep-
+Authorized licensed use limited to: Bernd Froehlich. Downloaded on August 01,2024 at 07:58:53 UTC from IEEE Xplore. Restrictions apply.
+1077-2626/12/$31.00 © 2012 IEEE Published by the IEEE Computer Society
+
+--- PAGE 2 ---
+2604 IEEE TRANSACTIONS ON VISUALIZATION AND COMPUTER GRAPHICS, VOL. 18, NO. 12, DECEMBER 2012
+resentations, which are at the core of many successful schematic dia- representing and searching DNA sequences and for building genetic
+grams in the history of sciences, engineering and business manage- constructs from DNA sequences, facilitating the use of conventional
+ment, offers a potentially more effective means for depicting these link diagrams. Both systems rely heavily on text labels. In handling
+workflows. This presents us with an interesting case study where other a large collection of workflows, they exhibit a few shortcomings, such
+types of design approaches would not be appropriate, especially in as inefficiency in using display space and ineffectiveness in supporting
+dealing with several hundreds of conceptual names. some visualization tasks, such as comparisons and novelty or anoma-
+It is important to note that domain experts are in general more will- lies detection in workflows.
+ing and able to learn and memorize an encoding scheme in order to im- In the literature, several authors encouraged glyph designers to con-
+prove the accuracy and efficiency of routine tasks. At the same time, it sider visual perception when constructing glyphs [58, 23]. Others
+is also necessary for an encoding scheme to facilitate effective learning examined the design space of icons, which normally encode less in-
+and remembering through appropriate abstraction and metaphors. formation than glyphs (e.g., [21, 29]). There were perceptual studies
+Motivated by this case study, we made an observation that when showing the merits of icons over text labels (e.g., [34, 41]), as well
+a large number of concepts (or taxa) are organized into a taxonomic as those showing the contrary (e.g., [60]). Building on such discus-
+tree, the hierarchy typically represents an ordering of different cat- sions, this work aims to address a methodological need for a system-
+egorization schemes. The schemes that are higher-up in the taxon- atic approach to glyph design for applications where large collections
+omy (closer to the root) are usually considered to be more important, of concepts need to be visually encoded using glyphs.
+which reflect their conceptual coverage, frequency of usage, domain-
+specific convention, and some other measurable factors. In terms of 2.2 Workflow Visualization
+visual encoding, higher up schemes should ideally be mapped to vi- The need for workflow visualization is pervasive across many different
+sual channels that have more discriminative capacity. Hence, we can domains. For example, in business and management the Gantt chart is
+explore the parallel between the taxonomic hierarchy and the order- a form of text based workflow visualization, while BPMN (Business
+ing of visual channels based on discriminative capacity to formulate a Process Model and Notation) and EPC (Event-driven Process Chain)
+systematic and relatively objective process for designing a glyph set. make use of icons to enrich text labels. In engineering disciplines, var-
+This approach addresses one of the most common criticisms of data ious schematic diagrams, such as UML (Unified Modeling Language),
+glyphs: the data to visual attribute mapping bias [58]. Given a large Petri-net and circuit diagrams, are used to convey data flow and pro-
+data repository that encompasses many concepts, our design process is cess interaction.
+composed of four major steps: (i) gathering and processing raw meta- In this work, we consider workflows used to describe biological
+data for obtaining a set of taxa (names); (ii) formulating a taxonomy experiments. This class of workflow visualization renders the pro-
+based on a set of categorization schemes (Section 4); (iii) carrying cesses enacted on biological materials in an experiment (e.g., removal
+out visual design, which includes the sub-process of determining the of blood sample from patient). There has been little effort to develop
+ordering of visual channels, proposing optional visual mappings, and tools that address the domain-specific needs. Scientists usually use
+identifying metaphoric abstractions and associations (Section 5); and generic text-based graph drawing tools such as GraphViz [3].
+(iv) implementing a glyph-based visualization system, in our case, for One related aspect is pathway visualization, which is concerned
+depicting workflows of biological experiments (Section 6). with the rendering of cellular biological processes. An array of path-
+Similar to most design processes, it is helpful to conduct all stages way visualization tools have been developed, some of which incorpo-
+in a progressive and iterative manner. As glyph-based visualization is rate glyphs. For example, VANTED [22] overlays glyphs representing
+normally deployed in a specific application domain, it is important to gene expression, enzyme and metabolite profile data on top of path-
+involve domain experts at every stage of the design process. During way diagrams from KEGG [37]. GENeVis [9], which also employs
+this work, we met with domain specialists on a weekly basis. glyphs to represent multivariate data, is a comprehensive visualization
+toolkit for exploration of pathways in conjunction with temporal data.
+2 RELATED WORK GenoCAD has at its core a workflow generation system and relies on
+In this section, we give a brief overview of two most relevant areas their glyph library for rendering of the different biological processes
+in visualization, glyph-based visualization and workflow visualiza- within a cell. SBGN-ED [14], is an add-on for the VANTED software
+tion. The remainder background information includes the biological and performs pathway creation using the aforementioned SBGN [28]
+data management, perceptual guidance, and categorization algorithms, visual language.
+which will be described in the following sections where the relevant
+technical details are discussed. 3 MOTIVATION AND OVERVIEW
+The advent of massively parallel techniques such as DNA microar-
+2.1 Glyph-based Visualization
+ray, mass-spectrometry based proteomics and metabolomics and next
+There are many examples of glyph usage in the literature spanning generation sequencing enables molecular biologists to collect, process
+many disciplines, especially in conjunction with many schematic di- and manipulate biological signals on a new scale. Big data in biology
+agrams. Bertin considered a range of simple glyphs in the context of is a reality. There has been serious effort in biology to ensure qual-
+geo-information visualization [7]. Ward surveyed the use of glyphs ity of experimental records by providing data archiving infrastructure
+in visualization, and discussed a number of bias issues, design ap- and defining standards for adequate annotation and sufficient details
+proaches, and layout options [58]. Ropinksi et al. conducted a survey for recapitulation of results. A number of molecular biology signature
+on glyph-based techniques in medical visualizations [48]. In visual- databases have been or are being established to cover the main molec-
+ization, a number of interesting glyph designs have been presented ular dimensions: transcript, protein and metabolites. The captured
+with noticeable impact on a large range of applications (e.g., medicine metadata mostly revolves around a similar configuration where sets of
+[25], software [13], text [47], and scientific computation [62]). Fur- samples corresponding to different conditions are processed, measure-
+thermore, Ribarsky et al. developed an editing system, Glyphmaker ments produced and analysis performed, delivering data that needs to
+[45], to assist the process of designing glyphs. Post et al. proposed be handled and interpreted. While the availability of such metadata
+a language, Icon Modeling Language, for creating glyphs and glyph- facilitates comparison across datasets and enables meta-analysis, pro-
+style contours [42]. viding means to serve an overview of experimental design can assist
+There have been some recent efforts to use glyph-based visualiza- analysts and data managers alike, from data selection according to rel-
+tion in biological sciences. One noticeable attempt is the Systems Bi- evancy, to error detection such as imbalances, irregularities or incon-
+ology Graphical Notation (SBGN) [28]. The design of SBGN makes sistencies in records.
+use of the notional representations of UML with some modifications to Task Analysis. In the context of meta-databases for experimental
+describe the biological entities and their interactions within a biolog- records, there are two main groups of users. The majority of users are
+ical system. GenoCAD [11] provides a grammar-based language for those who create data for their biological experiments or retrieve data
+Authorized licensed use limited to: Bernd Froehlich. Downloaded on August 01,2024 at 07:58:53 UTC from IEEE Xplore. Restrictions apply.
+
+--- PAGE 3 ---
+MAGUIRE ET AL: TAXONOMY-BASED GLYPH DESIGN — WITH A CASE STUDY ON VISUALIZING WORKFLOWS OF… 2605
+ated a taxonomic tree by recursively selecting the best categorization
+Bi r o e l p o o g s ic it a o l r d ie a s ta Da P t r a o C c a e p ss t i u n r g e & F T o a r x m o u n l o a m tin y g M V a i p su p a in l g A M A b s s e s t t o r a a c p c ia h ti t o o io r n i n c & G s ly e p t h Im G vi l p s y u l p e a h m li - z b e a a n t s i t o e in n d g s o c f h t e h m e e ta b x a o s n e o d m o y n b th y e a q ll u o a w li i t n y g m d e o a m su a r i e n s. ex W pe e rt fi s n ( a 2 liz c e o d -a t u h t e ho o r r s g ) a t n o iz m at a io k n e
+Glyph design adjustments according to domain-specific conventions. All leaf nodes
+of the resulting taxonomy tree are names extracted from the workflow
+metadata. All non-leaf nodes represent a categorization scheme.
+Fig. 2. A systematic process for creating glyph based representations.
+Glyph Design. First, we established an ordering of commonly-
+used visual channels based on the literature focused on perception and
+relevant to their scientific interests. Their tasks include: (a) entering
+visualization (see Section 5). This allows us to systematically compare
+and editing their own experimental records; (b) transforming workflow
+the order of categorization schemes in the taxonomy with the order of
+records to schematic diagrams for comparison, external memorization,
+different visual channels. Ideally, schemes at the upper level of the
+publication and education; (c) uploading and downloading datasets;
+tree can be mapped to visual channels which are more prominent to
+(d) querying and searching for relevant experiments; (e) understanding
+our visual system.
+workflows of existing experimental designs; (f) identifying similarity
+We then proceeded to the glyph design process involving two inter-
+and difference between workflows for a common task; (g) understand
+twined sub-processes for visual mapping and metaphoric abstrac-
+pooling events and sample relations (derivation).
+tion and association. We proposed various options of visual chan-
+The second group of users are curators who manage data archives.
+nels for each categorization scheme featured in the taxonomic tree.
+As biology or bioinformatics scientists themselves, they perform the
+We considered the merits of these visual channels and identify po-
+above-mentioned tasks (d)-(g) frequently, and (b)-(c) occasionally. In
+tential conflicts with the visual channels that have been assigned to
+addition, they also carry tasks for: (h) checking syntactic correctness
+other schemes. With the direct help from domain experts, we tried to
+of submitted workflows; (i) checking semantic correctness of submit-
+identify a metaphoric abstraction or association for each design option
+ted workflows which usually involves reading the associated publica-
+proposed. We evaluated and recorded the intuitiveness and suitability
+tions then comparing the submitted workflows with those described in
+of the abstraction and metaphor association.
+the publications; (j) interacting with authors of submitted workflows
+Informed by the results the two sub-processes, we finalized a glyph
+to clarify any inconsistency and misunderstanding; (k) making appro-
+set by selecting a design option for each scheme, while maintain-
+priate corrections in submitted records where necessary; (l) augment-
+ing the order of discriminative capacity of visual channels, minimiz-
+ing with appropriate annotation based on additional information found
+ing conflicts between different channels, and maximizing the use of
+in the associated publications; (m) providing authors with submission
+metaphoric abstraction and association.
+feedback. (n) forming an up-to-date overview about the experiments
+Implementation of Glyph-based Visualization. We then inte-
+in the data archives, and maintaining an insight about the provenance
+grated the glyph set with a layout algorithm to form a prototype sys-
+of the archives; (n) analyzing the grouping, replication, distribution
+tem for workflow visualization (see Section 6). For demonstration
+and trend of experiments; (o) analyzing ambiguities, errors and un-
+purposes, we tested the workflow visualization in conjunction with
+certainty in experimental recording, and identifying the need to enrich
+ISAcreator, a popular domain agnostic biological experiment meta-
+and refine the relevant standards for ontology, labelling and annota-
+data capture tool.
+tion. (p) providing tools to assist users in creating meta-data from raw
+data.
+4 TAXONOMY GENERATION
+It is not difficult to observe that effective workflow visualization can
+significantly improve users’ capability in performing tasks b, e, f, g, h, Given a large collection of concepts, we should ideally make use of a
+i, j, l, n, o and p. standard taxonomy, where non-leaf nodes represent different catego-
+While it is necessary to evolve a glyph-based design for workflow rization schemes and each scheme provides subclasses that lead to dif-
+visualization over a period, it is also important not to make the first ferent sub-trees. In many circumstances, however, there is no agreed
+step in an ad hoc manner. Such a process does not scale well with taxonomic tree as establishing a standard categorization requires non-
+the requirements of the application concerned where a large number trivial scientific effort that often spans over a few decades.
+of concepts are to be encoded using glyphs. We thus adopt a new sys- The algorithm described below is not intended to establish a
+tematic process for glyph design by exploring the parallel between the semantic-rich taxonomic tree for classifying concepts. It is designed
+hierarchy of concept categorization and the ordering of discriminative purely for addressing the needs for ordering various categorization
+capacity of visual channels. Fig. 2 depicts this process. schemes (when there is no such an agreed order) to aid glyph design,
+Data Capture and Processing. We first retrieved workflow and for devising a useful tree data structure in implementing the map-
+metadata from a biological repository (content of the ArrayExpress ping between concepts and glyphs in workflow visualization.
+archive), through use of a multi-threaded harvesting operation. All ex- Hence, the criteria used for structuring the tree are based on usage
+perimental workflows were then converted using a MAGE-Tab to ISA- of the concepts and the structural quality of the tree to be constructed.
+Tab converter, the latter format being more general than the former and Taxonomy is a long standing concept that can be traced back to
+can be used to carry metadata payloads for many types of experiments, 3000BC [32]. Automatic taxonomy generation has been an active field
+making the data processing program more “future-proof”. in computer science and computational biology with existing work
+From the 21,000 ISA-Tab files, we extracted all names of protocols largely focusing on clustering algorithms (e.g., [27]). Many such al-
+(processes) and biological materials, chemical materials, devices and gorithms assume the availability of similarity measures for ordering
+data used in annotation. We also computed the occurrence of each entities rather than relying on the existence of individual categoriza-
+material and process found in the entire set of ISA-Tab files, which tion schemes. In these algorithms, there is usually no attempt towards
+have been used as one of the metrics in the next stage (see Section 5 application of a metric for creating meaningful non-leaf nodes in the
+for details). This step results in 61 process names and 3492 names resulting tree. In this work, it is essential to keep each categorization
+of inputs and outputs (e.g., biological and chemical materials, device scheme as a non-leaf node unless it is redundant.
+measurements and data).
+4.1 Ordering Classification Schemes
+Taxonomy Formulation. Since a taxonomy for such a large col-
+lection of terms is absent, we, for starters, established a set of cat- Let X = x 1 , x 2 , . . ., xn be a set of concepts to be classified. In our
+{ }
+egorization schemes with the help of domain experts. For example, application, this is the set of all valid names of biological processes
+one of the schemes for categorizing processes may be based on dif- and IOs (inputs and outputs) in the database. Each concept xi is asso-
+ferent biological inputs to a process (e.g., molecule, cell, organism, ciated with a scalar value, µi [0, 1], indicating its frequency of usage
+∈
+etc.). Another scheme may be based on processing methods (e.g., per- in relation to the total occurrence of all concepts in the database. There
+turbation, combination, etc.). We computed the quality measures of are a number of categorization schemes, S = S 1 , S 2 , . . ., Sm . Each
+{ }
+each scheme based a set of generic metrics (see Section 4) then cre- scheme, S divides concepts into several classes, ck, ck, . . ., ck . The
+k 1 2 lk
+Authorized licensed use limited to: Bernd Froehlich. Downloaded on August 01,2024 at 07:58:53 UTC from IEEE Xplore. Restrictions apply.
+
+--- PAGE 4 ---
+2606 IEEE TRANSACTIONS ON VISUALIZATION AND COMPUTER GRAPHICS, VOL. 18, NO. 12, DECEMBER 2012
+relationship between the concept set X and different classification 10 in this work. We introduce the following metric to measure the
+schemes can thus be represented by a Boolean matrix, A, where each discriminative capacity of a scheme:
+element α[i, j, k] = 1 if concept xi belongs to the jth class of scheme
+S
+k
+; otherwise α[i, j, k] = 0. In the context of feature-based categoriza- 0 ηk < 2
+t u i i t n o y, d n e , w r o e S n k a e s a c s s u an m a e a p l a s t r h o t a ic v t u i t e l h a w e r c t e y l a a p c s e h se o s s f ch u th e n i m d s e e f r e S a th k tu e a r s e sa . a m W f e e i a t S h t k u o r u a e t r , e l a o d n s i d i s n j e g o a i g n ch e t. n c e I l r t a a s i l s s - M 4 (S k ) =   η η 1 $ $ − η η $ k+2 η 2 k ≤ > η η k $ ≤ η$ (4)
+also possible that a concept does not possess the kth feature, and hence Although the above four metrics have been normalized to ensure
+does not belong to any class under S k . their functional values within the [0, 1] domain, the distribution of the
+Given the above categorical information about the concept set X , values for different schemes can still be rather application-specific and
+one can choose a categorization scheme S k S , which will divide X may vary substantially between different metrics. This may lead to
+∈
+into a number of disjoint subsets corresponding to classes ck 1 , ck 2 , . . ., ck lk inconsistency in combining these metrics.
+and ck. The subset ck contains those concepts which S is unable We thus provide an optional linearization filter for these metrics by
+0 0 k
+to classify. The partitioning process can be repeated recursively by mapping the values obtained using a each metric Mi into fractional
+applying one of the remaining categorization schemes in S to each ranking numbers, which are then normalized into the [0, 1] domain
+subset. This results in a hierarchical categorization tree, which defines with 1 being the best and 0 the worst. For example, consider a set of
+a taxonomy for the concepts set X . six schemes with metric values:
+The ordering of the schemes in S thus determines the taxonomic
+(S , 0.5), (S , 0.3), (S , 0.54), (S , 0.8), (S , 0.85), (S , 0.6).
+structure of X . It is not difficult to anticipate that many criteria can be 1 2 3 4 5 6
+used to determine the ordering for a given concept set. Some criteria
+We first sort the set:
+will no doubt encode application-specific semantics, and some may be
+subjective or debatable. However, there are also some common-sense
+(S , 0.3), (S , 0.5), (S , 0.54), (S , 0.6), (S , 0.8), (S , 0.85)
+criteria that are generic to most applications. These include: 2 1 3 6 4 5
+Coverage. The number of concepts that can be classified by scheme We then obtain the normalized ranking values via the distance for or-
+S (i k .e i . s , t a h c e a f p e a w c e it r y in m c e k 0 a ) s , u t r h e e o b f e S tt k e . r. T T h h e e m m o e re as c u o r n e c , e w p h ts ic t h ha i t s S n k or c m an al c iz la e s d si b f y y r d a i n n k al p v o a s r i i t a io b n le f s o f r u e n a c c t h io s n ch σ em = a R . r − − 1 1 where R is the top rank and r is the
+the set size X = n, can be defined as:
+| |
+1 2 3 4 5
+M 1 (S k ) = ∑n i=1 max 1 ≤ n j ≤ lk (αi, j,k ) . (1) (S 2 , 0), (S 1 , 5 ), (S 3 , 5 ), (S 6 , 5 ), (S 4 , 5 ), (S 5 , 5 ).
+We denote this filter as a function R(S k , Mi , S ). Using the above set
+Potential Usage. A categorization scheme that is higher up in the of metrics in conjunction with the filter R, we can derive a combined
+taxonomical tree is expected to be used more often in the application metric as
+c e o st n im ce a r t n e e t d h . e T p h o e te o n c ti c a u l r u re sa n g c e e o fr f e a qu c e la n s c s i i e fi s ca o t f io c n on s c c e h p e t m s, e µ a i s , f e o n l a lo b w le s: us to M(S k ) = ∑4 1 ωtR(S ∑ k , 4 1 M ω t t (S k ), S ) .
+M 2 (S k ) = ∑n i=1 µi ma ∑ x 1 n i= ≤ 1 j ≤ µ l i k (α[i, j, k]) . (2) w ua h l e m re e ω tri t c , s t . = Si 1 m , 2 il , a 3 r , t 4 o a w re ei u g s h e t r s -a in dj c u l s u t s a t b e l r e in w g e a ig lg h o ts ri f th o m r t s h , e th fo e u se r i w n e d i i g v h id ts -
+need to be used with care as they introduce additional semantics into
+Subtree Balance. Having a balanced node distribution in a tree is a the ordering algorithm.
+desirable property of a tree structure. It prevents a tree from having an Equipped with the combined metric M, the algorithm for establish-
+excessive height, which corresponds to the need for more visual chan- ing an order of different schemes in S can be described as follows:
+nels. Let l denote the number of subclasses in categorization scheme
+k
+S k , τj be the number of concepts in each subclass ck j , j = 1, 2, . . ., l k and
+proc select(S , X )
+σ
+W
+τ
+e
+a
+c
+n
+a
+d
+n
+τ¯
+m
+b
+e
+e
+a
+t
+s
+h
+u
+e
+re
+st
+t
+a
+h
+n
+e
+d
+l
+a
+e
+r
+v
+d
+e
+d
+l
+e
+o
+v
+f
+i
+b
+a
+a
+ti
+l
+o
+a
+n
+nc
+a
+e
+nd
+as
+m
+f
+e
+o
+a
+ll
+n
+ow
+re
+s
+s
+:
+pectively of τ1 , . . .,τlk .
+S BEST := null; m BE
+≡
+ST := 0;
+for S S do
+∈
+m := M(S);
+0 ∑ l i k =1 τli = 0 if m > m BEST
+M 3 (S k ) = 1 στ < ε(ε > 0) (3) S BEST := S; m BEST := m;
+P(τ¯
+±
+1
+|
+N τ¯,στ ) τ¯ > 0 & στ > ε out put(S BEST );
+remove S BEST from S ;
+where P is the probability that a value within [τ¯ − 1,τ¯ + 1] falls under split X into subsetsX1 , X2 , . . ., based on S BEST ;
+the curve given by the normal distribution N with (τ¯,στ ) [40]. There if subsets 1
+| |≤
+are two special cases. When all values of τj are 0, S k cannot classify return;
+any concept; hence the metric returns a zero score. When στ = 0, fi
+the subtree is totally balanced; hence the metric returns one. As στ for each subsetXk do
+approaches zero, the function P becomes numerically unstable, we use select(S , Xi );
+a cut-off value ε to prevent this. In this work, we set ε = 0.00001. The od
+normal distribution is preferred over a χ-test, as χ may not be reliable fi
+when l k is a small number. od.
+Number of Subclasses. All visual channels used in glyphs have
+limited discriminative capacity. A higher number of subclasses in a 4.2 Application to the Biological Case Study
+scheme would require visual encoding to have more codewords (e.g., The biological community has built over the years a comprehensive
+more colors or more shape types), which will increase users’ cognitive collection of resources to archive experimental data. As molecular
+load in learning, remembering, and recognizing the codewords. It is biology became a more data intensive field with the advent of DNA
+thus more desirable to have a smaller number of subclasses, except microarrays, came the need to store not only measurements but also
+that a categorization scheme with fewer than 2 sub-classes is useless. ancillary annotation describing experimental conditions and set up,
+Let η$ be an up-limit for the number of codewords, which is set to thus ensuring a metadata core always shipped with the data set. The
+Authorized licensed use limited to: Bernd Froehlich. Downloaded on August 01,2024 at 07:58:53 UTC from IEEE Xplore. Restrictions apply.
+
+--- PAGE 5 ---
+MAGUIRE ET AL: TAXONOMY-BASED GLYPH DESIGN — WITH A CASE STUDY ON VISUALIZING WORKFLOWS OF… 2607
+Table 1. A fragment of the input document passed to the taxonomy gen-
+eration algorithm. Schemes are grouped by common names preceding
+the semi-colon, e.g. S1:On Material refers to schema 1 and On Material
+is the classification.
+Process Name Occurrences S1:Material S1:Data ... S6:in vitro S6:in vivo S6:in silico
+labeling 390811 1 ... 1
+nucleic acid extr. 350267 1 ... 1
+hybridization 345671 1 ... 1
+feature extr. 267044 1 ... 1
+bioassay data trans. 176347 1 ... 1
+grow 116194 1 ... 1
+pool 68004 1 ... 1
+... ... ... ... ... ... ... ...
+sizes of microarray databases (GEO, AE) constitute prime resources
+for evaluating and testing our approach [2, 1]. The content of Ar-
+rayExpress was therefore accessed obtaining data via parallel calls,
+converting 21000 experiments and associated experimental metadata
+to ISA-Tab[46, 50]. This step provided a harmonized format in which
+to represent not just transcriptomic data, but also genomic, proteomic,
+metabolomic and other classical experiment types. Schemes & classifications C1 material perturbation C1 behaviourally induced perturbation C1 in vitro
+C2 material combination C2 physically induced perturbation C2 in silico
+Given the data sets, the code analyzes the content of these direc- C1 inputs and outputs C3 material amplification C3 material induced perturbation C3 in vivo
+t p o e r r i i e m s e t n o ts d , e a te n r d m t i h n e e n t u h m e b p e ro r c o e f s t s i e m s e a s n t d he I y O o s c w cu h r i . ch Th e e xi a s n t a w ly it s h is in re t v h e e a e le x d - C C C 2 1 2 p o on n ro d m ce a a t s t a s e e r s ial C C C C 4 5 1 2 m m d d a a a a t t t t a a e e a p r r i i c r a a e q l l p u s c e o r is o p l i l c t a e i e r o c s a t n s t io i i n o n g n C C C C 1 2 3 4 i i i i n n n n p p p p u u u u t t t t c m c ti e e s o l l s l l u l u e e l c a u r l c a o r m pa p r o t nent C C C C 1 2 3 4 b d c d h e i a o e t v l a m i o c g e ic ic a a l l
+C3 data analysis C5 input organ
+61 processes (a small number resulting from the homogeneity of the C6 input organism
+C7 input population
+database where analysis techniques are targeted primarily towards
+DNA microarrays) with 1,845,089 occurrences and 8,223 properties
+of the sample of which 3492 were deemed to be IOs with 486,353 Fig. 3. The classification algorithm arranged the classification schemes
+in the above order.
+occurrences.
+Several distinct, empirical but meaningful, categorizations were de-
+data), however after the top level separation, S1 became redundant as
+vised encompassing a number of facets defining the properties of the
+a result of the top level implicitly making a split on data (in silico) and
+experimental process, either in terms of its participants or in terms of
+materials (in vitro and in vivo). The algorithm successfully detected
+key process properties. Classifications, based on features such as the
+this redundancy; hence S1 is absent from Fig. 3.
+nature of process participants, the granularity scale, the nature of ex-
+Although the algorithm performed as expected, a possible criticism
+periments and common types a treatments applied in biological experi-
+of the algorithm could be highlighted in the placement of S5 below
+ments were developed. Some classifications were somewhat informed
+S4. S5 could have been placed above S4 in line with the observation
+by the overall assumptions ISA model relies upon, where nodes can be
+that, for the majority of cases, S5 was selected over S4. The reason S5
+either material or data files and where edges are processes acting upon
+wasn’t used to sub-classify C1 of S4 is due to its number of classifi-
+those nodes. Others resulted from applying a small number of axioms
+cations (7) being greater than that of S4 (3), therefore S4 was selected
+discovered through consultations with domain experts. There were 6
+primarily on this metric even though the sub-tree balance of S5 (0.8)
+classification schemes in all with a total of 23 sub-classifications, these
+was slightly better than that of S4 (0.68). To modify this behavior, it
+are detailed in figure 3. Table 4.2 shows a snapshot of the input file
+was necessary to involve domain experts in refining the tree based on
+used in the classification algorithm.
+their domain-specific knowledge and case-specific requirements.
+The schemes are not tied to any existing taxonomic tree, may not
+be orthogonal and/or may be redundant with respect to others. The
+5 VISUAL ENCODING
+development of the classifications was not the result of application of
+any knowledge engineering methods and there is no ontological com- 5.1 Perceptual Guidance
+mitment, although in theory the classification names used could be A glyph is a small visual object composed of a number of visual chan-
+derived from an ontological framework. The reason for not relying nels which can be used independently as well as constructively to de-
+an ontology in the first place was risk mitigation, where use would al- pict attributes of a data record. Glyphs are of a type of visual signs that
+most certainly result in an unbalanced tree as occurrence counts for the can make use of visual features of other types of signs, such as icons,
+terms would not be considered, resulting in creation of many glyphs indices and symbols.
+that would never be used. Although there are several books on sign design (e.g., [6, 4]), they
+The creation of the tree shown in Fig. 3 was a largely iterative focus on signage in public space, and offer empirical guidance on a
+quest with continuous involvement of domain experts checking to en- large number of issues including standardization, size, location, illu-
+sure that the classifications assigned were meaningful. From early mination and so on. Many of these issues are not quite relevant to the
+versions of the classification matrix creation, classifications were re- need for visualizing the workflows of biological experiments. Here,
+moved, added or merged in consultation with those who knew the data we draw our design principles mainly from findings in perception, es-
+domain. For example, in S2 there were sub-classifications in Genetic pecially in the area of visual search [54, 43].
+Modification & Labeling which are types of Material Combination. While the extensive use of signs, icons and pictograms in everyday
+Therefore, these sub-classifications were removed since it would be life reflects their usefulness and effectiveness, several perceptual stud-
+technically and semantically incorrect to keep them. These early in- ies also directly or indirectly confirmed their perceptual and cognitive
+teractions emphasized the importance of having domain experts in the merits. For example, Franks and Bransford’s study on transformation
+loop, otherwise classifications and subsequent glyphs would not be as of prototypes [16] suggested that humans can learn to recognize glyphs
+well created as they could be. by rules consciously as well as unconsciously. The presence of iconic
+The algorithm managed to correctly place the classifications where memory [53] may facilitate rapid comparison between glyphs in the
+they were expected (checks were made by hand to ensure that the al- same display, whereas it is less so for texts.
+gorithm performed well). Schema S6 (in vitro, in silico and in vivo) Guideline on Semantic Relevance. Bertin [7] classified visual
+was the best top level classification due to its overall fitness metric of channels (which he referred to as retinal variables) into two categories,
+3.08 with individual metrics found to be: M1 = 1.0; M2 = 1.0; M3 = planar (location) and retinal (size, color, shape, orientation, texture
+0.9; and M4 = 0.18. S6 was closely followed by S1 (on material and on and brightness). Bertin proposed four semantic criteria for determin-
+Authorized licensed use limited to: Bernd Froehlich. Downloaded on August 01,2024 at 07:58:53 UTC from IEEE Xplore. Restrictions apply.
+
+--- PAGE 6 ---
+2608 IEEE TRANSACTIONS ON VISUALIZATION AND COMPUTER GRAPHICS, VOL. 18, NO. 12, DECEMBER 2012
+Table 2. Perceptual strength of different visual channels based on levels of organization studied by Bertin[7] and Green[17], ‘popout’ effect studied
+extensively in psychology [61, 15, 31, 7, 17, 63, 55, 38, 39], and hierarchy effect studied by Navon [35] and Love [30]. The summary strength of
+each channel is estimated and it should be considered in conjunction with application-specific conventions and metaphors.
+Visual Levels of Organization Popout Hierarchy Summary Convention
+Regions Channels Associative Selective Ordered Quantitative Effect Effect Strength & Metaphor
+a) Main 1. Color Yes Yes Yes ***** Strong ***** application
+2. Size Yes Yes Yes *** **** specific
+3. Shape Yes Yes *** ***
+4. Orientation Yes Yes *** ***
+5.Texture Yes Yes Yes ** **
+b) Supplementary 6-10 (same as 1-5) Medium
+11. Planar Yes Yes Yes *** ***
+c) Interior Contains (a+b)) Low
+ing the suitability of different channels in representing certain types
+of information. These semantic criteria are: associative, selective, or- supplementary unused
+dered and quantitative. These criteria are important guidelines, though process
+there has been disagreement in the literature as to how individual vi- main body S6
+sual channels are judged. For example, Bertin considered shape as a S2 & S4
+non-selective variable. Research has shown that shapes such as filled interior S3
+S5
+rectangles, circles and triangles do not allow the human visual sys-
+tem to identify one shape from another effectively in a rapid action
+when they form some global structures [30, 35], (they have poor “pop-
+out” effect). However, the omission of all shapes as a selective visual
+Fig. 4. (a) The glyph template with a main body, an interior region and
+channel has been challenged, for example, by [56, 57, 17], who show
+an exterior region (consisting of 4 sections). (b) Our final design makes
+practice and familiarity can support selectivity with almost any shape.
+use of the main body and interior region. The exterior is reserved for
+Guideline on Channel Composition. As a glyph is likely to fea-
+future extension.
+ture a number of visual channels, the constructive composition may
+affect how individual channels are perceived. A rich collection of lit-
+In theory, the exterior and interior regions may also be divided into
+erature on integral and separable dimensions shows that the combined
+sub-regions in a recursive fashion though in practice this is tightly con-
+dissimilarity of closely integrated visual channels exhibits Euclidean
+strained or discouraged by the very limited display resolution typically
+distance d a 2 + d b 2 [26, 18], whereas that of separable visual chan- available for glyphs. Similar to the design convention for icons, pic-
+nels exhib%its city-block distance da + d
+b
+[10, 51]. The latter is more tograms are normally featured in the interior region. The exterior re-
+cost-effective than the former in rule-based encoding of multi-faceted gion may be further divided in four sections (top, bottom, left and
+concepts, therefore effective glyph design should encompass a non- right). If glyphs will be connected to form a network or graph (as in
+conflicting set of separable retinal variables. this work), the use of these four sections has to take into account the
+Guideline on Pop-out Effects. Many classic studies in percep- possible incoming and outgoing connections.
+tion also established the “power” of different visual channels in terms Table 2 summarizes relative merits of some of the most commonly-
+of pop-out effect (pre-attentive search), and fixation (during attentive used visual channels in different regions according to Bertin’s cate-
+search)[19]. The pop-out effect is one which allows identification of gorization, pop-out effects and hierarchy effects. We estimated the
+a target within a few nanoseconds of initial exposure to the visual overall discriminating capacity of each channel by using a summary
+search space. A result of several milestone studies focusing on ob- rating in the penultimate column. We also recognized the importance
+served response times, the ordering of the four commonly used visual of the conventions and metaphors in an application. We will discuss
+channels follows the consensus: color size shape orientation visual metaphors further in Section 5.2. We added the last column to
+(e.g.,[61, 44, 48]). The symbol read ≺ s as pr ≺ ecedes. ≺ However, the highlight the necessity to consider these in a design process.
+strength of color over the other th ≺ ree channels is generally much more It is difficult to establish an accurate ranking order of different vi-
+noticeable. sual channels by taking all perceptual effects into account in a quan-
+Guideline on Visual Hierarchy. Visual hierarchy, with which the titative manner. The state of the art in perception research is yet to
+environment and objects around us are arranged is a well documented provide all evidence needed for a full and conclusive analysis. Nev-
+theoretical framework [38, 35, 30, 24, 5]. However, the literature con- ertheless, Table 2 can serve a qualitative guidance to glyph designs in
+tains a debate over the ways in which the visual system traverses this this work, providing an ordering of visual channels in parallel with the
+hierarchy. There are four possible ways: top-down (also called global ordering of categorization schemes discussed in Section 4.
+processing) [35]; bottom-up (also called local processing); middle-out
+5.2 Mapping Taxonomy to Visual Channels
+[24]; and salient features (e.g., edges, points, colors) [49]. Because
+glyphs are relatively small in comparison with a whole visualization, For each scheme in the taxonomic tree as shown in Fig. 3, we propose
+we consider at such a “localized level”, the top-down and salient fea- a number of design options. Fig. 5 shows some examples of the pro-
+tures may play more significant roles. The top-down assumption sug- posed designs. For example, the first column shows the use of colors
+gests that when consider a glyph in isolation, its global feature will to encode the classes of a categorization scheme. The second column
+affect visual search more than its local features. Salient features are shows the use abstract shapes. Some options convey an abstraction
+partly addressed by the pop-out effects. from pictorial representations of classes, and in other cases, we try
+Based on the above-mentioned perceptual guidance, we considered to establish a metaphoric association between a visual channel and a
+a generic glyph design template for this work as shown in Fig. 4(a). biological categorization.
+The template divides a glyph into three regions, namely main body, Metaphoric visual representations enable domain-specific encoding
+exterior and interior. In practice, each region can be divided into 2 using “natural mapping” [52, 36]. This natural mapping can make it
+or more sub-regions (e.g., a twin body glyph or 4 exterior sections), easier for users to infer meaning from the glyph with less effort re-
+it is convenient to consider the three regions in abstraction. The sep- quired to learn and remember them [33]. A recent study showed that
+aration of these regions facilitates the basic separation of visual chan- visual metaphors can aid memorization of the information depicted in
+nels based on the composition guideline, while allowing us to consider a visualization [8]. However, the same study also showed that visually
+them individually according to the hierarchy guideline. realistic metaphors (those with a lot of detail) may have a negative
+Authorized licensed use limited to: Bernd Froehlich. Downloaded on August 01,2024 at 07:58:53 UTC from IEEE Xplore. Restrictions apply.
+
+--- PAGE 7 ---
+MAGUIRE ET AL: TAXONOMY-BASED GLYPH DESIGN — WITH A CASE STUDY ON VISUALIZING WORKFLOWS OF… 2609
+design option 1 design option 2 design option 3 design option 4 design option 5 design option 6 design option 7
+Inputs and S0 | 2 levels
+Outputs Design Option 6.
+Process
+Biological
+Device S7 | 4 levels S6 | 3 levels
+Design Option 1. Design Option 6.
+Chemical
+Data more
+Not detailed in this example.
+S6 > S3 | 3 levels S6 > S2 | 5 levels
+In Vitro Design Option 6 Design Option 7
+In Vivo
+In Silico
+S6 > S2 > S4 | 3 levels S6 > S2 > S5 | 7 levels
+Data Design Option 5 Design Option 7
+Collection
+Data
+Processing
+Data
+Analysis
+S6 > S2 > S4 > S5 | 7 levels
+Material Design Option 7
+perturbation
+Material
+separation Fig. 6. Formation of the final glyph design. Top level items require the
+Material greatest visual power. It is important to be able to distinguish each of
+amplification the processes based on their parent level in the taxonomy. Distinguish-
+Material able global shapes provide the difference between IOs (circles) and pro-
+combination
+cesses (squares with pointed bottom to indicate directionality).
+Material
+collection
+other schemes in the tree;
+Molecule. encoding costs in terms of requirement for pixel resolution.
+•
+Cellular
+Part
+This process normally takes a few iterations, during which new
+Cell design options and new metaphoric abstractions and associations are
+sometimes proposed.
+Tissue
+Based on the hierarchy in Fig. 3, we considered to use color and
+shape options for S0 (IOs vs. processes) and S7 (four classes of IOs).
+Organ
+As introducing 4 main body shapes to encode IOs is not an effective
+Organism mapping for learning and remembering, we decided to assign outline
+color of the main body to encode S7, and use two basic shapes, circle
+Population and pentagon (a rectangle with a pointer to show workflow direction)
+to encode S0. Since the main body or the pentagon will only be col-
+ored in black or white, S0 also implicitly encoded in using color sym-
+Material
+induced bolism, that is, color for IOs and black/white for processes. In effect,
+pertubation.
+S0 is encoded using two visual channels. This redundancy can serve
+Behaviourally
+induced as an error detection in visualization [12].
+pertubation.
+Physically Fig. 6 shows each of the five schemes for the process subtree, and
+induced
+pertubation. the design option chosen from Fig. 5. Below we discuss our reason-
+ing for selecting each of the design options for each scheme in the
+taxonomy.
+Fig. 5. Experimenting with visual channels: an overview of the various
+S6: Process environment. The taxonomic tree suggested a high
+design options available for use in representing the different classifica-
+priority for visual mapping, which is consistent with the domain ex-
+tions. Most schemes for IO categorization are not shown due to space
+restriction. perts’ intuition. We took advantage that black color was not used by
+S7 for IOs, we assigned a white background to in silico/in computer
+impact on performance in visual search. Moreover, realistic visual (related to computational processes), and black to in vivo/in living)
+metaphors require a higher pixel resolution, and would lose their dis- and in vitro/in glass (related to materials). Further more, we made use
+criminating capacity in low resolution conditions. of a shape-based metaphor, fully-filled background for in vivo (whole
+Based on the design options shown in Fig. 5, we followed the taxo- organism), and black background with white cut out for in vitro (com-
+nomic tree in Fig. 3 and identified the best option for each scheme in ponent of an organism). Together, this was given in Fig. 5 as design
+a hierarchical manner. The evaluation criteria include: option 6. We maintained the overall appearance of the main body of
+process glyphs in black and white to avoid potential clash with mate-
+the discriminating capacities of different channels (Table 2);
+• rial glyphs.
+metaphoric capacity for aiding learning and remembering; S2: Types of Material Manipulation. S2 has 5 classes, and we
+•
+potential conflicts, including spatial, perceptual and metaphoric adopted design option 7, which employs visual metaphors that encap-
+•
+conflicts, with visual channels that have already been assigned to sulate strong domain-specific meanings. For example, visual symbol
+Authorized licensed use limited to: Bernd Froehlich. Downloaded on August 01,2024 at 07:58:53 UTC from IEEE Xplore. Restrictions apply.
+
+--- PAGE 8 ---
+2610 IEEE TRANSACTIONS ON VISUALIZATION AND COMPUTER GRAPHICS, VOL. 18, NO. 12, DECEMBER 2012
+molecule cellular part cell tissue organ organism population
+Fig. 7. Visual representations of the 7 classes in S5.
+for the material amplification class depicts a small segment becoming
+a large segment.
+S4: Type of Experimental Perturbation. S4 defines 3 further sub-
+classes of the material perturbation class of S2. Due to the low num-
+ber of subclasses, we made use of line styles to modify the diamond
+shape of the material perturbation. We made metaphoric association
+of three line styles as: “solid” line for physically induced perturbation;
+dash line, a common metaphor for uncertainty and unpredictability, for
+behaviorally induced perturbation; and wavy line, which is closer to a
+circle (a visual signature for IOs), for material induced perturbation.
+S5: Levels of Material Granularity. This scheme has 7 subclasses
+(molecule, cellular part, cell, tissue, organ, organism and population), 80px 60px 40px 20px 10px 5px
+and finding a suitable visual channel was not straightforward. A sim-
+plest approach would be to use colors to fill the interior of the glyph,
+or to use some shape-based encoding. After consulting the domain
+Fig. 9. A “crush” test of glyphs to evaluate the discriminating capacity of
+experts, these two options were ruled out. In fact, domain experts
+various visual channels at different resolutions.
+preferred some pictograms to represent the 7 subclasses. After con-
+sidering a number of more realistic drawings, we found that it was not
+Source Name Characteristics[Organism] Protocol REF Sample Name Protocol REF Extract Name Label Protocol REF Labeled Extract Name
+easy to create realistic representations that can differentiate all sub- source1 saccharomyces cerevisiae grow sample1_grow extraction sample1_extract1 biotin labeling sample1_extract1_lab1
+source1 saccharomyces cerevisiae grow sample1_grow extraction sample1_extract2 biotin labeling sample1_extract2_lab1
+classes (e.g., cellular part vs. cell; organ vs. organism). We designed
+a special set of icons as shown in Fig. 7 with three visual channels
+to aid learning, memorization and recognition. The first visual chan-
+nel is the overall shape and orientation. The second visual channel is
+metaphoric abstraction and association. For example, the shape of cell
+part indicates a portion of a cell. Tissue is associated with a patch,
+Fig. 10. A workflow is recorded in text form within the ISA-Tab format.
+organ with an abstract heart shape, organism with an abstract human,
+Our software translates it to glyph-based visualization. A branching
+population with two abstract humans. The third visual channel is the
+event is automatically detected during the translation.
+number of orange sub-shapes, representing the levels 1-7.
+S3: Types of Data Manipulation. S3 defines a 3 further sub-
+To generate the workflow, we made use of the layout algorithm
+classes of the in silico class of S6. We use three abstract pictograms to
+available within the Prefuse visualization framework [20]. This frame-
+represent data capture, processing and analysis. The encoding makes
+work also brings with it functionality such as panning, zooming and
+use of the difference in overall shape, orientation, and number of tri-
+filtering which bring more interactivity to the user and making naviga-
+angles to aid learning, memorization and recognition. Note that these
+tion through large collections of workflows easier. The only require-
+shapes will not be confused with those for S5 as the white background
+ment for use of Prefuse was a minimal amount of Java code to create
+of the main body provides a distinct context of computing rather than
+the user interface coupled with creation of an XML file format native
+IOs.
+to Prefuse for representation of the tree structure. This XML format
+Following mapping of all schemes to design options, creation of all
+is configurable, we have configured it to contain: node type (e.g., pro-
+glyphs is a straightforward process. Fig. 8 shows all variations of the
+cess), node name (e.g., labeling) and an image to be rendered, which is
+glyphs associated with the process sub-tree.
+assigned using a look-up operation through the above mentioned tab
+We introduced a “crush” test for the designed glyphs by scaling
+delimited mapping file. The order of the XML elements within this
+it to different pixel resolutions. Fig. 9 shows some example glyphs
+file has direct implications on the order these elements are displayed
+display at varying resolutions. One can comfortably see all details
+in. Within the ISA-Tab format, there is an implicit time element found
+at the 40 40 level. At the 10 10 level, one can observe the visual
+× × in the ordering of the columns in the study sample and assay files. This
+signature of in vivo and in vitro. Even at the lowest level (5 5), one
+× can be used to construct the XML elements through near direct map-
+can still differentiate the two glyphs.
+pings of processes and IOs, a workflow which is illustrated in Fig. 10.
+Recognizing branching events is an important part of workflow visu-
+6 WORKFLOW VISUALIZATION AND ISA INTEGRATION alization as illustrated in 10. In software, these branch events can be
+In order to visualize workflows of biological experiments, we had to identified when the preceding nodes of a process have the same names
+address the following technical issues: 1) mapping from a name in the while the succeeding output nodes are different. Fig. 10 highlights
+metadata to a glyph; 2) creating a workflow visualization with both one such case, where branching occurs after extraction of 3 materials
+node placement and connection display; 3) developing a prototype tool from one sample.
+for a practical environment such as the ISA tools framework. Our software reads text-based ISA-Tab files as illustrated to create
+The mapping from concept name is achieved by a look-up table the XML notations required by Prefuse for rendering the experiment
+which is built from the matrix used in formulating the taxonomic tree workflow illustrated in Fig. 1(b).
+and implemented as a tab delimited file. Each concept name is mapped The software is implemented as a Java application capable of pro-
+to a text tag encoding the traversal path from the root of the tree to the cessing ISA-Tab files to create experimental workflows using glyphs.
+leaf node corresponding to the name. The tag includes identifiers of For the purposes of broad dissemination in the near future, we have in-
+the schemes and classes encountered. With the path, a glyph can be tegrated the workflow visualization directly inside ISAcreator, a Java
+constructed dynamically from the pre-defined visual mapping as de- desktop application for creating and editing ISA-Tab files. Further-
+scribed in the previous section. The look-up table also enables storage more, the standalone workflow visualization shown in figures 11a and
+of pre-rendered glyphs in an image format. b makes use of the same ISA-Tab parser as available within ISAcre-
+Authorized licensed use limited to: Bernd Froehlich. Downloaded on August 01,2024 at 07:58:53 UTC from IEEE Xplore. Restrictions apply.
+
+--- PAGE 9 ---
+MAGUIRE ET AL: TAXONOMY-BASED GLYPH DESIGN — WITH A CASE STUDY ON VISUALIZING WORKFLOWS OF… 2611
+C1 inputs and outputs C1 behaviourally induced perturbation C1 biological
+C2 processes C2 physically induced perturbation C2 device
+C C 1 2 o on n d m a a t t a erial C C 1 3 i m np at u e t r m ial o i l n e d c u u c la e r d p p a e rt rturbation C C 3 4 c d h a e ta mical
+C2 input cellular component
+C1 material perturbation C3 input cell
+C2 material combination C4 input tissue
+C3 material amplification C5 input organ
+C4 material separation C6 input organism
+C5 material collection C7 input population
+C C C 1 2 3 d d d a a a t t t a a a a p a c n re q a p u ly r i s s o i i c s ti e o s n sing C C C 1 2 3 i i i n n n v s v i i i l t v i r c o o o Schemes & classifications
+Fig. 8. Overview of the taxonomy based glyph designs in the context of biodomain.
+not expect users to learn and remember these glyphs without help. We
+thus allow users to find detailed text descriptions in pop-up windows
+interactively. As shown in Fig. 11, not only do these windows pro-
+vide names of processes and IOs, they also serve as dynamic legends,
+showing how each glyph is decomposed into different elements corre-
+sponding to categorization schemes. One can also select a component
+to view all classes in a scheme.
+In this manuscript, we presented a systematic approach for glyph
+design by using taxonomy as a guide. We demonstrated our approach
+by analyzing the content of a biological database and showed how our
+tree-building algorithm could be used to take a large collection of con-
+cepts and generate a taxonomic tree, which provides an ordering of a
+set of categorization schemes (i.e., attribute dimensions). This enabled
+us to draw a parallel between the ordering of attribute dimensions with
+the ordering of visual channels compiled from the perception and visu-
+alization literature. We involved domain experts in refining the tree as
+well as in creating metaphoric abstraction and association for glyphs.
+Fig. 11. User can interact with a workflow to view the text descriptions This work was followed by development of a prototype tool for glyph-
+of individual glyphs in pop-up windows, which are also dynamic legends based visualization of experimental design workflows as found in bi-
+showing how the concept is categorized and how the corresponding ology. The prototype is integrated in the ISA suite of tools to be dis-
+glyph is decomposed into different elementary visual representations. seminated to users.
+Users can also use such a legend to find out other classes in a catego- We plan to further the present work to include the provision of
+rization scheme.
+“macros” in workflows in order to make graphs more compact and
+ator. The integration involved the development of user interface el- create dynamic web-based rendering of the workflows using vector
+ements for ISAcreator software to access the workflow visualization. graphics. We also intend to carry out field-based evaluation through
+From the spreadsheet view, users may highlight rows (assays), right ISAcommons, the user community of ISA-tools framework. Like all
+click and select an option named “View workflow for assays” to visu- potential diagrammatic schemes, we expect that it will take many iter-
+alize the entire processing pipeline for the corresponding samples as ations before it can become a standard. Nevertheless, the development
+shown in Fig. 1(b). of an online visualization tool will make such a process more efficient.
+7 CONCLUSIONS AND FUTURE WORK ACKNOWLEDGMENTS
+Although it was established in psychology that people can learn rules This work was supported by funding from the BBSRC and NERC,
+of glyph encoding consciously as well as unconsciously [16], we do grants BB/I000917/1 and BB/I025840/1.
+Authorized licensed use limited to: Bernd Froehlich. Downloaded on August 01,2024 at 07:58:53 UTC from IEEE Xplore. Restrictions apply.
+
+--- PAGE 10 ---
+2612 IEEE TRANSACTIONS ON VISUALIZATION AND COMPUTER GRAPHICS, VOL. 18, NO. 12, DECEMBER 2012
+REFERENCES [32] E. Maguire. Taxonomy in biology and visualization. http: //isa-
+tab.sourceforge.net/docs/publications/Taxonomy.pdf, Jan 2012.
+[1] Arrayexpress. http://www.ebi.ac.uk/arrayexpress/. [33] S. McDougall, O. De Bruijn, and M. Curry. Exploring the effects of
+[2] Gene expression omnibus (geo). http://www.ncbi.nlm.nih.gov/geo/. icon characteristics on user performance: The role of icon concreteness,
+[3] Graphviz. http://graphviz.org/. complexity, and distinctiveness. Journal of Experimental Psychology:
+[4] R. Abdullah and R. Hu¨mber. Pictograms, Icons & Signs: A guide to Applied, 6(4), 2000.
+Information Graphics. Thames & Hudson, 2006. [34] P. Muter and D. Mayson. The role of graphics in item selection from
+[5] M. Bar. Visual objects in context. Nature reviews. Neuroscience, menus. Behaviour and Information Technology, 5:89–95, 1986.
+5(8):617–629, 2004. [35] D. Navon. Forest before trees: The precedence of global features in visual
+[6] P. Barker and J. Fraser. Sign design guide: a guide to inclusive signage. perception. Cognitive psychology, 9(3):353–736, 1977.
+JMU and Sign Design Society, 2000. [36] D. A. Norman. The Design of Everyday Things. Basic Books, 2002.
+[7] J. Bertin. Semiology of graphics: diagrams, networks, maps. University [37] H. Ogata, S. Goto, K. Sato, W. Fujibuchi, H. Bono, and M. Kanehisa.
+of Wisconsin press, 1983. Kegg: Kyoto encyclopedia of genes and genomes. NAR, 27(1), 1999.
+[8] R. Borgo, A. Abdul-Rahman, F. Mohamed, P. W. Grant, I. Reppa, [38] S. Palmer. Hierarchical structure in perceptual representation. Cognitive
+L. Floridi, and M. Chen. An empirical study on using visual embellish- Psychology, 9(4):441–915, 1977.
+ments in visualization. to appear in IEEE Transactions on Visualization [39] D. Parkhurst, K. Law, and E. Niebur. Modeling the role of salience in the
+and Computer Graphics, 2012. allocation of overt visual attention. Vision research, 42(1), 2002.
+[9] R. Bourqui and M. Westenberg. Visualizing temporal dynamics at the [40] J. K. Patel and C. B. Read. Handbook of the Normal Distribution. Marcel
+genomic and metabolic level. Proc. 13th Int. Conf. Information Visuali- Dekker, 2nd edition, 1996.
+sation, pages 317–322, 2009. [41] J. W. Pellegrino, R. R. Rosinski, H. L. Chiesi, and A. Siegel. Picture-word
+[10] B. Burns, B. E. Shepp, D. McDonough, and W. K. Wiener-Ehrlich. The differences in decision latency: An analysis of single and dual memory
+relation between stimulus analyzability and perceived dimensional struc- models. Memory and Cognition, 5:383–396, 1977.
+ture. The Psychology of Learning and Motivation, pages 77–115, 1978. [42] F. Post, T. Walsum, F. Post, and D. Silver. Iconic techniques for feature
+[11] Y. Cai, M. L. Wilson, and J. Peccoud. Genocad for igem: a grammatical visualization. Proc. IEEE Visualization, pages 288–295, 1995.
+approach to the design of standard-compliant constructs. Nucleic Acids [43] P. Quinlan. Visual feature integration theory: past, present, and future.
+Res, 38(8):2637–44, May 2010. Psychological bulletin, 129(5):643–716, 2003.
+[12] M. Chen and H. Ja¨nicke. An information-theoretic framework for visu- [44] P. Quinlan and G. Humphreys. Visual search for targets defined by
+alization. IEEE Transactions on Visualization and Computer Graphics, combinations of color, shape, and size: an examination of the task con-
+16(6):1206–1215, 2010. straints on feature and conjunction searches. Perception & psychophysics,
+[13] M. Chuah and S. Eick. Information rich glyphs for software management 41(5):455–527, 1987.
+data. IEEE Computer Graphics and Applications, 18:24–29, 1998. [45] W. Ribarsky, E. Ayers, and J. Eble. Glyphmaker: creating customized
+[14] T. Czauderna, C. Klukas, and F. Schreiber. Editing, validating and trans- visualizations of complex data. Computer, 27:57–64, 1994.
+lating of sbgn maps. Bioinformatics, 26(18):2340–2341, 2010. [46] P. Rocca-Serra, E. Maguire, S.-A. Sansone, and et al. Isa software suite:
+[15] J. Duncan and G. Humphreys. Visual search and stimulus similarity. Psy- supporting standards-compliant experimental annotation and enabling cu-
+chological review, 96(3):433–491, 1989. ration at the community level. Bioinformatics, 26(18), 2010.
+[16] J. Franks and J. Bransford. Abstraction of visual patterns. Journal of [47] Rohrer and et al. The shape of shakespeare: visualizing text using implicit
+experimental psychology, 90(1):65–139, 1971. surfaces. In Proc. IEEE Visualization, pages 121–129, 1998.
+[17] M. Green. Toward a perceptual science of multidimensional data visual- [48] T. Ropinski, S. Oeltze, and B. Preim. Survey of glyph-based visualization
+ization: Bertin and beyond. ERGO/GERO Human Factors Science, 1998. techniques for spatial multivariate medical data. Computers & Graphics,
+[18] S. Handelt and S. Imai. The free classification of analyzable and unana- 35(2):392 – 401, 2011.
+lyzable stimuli. Attention, Perception, & Psychophysics, 12(1):108–224, [49] D. E. Rumelhart. A multicomponent theory of the perception of briefly
+1972. exposed visual displays. Journal of Math. Psych., 7(2):191–218, 1970.
+[19] C. G. Healey and J. T. Enns. Attention and visual memory attention and [50] S.-A. Sansone, P. Rocca-Serra, D. Field, E. Maguire, and et al. Toward
+visual memory in visualization and computer graphics. IEEE Transac- interoperable bioscience data. Nat Genet, 44(2):121–6, 2012.
+tions on Visualization and Computer Graphics, 18(7):1170–1188, 2011. [51] R. Shepard. Attention and the metric structure of the stimulus space.
+[20] J. Heer, S. K. Card, and J. A. Landay. prefuse: A toolkit for interactive Journal of Mathematical Psychology, 1(1):54–141, 1964.
+information visualization. In Proc. ACM CHI, pages 421–430, 2005. [52] H. Siirtola. The effect of data-relatedness in interactive glyphs. In Proc.
+[21] K. Hemenway. Psychological issues in the use of icons in command 9th Int. Conf. Information Visualization, 2002.
+menus. In Proc. ACM CHI, pages 20–23, 1982. [53] G. Sperling. The information available in brief visual presentations. Psy-
+[22] B. H. Junker, C. Klukas, and F. Schreiber. Vanted: A system for ad- chological Monographs: General and Applied, 74(11):1–29, 1960.
+vanced data analysis and visualization in the context of biological net- [54] K. T. Spoehr and S. W. Lehmkuhle. Visual Information Processing. W.
+works. BMC Bioinformatics, 2006. H. Freeman & Company, 1982.
+[23] A. Karve and M. Gleicher. Glyph-based overviews of large datasets in [55] A. Treisman. Focused attention in the perception and retrieval of multidi-
+structural bioinformatics. In Proc. 11th Int. Conf. Information Visualiza- mensional stimuli. Attention, Perception, & Psychophysics, 22(1), 1977.
+tion, Supplements, pages 1–6, 2007. [56] A. Treisman and S. Gormican. Feature analysis in early vision: evidence
+[24] R. Kinchla and J. Wolfe. The order of visual processing: ”top-down,” from search asymmetries. Psychol Rev, 95(1):15–48, Jan 1988.
+”bottom-up”, or ”middle-out”. Perception & psychophysics, 25(3), 1979. [57] Q. Wang, P. Cavanagh, and M. Green. Familiarity and pop-out in visual
+[25] G. Kindlmann and C.-F. Westin. Diffusion tensor visualization with glyph search. Percept Psychophys, 56(5):495–500, Nov 1994.
+packing. IEEE Transactions on Visualization and Computer Graphics, [58] M. O. Ward. Multivariate data glyphs: Principles and practice. In Hand-
+12(5):1329–1335, 2006. book of Data Visualization, pages 179–198. 2008.
+[26] D. Krantz and A. Tversky. Similarity of rectangles: An analysis of sub- [59] C. Ware. Information Visualization: Perception for Design. Morgan
+jective dimensions. Journal of Mathematical Psychology, 12(1), 1975. Kaufmann, 2004.
+[27] R. Krishnapuram and K. Kummamuru. Automatic taxonomy generation: [60] S. Wiedenbeck. The use of icons and labels in an end user application
+Issues and possibilities. In Proc. IFSA 2003, LNCS, pages 184–195, 2003. program: an empirical study of learning and retention. Behavior and
+[28] N. Le Nove`re, M. Hucka, H. Mi, S. Moodie, and et al. The systems Information Technology, 18(2):68–82, 1999.
+biology graphical notation. Nat Biotechnol, 27(8), 2009. [61] L. Williams. The effects of target specification on objects fixated during
+[29] J. P. Lewis and R. Rosenholtz. VisualIDs: Automatic distinctive icons visual search. Acta psychologica, 27:355–415, 1967.
+for desktop interfaces. ACM Transactions on Graphics, 23(3):416–423, [62] C. Wittenbrink, A. Pang, and S. Lodha. Glyphs for visualizing uncer-
+2004. tainty in vector field. IEEE Transactions on Visualization and Computer
+[30] B. Love, J. Rouder, and E. Wisniewski. A structural account of global Graphics, 2:266–279, 1996.
+and local processing. Cognitive psychology, 38(2):291–607, 1999. [63] J. Wolfe, K. Cave, and S. Franzel. Guided search: an alternative to the
+[31] S. Luck and S. Hillyard. Electrophysiological correlates of feature anal- feature integration model for visual search. Journal of experimental psy-
+ysis during visual search. Psychophysiology, 31(3):291–308, 1994. chology. Human perception and performance, 15(3):419–452, 1989.
+Authorized licensed use limited to: Bernd Froehlich. Downloaded on August 01,2024 at 07:58:53 UTC from IEEE Xplore. Restrictions apply.

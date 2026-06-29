@@ -1,0 +1,526 @@
+--- PAGE 1 ---
+Behavior Research Methods, Instruments, & Computers
+2003, 35 (2), 334-342
+Measuring icon complexity:
+An automated analysis
+ALEX FORSYTHE, NOEL SHEEHY, and MARTIN SAWEY
+Queen’s University, Belfast, Northern Ireland
+Measures of icon designs rely heavily on surveys of the perceptions of population samples. Thus,
+measuring the extent to which changes in the structure of an icon will alter its perceived complexity
+can be costly and slow. An automated system capable of producing reliable estimatesof perceived com-
+plexity could reduce development costs and time. Measures of icon complexity developed by Garcia,
+Badre, and Stasko (1994) and McDougall, Curry, and de Bruijn (1999) were correlated with six icon
+properties measured using Matlab (MathWorks, 2001) software, which uses image-processingtechniques
+to measure icon properties. The six icon properties measured were icon foreground, the number of ob-
+jects in an icon, the number of holes in those objects, and two calculations of icon edges and homo-
+geneity in icon structure. The strongest correlates with human judgments of perceived icon complexity
+(McDougall et al., 1999) were structural variability (r 5 .65) and edge information (r 5 .64).
+s s
+Small pictorial images, known as icons or symbols, are recently, Giannini, Giannini, and Condon (2000) found that
+ever-present in our society; they are used anywhere that the presentation of symbolic slides during lectures facili-
+language can be used to facilitate the communication of tated improvements in the test scores of students.
+information. Although the terms icon and symbol are often It may be that the memory capacity for pictures is al-
+used interchangeably, there are some subtle differences. most limitless (Harber & Hershenson, 1973; Standing,
+Icons often have a physical connection to a particular tar- 1973), but the value of an icon or symbol depends largely
+get or function, whereas symbols are more arbitrary in on the effort required for an accurate interpretation of its
+nature and often have an indirect relationship to their ref- meaning. The possibility of creating an unlimited number
+erents (Fenk, 1998; Horton, 1994). Yet, the use of the of icons means that the potential for communication fail-
+word icon to describe symbols—particularly on computer ure is high. In attempting to address this problem, the In-
+screens—is so pervasive that it is probably irreversible ternational Organization for Standardization (ISO) has set
+(Horton, 1994). a minimum recognition rate of 66.7% (Lindgaard, Ches-
+There are distinct advantages to the use of pictorial im- sari, & Ihsen, 1987; Piamonet, Abeysekera, & Ohlsson,
+ages for communication.Pellegrino, Rosinski, Chiesi, and 2001), but reports of recognition rates as low as 29% point
+Siegel (1977) reported that when two objects belong to the to difficulties in meeting the ISO criterion (Davies, Haines,
+same category, pictures depicting them are processed Norris, & Wilson, 1998; Piamonet et al., 2001).
+faster than words. Information is also conveyed more di- The development of design guidelines, informed by
+rectly through the use of images; pictorial road signs are contributions from several disciplines, including engi-
+understood easily and accurately and are learned more neering, ergonomics, and psychology, represents another
+easily than word signs (Walker, Nicolay, & Stearns, 1965). approach to the development of effective icons. There
+There is also strong evidence that symbols and icons are have been comprehensive reviews of the principal ideas
+more easily identified and better remembered. In tasks in- underpinning icon theory (Easterby & Zwaga, 1984; Hor-
+volving recall, participants have been able to correctly ton, 1994; Maguire, 1985) and ISO publishes a broad spec-
+identify 85%–95% of a set of previously presented graph- trum of recommendations regarding the location of icons,
+ical symbols, whereas recall for words was significantly including those pertaining to road vehicles (ISO, 1995)
+lower, particularly in larger learning sets (Standing, 1973). and information technology (ISO, 2000a, 2000b, 2000c,
+A similar advantage was reported by Muter and Mayson 2000d).
+(1986), who found that error rates were halved when users Research into good icon design and usability has been
+were presented with symbols rather than with text; more impeded by difficulties in measuring and controlling sym-
+bol characteristics. Traditional methods involve the gen-
+eration of large numbers of picture sets (Alario & Ferrand,
+Supplementary material, including an appendix to this article, is avail- 1999; Rogers & Oborne, 1987; Sanfeliu & Fernandez,
+able at http://www.psych.qub.ac.uk/research/projects/aia/. Correspon-
+1996; Snodgrass & Vanderwart, 1980). Recently, Mc-
+dence concerning this article should be addressed to A. Forsythe, School
+Dougall, Curry, and de Bruijn (1999) used this method to
+of Psychology, Queen’s University Belfast, Belfast, Northern Ireland
+BT7 INN (e-mail: a.forsythe@qub.ac.uk). develop the first set of normative values for icons. This
+Copyright 2003 Psychonomic Society, Inc. 334
+
+--- PAGE 2 ---
+MEASURING ICON COMPLEXITY: AN AUTOMATED ANALYSIS 335
+and a subsequent study (McDougall, de Bruijn, & Curry, ally tractable through the use of an automated measure-
+2000) have provided a common framework for the evalu- ment procedure.
+ation of icon characteristics. McDougall et al. (1999) has reported on the success of
+McDougall et al. (1999; McDougal et al., 2000) found one semi-automated system of icon measurement. Garcia,
+three characteristics to be of primary importance in the Badre, and Stasko (1994) developed a technique based on
+measurement of symbols and icons: concreteness, dis- a calculation of several icon features, including the num-
+tinctiveness, and complexity. The degree to which an icon ber of closed and open figures and horizontal and vertical
+could be considered concrete or similar to its real-world lines. This metric was developed primarily as a measure of
+counterpart was found to be important to the initial under- icon concreteness, and, using this measure, Garcia et al.
+standing of the icon. A more dynamic quality of icons— reported that icons that are pictorially similar to their real-
+their distinctiveness—can help users identify and respond world counterparts are more likely to be judged as com-
+to the messages they convey. Distinctiveness cannot be as- plex. Although there is some disagreement as to whether
+sessed in isolation; it is contingent on the nature of the vi- icon complexity and icon concreteness are related con-
+sual display in which an icon is located. The third charac- structs (McDougall et al., 1999), the high correlations be-
+teristic, icon complexity, is reported to be important in tween the metric of Garcia et al. and the McDougall et al.
+search efficacy. The amount of detail or intricacy within (1999) measures of icon complexity (r 5 .73) suggest
+s
+an icon influences the rate at which it can be detected, that the Garcia et al. measure of complexity is able to mea-
+with very simple or very abstract icons being detected sure the amount of detail in an icon in a way similar to that
+faster. Interestingly, icon complexity was found to be un- of human observers. However, Garcia et al.’s techniques
+related to how concretely similar an icon was to its refer- are painstaking for all but the simplest icons. In the study
+ent (McDougall et al., 1999; McDougall et al., 2000). reported here, it was considered whether a more auto-
+Making major alterations to an icon—such as rescaling mated system could be used to quickly produce reliable
+or inverting its black/white contrasts—will almost cer- estimates of perceived icon complexity.
+tainly change the way the icon is interpreted. To what ex- Several theories point to the possibility of developing a
+tent can designers change the structural properties of more computationally driven approach. First, it is gener-
+icons without changing behavioral responses to them? ally accepted that the degree to which an icon is judged to
+Currently, there are relatively few methods available to be concrete or similar to its target object is important in
+predict behavioral changes from structural alterations. providing meaning to the user (Guastello & Traut, 1989;
+One technique involves the iterative testing of modified McDougall et al., 2000; Mead & Modley, 1968; Schwartz
+icons using samples drawn from populations of potential & Phillippe, 1991). It has been reported that there is not
+users. User familiarity means, however, that different sam- necessarily a direct relationship between the icon dimen-
+ples are required at each stage of the modification process, sions of concreteness and complexity (McDougall et al.,
+and the designer is left to guess when it might be appro- 1999), but icons regarded as similar to their targets do tend
+priate to engage in the costly and laborious process of nor- to be more detailed and explicit in nature (Arend, Muthig,
+mative reassessment. Likewise, in the development of an & Wandmacher, 1987; Rogers & Oborne, 1987). This
+entirely new icon set, the gathering of subjective judg- extra detail is of particular importance to the novice user
+ments from users should occur throughout the design (see, e.g., Maguire, 1985; McDougall et al., 2000; Mead
+process, particularly at the beginning and end of set de- & Modley, 1968; Raeder, 1985); for example, essential el-
+velopment (McDougall et al., 2000). An automated sys- ements, such as the wings on an airplane or the handle on
+tem would enable designers to check iteratively through- a suitcase, give more explicit meaning to an icon, thereby
+out the design process, without the necessity of recruiting facilitating faster identification (Bruyas, Le Breton, &
+large numbers of human raters. Pauzie, 1998). Other advantages of using icons that are
+As a decision-making aid, an automated system would highly detailed in nature include the ability of designers to
+make the process of icon development and modification a convey action information, such as when a physical object
+less speculative, more cost-effective activity. requires manipulation (Figure 1) or in attracting the eye to
+small details that can aid in recognition, such as the lug-
+Why Should Automated gage label in Figure 2A.
+Measurement Be Possible? This extra detail however, comes at a cost. Regardless
+The characteristics of icon concreteness and distinc- of experience, more abstract icons—which are not neces-
+tiveness are, to some degree, dynamic properties, in the sense sarily good examples of a prototype—may elicit faster re-
+that the degree to which an icon is judged to be a concrete sponses than icons offering more concrete representations
+representation is determined partly by an observer’s famil- (Arend et al., 1987; McDougall et al., 2000). One expla-
+iarity with the target object or function. The distinctive- nation for this is that the observer seeks a functional ex-
+ness of an icon will depend not only on its structural fea- planation for any additional icon objects; hence, process-
+tures, but also on the visual landscape in which it is situated ing time increases (Bruyas et al., 1998; Nielson, 1993).
+(McDougall et al., 2000). Judgments of icon complexity, Consequently, it takes longer to process the suitcase in
+however, may be somewhat less sensitive to factors of user Figure 2A than that in Figure 2B. A further design feature
+familiarity and visual context and may be computation- that can add to the complexity of an icon is the use of
+
+--- PAGE 3 ---
+336 FORSYTHE, SHEEHY, AND SAWEY
+terior angles, different angles, and lines an image had, the
+more likely it was to be perceived in three dimensions.
+Gestalt grouping processes are also considered to be im-
+portant in the perception of form; the largest area of an
+image will always be considered background, with contour
+and shape considered foreground (Hochberg & Brooks,
+1960). Perhaps this explains why such grouping processes
+are important in the perceptionof image complexity. For ex-
+Figure 1. Count icon.
+ample, a global-feature superiority effect has been reported
+in the high-speed selection of icons, with responses to fea-
+color. Color is useful in attracting the attention of the user tures such as size and shape being faster than those to the
+and for organizing and grouping related icon concepts; structural detail of an image (Arend et al., 1987; Wand-
+however, general advice is that, where possible, the use of macher & Arend, 1985). Psychophysicalevidence suggest-
+color should be avoided. At best, color offers no advan- ing that higher order grouping processes operate in this
+tage to user performance (Christ, 1977; Tullis, 1981), and way can be found in studies showing that the brain regis-
+at worst it reduces the speed at which information is ters variations in an image as changes in intensity, and it is
+processed (Biederman & Ju, 1988; Ostergaard & David- these coarse and fine changes that provide detail and local
+off, 1985). Icons should be designed in black and white, information about a stimulus (Beck, Graham, & Sutter,
+with color added only for improvement (Horton, 1994). 1991; Harwerth & Levi, 1978; Sutter, Beck, & Graham,
+McDougall et al. (1999; McDougall et al., 2000) have 1989; Vassilev & Mitov, 1976). Coarse scales are thought to
+reported that the level of complexity within an icon bears be treated by the brain as low-frequency components and
+no direct relationship to the degree to which it can be con- are processed faster than high-frequency components ob-
+sidered concrete or representative of its target. Concrete- tained from local information. This difference in processing
+ness is related to the meaning implied by an icon, whereas speed would seem to be a function of image complexity:
+complexity is related to recognition time. One explanation When an object is of a detailed nature, its global attributes
+for this is focused on the impact of including additionalel- are processed much faster than its local ones (Hoeger,
+ements in an icon (Horton, 1994; Nielsen, 1993). Many 1997; Parker, Lishman, & Hughes, 1997).
+icons in common use are intended to convey information Although the theoretical positions underpinningfeature
+about their targets and the operation to be applied to them. integration theory, Gestalt explanations, and psycho-
+For example, an icon depicting a file held within a clamp physics research are all quite different, they all suggest
+can be used to refer to a generic target (any file stored on that the measurement of icon complexity may be compu-
+a computer) and the operation of compression. Depicting tationally tractable. If this is so, then it should be possible
+both an object and an operation usually involves the inclu- to develop an automated system that would inform de-
+sion of more elements to clearly communicate the in- signers about human estimations of users’ perceptions of
+tended meaning. Additional attentional processes are in- icon complexity. Such a system could prove to be a useful
+volved in building a cognitive representation of an icon, decision-making aid to designers who wish to create an
+because of the need to integrate the greater number of entirely new icon set or make alterations to the properties
+constituent elements. Simple image properties are ex- of an existing one.
+tracted from an image in parallel, and these properties are
+then combined to form objects of a particular shape, color, Method
+and size (see, e.g., Treisman, 1986; Treisman & Gelade, Matlab (MathWorks, 2001) is an integrated commercial
+1980; Treisman & Souther, 1985). package with powerful mathematical algorithms and vi-
+An alternative explanation that lends itself to measure- sualization utilities for the acquisition, analysis, and ex-
+ment consists in the Gestalt principles of figure/ground ploration of data. With its Image Processing Toolbox,
+and minimum. These center on the way in which higher Matlab can be used to recover detailed structural infor-
+order grouping processes and selective attention guide the mation from a black and white, grayscale, or color image.
+ordering and recognition of image features. For example, The Toolbox has numerous image-processing functions
+the law of simplicity suggests that, when viewing a com- and, on the basis of the theoretical explanations of icon
+plex image, the human perceptual system operates selec-
+tively to secure the most economical form (Hochberg,
+1968; Hochberg & Brooks, 1960; Neisser & Becklen,
+1975). Hochberg even went so far as to develop a semi-
+automated measure of image complexity, arguing that re-
+lying solely on human judgments of what makes an image
+“complex” would mean that we have no way of predicting
+just how advanced or simple an image will actually ap- A B
+pear. His calculations demonstrated that it was possible to
+predict how viewers would “see” an image: The more in- Figure 2. Luggage icon.
+
+--- PAGE 4 ---
+MEASURING ICON COMPLEXITY: AN AUTOMATED ANALYSIS 337
+complexity reviewed above, six of these functions were ap- lab assigns diagonally connected pixels extra weighting.
+plied to a random sample (n 5 68) of the McDougall et al. This is because the discreteness necessarily introduced by
+(1999) icons. The function measures were correlated with the digital representation of an image means that a given
+metrics developed by Garcia et al. (1994) and McDougall number of pixels arranged diagonally represents a longer
+et al. (1999). High correlations would indicate similar mea- line than the same number of pixels arranged horizontally
+surements of icon complexity. or vertically.
+The Gestalt argument (Arend et al., 1987) that distinct A processing convention was then established to define
+global features are important to perceptual speed was connections between pixels and, hence, an icon’s compo-
+tested first. It was considered that the most global charac- nent parts. All pixels touching both horizontally and ver-
+teristic of an icon would be its figural form, which was tically (but not diagonally)were considered to be connected.
+calculated using a measure of icon foreground. High cor- This is referred to by Matlab as a 4-connected neighbor-
+relations between this measure and the metrics of Garcia hood, and the difference between this and an 8-connected
+et al. (1994) and McDougall et al. (1999) would indicate neighborhood can be observed in panels B and C of Fig-
+that grouping principles are important factors in human ure 3 . Essentially, a 4-connected neighborhood produces
+ratings of complexity. a finer image.
+When preparing the McDougall et al. (1999) icon set for Four additional calculations were performed using this
+processing, Matlab treats a black and white, or binary, convention.The feature integration of icon elements
+icon as an array of 1s and 0s. This is essentially a data file (Bruyas et al., 1998; Nielson, 1993; Treisman, 1986) was
+in which the image is stored as a matrix of pixels. On tested by counting the number of discrete objects within
+white paper, black normally (but not always) represents each icon, an object being defined as a set of 4-connected
+the foreground, and white represents the background. pixels. Figure 4 shows an example of the objects count;
+Matlab, on the other hand, considers white to be an “on” the separate objects are shown in various shades of gray,
+pixel, giving it the value 1, and black to be an “off ” pixel, and this icon received an object count of 14. The number
+giving it the value 0. Thus, before any analysis was carried of holes within those objects was also counted by calcu-
+out, the representation of all the icons in Matlab was re- lating the Euler number of the image. A negative Euler
+versed, with 1s becoming 0s and vice versa. number indicates that the number of holes in the image is
+Icon foreground is defined as the area taken up by pix- greater than the number of objects. It was considered that
+els that are switched on (i.e., black on paper, but with the an icon rated as complex would contain more elements
+value of 1 in the Matlab representation of the icon). Mat- than an abstract icon and that these elements would them-
+A B C D E
+Original Perimeter Perimeter Canny Quadtee
+X8 X4
+645 562 848 1255
+379 246 427 754
+334 239 365 562
+Figure 3. Automated measures morphs with metric scores.
+
+--- PAGE 5 ---
+338 FORSYTHE, SHEEHY, AND SAWEY
+tect may be included superfluously in a Matlab perimeter-
+detection calculation.
+To allow for both of these considerations,a further analy-
+sis was performed using the Canny perimeter-detection
+calculation. The advantage of the Canny method over
+other perimeter-detection methods is that it works by
+using two thresholds to detect strong and weak edges and
+includes the weak edges in the output only if they are con-
+nected to strong edges. This means that truly weak edges
+Figure 4. Hierarchy icon.
+will be detected in the analysis, but noise—such as shadow
+or shading—will be ignored. The second icon in Fig-
+selves be complex in nature, having more local detail (i.e., ure 3D (frog) is a good example of the power of the Canny
+holes). analysis. Whereas the perimeter measures (Figures 3B
+To test the importance of changes in image structure in and 3C) retain elements of shading and shadow in their
+the perception of icon complexity, two perimeter-detection analysis, the Canny analysis retrieves a much more skele-
+measures and one structural analysis was performed. If tal impression. Furthermore, since Canny is able to deal
+structural variability were an important factor in the per- with grayscale and binary images, it is unnecessary to
+ception of icon complexity, it would be indicated by high treat the data before processing.
+correlations between these measures and the metrics of Finally, Quadtree decomposition examined homogene-
+Garcia et al. (1994) and McDougall et al. (1999). Exam- ity in the icons. It works by iteratively subdividingthe icon
+ples of how these various metrics affect an icon’s appear- into quarters; each subblock is then tested for homogene-
+ance can be observed in Figure 3. ity. The subdivision continues until the resulting subblock
+Perimeter-detection measures work by examining the is homogeneous; hence, a large number of small, homo-
+changes in intensity that occur at the edges of an image. geneous blocks indicates a highly structured image (see
+Edges are located using two criteria that examine areas in Figure 3E). A small number of largish blocks indicates a
+the icon where there is a rapid change in image intensity. more homogeneous image.
+Either a change in intensity must be larger than a prede-
+termined threshold (perimeter detection provides a num- Results
+ber of estimators that can be used to specify sensitivity) or The means, standard deviations, and skew for the cal-
+an edge will be detected where the intensity derivative has culated icon characteristics are displayed in Table 1. Mc-
+a zero crossing. For the purposes of this study, zero cross- Dougall et al. (1999) recorded two measures of complex-
+ings occur at the places where negative and positive pix- ity for this icon set, one using the Garcia et al. (1994)
+els are adjacent. For a pixel to be considered an edge pixel, metric and one involving subjective ratings. These scores
+it must be activated (on) and connected to at least one non- are also included in Table 1.
+activated (off ) pixel. This is a simplified version of more The distribution of scores for several of the measures
+general detectors, such as Canny and Sobel, which calcu- was positively skewed at more than twice the standard
+late the gradient of intensity values for close-by pixels in error. To correct this, a log transformation was performed
+10
+color or grayscale images. on the Garcia et al. (1994), Foreground, Objects, and
+A limitation of this analysis is that thicker lines are Holes metrics. This transformation corrected the distrib-
+awarded higher scores than thinner ones. This is because ution of data for these metrics; however, rudimentary
+the perimeter calculation rates a thick line as having two analysis of the underlying data for these measures pre-
+edges rather than one. The selection of a 4-connected neigh- sented some anomalies. Consequently, the corrected dis-
+borhood compensates for this problem to some degree, tributions were artificially inflated for all but the Garcia
+since it produces a finer image (see Figure 3C). However, et al. measures, and only the remaining ratings and this
+an edge that might be blurred or difficult for a user to de- measure were correlated.
+Table 1
+Descriptive Statistics for Icon Attributes
+Metric M SD Skew Kurtosis
+McDougall et al. (1999) complexity 2.75 .78 2 .31 5.8
+Garcia et al. (1994) 9.33 9.31 2.05 2.33
+Foreground 760.62 593.45 2.59 10.44
+Objects 13.17 21.00 3.04 11.83
+Holes 2.8 4.6 2.47 6.19
+Perimeter 384.08 228.26 .859 2.06
+Quadtree 733.82 396.32 .79 2.36
+Canny 329.34 181.52 .65 2.79
+
+--- PAGE 6 ---
+MEASURING ICON COMPLEXITY: AN AUTOMATED ANALYSIS 339
+Table 2
+Spearman Correlations Between Icon Attributes
+McDougall Garcia
+Metric et al. (1999) et al. (1994) Perimeter Quadtree
+McDougall et al. (1999) complexity 1.00
+Garcia et al. (1994) .75* 1.00
+Perimeter .64* .66* 1.00
+Quadtree .65* .65* .94* 1.00
+Canny .49* .60* .88* .84*
+*Correlations significant at p , .0008.
+Given the large number of analyses performed, a Bon- human judgments of icon complexity. For example, cal-
+ferroni adjustment was applied and the criterion for sta- culations on objects within an icon are based on connec-
+tistical significance was set at p , .0008. A caveat to this tions between pixels such that discrete objects will be de-
+adjustment is that it greatly increases the likelihood of tected only when there are breaks between the pixels.
+Type II error. Thus, because the nodes in Figure 5 are all linked by lines,
+The analysis (Table 2) replicated the moderately strong our computational measures detect only one discrete ob-
+correlations reported by McDougall et al. (1999) between ject. Feature integration theory contends that the human
+their ratings of complexity and those of the Garcia et al. perceptual system is much more sophisticated than this,
+(1994) metric. This supports the argument that they may with the nodes and lines of the hierarchy icon being ex-
+be tapping similar constructs. tracted separately (Treisman & Gelade, 1980). Specifi-
+The Garcia et al. (1994) and McDougall et al. (1999) met- cally, when an image is made up of more than one separa-
+rics both correlated with the structural analysis (Quadtree) ble feature, individualfeatures are attended to and processed
+score (r 5 .65, p , .0008) and with the perimeter- along independent dimensions (Treisman & Gelade,
+s
+detection score (r 5 .66 and r 5 .64, respectively; p , 1980). Thus, greater cognitive effort is involved in the in-
+s s
+.0008). The Canny correlations with Garcia et al. (r 5 .60) tegration of an icon composed of a number of separable
+s
+and McDougall et al. (1999; r 5 .49) are smaller but sta- elements than in that of an icon that is more integral in na-
+s
+tistically significant. These findings suggest that image- ture. According to this view, icon complexity is partly a
+processing techniques can measure icon characteristics in function of the cognitive effort involved in making an
+ways that approximate more time-consuming measures. evaluative judgment.
+The correlations also suggest that ratings of icon com- If the problem of object identification was limited to a
+plexity may be linked to homogeneity in image structure. few icons, this metric might still have proved a useful gen-
+eral estimate of the perceived characteristics of icon prop-
+Discussion erties. However, the problem is quite substantial: Fewer
+Positively skewed distributions were observed for sev- than three objects were detected in almost 50% of the
+eral of our measures as well as for the Garcia et al. (1994) icons we examined. Furthermore, changes to icons that we
+metric. Skewed distributions are commonly caused by thought might have led to an improvement in object count-
+sampling bias, nonnormal distribution of the characteris- ing produced disappointing results. For example, the icon
+tics of the items being measured, or the sensitivity of the in Figure 6 depicts the concept debug. The different ob-
+measurement tool. The first possibility can be discounted, jects detected by the objects metric are displayed in
+because the sample of icons was randomly drawn from grayscale. If an 8-connected neighborhood convention is
+those published by McDougall et al. (1999). The second applied (meaning that all touching pixels are considered
+fails to explain why the McDougall et al. (1999) norms connected), the icon will receive a count of 30 (Fig-
+are approximately normally distributed, whereas our mea- ure 6A). The problem is not rectified by applying a con-
+sures and those of Garcia et al. are positively skewed: If vention that considers only pixels that are connected hor-
+icon characteristics are not normally distributed, that izontally and vertically (a 4-connected neighborhood).
+should be observed consistently. Although a more conservative count of 2 is obtained from
+The third possibility suggests that enumeration meth- the metric (Figure 6B), the score is awarded for the entire
+ods of the type used by Garcia et al. (1994) and by us yield image plus one rogue pixel (shown in gray). Furthermore,
+positively skewed distributions because they are based on
+the systematic application of rigorous definitions of icon
+attributes. Stringent enumeration techniques would be ex-
+pected to yield measures of icons that pile up on the lower
+end of the scale, whereas the judgments of human ob-
+servers are probably based on a less meticulous analysis
+and produce a more normal distribution of scores. This is
+supported indirectly by evidence indicating that many
+image-processing measures yield poor estimates of Figure 5. Objects and holes metric.
+
+--- PAGE 7 ---
+340 FORSYTHE, SHEEHY, AND SAWEY
+A B
+Figure 6. Debug icon.
+deletion of either the insect or the repellent from the icon more economical than using human raters for the same
+without removing the rogue pixel would still produce an purpose.
+object count of 2. Similar problems were encountered The foreground metric was even less effective at differ-
+with many of the icons. entiating icon detail from icon foreground. Detail can be
+The problems posed by this type of analysis arise from particularly important in providing function cues to the
+the fact that icons consisting of multiple objects tend to user by drawing the eye to significant areas of information
+have many touching pixels. A similar problem arises when within the icon (Horton, 1994). However, delineating
+a count of holes is used as an estimate of icon complexity. areas that represent icon foreground from those denoting
+Image-processing software can detect holes that may be icon detail is very subjective, as is illustrated by the icon
+imperceptible to the naked eye, to the extent that even in Figure 7C. A simple measure of foreground is too crude
+dense icons, such as the one depicted in Figure 5, often re- a proxy for the complex grouping processes involved in
+ceived a hole count. In this case, the image-processing human perception, and it appears likely that this measure
+software detected a single tiny hole. These examples il- is merely a sophisticated calculation of icon area, as rep-
+lustrate that the skewed distribution of data was caused by resented by pixels that are switched on.
+some fundamental properties of the way the software mea- More reliable metrics for estimating human judgments
+sured the icons. As such, it could not be treated as a form of icon complexity are available in the Perimeter and
+of measurement error, and, for this reason, a log trans- Canny perimeter-detection measures and the Quadtree
+10
+formation of the raw data was considered inappropriate. structural variability measure. These metrics yield distri-
+Foreground was chosen as a possible measure of the butions that are much less skewed and that correlate
+global features of an icon, but automated measurement strongly with the complexity ratings reported by Garcia
+also proved difficult. The significantly skewed data sug- et al. (1994) and McDougall et al. (1999). They also point
+gested that processes unlike those involved in the human to the potential importance of structural variability in
+perceptionof figure and ground were in operation.Whereas judgments of icon complexity. As was previously noted,
+it may sometimes be possible to treat black areas of an the structural variability in an icon is probably determined
+icon as foreground, problems arise when this definition is by changes in intensity that occur at the edges of an image.
+applied globally. For example, treating black areas as fore- Furthermore, the Quadtree analysis of image structure,
+ground is acceptable when the simple icon in Figure 7A is which also correlates highly with the Garcia et al. and Mc-
+being processed, but it is unsatisfactory when it is applied Dougall et al. (1999) measures, is based on changes in
+to the analysis of the icon in Figure 7B. Although it would image intensity. Highly structured areas correspond to high
+be possible to analyze icons on a case-by-case basis, adapt- numbers of small, homogeneous blocks, and these blocks
+ing the algorithm accordingly, the procedure would be no collect around image boundaries. As is the case with the
+A B C
+Figure 7. Foreground metric.
+
+--- PAGE 8 ---
+MEASURING ICON COMPLEXITY: AN AUTOMATED ANALYSIS 341
+Perimeter and Canny measures, these boundaries are areas why McDougall et al. (1999) found human judgments of
+in which large changes in image intensity take place. icon familiarity to correlate negatively with their evalua-
+These findings add support to the argument that a com- tions of icon complexity (r 5 2.31, p , .001): As ratings
+s
+plex image is one that has a large number of edges, and it of icon familiarity decrease, complexity tends to increase.
+is these edges that slow down the perceptual process Computer-based algorithms should not be so influenced,
+(Hoeger, 1997; Parker et al., 1997). Hummel and Bieder- and to determine whether this is the case, a sample of 70
+man (1992) used contour deletion to make a similar point. icons was assembled, which consisted of all those rated as
+They argued that perceptual slowdown might be caused unfamiliar (scoring ,3) in McDougall et al.’s (1999) data
+by an inability to make a rapid semantic link between the set and judged to be very simple by our perimeter measure
+icon and its target. Although semantic processing is not (scoring ,400). The association between the Perimeter
+slow in and of itself, the physical properties that bind an measure of complexity and human judgments of familiar-
+image must be processed before semantic access can ity is close to zero (r 5 2.05). Thus, automated measures
+s
+occur. This would also explain why differences in response of the visual complexity of an icon are unaffected by the
+rates between complex and abstract icons do not change as semantic analyses that human observers cannot suppress
+a function of learning (Arend et al., 1987; McDougall when judging icon complexity.
+et al., 1999). Regardless of experience, a more detailed
+object will take longer to reach semantic processing, be- Conclusion
+cause the preprocessing of many edges is perceptually de- To what extent can designers change the structural prop-
+manding. erties of icons without changing behavioral responses
+to them? Decision-making aids based on the image-
+Other Relationships processing measures reported here can significantly re-
+Several of the automated measures correlated signifi- duce the degree of speculation involved in arriving at an
+cantly with each other. In particular, the Canny analysis estimate. In practical terms, this means that a designer can
+correlated highly with both the Perimeter and Quadtree modify any of the icons in the set published by McDougall
+metrics. What difference there is between the measures is et al. (1999) and, using the Perimeter and Canny perimeter-
+almost certainly due to the slightly different ways in which detection measures together with the Quadtree structural
+Matlab implements each of the analyses. However, for variability measure, can accurately estimate its perceived
+nonbinary images, such as colored icons and photographs, complexity without incurring the delays and expense as-
+a Canny analysis could be extremely useful in removing sociated with a new usability validation study.
+the effects of noise from a calculation.
+A preliminary analysis suggests that these automated REFERENCES
+calculations are reasonably robust, with all calculations re-
+maining stable when the icons are rotated. When the icons Alario, F.-X., & Ferrand, L. (1999). A set of 400 pictures standard-
+ized for French: Norms for name agreement, image agreement, fa-
+are resized, counts of objects and object holes remain sta-
+miliarity, visual complexity, image variability, and age of acquisition.
+ble, but counts of Perimeter, Quadtree, and Foreground Behavior Research Methods,Instruments, & Computers, 31, 531-552.
+areas will tend to vary with the degree of modification. Arend, U., Muthig, K.-P., & Wandmacher, J. (1987). Evidence for
+global feature superiority in menu selection by icons. Behaviour & In-
+formation Technology, 6, 411-426.
+Complexity and Semantics
+Beck, J., Graham, N., & Sutter, A. (1991). Lightness differences and
+Although moderate to strong correlations were ob-
+the perceived segregation of regions and populations. Perception &
+served between the automated measures of icon complex- Psychophysics, 49, 257-269.
+ity and human judgments, they were not perfect. The lack Biederman,I., & Ju, G. (1988).Surface versus edge-based determinants
+of convergence is almost certainly due to the fact that the of visual recognition. Cognitive Psychology, 20, 38-64.
+Boucart, M., & Humphreys, G. W. (1992). Global shape cannot be at-
+image-processing algorithms we applied to the icons are
+tended without object identification. Journal of Experimental Psychol-
+poor approximations of the more complex processes em- ogy: Human Perception & Performance, 18, 785-806.
+bedded in human perceptual judgment. These algorithms Boucart, M., & Humphreys, G. W. (1995). Automatic access to object
+do not process semantic information, whereas there is identity:Attention to global information, not to particular physical di-
+mensions, is important. Journal of Experimental Psychology: Human
+considerable psychophysical evidence that human ob-
+Perception & Performance, 21, 584-601.
+servers cannot process the structure of an image indepen- Boucart, M., & Humphreys, G. W. (1997).Integration of physical and
+dently of its semantic content. Boucart and Humphreys semantic information in object processing. Perception, 26, 1197-1209.
+(1992) used a sequential form-matching task to manipu- Bruyas, M. P., Le Breton, B., & Pauzie, A. (1998). Ergonomic guide-
+late semantic relations between pictures that were physi- lines for the design of pictorial information. International Journal of
+Industrial Ergonomics, 21, 407-413.
+cally identical, physically different, semantically related,
+Christ, R. E. (1977, October). Four years of color research for visual
+or semantically unrelated. When the distractor icon was displays. In Proceedings of the Human Factors Society 21st Annual
+semantically related, reaction times were found to be Meeting. San Francisco.
+longer than when it was unrelated. This and subsequent Davies, S., Haines, H., Norris, B., & Wilson, J. R. (1998). Safety pic-
+tograms: Are they getting the message across? Applied Ergonomics,
+studies (Boucart & Humphreys, 1995, 1997) suggest that
+21, 15-23.
+the processing of an image form cannot be completed Easterby, R., & Zwaga, H. (1984).Information design: The design and
+without some semantic analysis. This may also explain evaluation of signs and printed material. New York: Wiley.
+
+--- PAGE 9 ---
+342 FORSYTHE, SHEEHY, AND SAWEY
+Fenk, A. (1998). Symbols and icons in diagrammatic representation. Mead, M., & Modley, R. (1968). Communications among all people,
+Pragmatics & Cognition, 6, 301-334. everywhere. Natural History, 77, 56-63.
+Garcia, M., Badre, A. N., & Stasko, J. T. (1994). Development and Muter, P., & Mayson, C. (1986). The role of graphics in item selection
+validation of icons varying in their abstractness. Interacting With from menus. Behaviour & Information Technology, 5, 89-95.
+Computers, 6, 191-211. Neisser, U., & Becklen, R. (1975). Selective looking:Attending to vi-
+Giannini, A. J., Giannini, J. N., & Condon, M. (2000). Use of tangen- sually specified events. Cognitive Psychology, 7, 480-494.
+tial visual symbols to increase the long-term learning processes: Ap- Nielsen, J. (1993). Noncommand user interfaces. Communications of
+plications of linkage in teaching pharmacological principles of addic- the ACM, 36, 83-99.
+tion. Journal of Clinical Pharmacology, 40, 708-712. Ostergaard, A. L., & Davidoff, J. B. (1985). Some effects of color on
+Guastello, S. J., & Traut, M. (1989). Verbal versus pictorial repre- naming and recognition of objects. Journal of Experimental Psychol-
+sentations of objects in a human–computer interface. International ogy: Learning, Memory, & Cognition, 11, 579-587.
+Journal of Man–Machine Studies, 31, 99-120. Parker, D. M., Lishman, J. R., & Hughes, J. (1997). Integration of spa-
+Harber, R. N., & Hershenson, M. (1973). The psychology of visual tial information in human vision is temporally anisotropic: Evidence
+perception. New York: Holt, Rinehart & Winston. from a spatiotemporal discrimination task, Perception, 26, 1169-1180.
+Harwerth, R. S., & Levi, D. M. (1978). Reaction time as a measure of Pellegrino,J. W., Rosinski, R. R., Chiesi, H. L., & Siegel,A. (1977).
+suprathreshold grating detection. Vision Research, 18, 1579-1586. Picture–word differences in decision latency: An analysis of single
+Hochberg, J. E. (1968). Perception (2nd ed.). Englewood Cliffs, NJ: and dual memory models. Memory & Cognition, 5, 383-396.
+Prentice-Hall. Piamonet, D. P. T., Abeysekera, J. D. A., & Ohlsson, K. (2001). Un-
+Hochberg,J. E., & Brooks, V. (1960).The psychophysicsof form: Re- derstanding small graphical symbols: A cross-cultural study. Interna-
+versible perspective drawings of spatial objects. American Journal of tional Journal of Industrial Ergonomics, 27, 399-404.
+Psychology, 73, 337-354. Raeder, G. (1985). A survey of current graphical programming tech-
+Hoeger, R. (1997). Speed of processing and stimulus complexity in niques. IEEE Computer, 18, 11-25.
+low-frequency and high-frequencychannels. Perception, 26, 1039-1045. Rogers, Y., & Oborne, D. J. (1987). Pictorial communication of ab-
+Horton, W. (1994). The icon book. Visual symbols for computer systems stract verbs in relation to human computer interaction. British Jour-
+and documentation. New York: Wiley. nal of Psychology, 78, 99-112.
+Hummel, J. E., & Biederman, I. (1992). Dynamic binding in a neural Sanfeliu, M. C., & Fernandez, A. (1996). A set of 254 Snodgrass–
+network for shape recognition. Psychological Review, 99, 480-517. Vanderwart pictures standardized for Spanish: Norms for name agree-
+International Organization for Standardization (1995). Road ment, image agreement, familiarity, and visual complexity. Behavior
+Vehicles—Symbols for controls, indicators and tell-tales (ISO 2575). Research Methods, Instruments, & Computers, 28, 537-555.
+Geneva: Author. Schwartz, N. H., & Phillippe, A. E. (1991). Individual differences in
+International Organization for Standardization (2000a). In- the retention of maps. Contemporary Educational Psychology, 16,
+formation technology—User system interfaces and symbols—Icon 171-182.
+symbols and functions: Part 1. Icons—General (ISO/IEC 11581-1). Snodgrass. J. G., & Vanderwart, M. (1980). A standardized set of
+Geneva: Author. 260 pictures. Norms for name agreement, image agreement, familiar-
+International Organization for Standardization (2000b). In- ity and visual complexity. Journal of Experimental Psychology:
+formation technology—User system interfaces and symbols—Icon Human Learning & Memory, 6, 174-215.
+symbols and functions: Part 2. Object icons (ISO/IEC 11581-2). Standing, L. (1973). Learning 10,000 pictures. Quarterly Journal of
+Geneva: Author. Experimental Psychology, 25, 207-222.
+International Organization for Standardization (2000c). In- Sutter, A., Beck, J., & Graham, N. (1989). Contrast and spatial vari-
+formation technology—User system interfaces and symbols—Icon ables in texture segregation: Testing a simple spatial-frequency chan-
+symbols and functions: Part 3. Pointer icons (ISO/IEC 11581-3). nels model. Perception & Psychophysics, 46, 312-332.
+Geneva: Author. Treisman, A. (1986, November). Features and objects in visual pro-
+International Organization for Standardization (2000d). In- cessing. Scientific American, 255, 114B-125.
+formation technology—User system interfaces and symbols—Icon Treisman, A., & Gelade, G. (1980). A feature integration theory of at-
+symbols and functions: Part 6. Action icons (ISO/IEC 11581-6). tention. Cognitive Psychology, 12, 97-136.
+Geneva: Author. Treisman, A., & Souther, J. (1985). Search asymmetry: A diagnostic
+Lindgaard, G., Chessari, J., & Ihsen, E. (1987). Icons in telecommu- preattentive processing of separable features. Journal of Experimen-
+nications: What makes pictorial information comprehensible to the tal Psychology: General, 114, 285-310.
+user? Australian Telecommunication Research, 21, 17-29. Tullis, T. S. (1981). An evaluation of alphanumeric, graphic, and color
+Maguire, M. C. (1985). A review of human factors guidelines and tech- information displays. Human Factors, 23, 541-550.
+niques for the design of graphical human–computer interfaces. Com- Vassilev, A., & Mitov, D. (1976). Perceptual time and spatial fre-
+puter & Graphics, 9, 221-235. quency. Vision Research, 16, 89-92.
+MathWorks(2001). Image Processing Toolbox,user’s guide Version 3. Walker, R. E., Nicolay, R. C., & Stearns, C. R. (1965). Comparative
+Boca Raton, FL: CRC Press. accuracy of recognizing American and international road signs. Jour-
+McDougall, S. J. P., Curry, M. B., & de Bruijn, O. (1999). Measur- nal of Applied Psychology, 49, 322-325.
+ing symbol and icon characteristics: Norms for concreteness, com- Wandmacher, J., & Arend, U. (1985). Superiority of global features
+plexity, meaningfulness, familiarity, and semantic distance for 239 in classification and matching. Psychological Research, 47, 143-157.
+symbols. Behavior Research Methods,Instruments, & Computers, 31,
+487-519.
+McDougall, S. J. P., de Bruijn, O., & Curry, M. B. (2000). Explor-
+ing the effects of icon characteristics on user performance: The role
+of icon concreteness, complexity and distinctiveness. Journal of Ex- (Manuscript received October 9, 2001;
+perimental Psychology: Applied, 6, 291-306. revision accepted for publication October 26, 2002.)

@@ -11,7 +11,7 @@ Local status:
 
 - Repository cloned with `.git` removed.
 - This source is primarily a Blissymbol database/viewer rather than an upstream folder of standalone SVG/PNG image files.
-- Local standalone SVG stimuli were generated on 2026-06-22 with `scripts/render_blissymbolics_images.js`.
+- Local standalone SVG stimuli were generated on 2026-06-22 with `code/render_blissymbolics_images.js`.
 - Rendered character SVGs are stored in `rendered_svg/chars/`.
 - Rendered word SVGs are stored in `rendered_svg/words/`.
 - Render metadata is stored in `metadata/rendered_symbols.json`.

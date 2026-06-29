@@ -9,4 +9,4 @@ else
   PYTHON="python3"
 fi
 
-"$PYTHON" "$ROOT_DIR/scripts/extract_mcdougall_icons.py"
+"$PYTHON" "$ROOT_DIR/code/extract_mcdougall_icons.py"

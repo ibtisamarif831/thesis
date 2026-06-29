@@ -21,7 +21,7 @@ Normalized 256x256 PNGs are written to:
 This folder is intentionally ignored by git because it is generated and large. Regenerate it with:
 
 ```bash
-python3 scripts/build_icon_dataset.py --normalize --workers 8
+python3 code/build_icon_dataset.py --normalize --workers 8
 ```
 
 ## Dataset Columns
@@ -44,7 +44,7 @@ python3 scripts/build_icon_dataset.py --normalize --workers 8
 Feature extraction is implemented in:
 
 ```bash
-/Users/macbook/.cache/codex-runtimes/codex-primary-runtime/dependencies/python/bin/python3 scripts/extract_icon_features.py --per-set-limit 100 --workers 8
+/Users/macbook/.cache/codex-runtimes/codex-primary-runtime/dependencies/python/bin/python3 code/extract_icon_features.py --per-set-limit 100 --workers 8
 ```
 
 The extractor reads normalized 256x256 PNGs from `icon_data/normalized_256/` and writes a balanced pilot sample to `features.csv`. The current run uses up to 100 icons per icon set, producing 855 feature rows because some sets contain fewer than 100 canonical icons.
@@ -67,7 +67,7 @@ The extractor is plugin-style: each metric is a `FeatureExtractor` subclass regi
 Generate the current visual report with:
 
 ```bash
-/Users/macbook/.cache/codex-runtimes/codex-primary-runtime/dependencies/python/bin/python3 scripts/visualize_icon_features.py
+/Users/macbook/.cache/codex-runtimes/codex-primary-runtime/dependencies/python/bin/python3 code/visualize_icon_features.py
 ```
 
 The report is written to:
@@ -81,7 +81,7 @@ Current outputs include feature distributions by icon set, a Spearman feature-co
 Compute pairwise feature similarity with:
 
 ```bash
-/Users/macbook/.cache/codex-runtimes/codex-primary-runtime/dependencies/python/bin/python3 scripts/compute_icon_similarity.py
+/Users/macbook/.cache/codex-runtimes/codex-primary-runtime/dependencies/python/bin/python3 code/compute_icon_similarity.py
 ```
 
 The report is written to:

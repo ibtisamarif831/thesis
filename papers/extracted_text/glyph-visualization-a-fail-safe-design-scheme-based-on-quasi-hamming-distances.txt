@@ -1,0 +1,609 @@
+--- PAGE 1 ---
+Feature Article
+Glyph Visualization:
+A Fail-Safe Design Scheme Based
+on Quasi-Hamming Distances
+Philip A. Legg ■ University of the West of England
+Eamonn Maguire ■ CERN European Laboratory for Particle Physics
+Simon Walton and Min Chen ■ University of Oxford
+I
+n many spatial and temporal visualization ap- theory, which has been considered a candidate
+plications, glyphs provide an effective means framework for visualization in previous work.1
+for encoding multivariate data. Glyph-based In this article, we explore the concept of Ham-
+visualizations are ubiquitous in modern life be- ming distance, a well-established measure from
+cause they make excellent use of the human ability information theory that underpins the study of
+to learn abstract and metaphoric representations, codes to support error detec-
+facilitating instantaneous recognition and under- tion and error correction by the
+To address the various
+standing. However, because glyphs are typically receiver, without the need for
+perceptual errors common to
+small, they are vulnerable to various perceptual corroboration from the sender.
+glyph-based visualizations,
+errors. Glyphs are often designed with a high Specifically, we introduce the
+degree of similarity to facilitate mapping con- concept of a quasi-Hamming this article introduces the
+sistency, semantic interpretation, learning, and distance in the context of glyph concept of a quasi-Hamming
+memorization. As Figure 1 shows, as the size of the design. We examine the feasi- distance in the context of
+graphs decrease, the glyphs become indistinguish- bility of estimating the quasi- glyph design and examines
+able. Similarly, color defects from poor printing or Hamming distance between a the feasibility of estimating
+uncalibrated display screens could make it difficult pair of glyphs and the minimal the quasi-Hamming distance
+to differentiate between glyphs. Hamming distance for a glyph
+between a pair of glyphs
+Although many glyph designers attempt to ac- set. This measurement enables
+and the minimal Hamming
+count for perception and legibility, they may also glyph designers to determine the
+distance for a glyph set.
+wish to incorporate their own creativity and intu- differentiability between glyphs,
+ition as an artist. Thus, a delicate balance exists facilitating design optimization
+between the science and the art of effective glyph by maximizing distances between glyphs under
+design. This poses some challenging research ques- various design constraints. We demonstrate the
+tions for glyph visualization: Is there a theoretical design concept by developing an event visualiza-
+framework to encompass various design guide- tion tool that can depict the activities of multiple
+lines? Is there a systematic approach to designing users of a file system. Our evaluation shows that
+a fail-safe glyph set? This work is a direct attempt the concept of quasi-Hamming distance allows us
+to answer the second question, but we also con- to design glyphs that significantly reduce the vul-
+nect glyph-based visualization with information nerability of glyph-based visualization. We hope
+Published by the IEEE Computer Society 0272-1716/16/$33.00 © 2016 IEEE IEEE Computer Graphics and Applications 31
+Authorized licensed use limited to: Bernd Froehlich. Downloaded on August 01,2024 at 06:49:19 UTC from IEEE Xplore. Restrictions apply.
+g2leg.indd 31 2/14/17 3:31 PM
+
+--- PAGE 2 ---
+Feature Article
+Size reduction Size reduction Size reduction
+Color degeneration (saturation) Color degeneration (luminance) Grayscale degeneration
+Figure 1. Different types of quality degeneration applied to glyphs, each of which is encoded using a single
+visual channel. When their size, saturation, or luminance change, glyphs can become more difficult to
+differentiate. The original image quality is indicated by the rectangular marker on the x axis.
+111 Valid codeword 111 transmission accordingly.
+■ Automated error correction enables the receiver
+to detect an error and deduce what the intended
+110 101 011 110 101 011 transmission must have been.
+Hamming defined the following principle:
+100 010 001 100 010 001
+A code of d + 1 minimal Hamming distance
+can be used to detect d bits of errors dur-
+ing transmission. A code of 2d + 1 minimal
+000 Invalid codeword 000
+Hamming distance can be used to correct d
+(a) (b)
+bits of errors during transmission.2
+Figure 2. Two 3-bit codes. (a) The first code can detect 1-bit errors, and
+(b) the second code can detect 2-bit errors and correct 1-bit errors. For example, given a 3-bit code, as illustrated
+in Figure 2, there are eight possible codewords.
+that this new concept will encourage designers to We can select a subset of these codewords to con-
+consider systematically the need to empower vi- struct a code with its minimal Hamming distance
+sualization users to detect and correct potential equal to 2 or 3 bits. Figure 2a shows one such
+perception errors. code that has four code words and is of 2 bits
+Hamming distance. This code can detect 1-bit
+Hamming Distance errors because any change in a valid codeword
+In information theory and data communication, by 1 bit would result in an invalid codeword,
+a code consists of a finite set of codewords, each of which would lead the receiver to discover the
+which is a digital representation of a letter in an error. Figure 2b shows another code with two
+alphabet. In the context of binary encoding, Ham- codewords and of 3 bits Hamming distance. It
+ming distance, proposed by Richard Hamming in can detect 2-bit errors and correct 1-bit errors.
+1950, is a measure of the number of bit positions When a valid codeword (such as 111) is changed
+in which two codewords differ.2 Considering all by 1 bit during transmission (such as 110), the
+pairs of codewords in a code, the minimal distance receiver can detect such an error and recover the
+is referred to as the code’s minimal Hamming intended codeword based on the nearest-neighbor
+distance. (In the literature, the word minimal is principle. If a 2-bit error occurred during trans-
+often confusingly omitted). In communication, mission, the receiver would be able to detect the
+there are two main strategies for handling errors error but could not correct it. Nevertheless, if
+that occur during transmission: 2-bit errors are likely to occur, then this should
+either be used as only an error-detection code or
+■ Automated error detection lets the receiver dis- a code with a longer Hamming distance should
+cover if an error has occurred and request a re- be used instead.
+32 March/April 2017
+Authorized licensed use limited to: Bernd Froehlich. Downloaded on August 01,2024 at 06:49:19 UTC from IEEE Xplore. Restrictions apply.
+g2leg.indd 32 2/14/17 3:31 PM
+
+--- PAGE 3 ---
+Quasi-Hamming Distance for Glyph
+(a)
+Design
+A set of glyphs is a code, and each glyph in the
+set is a valid codeword. During visualization, there
+can be errors in displaying or perceiving a glyph. (b)
+If a viewer can detect that a perceived glyph is not
+correct, a conscious or unconscious effort can be Figure 3. Examples of error detection and correction in glyph-based
+made to fix the error. Conscious effort, which is an visualization. (a) In the first example, the orientation of the glyph on
+analogy of error detection and repeated transmis- the left is distorted. A viewer may sense this and consult the legend
+sion, may include zooming in for a closer look or for correction. (b) In the second example, a viewer may unconsciously
+consulting a legend. Unconscious effort, which is perceive the glyph on the left as a star shape due to Gestalt effects and
+an analogy of error correction, can be the result of a priori knowledge about the glyph set, even though the top point of
+Gestalt effects (the nearest neighbor)3 or a com- the star is missing because of occlusion.
+bined judgment involving multiple visual compo-
+nents (redundancy).4 common unit for both distance and error mea-
+Figure 3 shows two example glyph sets, each surement. Let us first consider an ordered visual
+with eight codewords. Given the two display errors channel, such as brightness or length, as a code
+depicted on the left—an arrow glyph is skewed in C. Theoretically, C can have a set of codewords
+Figure 3a and a shape glyph is occluded by another c , c , …, c such that the difference between two
+1 2 n
+shape in Figure 3b—we can detect both errors eas- consecutive codewords is the just-noticeable dif-
+ily. The error with the arrow glyph may need some ference (JND) of this visual channel.
+conscious effort, whereas the shape error can of- We can define the QHD between each pair of
+ten be corrected unconsciously. This suggests that code words c and c as |i – j| bits. If c is mis-
+i j i
+it is possible to establish a conceptual framework, taken for c , we can call this a d-bit error, where
+j
+similar to Hamming distance, for error detection d = |i – j|. Now let us extend this concept to a
+and correction in glyph-based visualization. less ordered visual channel (hue) or an integrated
+However, measuring the distances and errors in channel (color). Theoretically, we can construct a
+visual perception is clearly not as simple as mea- code C by uniformly sampling the visual channel’s
+suring those represented by binary codewords. space (for example, the CIE Lab color space) while
+We thereby propose an approximated conceptual ensuring that every pair of samples differ by at
+framework based on the principle of Hamming least the JND of this channel. These codewords, or
+distance and call it quasi-Hamming distance (QHD). samples, can be organized into a network, where
+The term quasi implies that the distance measure the distance between any two codewords can be
+is approximated, as is the quantitative measure of approximated proportionally according to the
+perceptual error. JND (JND = 1 bit). Note that the possible percep-
+QHD can be considered a kind of measurement tion error rate with a code that maximizes the
+of “perceptual distance” between two glyphs. number of codewords based on JND is likely to
+QHD offers several benefits: be high. In practice, a glyph set is designed based
+only on a small subset of samples in a visual
+■ It connects glyph-based visualization to infor- channel or more commonly in the multivariate
+mation theory through an important and widely space of several visual channels. Hence, a QHD
+used concept (Hamming distance) in computing measure based on JND would be too fine to use in
+and communication. practice, although in a longer term, JND can pro-
+■ It relates the need for accurate perception of vide an absolute reference measure once we have
+glyphs to error detection and correction by the obtained such measures for most visual channels
+receiver. in visualization.
+■ It facilitates quantitative measures semantically
+equivalent to Hamming distance and its math- Measuring QHD
+ematical implication. This leads us to the second research question:
+Given a glyph set, how can we measure the dis-
+The main research questions are therefore as fol- tance between glyphs? We can consider using the
+low: Can we establish a measurement unit com- following methods:
+mon to both measures? How do we obtain such
+measurements? 1. Estimation by expert designers. This practice has
+For the first question, we can utilize a bit as the always existed in designing exercises, such as
+IEEE Computer Graphics and Applications 33
+Authorized licensed use limited to: Bernd Froehlich. Downloaded on August 01,2024 at 06:49:19 UTC from IEEE Xplore. Restrictions apply.
+g2leg.indd 33 2/14/17 3:31 PM
+
+--- PAGE 4 ---
+Feature Article
+for traffic signs and icons in user interfaces. To there is not yet a conclusive confirmation
+formalize this practice, designers can explicitly about optimal image similarity measures, and
+estimate and label the distance between each there are hardly any metrics specially designed
+pair of glyphs in a glyph set. Although this ap- for measuring glyph similarities.
+proach may be most convenient to the design-
+ers, its effectiveness depends on the experience To demonstrate the feasibility of estimating
+of the designers involved, and it is rather easy QHD, we conducted two proof-of-concept experi-
+to overlook certain types of display and percep- ments based on methods 4 and 5. We considered
+tion errors. a task-based evaluation (method 3) as a possible
+2. Crush tests. Introduced by Eamonn Maguire approach because the glyph set under consider-
+and his colleagues,5 crush tests rescale glyphs ation is a file-activity visualization. However, this
+to lower pixel resolutions to assess the pre- additional cognitive load may distort the glyph
+served detail. We can simulate different causes similarity assessment. Instead, for the purposes of
+of errors, such as those illustrated in Figure 1, this study, method 4 allowed a much more general
+and determine at which level of degeneration audience to participate in the study, and method 5
+glyphs may become indistinguishable. The cor- let us corroborate the two methods.
+responding level of degeneration can be used to We conducted a survey with 20 participants, all
+of whom are either employees or students at the
+University of Oxford. About half the participants
+Quasi-Hamming distance can be had encountered glyph-based visualization pre-
+viously. The results of one participant were con-
+considered a measurement of “perceptual
+sidered an outlier and were not included in the
+distance” between two glyphs. statistics. After a brief introduction by one of the
+coauthors of this article, we asked the participants
+to rate how well they could differentiate 104 pairs
+of glyphs, on an integer scale between 0 and 10.
+define the QHD. Although this approach yields The 104 stimuli pairs were divided into three
+a more consistent QHD estimation, more re- main categories: eight reference pairs, 48 primi-
+search would be required to compile a list of tive pairs, and 48 application-specific pairs. The
+different causes of errors and define coherent eight reference pairs were designed to define the
+levels of degeneration. minimal and maximal QHD in the context of this
+3. Task-based evaluation. Similar to method 2, work. In four reference pairs, the two glyphs are
+we can simulate different visualization con- extremely difficult to differentiate (minimal dis-
+ditions, enlist users to perform their tasks, tance). In the other four pairs, the two glyphs can
+measure user performance, and transform be differentiated with undisputable ease (maximal
+performance measures to QHD. This approach distance).
+is perhaps most semantically meaningful for We divided the primitive pairs into eight groups:
+a particular glyph set in a specific application hue, shape, components, connection lines, lu-
+context. However, the performance measures minance, size, texture, and orientation. In each
+collected may exhibit many confounding ef- group, different pairs feature graphs with differ-
+fects, and the specifics of the application may ent perceptual distances, which let us obtain the
+mean that only a small number of users are human-centric estimation of the QHD for basic
+available for evaluation. visual channels individually. The application pairs
+4. User-centric estimation. We may conduct a contain glyphs designed for our application case
+survey among human participants about how study, which we will discuss in detail in the “Case
+easy or difficult it is to differentiate different Study” section.
+glyphs. By removing the task dependency nec- The 96 primitive and application-specific pairs
+essary for method 3, more participants can be were mixed together in a randomized order. The
+involved in such a survey, yielding a more reli- eight reference pairs were placed at positions 1, 2,
+able QHD estimation. 35, 36, 69, 70, 103, and 104 to help the participants
+5. Computer-based similarity measures. A variety of regularize their scores and to enable us to check
+image similarity measures already exist in the temporal consistency. See the online supplementary
+literature.6 In the long term, it is likely that we materials for further details about the questionnaire
+will be able to find measures that are statisti- and stimuli grouping (https://extras.computer
+cally close to user-centric estimation, although .org/extra/mcg2017020031s1.pdf) and for the full
+34 March/April 2017
+Authorized licensed use limited to: Bernd Froehlich. Downloaded on August 01,2024 at 06:49:19 UTC from IEEE Xplore. Restrictions apply.
+g2leg.indd 34 2/14/17 3:31 PM
+
+--- PAGE 5 ---
+Figure 4. Sample of results for the primitive glyph pairs used in both the user-centric estimation (top) and by computer-based
+similarity measure (bottom). Low values indicate pairs that are difficult to differentiate, and high values indicate easy to
+differentiate. Examples from groups A–D are highlighted, where group A is hard to differentiate, group B is easy to differentiate,
+group C is differentiated by color, and group D is differentiated by shape. The color legend shows the QHD ranges, where red
+indicates a low QHD (0 ≤ QHD ≤ 1) and blue indicates a high QHD (4 ≤ QHD ≤ 5).
+survey results (https://extras.computer.org/extra/ Table 1. Average QHD results for the primitive glyph
+mcg2017020031s2.xlsx). pairs by group.*
+As we mentioned earlier, we divided the category Group Average QHD
+of reference pairs into two groups. Group A con-
+Human Computer
+sists of four pairs of very similar glyphs, and group
+E (Component) 3.5 3.4
+B consists of four pairs of very different glyphs.
+D (Shape) 3.4 3.5
+We expected that participants would assign low
+scores (difficult to differentiate) to those in group J (Orientation) 3.0 1.6
+A and high scores (easy to differentiate) to those F (Connection) 2.8 2.4
+in group B, respectively. We placed one pair from I (Texture) 2.2 3.3
+group A and one from group B at regular intervals.
+C (Color) 2.2 1.5
+The average scores for the four pairs in group A
+H (Size) 2.1 4.2
+were 0.0, 0.4, 1.4, and 2.8, respectively. Those for
+G (Luminance) 1.2 2.4
+group B were 9.3, 9.0, 8.9, and 9.7, respectively.
+*These results were obtained from human participants and from a
+These results indicate that they statistically served
+computer-based algorithmic similarity measure. They are ordered
+as references for the minimal and maximum QHD according to the human estimation.
+in this survey.
+The category of primitive pairs consists of eight
+groups (C–J) for estimating QHD in relation to the In our second experiment, we measured the
+eight visual channels (C: hue, D: shape, E: compo- similarity between each pair of glyphs using a
+nents, F: connection lines, G: luminance, H: size, computer-based metric. To calculate this, we
+I: texture, and J: orientation). Figure 4 shows a developed a metric based on weighted invariant
+sample of the groups. (Full group details are avail- image moments,6,7 a well-established approach
+able in the supplementary material.) Each group in computer vision that is widely used for im-
+has six pairs of stimuli, facilitating a pairwise age similarity. The metric incorporates both pixel
+comparison of four different codewords for each color and spatial occupancy to assess the differ-
+channel. For the hue and luminance channels, af- ence between two images. The former captures
+ter choosing the first and fourth codewords, we a variety of feature differences (such as color,
+used a perceptually uniform color model (Hunter’s luminance, size, and orientation) and is defined
+lab) to determine the second and third codewords as the mean Euclidean distance between all cor-
+at 50 and 75 percent distance from the first, re- responding pixels in the two images representing
+spectively. The upper part of Figure 4 shows a small the pair of glyphs. The latter captures location-in-
+selection of the survey results, where we converted variant features (such as spatial occupancy) and
+the [0, 10] score range to a [0, 5] QHD range. We is defined as the difference between the numbers
+consider a QHD of less than 2 as potentially risky of pixels with ≤ 80 percent luminance. Both dif-
+for error detection, and a QHD of less than 3 as ference measures are first normalized to the [0,
+potentially risky for error correction. 1] range and are then scaled to the same QHD
+IEEE Computer Graphics and Applications 35
+Authorized licensed use limited to: Bernd Froehlich. Downloaded on August 01,2024 at 06:49:19 UTC from IEEE Xplore. Restrictions apply.
+g2leg.indd 35 2/14/17 3:31 PM
+
+--- PAGE 6 ---
+Feature Article
+range as the survey (with the same min, mean, in a visualization. Finally, the visualization should
+and max) before being combined into a single support collaborative environments by depicting
+metric. The lower part of Figure 4 shows the com- activities from different users.
+puted similarity measures for the same selection
+of stimuli pairs. Designing File-System Event Glyphs
+Table 1 shows the average QHD results for both Like the design of most visual representations,
+the human-centric study and the computer simi- glyph design needs to achieve a balance among
+larity measure by group. With the human par- many factors relating to the data, user, task, and
+ticipants, shape, component, and orientation all application. For this application, we consider that
+scored a QHD ≥ 3, which suggests they are well the volume of data is high, although it is expected
+separable visual channels. Luminance, however, to be filtered in some way, such as for a specific por-
+was the only group to score below QHD < 2, sug- tion of the file system, specific file types, or specific
+gesting it is not well separable. While some visual user groups. Nevertheless, the glyphs are expected
+channels were also scored similarly by the com- to be relatively small and plentiful on a display
+puter-based similarity measure (shape, component, screen. The visualization tasks are primarily rou-
+and connection), other channels differed from the tine observation and external memorization of the
+user feedback (size and orientation). This shows events in a file system. The users are expected to be
+that further research needs to be conducted in this regular users who will have the motivation, ability,
+area regarding how a computer can understand hu- and time to familiarize themselves with multivari-
+man visual perception. ate glyphs, although any metaphoric encoding will
+benefit learning and memorizing glyphs.
+Case Study: Visualizing File-System Events We considered the QHD concept throughout
+The problem of visualizing file systems plays a the design, development, evaluation, and ap-
+significant role in the short history of computer- plication of the glyphs that are utilized in our
+assisted visualization. In 1991, motivated by the file activity visualization tool. Through iterative
+need to visualize a file system’s structure, Brian design and team discussions, our understanding
+Johnson and Ben Shneiderman published their and appreciation of the concept improved along
+seminal paper on tree maps.8 with this process. As a result of this process, we
+Today, file systems are much larger and contain finalized our design for 18 glyphs that represent
+many more files; they are also shared by many more the most common events in a file system (see Fig-
+users and have many more events. One important ure 5). These events include creation, modifica-
+purpose of a file system is to support collaborative tion, deletion, copying, moving, and renaming.
+activities, such as sharing files within multipart- The action may be applied to a file, directory,
+ner projects and developing software among a team device, shortcut (symbolic link), or metadata.
+of programmers. Although there are text-based The designs of these event glyphs evolved in sev-
+mechanisms for recording events in relation to a eral stages.
+file system or a specific folder, the amount of data
+contained in typical log files can easily escalate to Initial Design
+the point where it becomes too overwhelming for We first designed a set of glyphs in conjunction
+anyone to read on a regular basis. To the best of with the overall visual design of the visualization
+our knowledge, there are no effective visualization tool (shown on the right side of Figure 5). This
+techniques that allows users of such collaborative allowed us to appreciate how these glyphs may be
+environments to observe events effectively. used and to identify the typical display conditions,
+In this case study, we designed and developed a such as glyph sizes, density, and available visual
+novel glyph-based visualization tool for observing channels. At this stage, we decided that the basic
+events in a file system. There were several techni- glyph designs should not feature the hue chan-
+cal challenges. First, the file system’s hierarchical nel; we reserved this intuitive and powerful visual
+nature needs to be depicted so that the spatial con- channel to depict user- or data-specific variables.
+text of where a particular event has occurred can
+be identified. Second, the temporal information Expert Estimation
+about events needs to be conveyed so that the ac- Four visualization researchers took part in this
+tivity ordering can also be observed and reasoned. research, and all had publications in areas of
+Third, there are a wide range of activities (such glyph-based visualization. We used our knowl-
+as copying and modifying a file) that are typically edge about different visual channels and our
+performed that would need to be distinguishable experience in glyph designs to improve on the
+36 March/April 2017
+Authorized licensed use limited to: Bernd Froehlich. Downloaded on August 01,2024 at 06:49:19 UTC from IEEE Xplore. Restrictions apply.
+g2leg.indd 36 2/14/17 3:31 PM
+
+--- PAGE 7 ---
+File operations Glyph Connections Semantics
+A
+Reference line (no change during this period)
+Delete file
+Change occurred to the metadata of the leaf file only
+New file
+Change occurred to content of a leaf file only Modify file metadata
+File deletion
+File creation B
+Modify metadata of a file (dates, owner, access, etc.)
+Open file Modify file
+Open a file (access to content)
+C
+Must open
+Modify content of a file (write action) then modify Copy file
+Move file (deletion then creation)
+Copy a file (access then creation)
+Create a shortcut (symbolic link) (metadata then creation) Move file
+Delete a directory
+Create a directory Create shortcut
+Modify directory metadata
+D
+Open a directory New directory
+Modify content of a directory, implicitly defined by Modify directory metadata
+Must open
+events in files, but can be used for summarization then modify
+Move directory
+Open Modify directory
+Copy a directory directory
+Create a shortcut (symbolic link) to directory
+Move directory
+Mount file system
+Unmount file system
+Figure 5. The 18 glyphs designed to represent different file-system events. Each event is associated with its primary glyph
+representation in the second column. In addition, an event may be associated with special signatures in terms of connection
+(third column) and semantic ordering (fourth column). The graphs on the right side (A–D) illustrate the initial designs for the
+timeline visualization, which depicts file activity using the proposed glyph set with a hierarchical tree representation of the file
+system to provide context.
+original designs. This is similar to the estimation software, such as by zooming and overlaying a
+by expert designers approach (method 1) we dis- translucent shape on top of glyphs.
+cussed previously. At this stage, we realized that simulating dif-
+In this evaluation, we noticed that although we ferent conditions that would cause glyph quality
+agreed on how easy or difficult it was to differen- to degenerate was not a trivial undertaking. In
+tiate between pairs of glyphs, we could not easily many ways, this also echoed the multifaceted na-
+agree on the reasons why. When we explicitly tried ture and complexity in estimating QHD that we
+to determine the QHD between a pair of glyphs, mentioned earlier.
+we were often influenced by different features,
+such as component shapes, convexity, aspect ratio, Human-Centric Estimation
+and curvature. This experience led us to further As we discussed earlier, we conducted a survey to
+appreciate the multifaceted complexity in estimat- gain a better understanding about QHD in the
+ing QHD. Many of the glyph designs in Figure 5 context of individual visual channels. This also
+were stabilized at this stage. allowed us to evaluate the set of proposed event
+glyphs. We considered 20 glyph designs, for which
+Crush Tests there were 190 pairwise comparisons. We selected
+We applied crush tests to all glyphs designed dur- 48 pairs that we considered to be “more risky” than
+ing the case study (method 2). In several cases, other pairs in terms of differentiability. Figure 6
+we carried out systematic testing by applying con- shows three example questions from the ques-
+sistent zooming factors to all glyphs. More often, tionnaire, in which we asked users how difficult
+when we were considering individual glyphs, we or easy it is to differentiate these pairs of glyphs.
+carried out ad hoc crush tests using our drawing In this particular example, the first two pairs are
+IEEE Computer Graphics and Applications 37
+Authorized licensed use limited to: Bernd Froehlich. Downloaded on August 01,2024 at 06:49:19 UTC from IEEE Xplore. Restrictions apply.
+g2leg.indd 37 2/14/17 3:31 PM
+
+--- PAGE 8 ---
+Feature Article
+Figure 6. Three
+examples from
+the survey As Figure 5 shows, we utilized some similar de-
+questionnaire. signs for files and directories to assist in learning
+Participants and memorization. Meanwhile, we also considered
+were asked, how they may be connected. The three types of
+“How difficult connection lines are shown on the top of Figure 5,
+or easy is it to and the different orientations shown in the third
+differentiate column may potentially add additional features
+between for differentiating glyphs. For example, all lines
+these pairs of connecting to a deletion glyph will always come
+glyphs?” There from the left, and all lines connecting to a creation
+were a total of glyph will always extend to the right. All lines con-
+104 questions, necting to a copy or move glyph will suggest a spa-
+based on tial shift vertically. In addition, semantic ordering,
+68 different such as to open and read a file, can also increase
+glyphs. the QHD, as Figure 5 illustrates.
+Evaluating Event Glyphs
+As part of the study we described earlier, we eval-
+uated the glyphs in Figure 5 based on the QHD
+obtained from a human-centric survey and using
+from our proposed glyph set (groups S and R) and computer-based similarity measures. This allowed
+the third example is a primitive pair for measur- for a comparative analysis against the reference
+ing orientation (group J). The full questionnaire is pairs and primitive glyph sets. For our glyph set,
+available in the supplementary material. only the potentially risky pairs were evaluated.
+In the survey, we found that only one pair scored The human-centric estimation provided us with
+below 2 bits in terms of QHD. The final designs the most meaningful insight about the glyphs’
+of the glyphs did not include this pair. The details quality. The 104 pairs of glyphs evaluated by par-
+of this evaluation are provided in the “Evaluating ticipants received an average QHD of 2.9 bits. The
+Event Glyphs” section. average QHD for the reference pairs (groups A and
+B) is 2.7 bits. The average for the primitive pairs
+Computer-Based Similarity Measures (groups C to J) is 2.6 bits. For our proposed glyph
+We used the same similarity metric we mentioned set, the average QHD for the potentially risky pairs
+earlier to measure the QHD of the 48 pairs that (groups O to Z) is 3.2 bits, suggesting that these
+were potentially risky. We found that they all glyphs are well differentiable.
+passed this QHD test. The details of this evalu- Almost all our glyph pairs for file-system visu-
+ation are also provided in the “Evaluating Event alization have a QHD above 2 bits. Only one pair
+Glyphs” section. received QHD = 1.5 bits, and it was not used in
+the final design. The upper part of Figure 7 shows
+Deployment in Software a subset of the survey results. The computer-based
+In addition to this design effort, we incorporated metric also measured our glyph pairs favorably.
+the glyph set into the visualization tool and used As we mentioned previously, the average QHD es-
+the tool to visualize events in a Dropbox folder. timated by the metric is normalized to have the
+This helped us gain direct experience with these same min, mean, and max as the human-centric
+glyphs and learn how they might be viewed and estimation. The complete set of 104 glyph pairs
+interpreted in practical applications. The details of have an average QHD of 2.9 bits. The average
+this deployment are discussed in the “Visualizing QHD for the reference pairs is 2.6 bits. The aver-
+Dropbox Activity Logs” section. age for the primitive pairs is 2.7 bits. The average
+for the potentially risky pairs in our glyph set is
+Further Considerations 3.1 bits, again suggesting that the proposed set of
+Differentiability is only one aspect of glyph de- glyphs are well differentiated. The lowest QHD for
+sign. We have to consider other aspects such as our potentially risks glyph pairs is 2.1 bits.
+how easy it is to learn and remember glyphs, how The evaluation also revealed some interesting
+glyphs may be connected, and how they may be phenomena. The additional features added to the
+ordered if the corresponding events happened to directory glyphs reduced the QHD among the
+the same file or directory. directory glyphs. For example, when comparing
+38 March/April 2017
+Authorized licensed use limited to: Bernd Froehlich. Downloaded on August 01,2024 at 06:49:19 UTC from IEEE Xplore. Restrictions apply.
+g2leg.indd 38 2/14/17 3:31 PM
+
+--- PAGE 9 ---
+Related Work in Glyph Visualization
+T he work described in this article covers the broad the such as temperature, pressure, wind direction, and wind
+definition of glyphs provided by Rita Borgo and her speed.9 And Johannes Fuchs and his colleagues conducted
+colleagues.1 We thus consider a glyph an evaluation study that addressed temporal glyph de-
+signs for small multiple displays.10
+a small visual object that can be used independently
+and constructively to depict attributes of a data
+record or the composition of a set of data records. References
+Each glyph can be placed independently from oth- 1. R. Borgo et al. “Glyph-Based Visualization: Foundations,
+ers, while in some cases, glyphs can be spatially Design Guidelines, Techniques and Applications,”
+connected to convey the topological relationships Eurographics State of the Art Reports, May 2013, pp. 39–63.
+between data records or geometric continuity of the 2. M.O. Ward, “A Taxonomy of Glyph Placement Strategies for
+underlying data space. Glyphs are a type of visual Multidimensional Data Visualization,” Information Visualization,
+sign that can make use of visual features of other vol. 1, nos. 3–4, 2002, pp. 194–210.
+types of signs such as icons, indices, and symbols. 3. M.O. Ward, Multivariate Data Glyphs: Principles and Practice,
+Springer, 2008.
+Matthew Ward provided a technical framework for 4. A.E. Lie, J. Kehrer, and H. Hauser, “Critical Design and
+glyph-based visualization that covers aspects of visual Realization Aspects of Glyph-Based 3D Data Visualization,” Proc.
+mapping and layout methods as well as addresses impor- 25th Spring Conf. Computer Graphics (SCCG), 2009, pp. 19–26.
+tant issues such as bias in mapping and interpretation.2,3 5. P.A. Legg et al., “MatchPad: Interactive Glyph-Based
+The state-of-the-art report on glyph-based visualization by Visualization for Real-Time Sports Performance Analysis,”
+Borgo and her colleagues also compiles many of the design Computer Graphics Forum, vol. 31, no. 3, 2012, pp. 1255–1264.
+guidelines and techniques that have been utilized in the 6. T. Kapler and W. Wright, “GeoTime Information Visualization,”
+field.1 Researchers have discussed various design consider- Proc. IEEE Information Visualization, 2004, pp. 25–32.
+ations for glyph-based visualization for 3D data, including 7. J. Pearlman and P. Rheingans, “Visualizing Network Security
+data mapping, glyph instantiation, and rendering.4 Events Using Compound Glyphs from a Service-Oriented
+Glyphs have also been used in a variety of applications. Perspective,” Proc. Workshop on Visualization for Computer
+For example, Philip Legg and his colleagues proposed Security (VizSEC 2007), 2008, pp. 131–146.
+MatchPad for analyzing sports event data using glyph- 8. M. Suntinger et al., “The Event Tunnel: Interactive Visualization
+based visualization.5 Thomas Kapler and William Wright of Complex Event Streams for Business Process Pattern
+proposed GeoTime for displaying military events in a com- Analysis,” Proc. IEEE Pacific Visualization, 2008, pp. 111–118.
+bined temporal and geospatial visualization.6 J. Pearlman 9. C. Ware and M.D. Plumlee, “Designing a Better Weather
+and P. Rheingans used glyphs to visualize network security Display,” Information Visualization, vol. 12, 3–4, 2013, pp.
+events.7 Martin Suntinger and his colleagues used glyph- 221–239.
+based event visualization to create an event tunnel for 10. J. Fuchs et al., “Evaluation of Alternative Glyph Designs
+business analysis and incident exploration.8 Colin Ware for Time Series Data in a Small Multiple Setting,” Proc.
+and Matthew Plumlee investigated the use of glyph- Conf. Human Factors in Computer Systems (CHI), 2013, pp.
+based visualization for encoding multivariate weather data 3237–3246.
+groups O and Q, where the glyphs for creation, between groups O and Q and between groups T
+modify metadata, and modify content were com- and V, which given the similar design is under-
+pared within the context of files (group O) and standable. This suggests that further research is
+directories (group Q), the human-centric estima- necessary to enrich the existing findings about
+tion shows a noticeable difference. The average how the distance functions for integrated and
+QHD for group O (files) is 3.4 bits and that for separable visual channels may affect perception.5
+group Q (directories) is 2.6 bits. Yet, the glyphs
+for directories are similar to those of files, with Visualizing Dropbox Activity Log
+the addition of the rectangle to the right of the To demonstrate the applicability of the proposed
+circular region. glyph set, we developed an interactive tool for visu-
+Similarly, for groups T and V, where move, copy, alizing file event log data. The system consists of a
+and shortcut glyphs were compared, the average Python backend for processing logs from file storage
+QHD for group T (files) is 3.3 bits and for group V services such as Dropbox and Git, and a web-based
+(directories) is 2.8 bits. Meanwhile, the computer- frontend that provides the user interface. The fron-
+based similarity measures suggest little difference tend was created with a combination of HTML5,
+IEEE Computer Graphics and Applications 39
+Authorized licensed use limited to: Bernd Froehlich. Downloaded on August 01,2024 at 06:49:19 UTC from IEEE Xplore. Restrictions apply.
+g2leg.indd 39 2/14/17 3:31 PM
+
+--- PAGE 10 ---
+Feature Article
+Figure 7. Sample of results for the file visualization glyph pairs used in both the user-centric estimation (top) and computer-based
+similarity measure (bottom). Low values indicate difficult to differentiate, and high values indicate easy to differentiate. The color
+legend shows the QHD ranges, where red indicates a low QHD (0 ≤ QHD ≤ 1) and blue a high QHD (4 ≤ QHD ≤ 5).
+Figure 8. Glyph-based visualization displaying events in a Dropbox activity log. The vertical bars are an
+abstract representation of a directory tree, and the timeline flows from left to right. At point A, a number of
+users have modified the same file. The popup gives more details about the modifications, who made them,
+and when to allow for provenance tracking. Point B shows another interesting case where user X (orange)
+created a file; then user Y made a copy of this file, opened it, and modified it. User X then deleted the original
+file, but the copy user Y modified still exists elsewhere.
+CSS, and JavaScript (utilizing Raphael.js for the ■ displaying detailed view when a mouse hov-
+visualization element and jQuery for control of ers over a glyph.
+popup events). In addition to glyph-based visualiza-
+tion, the system supports a variety of interactions: Figure 8 shows an excerpt of the file-system visu-
+alization, depicting events from a Dropbox activity
+■ filtering different types of file-system events, log. Because Dropbox supports file-sharing capabili-
+■ filtering different users, ties, it is desirable for users to visualize events in
+■ selecting a specific directory as a subtree, a shared folder, for instance, to see which file was
+■ selecting different time periods, created or modified recently and by whom. Although
+■ zooming and scrolling on the directory axis and the service does provide a text-based activity log that
+timeline, and users can access, it is time-consuming and tedious
+40 March/April 2017
+Authorized licensed use limited to: Bernd Froehlich. Downloaded on August 01,2024 at 06:49:19 UTC from IEEE Xplore. Restrictions apply.
+g2leg.indd 40 2/14/17 3:31 PM
+
+--- PAGE 11 ---
+to read a long list of events. Glyph-based visualiza- 4. P. Rheingans and C. Landreth, “Perceptual Principles
+tion gives users an easy overview of the events in a for Effective Visualizations,” Perceptual Issues in
+shared folder. The visualization in Figure 8 makes Visualization, Springer-Verlag, 1995, pp. 59–74.
+use of the glyph set shown in Figure 5, with color 5. E. Maguire et al., “Taxonomy-Based Glyph Design with
+used to depict different users. This example includes a Case Study on Visualizing Workflows of Biological
+three different users (blue, orange, and green) who Experiments,” IEEE Trans. Visualization and Computer
+have accessed the system during this time. Graphics, vol. 18, no. 12, 2012, pp. 2603–2612.
+The glyphs are shown in conjunction with the 6. C. Zitova and J. Flusser, “Image Registration
+file system hierarchy, which is represented at each Methods: A Survey,” Image and Vision Computing,
+of the three time intervals by the gray vertical bars. vol. 21, no. 11, 2003, pp. 977–1000.
+We can see that some files were accessed by all 7. M.-K. Hu, “Visual Pattern Recognition by Moment
+three users, such as the top line between the first Invariants,” IRE Trans. Information Theory, IT-8,
+and second time steps. Here, the orange user cre- 1962, pp. 179-187.
+ated a file and then opened and modified it. Later, 8. B. Johnson and B. Shneiderman, “Tree-Maps: A Space-
+the blue user modified the file’s metadata (possi- Filling Approach to the Visualization of Hierarchical
+bly renaming it or changing its access date). Af- Information Structures,” Proc. IEEE Visualization,
+terward, the green user opened and modified the 1991, pp. 284–291.
+file. By hovering over each glyph with the mouse,
+the user can display a popup window that pro- Philip A. Legg is a senior lecturer in computer science at the
+vides further detail about the activities, including University of the West of England. His research interests in-
+the sequence of file events and the associated file clude visualization, machine learning, and human-computer
+size. This enables collaborative colleagues to easily interaction. Legg has a PhD in computer science from Cardiff
+understand ongoing actions, reducing the need to University. Contact him at phil.legg@uwe.ac.uk.
+update other users manually.
+Eamonn Maguire is a research scientist at the CERN Eu-
+ropean Laboratory of Particle Physics. His research interests
+W
+e consider this to be the first step toward include visualization and machine learning. Maguire has a
+establishing a collection of mathematical DPhil in computer science from the University of Oxford.
+and cognitive theories, experimental findings and Contact him at eamonnmaguire@gmail.com.
+statistics, design techniques, and computational
+metrics for guiding and aiding glyph designs. This Simon Walton is a research associate in the e-Research
+work highlights a number of gaps where further Center at the University of Oxford. His research interests
+research is needed. For example, it would be highly include visualization and computer graphics. Walton has a
+desirable to understand the relationship between PhD in computer science from Swansea University. Contact
+the JND measures of various visual channels and him at simon.walton@oerc.ox.ac.uk.
+differentiability of glyphs encoded using such vi-
+sual channels. It will also be beneficial to corre- Min Chen is a professor of scientific visualization in the
+late existing findings about error detection and e-Research Center at the University of Oxford. His research
+correction with QHD measures.7 In the future, to interests include visualization, computer graphics, and hu-
+further aid glyph design processes, it will be nec- man-computer interaction. Chen has a PhD in computer-
+essary to develop computer-based similarity mea- aided engineering design from Swansea University. Contact
+sures that are statistically closer to (or even better him at min.chen@oerc.ox.ac.uk.
+than) human-centric estimation.
+References
+1. M. Chen and H. Jänicke, “An Information-
+Theoretic Framework for Visualization,” IEEE Trans.
+Visualization and Computer Graphics, vol. 16, no. 3,
+2010, pp. 1206-1215.
+2. R.W. Hamming, “Error Detecting and Error
+Correcting Codes,” Bell System Technical J., vol. 29,
+no. 2, 1950, pp. 147–160. Read your subscriptions through
+3. M. Chen et al., “Visual Multiplexing,” Computer the myCS publications portal at
+http://mycs.computer.org.
+Graphics Forum, vol. 33, no. 3, 2014, pp. 241–250.
+IEEE Computer Graphics and Applications 41
+Authorized licensed use limited to: Bernd Froehlich. Downloaded on August 01,2024 at 06:49:19 UTC from IEEE Xplore. Restrictions apply.
+g2leg.indd 41 2/14/17 3:31 PM

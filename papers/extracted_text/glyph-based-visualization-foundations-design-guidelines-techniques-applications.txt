@@ -1,0 +1,1865 @@
+--- PAGE 1 ---
+Cronfa - Swansea University Open Access Repository
+_____________________________________________________________
+This is an author produced version of a paper published in :
+EUROGRAPHICS 2013, State of the Art Reports
+Cronfa URL for this paper:
+http://cronfa.swan.ac.uk/Record/cronfa24643
+_____________________________________________________________
+Conference contribution :
+Borgo, R., Kehrer, J., Chung, D., Laramee, B., Hauser, H., Ward, M. & Chen, M. (2013). Glyph-Based Visualization:
+Foundations, Design Guidelines, Techniques, and Applications. EUROGRAPHICS 2013, State of the Art Reports,
+http://dx.doi.org/10.2312/conf/EG2013/stars/039-063
+_____________________________________________________________
+This article is brought to you by Swansea University. Any person downloading material is agreeing to abide by the
+terms of the repository licence. Authors are personally responsible for adhering to publisher restrictions or conditions.
+When uploading content they are required to comply with their publisher agreement and the SHERPA RoMEO
+database to judge whether or not it is copyright safe to add this version of the paper to this repository.
+http://www.swansea.ac.uk/iss/researchsupport/cronfa-support/
+
+--- PAGE 2 ---
+EUROGRAPHICS 2013/ M. Sbert, L. Szirmay-Kalos STAR – State of The Art Report
+Glyph-based Visualization: Foundations, Design Guidelines,
+Techniques and Applications
+R. Borgo1, J. Kehrer2, D. H. S. Chung1, E. Maguire3, R. S. Laramee1, H. Hauser4, M. Ward5 and M. Chen3
+1 Swansea University, UK; 2 University of Bergen and Vienna University of Technology, Austria; 3 University of Oxford, UK;
+4 University of Bergen, Norway; 5 Worcester Polytechnic Institute, USA
+Abstract
+This state of the art report focuses on glyph-based visualization, a common form of visual design where a data set
+is depicted by a collection of visual objects referred to as glyphs. Its major strength is that patterns of multivariate
+data involving more than two attribute dimensions can often be more readily perceived in the context of a spatial
+relationship, whereas many techniques for spatial data such as direct volume rendering find difficult to depict
+with multivariate or multi-field data, and many techniques for non-spatial data such as parallel coordinates are
+less able to convey spatial relationships encoded in the data. This report fills several major gaps in the literature,
+drawing the link between the fundamental concepts in semiotics and the broad spectrum of glyph-based visualiza-
+tion, reviewing existing design guidelines and implementation techniques, and surveying the use of glyph-based
+visualization in many applications.
+1. Introduction While glyphs are a form of illustrative graphics and visu-
+alization, fundamentally they are dictionary-based encoding
+Glyph-based visualization is a common form of visual de-
+schemes. Historically, many of such schemes (e.g., maritime
+sign where a data set is depicted by a collection of visual
+semaphore and signal flags) have made indispensable contri-
+objects referred to as glyphs. In a narrow interpretation,
+butions around the world. Technically, dictionary-based en-
+(a.1) a glyph is a small independent visual object that de- coding has shown great merits in text compression and im-
+picts attributes of a data record; age compression. In the era of data deluge, one cannot help
+(a.2) glyphs are discretely placed in a display space; and to contemplate the cost-effectiveness of using glyph-based
+(a.3) glyphs are a type of visual sign but differ from other visualization in many applications, and the long-term poten-
+types of signs such as icons, indices and symbols. tial of evolving glyph-based encoding schemes into a com-
+In a broad interpretation, mon visualization language.
+(b.1) a glyph is a small visual object that can be used inde-
+pendently and constructively to depict attributes of a data
+The design of glyphs can make use of many different
+record or the composition of a set of data records;
+visual channels such as shape, colour, texture, size, orien-
+(b.2) each glyph can be placed independently from others,
+tation, aspect ratio or curvature, enabling the depiction of
+while in some cases, glyphs can be spatially connected to
+multi-dimensional data attributes. Meanwhile, glyphs are
+convey the topological relationships between data records
+normally recognisable individually, offering a means of vi-
+or geometric continuity of the underlying data space; and
+sual fusion in multi-field visualization. Similar to most types
+(b.3) glyphs are a type of visual sign that can make use of
+of visual signs, a specific design of a glyph set is funda-
+visual features of other types of signs such as icons, in-
+mentally a visual coding scheme. Like all coding schemes,
+dices and symbols.
+a well-designed glyph-based visualization can facilitate ef-
+In many applications, the spatial location of each glyph is ficient and effective information encoding and visual com-
+pre-determined by the underlying spatial structure encoded munication. As a type of sign, a glyph is a stimulus pattern
+in the data, such as a map in geo-information visualization, that has meanings, which can potentially attract greater at-
+or a volumetric field in diffusion-tensor imaging. In other tention and stimulate more cognitive activity during visual-
+applications, the spatial location represents the result of a vi- ization than other forms of visual design. In dealing with the
+sual mapping from non-spatial information, such as the tem- ever-increasing problem of data deluge, it is a technique that
+poral dimension and semantic grouping of data records. is not to be overlooked.
+(cid:13)c The Eurographics Association 2013.
+
+--- PAGE 3 ---
+R. Borgo et al. / Glyph-based Visualization
+In the literature of visualization, there have been a few 2.1. A brief history of the study of signs
+major surveys related to glyph-based visualization. The sur-
+Signs in terms of indices, icons and symbols (Figure 1) are
+vey by Ward [War08] provides a technical framework for
+all different aspects of a similar unit of knowledge repre-
+glyph-based visualization, covering aspects of visual map-
+sentation, which has been used as a fundamental concept in
+ping and layout methods, as well as addressing important
+trade, commerce and industry from early days to present.
+issues such as bias in mapping and interpretation. Ropinski
+Symbolism has played an important part in the development
+et al. [RP08, ROP11] present an in-depth survey on the use
+of human culture, especially as a form of communication.
+of glyph-based visualization for spatial multivariate medi-
+The Paleolithic Age, around 18,000 BC, has given us hun-
+cal data. Lie et al. [LKH09] describe a general pipeline for
+dreds of examples in the form of cave paintings. The Ne-
+the glyph-based visualization of scientific data in 3D along
+olithic Age instead provides the first forms of pre-writing
+with design guidelines such as the orthogonality of individ-
+symbols used for communication: the Petroglyphs, images
+ual attribute mappings. Because glyphs are commonly used
+incised in rock petra (meaning “stone”) + glyphein (mean-
+in vector field visualization, they have been discussed and
+ing “to carve”) . Tribal societies continue to use this form of
+compared with other forms of visualization in a collection
+of surveys on flow visualization [PVH∗03, LHD∗04, PL09]. symbolic writing even in current times.
+However, there is a need to build on these surveys by taking
+An interesting aspect of petroglyphs is their similar-
+a holistic overview of glyph-based visualization in terms of
+ity across different continents; the commonality of styles
+the fundamental concepts and theories, design guidelines, al-
+strengthens the hypotheses that human conceptual system
+gorithms and techniques and applications. In particular, this
+is symbolic in nature as investigated by Jungian psychol-
+survey is intended to address some noticeable gaps in the
+ogy and early works from Mircea Eliade [EM91]. Psycho-
+literature by:
+physical studies have demonstrated how recurrent geomet-
+• systematically examining the extensively rich collection ric patterns (form constants) in petroglyphs and cave paint-
+of theories in semiotics, perception and cognition; and ings are “hard-wired” into the human brain. Petroglyphs are
+identifying their relevance to glyph-based visualization; ancestors to pictograms (or pictograph) symbolic represen-
+• categorizing the technical methods for glyph-based visu- tations restricted not just to objects but also places, activi-
+alization in the scopes of both narrow and broad interpre- ties and structured concepts. Ideograms (or ideograph) are
+tations, opening up the design space for future technical graphical symbols analogous to pictograms but believed to
+advances; and have appeared later and with the main intent of representing
+• surveying a large collection of applications where glyph- “ideas”; contemporary examples of ideograms can be found
+based visualization has already made an impact. in wayfinding signage as well as technical notations such as
+arabic numerals, mathematical notations or binary systems,
+The survey is organized as follows: Section 2 examines
+which maintain the same meaning despite the difference in
+the studies of signs in philosophy, language studies and psy-
+language and environment. Pictograms and ideograms are at
+chology. We draw fundamental understanding from these
+the base of early written symbols such as cuneiforms and hi-
+studies in order to establish formal definitions of glyphs and
+eroglyphs to sophisticated logographic writing system such
+ways for classifying them. Section 3 surveys formal design
+as the ones developed in Chinese and Eastern cultures. A
+guidelines, mapping techniques and layout algorithms and
+logogram (or logograph) is defined as a “grapheme” the fun-
+rendering methods that have been used in practice. Section 4,
+damental unit of a written language (as opposed to phoneme
+examines a number of application areas where glyph-based
+the fundamental unit of a spoken language). It can represent
+visualization has been deployed. In particular, it describes
+either a single letter or a morpheme, the smallest meaningful
+the benefits brought by glyph-based visualization. Section 5
+unit in the grammar of a language (e.g. a whole word or con-
+summarizes the findings that have emerged during the com-
+cept). The Cuneiform writing system for example, employed
+pilation of this survey and proposes new interesting research
+signs to represent numbers, things, words, and their pho-
+avenues.
+netics. Egyptian hieroglyphs contained a combination of lo-
+gographic, alphabetic, and ideographic elements, consisting
+2. History and Related Concepts mainly of three kinds of glyphs: phonetic glyphs, including
+single-consonant characters that functioned like an alpha-
+The term glyph is originated from Greek word, glyphe¯,
+bet; logographs, representing morphemes, and ideograms,
+meaning carving. Since the 16th century, its uses in En-
+which narrowed down the meaning of a logographic or pho-
+glish have been much associated with etymology, archae-
+netic word. Chinese characters instead are derived directly
+ology, topography and graphonomics. Although its contem-
+from individual pictograms or combinations of pictograms
+porary use in the context of multivariate visualization may
+and phonetic signs and represents logograms used in writing
+seem rather different, they share many interesting attributes,
+Chinese, Japanese and Korean.
+such as being “small”, being “visual”, having “meaning”, re-
+quiring “learning”, and often being “metaphoric”. It is thus Examples of pictograms can be easily found today. Inter-
+interesting to study briefly the related history and concepts. esting examples are the Pub and Inn signs found in Eng-
+(cid:13)c The Eurographics Association 2013.
+
+--- PAGE 4 ---
+R. Borgo et al. / Glyph-based Visualization
+Figure 1: In philosophy, language studies and psychology, signs may take one of the three forms, icon, index and symbol. In
+many contexts, terms such as visual metaphor, ideogram and pictogram are also used to denote subclasses of signs.
+land, Europe and North America. After an edict from King 2.2. Functional Space
+Richard II in 1393 that required all alehouses to post a
+According to Peirce [Pei02]’s theory of signs all modes of
+sign they soon became a method of identifying and pro-
+thinking depend on signs. Signs act as mediators between
+moting themselves to the official ale tasters and the pub-
+the external world of objects and the internal world of ideas.
+lic. These signs still remain a tradition often exposing cre-
+A sign in itself is a stimulus pattern associated with a mean-
+ative and unusual but always metaphoric. The use of sym-
+ing. Depending on how the meaning is associated with the
+bols and signs has traversed human history for generations,
+pattern (or object) a sign can be classified as either an icon,
+due to their cross-cultural expressive power. Signs and sym-
+an index or a symbol. The icon, index and symbol triad rep-
+bols are fundamental means for communication transcend-
+resents the different relationship between the sign and its ob-
+ing cultural boundaries. With the advent of the computer
+ject. Icons (such as pictures, images, models, or diagrams)
+era, icons have become one of the most popular means of
+represent a sign that itself resembles the qualities of the ob-
+conveying messages. In the early 1980s the CHI commu-
+ject it stands for (physical correlation). Indexes are defined
+nity [BSG89, Bly82, Gay89] investigated the use of sounds
+by some sensory feature (such as a clock, thermometer, fuel
+in associations with visual display to create a new type of
+gauge, or medical symptom) and therefore represent a sign
+multisensory signs: the “earcons”. Today the use of icons,
+which demonstrates the influence of its object (space and
+with added sophisticated features such as animations and
+time correlation). Symbols (such as a trophy, medal, receipt,
+sounds, is now pervasive throughout most media platforms.
+diploma, monument, word, phrase, or sentence) represent
+As highlighted by Marcus [Mar03] specialised communities
+a sign which is interpreted as a reference to its object. For
+such as health and medicine, finance and banking, travel and
+this reason, symbols are the only type of sign which do not
+transportation, and education and training, already possess
+require any physical, space or time correlation between the
+widespread and sophisticated proprietary visual sign sys-
+sign and its meaning (metaphysical correlation).
+tems. The power of expression inherent to visual sign sys-
+tems is appealing to media, technology and information vi- Codes provide the framework within which signs assume
+sualization alike. The challenge relies on the development of a meaning. A symbol, for example, is a sign where the func-
+well-designed sign systems. tion is a conventional rule (or coding) and is dependent only
+on a process of interpretation (Figure 2).
+2.2.1. Icons
+The functional domain of icons is comprised of: images,
+metaphors and diagrams. These three items all share topo-
+logical similarity with the object they are related. Images
+share sensory qualities, diagrams share relational and struc-
+tural qualities, while metaphors elicit the representative
+character of an object by building a parallelism with some-
+thing else [JL02]. The typology of signs can be described
+based on the different ways a sign refers to its object [PB55].
+Indices require the existence of the object they are a sign of,
+symbols require an interpreter; while icons require neither
+object nor interpreter. A Euclidean diagram for example, is
+Figure 2: The Pioneer 10 Spacecraft 1972 Plaque. made up of streaks of pencil lead that represent a geometric
+line even though the latter “has no existence” [Pei02].
+(cid:13)c The Eurographics Association 2013.
+
+--- PAGE 5 ---
+R. Borgo et al. / Glyph-based Visualization
+2.2.2. Indices act as vehicles to represent reality (representational codes).
+Examples are:
+The functional domain of indices is comprised of: tracks,
+symptoms and designations [JL02]. The three types of index • scientific codes: including mathematics;
+represent abstractions that rely on a physical cause/effect re- • aesthetic codes: within the various expressive arts (poetry,
+lation which is not necessarily simultaneous with the object drama, painting, sculpture, music) and currents (classi-
+to which they relate to. Despite simultaneously not being a cism, romanticism, realism);
+constraint, an index cannot be a sign without its object (e.g • genre, rhetorical and stylistic codes: narrative (plot, char-
+smoke is a symbol/sign of fire). acter, action, dialogue, setting), exposition, argument and
+so on;
+2.2.3. Symbols
+• mass media codes: photography, television, film, radio,
+The functional domain of symbols is comprised of all ab- newspaper and magazine codes, both technical and con-
+stractions which rely on a code conventionally used in or- ventional (including format).
+der to determine meaning. Examples of symbols are lan-
+guages, mathematical symbols and alphanumeric characters 2.2.4.3. Interpretative Codes. Interpretative codes are
+on a computer keyboard. Symbols as signs need an inter- perhaps the more interesting as they include:
+preter but do not require any space or time correlation with
+the object they are a sign of, therefore a symbol represents • ideological codes: individualism, capitalism, liberalism,
+the only type of sign which: a) can be easily removed from conservatism, feminism, materialism, consumerism and
+its context; and b) is closely associated with large sets of populism;
+other words. • perceptual codes: visual perception.
+Perception forms an integral part of the interpretation pro-
+2.2.4. Codes
+cess. As a semiotic code, perception involves the ability to
+The Pioneer 10 plaque (Figure 2) represents an attempt at decode a message presented in a representational form (e.g.
+communication with alien beings via a “pictorial message” a sign) and as such involves a learning process based on the
+including all three type of signs previously described (e.g. influence of culture and context. In Section 3 we discuss de-
+icons, indices and symbols) and it is an exemplar testimony sign guidelines that can be taken into consideration to aid the
+of the importance of what semioticians call codes. Coding creation of glyphs with attributes making best use of human
+is one of the fundamental concepts in semiotics and repre- perception.
+sents a deterministic functional relation between two sets of
+A code is a system of syntactic, semantic and behavioural
+entities, namely: a signifier and a signified. Reading an im-
+elements which must respond to three basic principles: co-
+age, like the reception of any other message, is dependent
+herence, homogeneity, and systematicity. In a communica-
+on prior knowledge of possibilities (signifier); we can only
+tional framework a code is significant if given a message,
+recognise what we know (signified). It is this information
+heterogeneous in nature, it assumes its specificity when
+alone that enables us to separate the code from the message.
+transmitted through the code. In the context of visual rep-
+Related to sign, it is possible to distinguish between three
+resentation the importance of proper coding is therefore
+main kind of codes [Cha02]: social codes, textual codes and
+self-explicative. Eco [Eco79] distinguishes between “signi-
+interpretative codes.
+fication” and “communication”. Signification is seen as the
+2.2.4.1. Social Codes. All semiotic codes can be broadly semiotic event whereby a sign “stands for” something; com-
+classified as social codes, however within our classification munication instead is seen as the transmission of information
+we refer to social code in their narrow sense concerning im- from a source to a destination. In this context codes estab-
+plicit or explicit social agreements and behaviours as in: lish rules for systems of signification and communication is
+made possible by the existence of a code, or by a system
+• verbal language: phonological, syntactical, lexical,
+of signification. Without a code or a system of signification,
+prosodic and paralinguistic subcodes;
+there is no set of rules to determine how the expression of
+• bodily codes: bodily contact, proximity, physical orienta-
+signs is to be correlated with their content.
+tion, appearance, facial expression, gaze, head nods, ges-
+tures and posture;
+• commodity codes: fashion, clothing and cars; 2.3. Theoretic Frameworks
+• behavioural codes: protocols, rituals, role-playing and
+games. Whilst semiotics is often encountered in the form of tex-
+tual analysis, it also involves studying representations and
+2.2.4.2. Textual Codes. Next to social codes and inter- the “reality” always involves representation. Semiosis was
+pretative codes, textual codes represent one of the ma- first proposed as a term by Charles Sanders Peirce and sub-
+jour groups of codes. According to Chandler’s classifica- sequently expanded by Eco [Eco79] to designate the process
+tion [Cha02], textual codes relate to our knowledge and often by which a culture produces signs and/or attributes specific
+(cid:13)c The Eurographics Association 2013.
+
+--- PAGE 6 ---
+R. Borgo et al. / Glyph-based Visualization
+Figure 3: The Dyadic Model of the Sign Notion of Ferdinand
+de Saussure [SBSR83].
+Figure 5: Visual Variables [Mac04].
+capture the systematic structure of a sign. In Semiotic Alge-
+bra a sign is always divisible into subparts called sorts (e.g.,
+colour, location, size). Sorts may have a hierarchical struc-
+ture with relationship such as inheritance or partial ordering
+Figure 4: The Structure of the Sign Notion (Triadic Model)
+between subsorts. Signs can be composed into more com-
+of Charles Sander Peirce [PB55].
+plex signs through constructor rules, functions that build new
+signs from other signs of given sorts plus additional param-
+eters. Constructors express the whole/part relationship at the
+meanings to signs. In modern semiotics there are two prin- base of complex signs. Some sign constructors can be more
+cipal models of signs, the dyadic model due to Ferdinand important than others which gives rise to a priority partial
+de Saussure [SBSR83], and the triadic model due to Charles ordering on the constructors of a given sort, for example: the
+Peirce [PB55]. pollutants in a lake may be prioritised by their toxicity, to aid
+in the design of an appropriate visualization. The complexity
+2.3.1. Semiotic Models: Diadic and Triadic of a sign is measured in term of a hierarchy of levels, with
+atomic signs at the lowest levels and complex sign built from
+In the Dyadic Model (Figure 3) introduced by Ferdinand de
+signs at lower or same levels.
+Saussure [SBSR83] a sign is composed of the signifier (the
+sound pattern of a word, either in mental projection - as when
+2.3.3. Semiotic Systems: Grammar
+we silently recite lines from a poem to ourselves - or in ac-
+tual, physical realization as part of a speech act), and the Bertin [Ber83] proposed the first and probably unique at-
+signified (the concept or meaning of the word). tempt at developing a syntax of visual signs based on formal
+rules. Bertin identified six visual primitives, or fundamental
+With its Triadic Model (Figure 4), Peirce [PB55] viewed
+visual variables, which are at the basis of the construction
+the symbol/index/icon triad as “the most fundamental di-
+of any graphics sign: size, colour hue, colour value, grain,
+vision of signs”, and the majority of semioticians continue
+orientation, and shape. Bertin rated each visual variable in
+to agree [Joh88]. Peirce thus defines “semiosis” as the pro-
+function of the signified dataset, giving a rating of appro-
+cess by which representations of objects function as signs.
+priate or inappropriate to each visual variable for numeri-
+Semiosis is a process of cooperation between signs, their ob-
+cal, ordinal, and categorical data. This laid down the gram-
+jects, and their “interpretants” (i.e. their mental representa-
+matical rules of a syntax to guide the choice of appropri-
+tions). “Semiotic” (i.e. the science of signs) is the study of
+ate forms of graphical representation. MacEachren [Mac04]
+semiosis and is an inquiry into the conditions which are nec-
+proposed adding three extra variables based on advances in
+essary in order for representations of objects to function as
+graphics technology (Figure 5): clarity (fuzziness) of sign
+signs.
+vehicle components, resolution (of boundaries and images),
+and transparency. He also provides a three-step rating for the
+2.3.2. Semiotic Systems: Algebra
+full set of visual variables of good, marginal, and poor for
+According to Saussure [SBSR83] signs are always part of use with numerical, ordinal, and categorical data. Mackin-
+a formal system with a specific structure and relations. In lay [Mac86] demonstrated the usefulness of such syntax of
+its Semiotic Algebra Goguen [Gog03] devises a system to visual variables with his early implementation of an expert
+(cid:13)c The Eurographics Association 2013.
+
+--- PAGE 7 ---
+R. Borgo et al. / Glyph-based Visualization
+system for automating the design of graphical representa-
+tions.
+3. Design Criteria and Guidelines
+Glyphs represent different data variables by a set of visual (a) Proximity (b) Similarity
+channels including shape, size, colour, orientation, etc. It
+was a wide-spread opinion in the related research commu-
+nity for a long time that “just” knowing these basic principles
+of glyph-based visualization would suffice to its successful
+usage. More recently, however, it has been understood that
+only well designed glyphs are actually useful. Visual chan-
+(c) Continuity (d) Closure
+nels such as colour [Chr75] or size [LMvW10] are more
+dominant and can help to focus the user’s attention. Other
+channels such as position, length, angle or slope can be
+measured and compared more accurately [CM84a, HBE96].
+An effective glyph visualization should, therefore, carefully
+choose and combine different visual channels. In this sec-
+tion, we discuss critical design aspects and guidelines for
+glyph-based visualization. (e) Symmetry
+3.1. Design Space
+As stated by Pettersson [Pet10] the main goal in information
+design is clarity of communication; in order to fulfill this
+goal, all messages must be accurately designed, produced
+(f) Background/Foreground (g) Prägnanz
+and distributed, and later correctly interpreted and under-
+stood by members of the intended audience. Several prin- Figure 6: Gestalt Principles of Perceptual Organisation.
+ciples to assist this design process have been proposed in
+the literature some empirical in nature others more formally
+perceived as symmetrical shapes that form around their cen-
+defined.
+ter. In Figure 6e (i) the perceived picture is usually three sets
+of opening and closing brackets while in Figure 6e (ii) the
+3.1.1. Perceptual Codes
+dominant picture would be two overlapping diamonds. In
+Gestalt psychologists outlined several fundamental and uni- the first case symmetrical balance is stronger than proxim-
+versal principles (or laws) of perceptual organisation which ity while in the second case symmetrical regions tend to be
+are assumed as a basis of a perceptual code (Figure 6): prox- seen as the dominant figures.
+imity, similarity, continuity, closure, figure/ground, area,
+The figure/ground principle (Figure 6f) states that ele-
+symmetry and prägnanz.
+ments are perceived as either figure (element of focus) or
+The proximity principle (Figure 6a) states that objects that ground (background or surrounding area). In this principle
+are closer to one another are perceived to be more related several factors play an important role: surroundedness, size
+than those that are spaced farther apart. The proximity rela- (or area), symmetry, parallelism, and extremal edges. Each
+tion has been proved to be stronger than colour similarity. of these five properties can determine which parts of a figure
+are classified as figure or as background.
+The similarity principle (Figure 6b) states that objects that
+are similar are perceived to be more related than those that The prägnanz principle (Figure 6g) states that confronted
+are dissimilar. with an ambiguous or complex representation the simplest
+and most stable interpretation is always favoured.
+The continuity principle (Figure 6c) states that elements
+that are arranged on a line or curve are perceived to be more
+3.1.2. Visual Channels
+related than elements not on the line or curve. Continuation
+is stronger than similarity of colour. A visual channel is a collection of primitive visual repre-
+sentations that are used to convey different values of a vari-
+The closure principle (Figure 6d) states that elements in
+able. Other terms were introduced in the literature. For ex-
+a complex arrangement tend to be grouped into a single,
+ample, Bertin called them retinal variables, Ware referred
+recognisable pattern.
+to them as visual encoding variables as well as visual chan-
+The symmetry principle (Figure 6e) states that objects are nels. Cleveland and McGill proposed a ranking of several
+(cid:13)c The Eurographics Association 2013.
+
+--- PAGE 8 ---
+R. Borgo et al. / Glyph-based Visualization
+Geometric Channels Optical Channels Topological and Rela- Semantic Channels
+tional Channels
+• size / length / width / • intensity / brightness • spatial location • number
+depth / area / volume • colour / hue / satura- • connection • text
+• orientation / slope tion • node / internal node / • symbol / ideogram
+• angle • opacity / trans- terminator • sign / icon / logo /
+• shape parency • intersection / overlap glyph / pictogram
+• curvature • texture (partly geo- • depth ordering / par- • isotype
+• smoothness metric) tial occlusion
+• line styles (partly ge- • closure / contain-
+ometric) ment
+• focus / blur / fading • distance / density
+• shading and lighting
+effects
+• shadow
+• depth (implicit / ex-
+plicit cues)
+• implicit motion / mo-
+tion blur
+• explicit motion / ani-
+mation / flicker
+Table 1: Visual Channels [CF12].
+visual channels (i.e., position, length, angle, slope, area, proposed and empirically validated in the context of visual
+volume, colour and density) [CM84b]. Mackinlay extended metaphors used in interface design. The criteria proposed are
+this exercise to some 13 visual channels [Mac86]. In ad- referred to with the acronym of CARSE: contextual suit-
+dition, perceptual studies have been carried out to eval- ability, applicability of structure, representability/imagery,
+uate the effectiveness of some basic visual channels, re- salience imbalance, prominence and emotional tone.
+sulting in a common consensus about pop-out effects of
+Context suitability, or relevance, indicates the extent to
+some of them : colour ≺ size ≺ shape ≺ orientation (e.g.,
+which the metaphorical sign resembles the source domain
+[Wil67, QH87, ROP11]). The symbol ≺ reads as precedes.
+with respect to the context of use.
+However, the strength of colour over the other three chan-
+nels is generally much more noticeable. Applicability of structure indicates the extent to which the
+proposed metaphorical sign is relevant to the new and unfa-
+Recently Chen and Floridi organised over 30 visual chan-
+miliar concept that is being explained. The criteria can be
+nels into a simple taxonomy consisting of four categories,
+regarded as the correspondence between the source and the
+namely geometric, optical, topological and semantic chan-
+target domain, in [TS82] is referred to as “Within-Domain
+nels [CF12].
+Distance” while Lakoff [Lak95] calls it the “Invariance Prin-
+Combining these into a common table, we have a rich col- ciple”.
+lection of visual channels (Table 1).
+Representability/imagery indicates the ease with which
+Most of these visual channels can be of potential use in the visual metaphor can be represented.
+glyph design, though only a small number of channels have
+Salience imbalance refers to Ortony’s [Ort93] statement
+been used in the literature. This suggests that the design
+that good metaphors are the ones in which the source (vehi-
+space for glyphs is far from being fully explored.
+cle) domain contains elements or traits, which are highly ex-
+plicit/prominent; at the same time these traits are very subtle
+3.1.3. Design Criteria in the target (topic) domain. The visual representation should
+convey these salient source traits to the receiver.
+According to Eco [Eco79], a general semiotic theory should
+include not only a theory of how codes may establish rules Emotional tone indicates the importance of emotions trig-
+for systems of signification but a theory of how signs may be gered by the metaphor as one indicator of the semantic effi-
+produced and interpreted to clarify aspects of communica- cacy of the function that is presented metaphorically. In a re-
+tions. In the work of Yousef [You01] five criteria have been cent study, Maguire et al. proposed a set of guidelines based
+(cid:13)c The Eurographics Association 2013.
+
+--- PAGE 9 ---
+R. Borgo et al. / Glyph-based Visualization
+on the literature of psychology and Bertin’s categorisation of In addition, Maguire et al. also suggested the impor-
+semantic relevance [MRSS∗12]. These guidelines are: tance of establishing a metaphoric association between
+a visual channel and the concept or concepts to be en-
+coded [MRSS∗12]. Metaphoric visual representations en-
+• Guideline on Semantic Relevance. Bertin [Ber83] clas-
+able domain-specific encoding using “natural mapping”
+sified visual channels (which he referred to as retinal vari-
+[Sii02, Nor02]. This natural mapping can make it easier for
+ables) into two categories, planar (location) and retinal
+users to infer meaning from the glyph with less effort re-
+(size, colour, shape, orientation, texture and brightness).
+quired to learn and remember them [MdBC00]. A recent
+Bertin proposed four semantic criteria for determining
+study showed that visual metaphors can aid memorization
+the suitability of different channels in representing cer-
+of the information depicted in a visualization [BARM∗12].
+tain types of information. These semantic criteria are: as-
+However, the same study also showed that visually realistic
+sociative, selective, ordered and quantitative. Since then,
+metaphors (those with a lot of detail) may have a negative
+research has also improved Bertin’s analysis. For exam-
+impact on performance in visual search. Moreover, realis-
+ple, it was shown that practice and familiarity can support
+tic visual metaphors require a higher pixel resolution, and
+selectivity with almost any shape [TG88,WCG94,Gre98].
+would lose their discriminating capacity in low resolution
+• Guideline on Channel Composition. As a glyph is likely
+visualizations.
+to feature a number of visual channels, the constructive
+composition may affect how individual channels are per- A glyph is composed by a set of visual channels, each of
+ceived. A rich collection of literature on integral and sep- which encodes a variable of a multivariate data record. Nat-
+arable dimensions shows that the combined dissimilarity urally the first criterion is that the visual channel should ide-
+of closely integrated visual channels exhibits Euclidean ally be able to encode many valid values of that variable, or
+(cid:113)
+distance da 2 + d
+b
+2 [KT75, HI72], whereas that of sepa- collectively, different visual channels of the glyph could en-
+code many data records with different combinations of data
+rable visual channels exhibits city-block distance da + d
+b
+values. However, this is not the only criterion, and in many
+[BSMWE78,She64]. The latter is more cost-effective than
+cases, it may not even be the most important criterion. If
+the former in rule-based encoding of multi-faceted con-
+the goal is to encode as many values as possible, one may
+cepts, therefore effective glyph design should encompass
+be better off reading these values in text directly. Chung et
+a non-conflicting set of separable retinal variables.
+al. [CLP∗13] proposed eight criteria for glyph design in the
+• Guideline on Pop-out Effects. Many classic studies in
+context of sorting glyphs visually (Figure 7). These are:
+perception also established the “power” of different visual
+channels in terms of pop-out effect (pre-attentive search), a Typedness – This criterion refers to whether or not each
+and fixation (during attentive search) [HE11]. The pop- visual channel in a glyph is appropriately selected to
+out effect is one which allows identification of a target match with the data type of the variable to be encoded.
+within a few nanoseconds of initial exposure to the vi- Such data types may include, but not limited to: nominal,
+sual search space. A result of several milestone studies ordinal, interval, ratio, and directional.
+focusing on observed response times it shows the order- b Visual Orderability – When a variable to be encoded is or-
+ing of the four commonly used visual channels to fol- derable, the corresponding visual channel should ideally
+low the consensus: colour ≺ size ≺ shape ≺ orientation be orderable visually (e.g., size, greyscale intensity, but
+(e.g., [Wil67,QH87,ROP11]). The symbol ≺ reads as pre- not an arbitrary set of shapes).
+cedes. However, the strength of colour over the other three c Channel Capacity – This refers to the number of values
+channels is generally much more noticeable. that may be encoded by a visual channel. Such a number is
+• Guideline on Visual Hierarchy. Visual hierarchy, with often affected by the size of a glyph and many perceptual
+which the environment and objects around us are arranged factors (e.g., just-noticeable-difference, interference from
+is a well documented theoretical framework [Pal77, nearby visual objects).
+Nav77, LRW99, KW79, Bar04]. However, the literature d Separability – When two or more visual channels are in-
+debates over the ways in which the visual system traverses tegrated into a compound channel, such as combining in-
+this hierarchy. There are four possible ways: top-down tensity, hue and saturation into a colour channel, the in-
+(also called global processing) [Nav77]; bottom-up (also terference between different primitive channels should be
+called local processing); middle-out [KW79]; and salient minimised.
+features (e.g., edges, points, colours) [Rum70]. Because e Searchability – This refers to the levels of ease when one
+glyphs are relatively small in comparison with an entire needs to identify a specific visual channel within a glyph
+visualization, top-down and salient feature detection play for a specific variable.
+significant roles in selecting a glyph or glyphs of interest. f Learnability – This is often an important criterion in many
+The top-down assumption suggests that when considering applications. Ideally, a glyph design should be easy to
+a glyph in isolation, its global features will affect visual learn, and easy to remember. There are many factors that
+search more than its local features. Salient features are may affect a visual design in this context, for instance,
+partly addressed by pop-out effects. whether there are well-defined constructive rules, whether
+(cid:13)c The Eurographics Association 2013.
+
+--- PAGE 10 ---
+R. Borgo et al. / Glyph-based Visualization
+Figure 7: Glyph design criteria [CLP∗13].
+there are memorable metaphors, whether it is easy to integral-separable dimension pairs, natural mappings and
+guess, and so on. perceptual efficient encoding. Integral-separable dimension
+g Attention Balance – Different visual channels in a glyph pairs focus on the readability of multi-attribute glyphs and
+will receive different levels of attention. Ideally, the levels multi-glyphs displays, Karve and Gleicher [KG07] argue
+of attention should correspond to the levels of importance that individual glyphs should combine as many separable vi-
+of the variables. However, this is easier said than done as sual attributes as possible and multi-glyph displays should be
+the relative importance of a variable is often undefined or dense, juxtaposing related items, and employing repetitive
+may vary from tasks to tasks. design motifs that support inter-glyph comparison. Natural
+h Focus and Context – This refers to the need to identify an mappings (e.g. use of metaphoric representations) focuses
+individual visual channel under a certain interactive oper- on the natural relationship between data and glyph features;
+ation. For example, when a user select a certain variable a clear relationship between visual and data attributes en-
+as a sort key, it is desirable to highlight the corresponding hances glyph usability. Perceptual efficiency of the encoding
+visual channel so it stands out from other channels. focuses on the encoding of a continuous variable; horizontal
+bars on a shared positional scale are found to be the most ac-
+This is not an exhaustive list, and there are other design
+curate method followed in decreasing order of accuracy by
+criteria, such as aesthetic appearance that also play an im-
+interval length, slope, area, volume, and colour.
+portant role.
+3.1.4.1. Measurements and Norms If symbol design is
+3.1.4. Design Processes to progress, we need to know more about why some sym-
+bols are easier to use than others. A major obstacle facing
+Petterson [Pet10] introduces four categories of principles
+researchers attempting to answer this question has been the
+supporting the visual representation design process:
+difficulties in quantifying symbol characteristics so that they
+• Functional Principles: focus, structure, clarity, simplicity, can be experimentally controlled. A good way of controlling
+emphasis and unity; symbol characteristics experimentally is to obtain subjective
+• Administrative Principles: accessibility, cost, ethics and ratings of each characteristic.
+quality;
+Although there has been a long tradition in psycholin-
+• Aesthetic Principles: harmony and aesthetic proportion;
+guistic research of using normative ratings to control item
+• Cognitive Principles: facilitating attention, facilitating
+characteristics for words and pictures, no normative rat-
+perception, facilitating mental processing and facilitating
+ings for symbols have yet been produced. McDougall et
+memory.
+al. [MCdB99, MdBC00] address the problem by providing
+For each category Petterson provides detailed guidelines on normative ratings for five symbol characteristics considered
+how to achieve the target result with the appropriate use of determinant in the development of easy to use and under-
+text, picture, layout and colour. stand symbols: concreteness, visual complexity, meaningful-
+ness, familiarity, semantic distance.
+Given the abundance of multivariate data, perceptual and
+cognitive efficiency is at the core of glyph-based visual- McDougall et al. highlights and investigates several inter-
+ization. Karve and Gleicher [KG07] identify three consid- esting correlations between these five criteria. Concreteness,
+erations for the design of complex and compound glyphs: for example, (as opposed to abstraction) is somehow in op-
+(cid:13)c The Eurographics Association 2013.
+
+--- PAGE 11 ---
+R. Borgo et al. / Glyph-based Visualization
+position to visual complexity; concrete symbols tend to be
+more visually obvious because they depict objects, places,
+and people that are already familiar. In contrast, abstract
+symbols represent information using graphic features such
+as shapes, arrows and so on. One of the reasons why concrete
+symbols are more visually obvious may simply be because
+the extra detail provided in concrete symbols makes them
+easier to comprehend. In contrast, however, design guide-
+lines typically suggest that the design of symbols or icons visual channels
+should be kept as simple as possible. Other researchers have (b) glyph mapping / instantiation
+focused on the fact that concrete symbols are more meaning-
+ful than abstract symbols.
+Semantic, or articulatory, distance is a measure of the
+closeness of the relationship between the symbol and what
+it is intended to represent. A number of classification sys-
+tems have been developed in order to attempt to characterise
+the different relationships between symbols and their func-
+tions [Pei02].
+Familiarity reflects the frequency with which symbols are
+encountered. This property is thought to be an important de-
+terminant of usability. It is evident that user performance
+improves dramatically as a result of learning symbols and
+signs. The effects of some symbol characteristics on perfor-
+mance, such as colour and concreteness, diminish as sym-
+bols become more familiar but others, such as complexity,
+do not.
+In [MdBC00, NC08] the relationship between: concrete-
+ness/visual complexity, concreteness/meaningfulness and
+meaningfulness/familiarity/semantic distance were exam-
+ined in detail using subjective rating methods. For each char-
+acteristic subjects had to choose bipolar adjectives based on
+a five-point scale to indicate their perception of an icon. Ng
+et al. [NC08] propose a review of the relationships among
+the same five characteristics together with a description of
+three types of measures used in literature to quantify such
+relationships:
+• subjective rating (as in [MdBC00]);
+• icon-based metric: the measure is obtained summing up
+the components of an icon, such as letters, lines, arrows
+and so on;
+• automated visual measurement: the measure is a function
+of icon features extracted via image analysis techniques
+such as edge-detection, perimeter determination, decom-
+position and so on.
+Other symbol characteristics present in literature are dis-
+criminability, distinctiveness and configurality, however to
+provide a normative rating is a much harder task since such
+characteristics can only be defined (and quantified) in re-
+lation to the other symbols included in the display as a
+whole [MdBC00].
+selbairav
+1 1
+0 0
+0 1
+(a) data mapping
+(c) rendering
+’tuptuo
+1
+0
+variable output’ 1 i
+”tuptuo
+output”
+tuptuo
+γ < 1
+w left w right γ > 1
+min max 0
+(i) windowing (ii) exponentiation (iii) mapping
+Figure 8: A pipeline for creating glyphs [LKH09]: (a) Each
+data variable is subject to three stages of data mapping: win-
+dowing, exponentiation and mapping. (b) The data variables
+are mapped to the different visual channels of a glyph (e.g.,
+upper/lower shape, size, and rotation) and used to instantiate
+the individual glyphs. (c) Finally, the glyphs are rendered in
+their spatial context.
+3.2. General Design Considerations and Guidelines
+3.3. Design and Usage Guidelines for Glyphs
+A number of design guidelines (marked with DGx in the
+following) for glyph-based visualization have been pro-
+posed [War02, War08, RP08, LKH09, ROP11, MRSS∗12],
+and we review them in the following. Ward [War02] sur-
+veys glyph-based representations for information visualiza-
+tion and presents a taxonomy for glyph placement. Ropin-
+ski et al. [RP08, ROP11] propose a perception-based glyph
+taxonomy for medical visualization. Glyph-based visualiza-
+tions are categorised according to:
+• pre-attentive visual stimuli such as glyph shape, colour
+and placement, and
+• attentive visual processing, which is mainly related to the
+interactive exploration phase (e.g., changing the position
+or parameter mapping of a glyph).
+In the context of medical visualization, the authors propose
+usage guidelines for glyphs, which are addressed later on.
+Inspired by the work of Ropinski and Preim [RP08],
+Lie et al. [LKH09] propose further guidelines for glyph-
+based 3D data visualization. Aligned with the visualization
+pipeline [HS09], the task of creating a glyph-based 3D visu-
+alization is divided into three stages as shown in Figure 8:
+• during data mapping, the data attributes of a record are
+remapped (to achieve, for example, some contrast en-
+hancement) and mapped to the different visual channels
+of a glyph;
+(cid:13)c The Eurographics Association 2013.
+
+--- PAGE 12 ---
+R. Borgo et al. / Glyph-based Visualization
+Figure 9: Small simple glyphs vs. large and complex glyphs: (a) Stick figures form textural patterns [PG88]. (b) Dense
+glyph packing for diffusion tensor data [KW06]. (c) Helix glyphs on maps for analyzing cyclic temporal patterns for two
+diseases [TSWS05]. (d) The local flow probe can simultaneously depict a multitude of different variables [dLvW93].
+• glyph mapping (or glyph instantiation) creates the indi- not placed in a dense way, the space between them can be
+vidual glyphs, properly arranged across the domain; and used for additional information. Treinish [Tre99], for exam-
+• during rendering, the glyphs are placed in the resulting ple, visualizes multivariate weather data using colour con-
+image, where one has to cope with issues such as visual touring on vertical slices and isosurfaces that represent cloud
+cluttering or occlusion. boundaries. At user-defined locations (vertical profiles), the
+wind velocity and direction are represented by a set of arrow
+For each of these steps, the following sections discuss criti-
+glyphs. Streamlines following the wind direction are seeded
+cal design aspects and guidelines for glyph-based visualiza-
+at each arrow. Kirby et al. [KML99] use concepts from paint-
+tion.
+ing for visualizing 2D flow. They combine different image
+Table 2 illustrates different papers which are consistent layers with glyphs, elongated ellipses, and colour.
+with the design guidelines presented here. The papers are
+also categorised according to the utilised visual channels, di-
+mensionality of the visualization space, and density of glyph 3.4. Data Mapping
+placement.
+Each dimension or variable of a data set will map to a spe-
+[DG1] Task-based choice of visualization space. Glyph- cific graphical attribute. By modifying the order of dimen-
+based visualization approaches vary with respect to whether sions while preserving the type of mapping, as many as N!
+they are constructed in a 2D or 3D visualization space. In alternate "views" of the data can be generated. An impor-
+case of abstract data such as census or financial data, this tant issue in using glyphs is to ascertain which ordering(s)
+decision is often dependent on the task at hand. However, will be most supportive of the task at hand. Several possibil-
+certain scenarios with 3D volumetric or flow data inherently ities exist, beyond random ordering or the order in which the
+require a 3D visualization. We think that it also makes sense variables were originally stored [War08]:
+to consider glyph-based visualizations, which are based on
+the placement of glyphs on 3D surfaces [RSMS∗07] (called • Correlation-driven. Many researchers have proposed us-
+2.5D in the following). ing correlation and other similarity measures to order
+dimensions for improved visualization [Ber83, ABK98,
+[DG2] Task-based compromise between complexity
+FK03,BS92]. These orderings help reveal clusters of sim-
+and density. Glyph-based visualization approaches span a
+ilar variables, outlier records, and gradual shifts in rela-
+certain spectrum from dense arrangements of relatively sim-
+tionships between variables.
+ple shapes such as stick figures [PG88] (Figure 9a) to indi-
+• Complexity and Symmetry-driven. Gestalt principles
+vidual instances of complex glyphs that reveal a lot of infor-
+indicate we have a preference for simple shapes, and
+mation (but only for few, selected places, Figures 9c and d).
+we are good at seeing and remembering symmetry.
+Additionally, we can differentiate visualization solutions ac-
+In [PWR04] the shapes of star glyphs resulting from us-
+cording to which visual channels are varied according to the
+ing different dimension orders were evaluated for two
+data, and how many different values a glyph eventually rep-
+attributes: monotonicity (the direction of change is con-
+resents. Usually this number is not too large, often 2 to 4, but
+stant) and symmetry (similar ray lengths on opposite sides
+then also examples exist where dozens of values are repre-
+of the glyph). The ordering that maximised the number of
+sented (e.g., the local flow probe [dLvW93] in Figure 9d).
+simple and symmetric shapes was chosen as the best. User
+[DG3] Hybrid visualizations. Ropinski et al. [RP08] studies showed improved performance with complexity
+suggest combining glyphs with other visualization tech- and symmetry optimised orderings.
+niques such as isosurfaces or volume rendering, which pro- • Data-driven. Another option is to base the order of the
+vide spatial context [RSMS∗07, CM93]. When glyphs are dimensions on the values of a single record (base), using
+(cid:13)c The Eurographics Association 2013.
+
+--- PAGE 13 ---
+R. Borgo et al. / Glyph-based Visualization
+Figure 10: The figure shows monetary exchange rates over 3 Figure 11: In this figure, the dimensions are sorted based on
+years using random ordering. the first record. Gradual changes and anomalies are much
+easier to perceive.
+an ascending or descending sort of the values to specify
+Another option would be a ranking-based mapping where
+the global dimension order. This can allow users to see
+the data is sorted first and each discrete value (or bin) is
+similarities and differences between the base record and
+then shown differently, for example, using different shapes
+all other records. For example, sorting the exchange rates
+such as a triangle, circle, or star [STH02]. After the window-
+of 10 countries with the U.S. by their relative values in the
+ing, the contrast of a data variable can be further enhanced
+first year of the time series exposes a number of interest-
+using an optional exponential mapping e(x) = xγ. Using a
+ing trends, anomalies, and periods of relative stability and
+value γ ∈]0, 1[, smaller values are represented more promi-
+instability (Figures 10 and 11).
+nently (see the dashed red curve in Figure 8a (ii)). In con-
+• User-driven. As a final strategy, we can allow users to
+trast, larger values are emphasised with γ > 1. Since an ex-
+apply knowledge of the data set to order and group di-
+ponential mapping can be hard to interpret, it should not be
+mensions by many aspects, including derivative relations,
+used as a default mapping. It can rather be applied when the
+semantic similarity, and importance. Derivative relations
+user is interactively exploring the visualization, for instance,
+mean that the user is aware that one or more dimensions
+by modifying the parameter mappings to focus of different
+may simply be derived through combinations of other di-
+portions of the data. Finally, a third mapping step enables the
+mensions. Semantic similarity indicates dimensions that
+user to restrict or transform the output range that should be
+have related meanings within the domain.
+depicted by a visual channel. Using a reverted mapping, for
+Finally, some dimensions are likely to have more importance instance, smaller values, which are possibly more important
+than others for a given task, and thus ordering or assign- to the user, are depicted in an enhanced style while larger
+ing such dimensions to more visually prominent features of values are de-emphasised. Consequently, also semantics of
+the glyph will likely have a positive impact on task perfor- the data variables can be considered, which is an important
+mance. In order to optimally represent a data variable us- guideline when mapping a data variable to a visual channel
+ing a visual channel of the glyph, the corresponding data of a glyph [War02, ROP11].
+range should be normalised, for instance, to the unit inter-
+val [ROP11, War02, LKH09]. The remapped data attributes
+3.5. Glyph Mapping / Instantiation
+parameterize the visual appearance of a glyph. Ropinski et
+al. [RSMS∗07], for example, use an interface similar to a During glyph mapping the individual glyphs are created by
+transfer function editor for mapping a data attribute to a vi- representing the data variables with different visual channels
+sual channel of the glyph. of a glyph. During this step, the glyphs are also properly ar-
+ranged across the domain. In the following, we discuss gen-
+Lie et al. [LKH09] propose three consecutive steps for
+eral design guidelines during this mapping stage as well as
+the data mapping stage. First, the data values within a user-
+guidelines related to glyph shape and appearance.
+selected data range [w , w ] are mapped to the unit in-
+left right
+terval (Figure 8a (i)). Values outside this range are clamped [DG4] Perceptually uniform glyph properties. When
+to 0 or 1, respectively. Consequently, the contrast of the visu- mapping a data variable to a glyph property, equal distances
+alization can be enhanced with respect to a range of interest in data space should be perceived equally as well. This is an
+(sometimes called windowing). A linear mapping would be important guideline for glyph design, and it was originally
+a natural choice for this step, but also other forms of map- developed for colour maps [RTB96]. The box plot [MTL78],
+ping could be considered, such as a discontinuous mapping. for example, uses position and height of the box / whiskers
+(cid:13)c The Eurographics Association 2013.
+
+--- PAGE 14 ---
+R. Borgo et al. / Glyph-based Visualization
+Table 2: Categorisation of glyph-based approaches according to design guidelines, visualization space and visual channels. In
+DG2, the approaches span a spectrum from individual instances of complex glyphs (-3) to dense arrangements of relatively
+simple shapes (+3).
+to encode minimum and maximum value, median, and other mapping a data variable to multiple glyph channels. Such
+quartile information of a data distribution. A negative exam- a mapping can reduce the risk of information loss by en-
+ple in this context would be mapping a data variable to the coding important variables multiple times, which is also
+radius of a circle. The circle’s area then increases quadrat- an important guideline for glyph design [LKH09,ROP11].
+ically with respect to the radius (instead of linearly). Li et • a many-to-one mapping represents multiple data variables
+al. [LMvW10] study the perception of symbol size, which by the same kind of visual channel, for example, the
+is assumed to be the second dominant visual channel (after height of bars in a histogram or profile glyph. Such a map-
+colour [Chr75]). Their experiments suggest that the percep- ping is useful when comparing the different data variables
+tion of size can be best represented by a power law transfor- for a data element [War08].
+mation. Another negative example would be the usage of a
+rainbow colour map, which is not perceptually uniform and [DG6] Importance-based mapping. According to
+does not have a perceptual ordering [BT07]. Ropinski et al. [ROP11], important variables should be en-
+hanced in the visualization, for instance, by using a redun-
+[DG5] Redundant mapping of variables. According to
+dant mapping (compare to the previous guideline). More-
+Ward [War08], there are three different mappings:
+over, the mapping should guide the user’s focus of attention,
+• a one-to-one mapping assigns each data variable to a dif- e.g., using more prominent visual stimuli such as colour, size
+ferent visual channel of the glyph; or opacity to encode relevance. Ropinski et al. [RSMS∗07],
+• a one-to-many mapping makes use of redundancies by for example, use surface glyphs to show data from positron
+(cid:13)c The Eurographics Association 2013.
+
+--- PAGE 15 ---
+R. Borgo et al. / Glyph-based Visualization
+emission tomography (PET). An inverse mapping is used, In the following, additional guidelines for shape design
+which maps low PET activity to thick and high PET ac- are discussed in relation to other visual properties.
+tivity to thin glyphs. Consequently, interesting regions with
+reduced activity are shown in an enhanced style. Maguire 3.5.2. Other Visual Properties / Glyph Appearance
+et al propose an algorithmic approach to importance-based Pre-attentive visual stimuli such as position, width, size, ori-
+mappings [MRSS∗12]. Their algorithm builds a taxonomy entation, curvature, colour (hue), or intensity are a powerful
+(a hierarchical classification) from a list of qualitative terms way to represent data [CM84a, HBE96]. These visual chan-
+grouped into classification schemes. The higher up some nels are rapidly processed by our low-level visual system
+classification scheme is in the taxonomy (determined algo- and can thus be used for the effective visualization of large
+rithmically and based on term use for instance), the stronger data. Special care is required, however, if several such stim-
+the visual channel to represent that scheme will be. uli are combined—the result may not be pre-attentive any
+more. Healey and Enns [HE99] propose simple texture pat-
+terns and colour to visualize multivariate data. Different data
+3.5.1. Shape Design variables are encoded in the individual elements of a percep-
+tual texture using equally distinguishable colours and texture
+One of the most prominent visual channels of a glyph is
+dimensions such as element density, regularity and height.
+its shape. Ropinski et al. [ROP11] distinguish between ba-
+Groups of neighboring elements form texture patterns that
+sic glyph shapes such as variants of superquadrics [Bar81]
+can be analysed visually.
+(sphere, torus) and composite shapes that combine multi-
+ple basic shapes. Since basic shapes can be perceived pre- Ward [War08] identifies different biases that are intro-
+attentively the authors argue that they should be used to con- duced when mapping a data variable to a glyph property. The
+vey the most important information. Composite glyphs, on first kind of biases are related to human perception. Different
+the other hand, are interpreted in the exploration phase and properties of a glyph can be perceived and related with vary-
+are usually not pre-attentive, i.e., they are analysed sequen- ing accuracy. Cleveland and McGill [CM84a] identify differ-
+tially. Chernoff faces [Che73], for instance, represent data ent visual channels and perform perceptual experiments. The
+variables by different features of a cartoon face (e.g., shape visual channels are ordered based on how accurately they
+of the face; size and position of eyes, nose, and mouth; cur- can be perceived: 1) position along a common scale; 2) po-
+vature of the mouth). The Glyphmaker [RAEM94] provides sition along non-aligned scale; 3) length, angle or slope;
+a user interface that enables non-programmers to map data 4) area; 5) volume or curvature; 6) shading or colour satu-
+variables to the different properties of a glyph such as posi- ration. Moreover, adjacent properties of a glyph are easier to
+tion, colour, shape, overall size and transparency. Kraus and relate and compare than nonadjacent (Ward calls these prox-
+Ertl [KE01] propose a similar tool for scientific data. imity-based biases [War08]). Finally, data variables mapped
+to semantically or perceptually grouped glyph properties
+[DG7] View point independence: Glyph shapes should (e.g., the ears or eyes in Chernoff faces [Che73]) are easier
+be unambiguously perceivable independent of the viewing to distinguish than variables mapped to non-related features.
+directions [ROP11]. When using 3D glyph shapes, one has
+[DG9] Orthogonality and Normalization: When de-
+to account for possible distortions introduced when viewing
+signing glyphs, it is especially important to consider how dif-
+the glyph from a different point of view. Lie et al. [LKH09],
+ferent glyph properties interact with each other and thereby
+therefore, suggest to use 2D billboard glyphs in order to
+possibly distort the interpretation (compared to channel
+avoid this problem. In certain scenarios, however, it makes
+composition [MRSS∗12]). A challenge in this context is the
+sense to use 3D glyphs, for example, when they have a se-
+orthogonality [LKH09] of the different glyph components,
+mantic meaning. Such an example would be arrow glyphs
+meaning that it should be possible to perceive each visual
+that depict a flow field [CM93]. Kindlmann [Kin04] use
+cue independently (or to mentally reconstruct the depicted
+superquadric glyph shapes that fulfill DG7. For composite
+data variables as suggested by Ropinski et al. [ROP11]).
+shapes, Ropinski et al. [ROP11] distinguish between direc-
+Moreover, one has to account for distortions introduced by
+tional and non-directional glyphs.
+the different glyph properties. When using, for example,
+[DG8] Simplicity and Symmetry: According to Gestalt glyph shape to represent a data variable this affects the area
+laws [War04], simple and symmetric shapes facilitate the (size) of the glyph as well. Accordingly, such effects should
+perception of visual patterns. Also, simple glyph shapes en- be normalised against each other [LKH09]. In the previous
+hance the detection of minor shape changes as well as out- example, the overall glyph size could thus be altered in or-
+liers [War08]. Peng et al. [PWR04], for instance, automat- der to compensate for the changes introduced by variations
+ically reorder the data-to-property mapping for generating in shape. However, it is not always easy to design a glyph-
+more symmetric and simple star glyphs. Lie et al. [LKH09] based visualization such that the different data-to-property
+propose horizontally symmetric glyphs that are based on su- mappings are independent and do not influence each other
+perellipses, which should facilitate the mental reconstruct of (e.g., the interpretation of shape details is usually influenced
+glyph parts that are occluded. by the size of the glyph).
+(cid:13)c The Eurographics Association 2013.
+
+--- PAGE 16 ---
+R. Borgo et al. / Glyph-based Visualization
+[DG10] Intuitive mapping based on semantics. Se- to represent DTI data. Kindlmann and Westin [KW06] use
+mantics of the data should be incorporated in the glyph a particle system for densely packing superquadric glyphs
+mapping [War08, LKH09, ROP11, MRSS∗12]. Crawfis and (Figure 9b). Meyer-Spradow et al. [MSSD∗08] evenly dis-
+Max [CM93], for instance, combine small coloured vector tribute surface glyphs by combining a random placement
+glyphs depicting wind velocity with contour surfaces rep- with relaxation criteria.
+resenting cloudiness. Another example would be to repre-
+In the context of glyph placement, the number of depicted
+sent temperature with a diverging colour map [Bre99], where
+data variables must be seen in relation to the available screen
+white is used to indicated 0◦C, blue indicates minus and red
+resolution (compare to DG2). Large and complex glyphs
+plus degrees.
+such as the local probe [dLvW93] can be used when only
+a few data points need to be visualised (or during individ-
+3.5.3. Glyph Placement ual exploration). If many glyphs should be displayed in a
+dense manner, however, a more simple glyph may be desir-
+The placement of glyphs is a prominent visual stimuli and
+able [PG88, KW06, LKH09].
+can be used to convey information about the data. In the con-
+text of information visualization, Ward [War02] categorizes
+placement strategies into data- and structure-driven place- 3.6. Rendering
+ment. The former is directly based on individual variables
+In the final stage of the visualization pipeline (Figure 8),
+or spatial dimensions of the data, or on derived informa-
+glyphs are transferred from visualization space to the result-
+tion such as principal components. Examples of data-driven
+ing image, where one has to cope with issues such as visual
+strategies are placing the glyphs in a 2D scatterplot or locat-
+cluttering, depth perception, and occlusion [LKH09]. In the
+ing them aligned with the underlying data grid (in case of
+following, we discuss approaches such as halos, interactive
+spatial data). Structure-driven placement, on the other hand,
+slicing, or brushing.
+is based on the ordering, hierarchical or other relationships
+of the data variables. According to Ropinski et al. [ROP11] [DG12] Facilitate depth perception for 3D visualiza-
+such strategies, however, are not directly applicable to med- tions. In cases where many glyphs overlap, halos can help
+ical data. Therefore, they suggest feature-driven placement to enhance the depth perception and to distinguish individ-
+as an additional category, where glyphs are placed on local ual glyphs from each other [LKH09]. Piringer et al. [PKH04]
+data features such as iso-surfaces [RSMS∗07, MSSD∗08]. and Interrante et al. [IG98] use halos to emphasize dis-
+We consider it useful to also consider user-driven placement, continuity in depth and to draw the users attention to-
+where glyphs are manually placed to investigate the data at wards objects. For improving the depth perception for non-
+a certain location [dLvW93, Tre99]. overlapping glyphs, a special colour map (called chroma
+depth [Tou97]) can be used to represent depth. Since colour
+In the context of data-driven placement [War02], glyphs
+is a dominant visual channel, however, it is questionable
+can be placed according to derived information as well. Di-
+whether to use it for depicting depth instead of depicting a
+mensionality reduction approaches, for instance, aim at re-
+data variable.
+ducing the data dimensionality while maintaining the higher-
+dimensional characteristics. Such placement strategies can [DG13] Avoid occlusion by interactive slicing or
+facilitate the perception of similar glyph shapes, which brushing: Occlusion is a major problem when reading
+should be located close to each other. Principal component glyphs. Therefore, it can be advantageous to employ interac-
+analysis [WG11] (PCA) is such an example, which trans- tive slicing or brushing. Using a view dependent slice-based
+forms multivariate data into an orthogonal coordinate sys- visualization, for example, glyphs that are located in front
+tem that is aligned with the greatest variance in the data. of a user-controlled plane are not displayed [LKH09]. Using
+Wong and Bergeron [WB97] apply multi-dimensional scal- linking and brushing in coordinated multiple views, glyphs
+ing (MDS) for mapping higher-dimensional data items into a can be filtered out based on user-defined criteria [KMDH11].
+lower-dimensional space while preserving the dissimilarities
+[DG14] Avoid perspective projections when using
+between the items. Since MDS also maintains the higher-
+glyph size to encode a data variable [ROP11]. In such
+dimensional structure of the data, it is well suitable for sub-
+cases, an orthographic projection is preferable, which sup-
+sequent clustering. With such methods, however, the seman-
+ports the comparison of glyph size at different locations.
+tic meaning of the glyph location is usually lost, in contrast
+to techniques that are based on the raw data [War02].
+3.7. Glyph Interaction
+[DG11] Balanced glyph placement. Glyphs may over-
+lap and form unwanted aggregations in image space, for in- Interaction in glyph-based visualizations forms an important
+stance, resulting from a regular data grid. Such aggregations aspect in modern visual analytics. Legg et al. [LCP∗12] in-
+should be avoided, since they may be erroneously identified troduce such an example in sport notational analysis, by de-
+as features [ROP11, War02]. Laidlaw et al. [LAK∗98], for veloping the MatchPad: an interactive visualization software
+instance, apply random jittering when placing brush strokes that incorporates a series of intuitive user-interactions and a
+(cid:13)c The Eurographics Association 2013.
+
+--- PAGE 17 ---
+R. Borgo et al. / Glyph-based Visualization
+scale-adaptive layout to support data navigation. One essen- include a colour legend which users can use to formulate
+tial requirement in notational analysis in sport is the ability more quantitative glyphs and repositioning glyphs where the
+to review key video event footage. Since glyphs have a lim- glyph properties adapt depending on the location. Based on
+ited encoding capacity, it would be impractical to map such this classification, the authors describe eight usage guide-
+data (e.g., a video clip, tracking data) entirely to a glyph. lines which they evaluate against modern diffusion tensor
+Thus, the authors interactively link the playback of videos imaging and cardiac visualization.
+through glyphs to support rapid information retrieval.
+Westin et al. [WMM∗02] introduce a novel analytical so-
+The work of Chung et al. [CLP∗13] extends this further lution to the Stejskal-Tanner diffusion equation system from
+by integrating focus+context techniques into glyph-based vi- which a set of derived diffusion tensor metrics describes the
+sual analytics to emphasise the perceptual orderability of at- geometric properties of a diffusion ellipsoid. Using three
+tributes on glyphs. They propose a system that incorporates tensor eigenvalues, the quantitative shape measures, c
+l
+, cp,
+a focus+context glyph-based interface to control and under- and cs indicate the linear, planar and spherical properties of
+stand high-dimensional sorting of multivariate data. Selected a tensor. In addition, the authors present a visualization tech-
+components on the glyph are rendered in focus which adjusts nique using a composite tensor glyph built from a sphere,
+and populates various sorting parameters within a linked disc and rod that are mapped to the three eigenvalues which
+Interactive, Multidimensional Glyph (IMG) plot. The IMG aims to reduce the ambiguity caused by traditional ellipsoid
+plot arranges the glyphs along two primary sorting axes. representation. The composite glyphs are colour-coded ac-
+Various interactive tools are described to support user ex- cording to shape such that blue is mapped to linear case,
+ploration which include: brushing tools for selecting glyphs, yellow to planarity and red for spherical case.
+pan-and-zoom, and optional display preferences (e.g., con-
+Oeltze et. al [OHG∗08] incorporate 3D glyphs for visual-
+nectivity lines) for conveying additional data.
+izing perfusion parameters in conjunction with their ventric-
+ular anatomical context. They propose two glyph designs:
+4. Application (a) 3D Bull’s Eye Plot (BEP) Segment and (b) 3D Time-
+Intensity Curve (TIC) Miniatures for depicting four per-
+Glyph-based visualization is an excellent tool for repre-
+fusion parameters: Peak Enhancement (PE), Time To Peak
+senting single or multiple data attributes. Whilst generic
+(TTP), Integral and Up-slope which describe the myocardial
+glyphs are desirable and have been well-studied (e.g., Star
+contractility and viability. The 3D BEP segments are ring-
+glyphs [SFGF72] and Chernoff faces [Che73]), the effec- shaped glyphs which extend the previous work [CWD∗02]
+tiveness of such designs for conveying information are lim-
+from 2D to 3D space. An improved glyph (TIC minia-
+ited when presented with challenging, complex data forms
+tures) enables intuitive mapping of all important parameters
+such as vector and tensor data. In addition to various data
+in cardiac diagnosis as a result of encoding TIC semantic
+type constraints, other factors must be considered. For ex-
+metaphors (glyph shape) that is familiar to domain experts.
+ample, the sampling resolution greatly affects how small or
+They apply their technique on three datasets from a clinical
+how large the glyph can be in order to avoid visual clut-
+study.
+ter (compare to DG2). Thus, we find that many glyphs are
+attribute-dependant and that their specific application con- The work by Meyer-Spradow et al. [MSSD∗08] present
+text is an integral aspect to the design process. In this sec- an interactive 3D glyph-based approach for the visualization
+tion, we report a selection of important papers that focus on of SPECT-based myocardial perfusion data. They utilise a
+novel glyph-based visual techniques that have been explored supertorus prototype glyph which characterises SPECT data
+and utilised in various scientific domains. based on its colour, opacity, size and roundness. The glyphs
+are positioned along a 3D surface (i.e., the myocardium) us-
+ing a random distribution with relaxation for depicting in-
+4.1. Medical Visualization formation of the underlying tissue. One motivation of such
+a placement strategy is to provide a more even-distribution
+The recent survey by Ropinski and Preim [RP08, ROP11]
+of glyphs. This addresses the problem of unbalanced place-
+provides an overview of existing glyph-based visualization
+ment that can occur from regular grid sampling in complex
+techniques used in the medical domain and propose guide-
+and non-uniform meshes (compare to DG11).
+lines for developing more valuable glyph representations. A
+glyph taxonomy based on the way information is processed
+when interpreting glyph visualizations is used to classify
+4.2. Event Visualization
+such techniques. Within semiotic theory, this consists of a
+two-phase information process: 1) pre-attentive processing, Event and activity visualization is a rapidly growing research
+that is mainly stimulated by glyph attributes such as size, topic. The work by Botchen et al. [BBS∗08] describe the
+colour and shape along with glyph placement, texture map- VideoPerpetuoGram (VPG), a dynamic technique for visu-
+ping and glyph filtering and 2) attentive stimuli processes alizing activity recognition found in video streams. This in-
+which are based on glyph-interaction paradigms. Examples volves stacking temporally spaced intervals of key video
+(cid:13)c The Eurographics Association 2013.
+
+--- PAGE 18 ---
+R. Borgo et al. / Glyph-based Visualization
+frames and using colour filled glyphs to represent geomet-
+ric information (e.g., object identifier, position, size), seman-
+tic information (e.g., action type and inter-object relation)
+and statistical information (the certainty and error margins
+of the analytical results). They demonstrate their technique
+on surveillance video footage for summarizing the motion of
+people and actions.
+(a) (b) (c)
+Pearlman and Rheingans [PR07] introduce a glyph-based
+approach for visualizing computer network security using
+compound glyphs. The compound glyph representation is a
+pie chart in which the size and colour of each segment is
+mapped to the amount of activity and the type of service.
+One of the motivations of using a simple pie chart design,
+(d) (e) (f)
+is its ability to extend to the temporal domain by slicing the
+glyph as concentric layers for depicting information at dif-
+Figure 12: Some designs of metaphoric pictograms for visu-
+ferent time instances. Each glyph indicates a node on the alizing event data in Rugby by Legg et al. [LCP∗12]. In (a),
+network in which connectivity lines in the visualization rep-
+initial stickmen designs were produced to prompt an artist.
+resent the communication between nodes. They successfully
+The artist produced several different designs: (b) a refined
+demonstrate their method on a simulated network consisting
+stickman design, (c) contemporary design, (d) a posterised
+of a small set client users.
+colour design and (e) a silhouette design. In (f) the scrum is
+The work by Parry et al. [PLC∗11] introduce a novel event depicted using the silhouette design (cf. (a) and (b))
+selection concept for summarising video storyboards. Video
+storyboard is a form of video visualization, used to sum-
+marise the major events in a video using illustrative visu- ing to learn, remember or guess. Instead, the authors explore
+alization. There are three main technical challenges in cre- the use of metaphoric pictograms which are commonly used
+ating a video storyboard, (a) event classification, (b) event in many domain-specific visualization (e.g., electronic cir-
+selection and (c) event illustration. Among these challenges, cuit diagrams) and visualization for the masses (e.g., road
+(a) is highly application-dependent and requires a significant signs). Metaphoric glyphs can come in different forms, rang-
+amount of application- specific semantics to be encoded in ing from abstract representation to photographic icons (Fig-
+this system or manually specified by the users. This paper ure 12), where the use of appropriate visual channels can
+focuses on challenges (b) and (c) which they demonstrate provide semantic cues that are easy to learn, remember or
+using a case study on Snooker video visualization. For event guess. The MatchPad adopts a scale-adaptive layout to posi-
+illustration, the authors explore a collection of iconic glyphs tion glyphs along a timeline interactively based on the view-
+which convey some metaphors in addition to data values for point zoom factor. This minimises glyph occlusion which
+event labelling. These include ball objects that vary in size, they demonstrate successfully using a case study on Rugby.
+opacity and colour for representing ball trajectory and se-
+mantic information (e.g., ball type, event importance), tex-
+4.3. Multi-field Visualization
+tured circle glyphs and numbered icons for depicting the se-
+quences of shots, and a pie chart icon to represent scoring Due to its multivariate characteristics, geometric shapes
+and video timing information. are commonly used to represent multiple data attributes.
+Superquadrics and Angle-Preserving Transformations by
+A more thorough investigation of incorporating visual
+Barr [Bar81] presents such an approach by introducing ge-
+semantics into glyph designs is explored by Legg et
+ometric shapes (superquadrics) used for creating and simu-
+al. [LCP∗12]. They describe the MatchPad: an interactive
+lating three-dimensional scenes. The author defines a math-
+glyph-based visualization for mapping events and actions
+ematical framework used to explicitly define a family of
+in sports notational analysis. Sports event analysis provides
+geometric primitives from which their position, size, and
+an example where a large number of event types need to
+surface curvature can be altered by modifying a family of
+be depicted in a manner to facilitate rapid information re-
+different parameters. Example glyphs include: a torus, star-
+trieval. A comprehensive review of mapping such data is
+shape, ellipsoid, hyperboloid, toroid. Furthermore, the au-
+discussed using different levels of abstractions. These in-
+thor describes angle-preserving shape transformations that
+clude the evaluation of abstract icons and colour for encod-
+can be applied to primitives to create geometric effects such
+ing each event type. Whilst the approach may be suitable for
+as bending or twisting.
+data attributes with a small number of enumerative values,
+the range of categorical attributes in sports results to many Crawfis and Allison [CA91] introduce a novel approach
+different shapes or colours making it cognitively challeng- for visualizing multiple scientific data sets using texture
+(cid:13)c The Eurographics Association 2013.
+
+--- PAGE 19 ---
+R. Borgo et al. / Glyph-based Visualization
+mapping and raster operations. The interactive programming rate of strain tensor, turbulent charge and turbulent current
+framework enables users to overlay different data sets by using a series of visualization techniques such as tensor el-
+defining raster functions/operations. Such a function may in- lipses, vector arrows and colour mapping.
+clude glyph textures for mapping data attributes (e.g., vec-
+tor data). Using a generated synthetic dataset, they present
+4.4. Geo-spatial Visualization
+a method for reducing the visual clutter by mapping colour
+to a height field and using a bump map to represent the vec- We often find that geo-spatial visualization may incorporate
+tor and contour plots. The final texture is mapped onto a 3D inter-disciplinary techniques from other domains, and thus
+surface. can be classified under more than one category. MacEachren
+et al. [MBP98] is such an example where the authors present
+Using the set of superquadrics defined by Barr [Bar81],
+Shaw et. al [SEK∗98] describe an interactive glyph-based a novel approach to visualize reliability in mortality maps
+using a bi-variate mapping. Given a base geographical map
+framework for visualizing multi-dimensional data. As op-
+(United States), the technique involves using colour filled
+posed to the analytical focus in the previous work, the au-
+regions to represent the data and texture overlay to represent
+thors describe a method for mapping data attributes appro-
+the reliability.
+priately to shape properties such that visual cues effectively
+convey data dimensionality without depreciating the cogni- Healey and Enns introduce a different approach [HE99]
+tion of global data patterns. They map in decreasing order of using multi-coloured perceptual texture elements known as
+data importance, values to location, size, colour and shape pexels for visualizing multivariate scientific datasets across
+(of which two dimensions are encoded by shape). Using su- a height field. The pexels appearance is determined by en-
+perellipsoids, they apply their framework to the "thematic" coding attribute values into three texture dimensions: height,
+document similarities [SEK∗98] and magnetohydrodynam- density and regularity. Pexels incorporate pre-attentive fea-
+ics simulation of the solar wind in the distant heliosphere tures (e.g., height) to improve the accuracy of visual search-
+[E∗00], [ES01]. based tasks. To assess its effectiveness, the authors apply
+their technique on a typhoon data set where wind speed,
+The report by Taylor [Tay02] provides an overview of suc-
+pressure and precipitation is mapped to the pexel properties.
+cessful and unsuccessful techniques for visualizing multiple
+scalar fields on a 2D manifold. The author first hypothesises Pang [Pan01] provides an overview of various geo-spatial
+that the largest number of data sets can be displayed by map- uncertainty metrics and identifies two methods for integrat-
+ping each field to the following: a unique surface charac- ing this data into a geo-spatial representation: (a) mapping
+teristic, applying a different visualization technique to each uncertainty information to graphic attributes (e.g., hue, opac-
+scalar field or by using textures/glyphs whose features de- ity) or by using (b) animation to convey uncertainty. By
+pend on the data sets. Such a framework revealed limitations treating uncertainty fields as an additional layer of informa-
+of up to four scalar fields. This led to the research of two tion in cartography, techniques such as uncertainty glyphs
+new techniques that prove effective for visualizing multiple can be visualised independently and overlaid on top of an
+scalar fields, (1) data-driven spots (DDS) [Bok03] - using existing geo-spatial visualization.
+different spots of various intensities and heights to visual- The work of Sanyal et al. [SZD∗10] introduce glyphs, rib-
+ize each data set, and (2) oriented slivers [WEL∗00] - using
+bons and spaghetti plots for interactively visualizing ensem-
+sliver-like texture glyphs of different orientations for visual-
+ble uncertainty in numerical weather models. They demon-
+izing multiple scalar fields in which luminance is mapped to
+strate their work on the 1933 Superstorm simulation, where
+the relative scalar values.
+the visual mappings illustrate the statistical errors (e.g.,
+One successful technique is developed by Kirby and Laid- mean, standard deviation, interquartile range and 95% con-
+law [KML99] who stochastically arrange multiple visual- fidence intervals) in the data.
+ization layers to minimize overlap. This paper extends the
+work by Laidlaw et. al [LAK∗98] by applying visualization
+4.5. Flow Visualization
+concepts from oil painting, art and design, to the problems
+in fluid mechanics. Given a permutation of layers, a user- In the flow visualization community, De Leeuw and Van
+specified importance value is attached to each visualization Wijk [dLvW93] present an interactive probe-glyph for vi-
+of increasing weights in order to provide greater emphasis sualizing multiple flow characteristics in a small region. One
+to higher layers. Visual cues such as colour and opacity in- focus is the visualization of six components: velocity, curva-
+dicate regions and layers of importance (e.g., Rate of strain ture, shear, acceleration, torsion and convergence. In order
+tensor example emphasise the velocity more by using black to facilitate such a mapping, the authors incorporate a larger
+arrows). This method enables the simultaneous depiction of glyph design. The core components of the glyph consists of
+6-9 data attributes, in which the authors apply to a simulated the following: 1) a curved vector arrow where the length
+2D flow field past a cylinder at different reynolds number. and direction represents the velocity and the curvedness is
+The example shows the visualization of velocity, vorticity, mapped to the curvature, 2) a membrane perpendicular to the
+(cid:13)c The Eurographics Association 2013.
+
+--- PAGE 20 ---
+R. Borgo et al. / Glyph-based Visualization
+nique commonly used for depicting wind magnitude and di-
+rection in weather visualizations. For both magnitude and di-
+rection, users had to estimate the value at a given point and
+estimate the average value over a rectangular region. The au-
+thors use a real hurricane simulation data set in their study.
+Hlawatsch et al. [HLNW11] introduce a glyph for vi-
+sualizing unsteady flow with static images. The flow-radar
+(glyph) is constructed by transforming time-dependant vec-
+tor attributes into polar co-ordinates, whereby vector direc-
+tion is mapped to angle, and the time to radius. In addition,
+the velocity magnitude is encoded using colour. The radar
+glyphs provides a visual summary of the flow over multi-
+ple time steps. A method for visualizing flow uncertainty is
+described using a single arc that represents the angular varia-
+tion at given seed point. The authors demonstrate their work
+on two CFD simulation data set.
+Figure 13: The visualization of vector field clustering of flow
+Peng et al. [PGL∗12] describe an automatic vector field
+around an engine. A combination of |v|-range and θ-range
+clustering algorithm and presents visualization techniques
+glyph is used for depicting the range of vector magnitude
+and direction in each vector cluster [PGL∗12] that incorporate statistical-based multivariate glyphs. The
+authors clustering algorithm is given by: 1) derive a mesh
+resolution value for each vertex, 2) encode vector and mesh
+resolution values into R, G, B and α in image space. Clusters
+flow where its displacement to the centre is mapped to accel- naturally form in this space based on pixel intensity. 3) the
+eration, 3) candy stripes on the surface of the velocity arrow clusters are merged depending on a similarity value derived
+illustrates the amount of torsion, 4) a ring describes the plane using euclidean distance, mesh resolution, average velocity
+perpendicular to the flow over time (shear-plane), and finally magnitude and velocity direction. A collection of clustering
+5) the convergence and divergence of the flow is mapped to a glyph-based visualizations are introduced, such as |v|-range
+lens or osculating paraboloid. Placement of such probes are glyph or “disc” (Figure 13 for example) that depicts the local
+interactively placed by the users along a streamline to show minimum and maximum vector. The inner and outer radius
+local features in more detail. of the disc is mapped to the vector magnitudes. The θ-range
+glyph combines a vector glyph that illustrates the average ve-
+Vector Plots for Irregular Grids Dovey [Dov95] extends
+locity direction and magnitude, and a semi-transparent cone
+Crawfis and Max’s method [CM92] from regular to curvi-
+that shows the variance of vector field direction. Other visu-
+linear and unstructured grids. In order to visualize vector
+alizations include streamlets that are traced from the cluster
+fields on unstructured grids, physical space and parameter
+centre, and colour coding with mean velocity. The authors
+space resampling methods are employed. During the phys-
+demonstrate their clustering results on a series of synthetic
+ical space resampling, the vector field is linearly interpo-
+and real-world CFD meshes.
+lated at each sample point, then the physical coordinates of
+the point are calculated, and lastly related oriented glyphs
+4.6. Tensor Visualization
+(plots) are projected from back to front. Although this en-
+sures that sample points are uniformly distributed, physical The work of Laidlaw et al. [LAK∗98] presents two novel
+space resampling is computationally expensive. To address methods for visualizing Diffusion Tensor Imaging (DTI).
+this problem, it may be preferable to resample to parameter The first method uses normalised ellipsoids, where the prin-
+space instead. At first, random points are directly generated cipal axes and radii are mapped to the tensor eigen vectors
+in parametric space with an area-weighted distribution. Then and eigen values respectively. Glyph normalisation reduces
+a relatively accurate and dense resampling can be approxi- the visual clutter and enables full depiction of the data set.
+mated by mapping the parameterised coordinate to physical The second method incorporates concepts from oil painting
+coordinate grid points. Vector field visualization on arbitrary to represent seven tensor data attributes as multiple layers of
+3D surfaces can be efficiently achieved with parameter space varying brush strokes which is composited into a single visu-
+resampling. alization. The authors demonstrate their technique on DTIs
+Martin et al. [MII∗08] present a study to validate the ef- of healthy and diseased mouse spinal cords.
+fectiveness of traditional 2D hurricane visualizations by ob- Building upon previous research by Barr [Bar81] and
+serving the users ability to mentally integrate the magnitude Westin et al. [WMM∗02], Kindlmann [Kin04] introduces
+and direction of flow in a vector field. In particular, the au- a novel approach of visualizing tensor fields using su-
+thors focus on evaluating 2D glyphs (or wind barb) - a tech- perquadric glyphs. The motivation of superquadric tensor
+(cid:13)c The Eurographics Association 2013.
+
+--- PAGE 21 ---
+R. Borgo et al. / Glyph-based Visualization
+glyphs addresses the problems of asymmetry and ambi- used to encode other important tensor quantities. To facili-
+guity prone in previous techniques (e.g. cuboids and el- tate quick visual exploration of the data from different view-
+lipsoids). An explicit and implicit parameterisation of su- points and at different resolutions, the authors employ an ef-
+perquadric primitives is presented, along with geometric ficient image-space approach in which hyperstreamlines and
+anisotropy metrics c
+l
+, cp, cs [WMM∗02] and user-controlled glyphs are generated quickly in the image plane. The combi-
+edge sharpness parameter γ, to create a barycentric triangular nation of these techniques leads to an efficient tensor field vi-
+domain of shapes that change in shape, flatness and orienta- sualization system for domain scientists. They demonstrate
+tion under different parameter values. A subset of the family the effectiveness of their visualization technique through ap-
+of superquadrics is chosen and applied towards visualizing plications of complex simulated engine fluid flow and earth-
+a DT-MRI tensor field which is then compared against an quake deformation data.
+equivalent ellipsoid visualization.
+Kriz et al. [KYHR05] provides a review of visualization
+4.7. Uncertainty Visualization
+techniques on second-order tensors which include: Lame’s
+stress ellipsoids, Haber glyphs [Hab90], Reynolds tensor A number of approaches have been used to quantify and vi-
+glyph [HYW03], and hyper streamtubes [DH93]. Further- sualize uncertainty. In particular, glyphs are well suited for
+more, the authors introduce a Principal, Normal and Shear illustrating uncertainty, detailed by the early work of Wit-
+(PNS) glyph for visualizing stress tensors and their gradi- tenbrink et al. [WPL96] who evaluates the effective use of
+ents. The method extends the stress ellipsoids by mapping glyphs for visualizing uncertainty in vector fields simulated
+the shearing stress component to the surface colour of the from winds and ocean currents. Several uncertainty metrics
+ellipsoid. are depicted simultaneously such as direction, magnitude as
+well as mean direction and length using a variety of glyph at-
+Kindlmann extends his previous work [Kin04] to glyph-
+tributes that are commonly mapped (e.g., length, area, colour
+packing [KW06], a novel glyph placement strategy. The goal
+and/or angles). Lodha et al. [LPSW96] presents a system
+of this work is to improve upon the discrete nature of glyph-
+(UFLOW) for visualizing uncertainties in fluid flow. The
+based visualization through the use of regular grid sampling,
+system analyses the changes that occur from different inte-
+to a more continuous character such as texture-based meth-
+grators and step-sizes used for computing streamlines. The
+ods by packing the glyphs into the field. A tensor-based po-
+authors visualize the differences between each streamlines
+tential energy is defined to derive the placement of a sys-
+using several approaches such as glyphs that encode the un-
+tem of particles whose finals positions will be used to place
+certainty through their shape, size and colour.
+glyphs. Hlawitschka et al. [HSH07] presents an alternative
+glyph packing using Delaunay triangulation which success- Pang et al. [PWL96] and Verma and Pang [VP04] present
+fully reduces the computation cost. comparative visualization tools to analyse differences be-
+tween two datasets. Streamlines and stream ribbons are gen-
+More recently, Schultz and Kindlmann [SK10] introduce
+erated on two datasets, one being a sub-sampled version of
+superquadric glyphs that can be used to visualize the general
+the other. To compare streamlines, the euclidean distance be-
+symmetric second order tensors that could be non-positive-
+tween them is used. Glyphs are added to aid the user in see-
+definite. The work extends previous glyph-based methods
+ing how a pair of streamlines differ. Brown [Bro04] demon-
+(e.g., [Kin04], [WMM∗02]) which concerntrate on tensors
+strates the use of vibrations to visualize data uncertainty.
+with strictly positive eigenvalues such as diffusion tensors, to
+Experiments using oscillations in vertex displacement, and
+the general case by mapping the glyph shape to show eigen-
+changes in luminance and hue are investigated.
+value sign differences. The shape between two eignvectors is
+convex if the corresponding eigenvalues have the same sign, MacEachren et al. [MRO∗12] is another instance of em-
+and concave if they are different. pirical research that evaluates the effects of visualizing
+different categories of uncertainty using discrete symbols.
+Chen et al. [CPL∗11] present a novel asymmetric tensor
+Building upon the theoretical framework by Bertin [Ber83]
+field visualization method to provide important insight into
+on visual semiotics, they provide insight on the effects of us-
+fluid flows and solid deformations. Existing techniques for
+ing abstract symbols that vary only a single visual variable
+asymmetric tensor fields focus on the analysis, and simply
+(e.g., shape, hue, orientation) in comparison to iconic sym-
+use evenly-spaced hyperstreamlines on surfaces following
+bols that are of more pictorial form. Both sets of symbols
+eigenvectors and dual-eigenvectors in the tensor field. They
+underwent two distinct experiments which focus on assess-
+describe a hybrid visualization technique in which hyper-
+ing their intuitiveness for representing different categories of
+streamlines and elliptical glyphs are used in real and com-
+uncertainty and effectiveness for a typical map use task: as-
+plex domains, respectively. This enables a more faithful rep-
+sessing and comparing the aggregate uncertainty in two map
+resentation of flow behaviours inside complex domains. In
+regions.
+addition, tensor magnitude, which is an important quantity
+in tensor field analysis is mapped to the density of hyper- Ribicic et al. [RWG∗12] describe an interactive sketch-
+streamlines and sizes of glyphs. This allows colours to be based visualization system for investigating simulation mod-
+(cid:13)c The Eurographics Association 2013.
+
+--- PAGE 22 ---
+R. Borgo et al. / Glyph-based Visualization
+els and assess the uncertainty associated with changing dif- encourage more empirical studies on high dimensional glyph
+ferent numeric parameters. In particular, the authors demon- representations. As we mentioned in Section 1, glyph-based
+strate their approach on flood management simulation as a visualization essentially offers a form of dictionary-based
+means of risk assessment. Such an approach provides an in- compression. Naturally, this allows us to draw inspiration,
+tuitive mechanism for transforming sketches into boundary theories and techniques from established disciplines, such as
+conditions of a simulation and to deliver visual feedback to data communication and historical linguistics, and research
+end-users. A set of glyphs and icons are used to depict var- subjects such as information theory, data compression, and
+ious simulation attributes. These include vector glyphs for lexicography. Perhaps more ambitiously, the field of visu-
+illustrating the force field on a water flow and ensemble han- alization may channel more energy and innovation into the
+dle glyphs for representing uncertainty values. development of a common framework, which may one day
+become the basis of a common visualization language.
+5. Summary and Conclusions
+6. Acknowledgmenets
+In this state of the art report, we have presented a compre-
+The authors wish to thank all participants of the Work-
+hensive survey of the subject of glyph-based visualization.
+shop on Glyph-based Visualization, which was held
+In particular, we have made connection between glyphs and
+on 7-8 May 2012, and in particular the keynote speak-
+the history of signs and perceptual studies on visual channels
+ers of the workshop, Professor Colin Ware (University
+and the use of icons. We have brought together a substantial
+of New Hampshire, USA) and Professor Sine Mc-
+collection of design criteria and guidelines. We have exam-
+Dougall (Bournemouth University, UK). Parts of this
+ined a variety of methods and algorithms for visual mapping,
+work have also been funded by the Austrian Science
+computing spatial layout, rendering glyphs and supporting
+Fund (FWF) through the ViMaL project (No. P21695).
+glyph-based interaction. Noticeably, we have gathered an in-
+disputable set of evidence in different applications, suggest-
+ing that glyph-based visualization is useful and can bring
+about cost-effective benefits in many data-intensive tasks. References
+While this survey has confirmed that glyph-based visual- [ABK98] ANKERST M., BERCHTOLD S., KEIM D.: Similarity
+ization is an important technique in the field of visualiza- clustering of dimensions for an enhanced visualization of multi-
+dimensional data. In Information Visualization, 1998. Proceed-
+tion, we have also observed some doubts in the commu-
+ings. IEEE Symposium on (oct 1998), pp. 52 –60, 153. 11
+nity about the encoding capability of glyphs primarily due
+[Bar81] BARR A. H.: Superquadrics and angle-preserving trans-
+to its size, limited capacity of individual visual channels and
+formations. IEEE Computer Graphics and Applications 1, 1 (Jan.
+cognitive demand for learning and memorization. Although 1981), 11–23. 14, 17, 18, 19
+such reservations are very reasonable and cannot be over-
+[Bar04] BAR M.: Visual objects in context. Nature reviews. Neu-
+looked in any practical applications, they do not undermine roscience 5, 8 (2004), 617–629. 8
+the relative merits of glyph-based visualization, which have [BARM∗12] BORGO R., ABDUL-RAHMAN A., MOHAMED F.,
+already been demonstrated in everyday life as well as many GRANT P. W., REPPA I., FLORIDI L., CHEN M.: An empirical
+applications. These merits include: study on using visual embellishments in visualization. to appear
+in IEEE Transactions on Visualization and Computer Graphics
+• rapid semantic interpretation (e.g., traffic (2012). 8
+signs [LCP∗12]), [BBS∗08] BOTCHEN R. P., BACHTHALER S., SCHICK F., CHEN
+• more scalability in dimensions for multivariate data visu- M., MORI G., WEISKOPF D., ERTL T.: Action-based multifield
+alization (e.g., [Kin04, SK10]), video visualization. IEEE Trans. Visualization and Computer
+Graphics 14, 4 (2008), 885–899. 16
+• suitable for both dense and sparse layout (e.g., [KW06,
+LKH09, LHD∗04, LCP∗12]), [Ber83] BERTIN J.: Semiology of graphics. Univ. of Wisconsin
+Press, 1983. 5, 8, 11, 20
+• no significant disadvantage in learning and memorization
+(e.g., [MdBC00]), [Bly82] BLY S.: Presenting information in sound. In Proceedings
+of the 1982 conference on Human factors in computing systems
+• can be evolved into a standard form (e.g., many schematic
+(1982), CHI ’82, ACM, pp. 371–375. 3
+diagrams),
+[Bok03] BOKINSKY A. A.: Multivariate data visualization with
+• can be evolved into a language (e.g., grapheme-based lan-
+data-driven spots. 18
+guages).
+[Bre99] BREWER C.: Color use guidelines for data representa-
+This survey has also helped us identify major gaps in the tion. In Proc. Section on Statistical Graphics (1999), pp. 55–60.
+15
+current research on glyph-based visualization. While exist-
+ing perception studies on visual channels and icons have pro- [Bro04] BROWN R.: Animated visual vibrations as an uncertainty
+visualisation technique. In Proceedings of the 2nd international
+vided a concrete foundation for glyph-based visualization,
+conference on Computer graphics and interactive techniques in
+most findings are directly applicable only to glyph represen- Australasia and South East Asia (2004), GRAPHITE ’04, ACM,
+tations in three or fewer dimensions. We hence would like to pp. 84–89. 20
+(cid:13)c The Eurographics Association 2013.
+
+--- PAGE 23 ---
+R. Borgo et al. / Glyph-based Visualization
+[BS92] BORG I., STAUFENBIEL T.: Performance of snow flakes, [E∗00] EBERT D. S., ET AL.: Procedural shape generation for
+suns, and factorial suns in the graphical representation of mul- multi-dimensional data visualization. Computers and Graphics
+tivariate data. Multivariate Behavioral Research 27, 1 (1992), 24, 3 (June 2000), 375–384. 18
+43–55. 11
+[Eco79] ECO U.: A theory of semiotics. Advances in semiotics.
+[BSG89] BLATTNER M. M., SUMIKAWA D. A., GREENBERG Indiana University Press, 1979. 4, 7
+R. M.: Earcons and icons: Their structure and common design [EM91] ELIADE M., MAIRET P.: Images and symbols: studies in
+principles. Human-Computer Interaction 4, 1 (1989), 11–44. 3 religious symbolism. Mythos: The Princepto/Bollingen Series in
+[BSMWE78] BURNS B., SHEPP B. E., MCDONOUGH D., World Mythology. Princeton University Press, 1991. 2
+WIENER-EHRLICH W. K.: The relation between stimulus an- [ES01] EBERT D. S., SHAW C. D.: Minimally immersive
+alyzability and perceived dimensional structure. The Psychology flow visualization. In IEEE Transactions on Visualization and
+of Learning and Motivation (1978), 77–115. 8 Computer Graphics (2001), vol. 7(4), IEEE Computer Society,
+[BT07] BORLAND D., TAYLOR R.: Rainbow color map (still) pp. 343–350. 18
+considered harmful. IEEE Computer Graphics and Applications [FK03] FRIENDLY M., KWAN E.: Effect ordering for data dis-
+27, 2 (2007), 14–17. 13 plays. Comput. Stat. Data Anal. 43, 4 (Aug. 2003), 509–539.
+[CA91] CRAWFIS R., ALLISON M. J.: A scientific visualization 11
+synthesizer. In IEEE Visualization (1991), pp. 262–267. 17 [Gay89] GAYER W. W.: The sonicfinder: An interface that uses
+[CF12] CHEN M., FLORIDI L.: An analysis of information in auditory icons (abstract only). SIGCHI Bull. 21 (August 1989).
+visualisation. to appear in Synthese (2012). 7 3
+[Cha02] CHANDLER D.: Semiotics: The Basics. Routledge, 2002. [Gog03] GOGUEN J.: Semiotic morphisms, representations, and
+4 blending for user interface design. In AMAST Proceedings
+(2003), pp. 1–15. 5
+[Che73] CHERNOFF H.: The use of faces to represent points in
+k-dimensional space graphically. J. American Statistical Associ-
+[Gre98] GREEN M.: Toward a perceptual science of multidimen-
+sional data visualization: Bertin and beyond. ERGO/GERO Hu-
+ation 68, 342 (1973), 361–368. 14, 16
+man Factors Science (1998), 1–30. 8
+[Chr75] CHRIST R.: Review and analysis of color coding research
+for visual displays. Human Factors 17, 6 (1975), 542–570. 6, 13
+[Hab90] HABER R. B.: Visualization techniques for engineering
+mechanics. Computing Systems in Engineering 1, 1 (1990), 37–
+[CLP∗13] CHUNG D. H. S., LEGG P. A., PARRY M. L., BOWN 50. 20
+R., GRIFFITHS I. W., LARAMEE R. S., CHEN M.: Glyph sort-
+[HBE96] HEALEY C., BOOTH K., ENNS J.: High-speed visual
+ing: Interactive visualization for multi-dimensional data (under
+estimation using preattentive processing. ACM Trans. Computer-
+review). 8, 9, 16
+Human Interaction 3 (1996), 107–135. 6, 14
+[CM84a] CLEVELAND W., MCGILL R.: Graphical perception:
+[HE99] HEALEY C., ENNS J.: Large datasets at a glance: Com-
+Theory, experimentation, and application to the development of
+bining textures and colors in scientific visualization. IEEE Trans.
+graphical methods. J. American Statistical Association 79, 387
+Visualization and Computer Graphics 5, 2 (1999), 145–167. 14,
+(1984), 531–554. 6, 14
+18
+[CM84b] CLEVELAND W., MCGILL R.: Graphical perception:
+[HE11] HEALEY C. G., ENNS J. T.: Attention and visual mem-
+Theory, experimentation, and application to the development of
+ory in visualization and computer graphics. IEEE Transactions
+graphical methods. J. American Statistical Association 79, 387
+on Visualization and Computer Graphics 18, 7 (2011), 1170–
+(1984), 531–554. 7
+1188. 8
+[CM92] CRAWFIS R., MAX N.: Direct volume visualization of [HI72] HANDELT S., IMAI S.: The free classification of ana-
+three-dimensional vector fields. In Proceedings of the Workshop lyzable and unanalyzable stimuli. Attention, Perception, & Psy-
+on Volume Visualization (New York, Oct. 19–20 1992), Acm chophysics 12, 1 (1972), 108–224. 8
+Press, pp. 55–60. 19
+[HLNW11] HLAWATSCH M., LEUBE P., NOWAK W.,
+[CM93] CRAWFIS R., MAX N.: Texture splats for 3D scalar and WEISKOPF D.: Flow radar glyphs - static visualization of
+vector field visualization. In Proc. IEEE Visualization (1993), unsteady flow with uncertainty. In IEEE Transactions on Visual-
+pp. 261–266. 11, 14, 15 ization and Computer Graphics (2011), vol. 17, pp. 1949–1958.
+[CPL∗11] CHEN G., PALKE D., LIN Z., YEH H., VINCENT P., 19
+LARAMEE R. S., ZHANG E.: Asymmetric tensor field visualiza- [HS09] HAUSER H., SCHUMANN H.: Visualization pipeline. In
+tion for surfaces. IEEE Transactions on Visualization and Com- Encyclopedia of Database Systems, Liu, Özsu, (Eds.). Springer,
+puter Graphics 17, 6 (2011). 20 2009, pp. 3414–3416. 10
+[CWD∗02] CERQUEIRA M. D., WEISSMAN N. J., DILSIZIAN [HSH07] HLAWITSCHKA M., SCHEUERMANN G., HAMANN
+V., ET AL.: Standardized myocardial segmentation and nomen- B.: Interactive glyph placement for tensor fields. In Advances
+clature for tomographic imaging of the heart. Circulation 105, 4 in Visual Computing (2007), pp. I: 331–340. 20
+(2002), 539–542. 16
+[HYW03] HASHASH Y. M. A., YAO J. I.-C., WOTRING D. C.:
+[DH93] DELMARCELLE T., HESSELINK L.: Visualization of Glyph and hyperstreamline representation of stress and strain ten-
+second order tensor fields with hyperstreamlines. IEEE Com- sors and material constitutive response. International Journal
+puter Graphics and Applications 13, 4 (1993), 25–33. 20 for Numerical and Analytical Methods in Geomechanics 27, 7
+(2003), 603–626. 20
+[dLvW93] DE LEEUW W. C., VAN WIJK J. J.: A probe for lo-
+cal flow field visualization. In Proc. IEEE Visualization (1993), [IG98] INTERRANTE V., GROSCH C.: Visualizing 3D flow. IEEE
+pp. 39–45. 11, 15, 18 Computer Graphics and Applications 18, 4 (1998), 49–53. 15
+[Dov95] DOVEY D.: Vector plots for irregular grids. In IEEE [JL02] JOHANSEN J., LARSEN S.: Signs in use: an introduction
+Visualization (1995), pp. 248–253. 19 to semiotics. Routledge, 2002. 3, 4
+(cid:13)c The Eurographics Association 2013.
+
+--- PAGE 24 ---
+R. Borgo et al. / Glyph-based Visualization
+[Joh88] JOHANSEN J.: The Distinction between Icon, Index, and [Mac86] MACKINLAY J.: Automating the design of graphical
+Symbol in the Study of Literature. Berlin: Walter de Gruyter, presentations of relational information. ACM Trans. Graph. 5,
+1988. 5 2 (Apr. 1986), 110–141. 5, 7
+[KE01] KRAUS M., ERTL T.: Interactive data exploration with [Mac04] MACEACHREN A. M.: How Maps Work - Representa-
+customized glyphs. In Proc. WSCG (2001), pp. 20–23. 14 tion, Visualization, and Design. Guilford Press, 2004. 5
+[KG07] KARVE A., GLEICHER M.: Glyph-based overviews of [Mar03] MARCUS A.: Icons, symbols, and signs: visible lan-
+large datasets in structural bioinformatics. In Proceedings of the guages to facilitate communication. interactions 10 (May 2003),
+11th International Conference on Information Visualization (IV 37–43. 3
+2007) (jul 2007), pp. 1–6. 9
+[MBP98] MACEACHREN A. M., BREWER C. A., PICKLE
+[Kin04] KINDLMANN G.: Superquadric tensor glyphs. In Proc. L. W.: Visualizing georeferenced data: Representing reliability
+Symp. Data Visualization (VisSym) (2004), pp. 147–154. 14, 19, of health statistics. Evironment and Planning A (1998), 1547–
+20, 21 1561. 18
+[KMDH11] KEHRER J., MUIGG P., DOLEISCH H., HAUSER H.: [MCdB99] MCDOUGALL S., CURRY M., DE BRUIJN O.: Mea-
+Interactive visual analysis of heterogeneous scientific data across suring symbol and icon characteristics: Norms for concreteness,
+an interface. IEEE Trans. Visualization and Computer Graphics complexity, meaningfulness, familiarity, and semantic distance
+17, 7 (2011), 934–946. 15 for 239 symbols. Behavior Research Methods 31 (1999), 487–
+519. 9
+[KML99] KIRBY R., MARMANIS H., LAIDLAW D.: Visualizing
+multivalued data from 2D incompressible flows using concepts [MdBC00] MCDOUGALL S., DE BRUIJN O., CURRY M.: Ex-
+from painting. In Proc. IEEE Visualization (1999), pp. 333–340. ploring the effects of icon characteristics on user performance:
+11, 18 The role of icon concreteness, complexity, and distinctiveness.
+Journal of Experimental Psychology: Applied 6 (2000), 291–306.
+[KT75] KRANTZ D., TVERSKY A.: Similarity of rectangles: An
+8, 9, 10, 21
+analysis of subjective dimensions. Journal of Mathematical Psy-
+chology 12, 1 (1975), 4–34. 8 [MII∗08] MARTIN J. P., II J. E. S., II R. J. M., LIU Z., CAI S.:
+Results of a user study on 2D hurricane visualization. Computer
+[KW79] KINCHLA R., WOLFE J.: The order of visual process-
+Graphics Forum 27, 3 (2008), 991–998. 19
+ing: "top-down," "bottom-up", or "middle-out". Perception &
+psychophysics 25, 3 (1979). 8 [MRO∗12] MACEACHREN A. M., ROTH R. E., O’BRIEN J., LI
+[KW06] KINDLMANN G., WESTIN C.-F.: Diffusion tensor vi-
+B., SWINGLEY D., GAHEGAN M.: Visualizing semiotics & un-
+certainty visualization. IEEE Trans. Visualization and Computer
+sualization with glyph packing. IEEE Trans. Visualization and
+Graphics 18, 12 (2012), 2496–2505. 20
+Computer Graphics 12, 5 (2006), 1329–1336. 11, 15, 20, 21
+[KYHR05] KRIZ R. D., YAMAN M., HARTING M., RAY A. A.:
+[MRSS∗12] MAGUIRE E., ROCCA-SERRA P., SANSONE S.-A.,
+Visualization of Zeroth, Second, Fourth, Higher Order Tensors,
+DAVIES J., CHEN M.: Taxonomy-based Glyph Design – with a
+Case Study on Visualizing Workflows of Biological Experiments.
+and Invariance of Tensor Equations. Computers and Graphics
+to appear in IEEE Transactions on Visualization and Computer
+21, 6 (2005), 1–13. 20
+Graphics 18 (2012), –. 8, 10, 14, 15
+[Lak95] LAKOFF G.: The Contemporary Theory of Metaphor.
+Metaphor and Thought, A. Ortony (2nd Ed.) (1995), 202,252. 7
+[MSSD∗08] MEYER-SPRADOW J., STEGGER L., DÖRING C.,
+ROPINSKI T., HINRICHS K.: Glyph-based SPECT visualiza-
+[LAK∗98] LAIDLAW D. H., AHRENS E. T., KREMERS D., tion for the diagnosis of coronary artery disease. IEEE Trans-
+AVALOS M. J., JACOBS R. E., READHEAD C.: Visualizing actions on Visualization and Computer Graphics 14, 6 (2008),
+diffusion tensor images of the mouse spinal cord. In IEEE Vi- 1499–1506. 15, 16
+sualization (1998), pp. 127–134. 15, 18, 19
+[MTL78] MCGILL R., TUKEY J., LARSEN W.: Variations of box
+[LCP∗12] LEGG P. A., CHUNG D. H. S., PARRY M. L., JONES plots. The American Statistician 32 (1978), 12–16. 12
+M. W., LONG R., GRIFFITHS I. W., CHEN M.: Matchpad: Inter-
+active glyph-based visualization for real-time sports performance
+[Nav77] NAVON D.: Forest before trees: The precedence of global
+features in visual perception. Cognitive psychology 9, 3 (1977),
+analysis. Computer Graphics Forum 31, 3pt4 (2012), 1255–
+353–736. 8
+1264. 15, 17, 21
+[LHD∗04] LARAMEE R., HAUSER H., DOLEISCH H., VROLIJK [NC08] NG A. W., CHAN A. H.: Visual and cognitive features on
+icon effectiveness. Lecture Notes in Engineering and Computer
+B., POST F., WEISKOPF D.: The state of the art in flow visual-
+Science 2169 (2008), 1856U˝ 1859. 10
+ization: Dense and texture-based techniques. Computer Graphics
+Forum 23, 2 (2004), 203–221. 2, 21 [Nor02] NORMAN D. A.: The Design of Everyday Things. Basic
+Books, 2002. 8
+[LKH09] LIE A. E., KEHRER J., HAUSER H.: Critical design
+and realization aspects of glyph-based 3D data visualization. In [OHG∗08] OELTZE S., HENNEMUTH A., GLASSER S., KÜH-
+Proc. Spring Conference on Computer Graphics (SCCG 2009) NEL C., PREIM B.: Glyph-based visualization of myocardial
+(2009), pp. 27–34. 2, 10, 12, 13, 14, 15, 21 perfusion data and enhancement with contractility and viability
+information. In Proceedings of the First Eurographics conference
+[LMvW10] LI J., MARTENS J.-B., VAN WIJK J. J.: A model
+on Visual Computing for Biomedicine (2008), EG VCBM’08,
+of symbol size discrimination in scatterplots. In Proc. Human
+pp. 11–20. 16
+Factors in Computing Systems (CHI’10) (2010), pp. 2553–2562.
+6, 13 [Ort93] ORTONY A.: Metaphor and thought. Cambridge Univer-
+sity Press, 1993. 7
+[LPSW96] LODHA S. K., PANG A., SHEEHAN R. E., WITTEN-
+BRINK C. M.: UFLOW: Visualizing uncertainty in fluid flow. In [Pal77] PALMER S.: Hierarchical structure in perceptual repre-
+IEEE Visualization (1996), pp. 249–254. 20 sentation. Cognitive Psychology 9, 4 (1977), 441–915. 8
+[LRW99] LOVE B., ROUDER J., WISNIEWSKI E.: A structural [Pan01] PANG A.: Visualizing uncertainty in geo-spatial data.
+account of global and local processing. Cognitive psychology 38, In In Proceedings of the Workshop on the Intersections between
+2 (1999), 291–607. 8 Geospatial Information and Information Technology (2001). 18
+(cid:13)c The Eurographics Association 2013.
+
+--- PAGE 25 ---
+R. Borgo et al. / Glyph-based Visualization
+[PB55] PEIRCE C., BUCHLER J. E.: The Philosophical Writings [RTB96] ROGOWITZ B. E., TREINISH L. A., BRYSON S.: How
+of Peirce. New York: Dover, 1955. 3, 5 not to lie with visualization. Comput. Phys. 10 (1996), 268–273.
+12
+[Pei02] PEIRCE C.: The New Elements of Mathematics. 1902. 3,
+10 [Rum70] RUMELHART D. E.: A multicomponent theory of the
+perception of briefly exposed visual displays. Journal of Math.
+[Pet10] PETTERSSON R.: Information design−principles and
+Psych. 7, 2 (1970), 191–218. 8
+guidelines. Journal of Visual Literacy 29, 2 (2010), 167–182.
+6, 9 [RWG∗12] RIBICIC H., WASER J., GURBAT R., SADRANSKY
+B., GROLLER M. E.: Sketching uncertainty into simulations.
+[PG88] PICKETT R., GRINSTEIN G.: Iconographic displays for
+IEEE Trans. Visualization and Computer Graphics 18, 12 (2012),
+visualizing multidimensional data. In Systems, Man, and Cyber-
+2255–2264. 20
+netics, 1988. Proceedings of the 1988 IEEE International Con-
+ference on (1988), pp. 514–519. 11, 15 [SBSR83] SAUSSURE F., BALLY C., SECHEHAYE A.,
+[PGL∗12] PENG Z., GRUNDY E., LARAMEE R., CHEN G.,
+C
+R
+o
+IE
+u
+D
+rt
+L
+C
+IN
+la
+G
+ss
+E
+i
+R
+cs.
+A
+O
+.
+p
+:
+en C
+C
+o
+o
+u
+u
+rt
+r
+,
+se
+198
+in
+3.
+g
+5
+eneral linguistics. Open
+CROFT N.: Mesh-driven vector field clustering and visualization:
+An image-based approach. IEEE Transactions on Visualization [SEK∗98] SHAW C. D., EBERT D. S., KUKLA J. M., ZWA A.,
+and Computer Graphics (TVCG) 18, 5 (2012), 283–298. 19 SOBOROFF I., ROBERTS D. A.: Data visualization using au-
+tomatic, perceptually-motivated shapes. In In Proceedings of
+[PKH04] PIRINGER H., KOSARA R., HAUSER H.: Interactive
+SPIE 3298, Visual Data Exploration and Analysis V (apr 1998),
+focus+context visualization with linked 2D/3D scatterplots. In
+pp. 208–213. 18
+Proc. Coordinated & Multiple Views in Exploratory Visualization
+(CMV) (2004), pp. 49–60. 15 [SFGF72] SIEGEL J., FARRELL E., GOLDWYN R., FRIEDMAN
+H.: The surgical implication of physiologic patterns in myocar-
+[PL09] PENG Z., LARAMEE R. S.: Higher dimensional vector dial infarction shock. Surgery 72 (1972), 27–35. 16
+field visualization: A survey. In TPCG (2009), pp. 149–163. 2
+[She64] SHEPARD R.: Attention and the metric structure of the
+[PLC∗11] PARRY M. L., LEGG P. A., CHUNG D. H. S., GRIF- stimulus space. Journal of Mathematical Psychology 1, 1 (1964),
+FITHS I. W., CHEN M.: Hierarchical event selection for video 54–141. 8
+storyboards with a case study on snooker video visualization.
+IEEE Transactions on Visualization and Computer Graphics 17 [Sii02] SIIRTOLA H.: The effect of data-relatedness in interactive
+(2011), 1747–1756. 17 glyphs. In Proc. 9th Int. Conf. Information Visualization (2002),
+869–876. 8
+[PR07] PEARLMAN J., RHEINGANS P.: Visualizing network se-
+curity events using compound glyphs from a service-oriented [SK10] SCHULTZ T., KINDLMANN G.: Superquadric glyphs for
+perspective. In Proceedings of the Workshop on Visualization symmetric second-order tensors. IEEE Trans. Visualization and
+for Computer Security (2007), pp. 131–146. 17 Computer Graphics 16, 6 (2010), 1595–1604. 20, 21
+[PVH∗03] POST F., VROLIJK B., HAUSER H., LARAMEE R., [STH02] STOLTE C., TANG D., HANRAHAN P.: Polaris: A sys-
+DOLEISCH H.: The state of the art in flow visualisation: Feature tem for query, analysis, and visualization of multidimensional
+extraction and tracking. Computer Graphics Forum 22, 4 (2003), relational databases. IEEE Trans. Visualization and Computer
+775–792. 2 Graphics 8, 1 (2002), 52–65. 12
+[PWL96] PANG A., WITTENBRINK C., LODHA S.: AP- [SZD∗10] SANYAL J., ZHANG S., DYER J., MERCER A., AM-
+PROACHES TO UNCERTAINTY VISUALIZATION. Technical BURN P., MOORHEAD R.: Noodles: A tool for visualization of
+Report UCSC-CRL-96-21, University of California, Santa Cruz, numerical weather model ensemble uncertainty. IEEE Transac-
+Jack Baskin School of Engineering, Sept. 1996. 20 tions on Visualization and Computer Graphics 16, 6 (Nov./Dec.
+2010), 1421–1430. 18
+[PWR04] PENG W., WARD M., RUNDENSTEINER E.: Clutter
+reduction in multi-dimensional data visualization using dimen- [Tay02] TAYLOR R.: Visualizing multiple fields on the same sur-
+sion reordering. In Proc. IEEE Symp. Information Visualization face. IEEE Computer Graphics and Applications 22, 3 (2002),
+(2004), pp. 89–96. 11, 14 6–10. 18
+[QH87] QUINLAN P., HUMPHREYS G.: Visual search for targets
+[TG88] TREISMAN A., GORMICAN S.: Feature analysis in early
+vision: evidence from search asymmetries. Psychol Rev 95, 1
+defined by combinations of color, shape, and size: an examina-
+(Jan 1988), 15–48. 8
+tion of the task constraints on feature and conjunction searches.
+Perception & psychophysics 41, 5 (1987), 455–527. 7, 8 [Tou97] TOUTIN T.: Qualitative aspects of chromo-stereoscopy
+for depth-perception. Photogrammetric Engineering and Remote
+[RAEM94] RIBARSKY W., AYERS E., EBLE J., MUKHERJEA
+Sensing 63, 2 (1997), 193–203. 15
+S.: Glyphmaker: Creating customized visualizations of complex
+data. IEEE Computer, 7 (1994), 57–64. 14 [Tre99] TREINISH L.: Task-specific visualization design. IEEE
+Computer Graphics and Applications 19, 5 (1999), 72–77. 11,
+[ROP11] ROPINSKI T., OELTZE S., PREIM B.: Survey of glyph-
+15
+based visualization techniques for spatial multivariate medical
+data. Computers & Graphics 35, 2 (2011), 392–401. 2, 7, 8, [TS82] TOURANGEAU R., STERNBERG R. J.: Understanding
+10, 12, 13, 14, 15, 16 and appreciating metaphors. Cognition (1982), 203–244. 7
+[RP08] ROPINSKI T., PREIM B.: Taxonomy and usage guidelines [TSWS05] TOMINSKI C., SCHULZE-WOLLGAST P., SCHU-
+for glyph-based medical visualization. In Proc. Simulation and MANN H.: 3D information visualization for time-dependent data
+Visualization (SimVis) (2008), pp. 121–138. 2, 10, 11, 16 on maps. In Proc. Int’l. Conf. Information Visualization (IV ’05)
+[RSMS∗07] ROPINSKI T., SPECHT M., MEYER-SPRADOW J., (2005), pp. 175–181. 11
+HINRICHS K., PREIM B.: Surface glyphs for visualizing multi- [VP04] VERMA V., PANG A.: Comparative flow visualization.
+modal volume data. In Proc. Vision, Modeling, and Visualization IEEE Transactions on Visualization and Computer Graphics 10,
+(VMV) (2007), pp. 3–12. 11, 12, 13, 15 6 (Nov./Dec. 2004), 609–624. 20
+(cid:13)c The Eurographics Association 2013.
+
+--- PAGE 26 ---
+R. Borgo et al. / Glyph-based Visualization
+[War02] WARD M.: A taxonomy of glyph placement strategies
+for multidimensional data visualization. Information Visualiza-
+tion 1, 3/4 (2002), 194–210. 10, 12, 15
+[War04] WARE C.: Information Visualization: Perception for De-
+sign, second edition ed. Morgan Kaufmann, 2004. 14
+[War08] WARD M.: Multivariate data glyphs: Principles and
+practice. In Handbook of Data Visualization, Chen C.-H., Här-
+dle W., Unwin A., (Eds.), Springer Handbooks Comp. Statistics.
+Springer, 2008, pp. 179–198. 2, 10, 11, 13, 14, 15
+[WB97] WONG P. C., BERGERON R. D.: Multivariate visualiza-
+tion using metric scaling. In Vis1997 (1997), pp. 111–118. 15
+[WCG94] WANG Q., CAVANAGH P., GREEN M.: Familiarity and
+pop-out in visual search. Perception & psychophysics 56, 5 (Nov
+1994), 495–500. 8
+[WEL∗00] WEIGLE C., EMIGH W. G., LIU G., TAYLOR R. M.,
+ENNS J. T., HEALEY C. G.: Oriented sliver textures: A tech-
+nique for local value estimation of multiple scalar fields. In
+Graphics Interface (2000), Canadian Human-Computer Commu-
+nications Society, pp. 163–170. 18
+[WG11] WARD M., GUO Z.: Visual exploration of time-series
+data with shape space projections. Computer Graphics Forum
+30, 3 (2011), 701–710. 15
+[Wil67] WILLIAMS L.: The effects of target specification on ob-
+jects fixated during visual search. Acta psychologica 27 (1967),
+355–415. 7, 8
+[WMM∗02] WESTIN C. F., MAIER S. E., MAMATA H.,
+NABAVI A., JOLESZ F. A., KIKINIS R.: Processing and visu-
+alization for diffusion tensor MRI. Medical Image Analysis 6, 2
+(2002), 93–108. 16, 19, 20
+[WPL96] WITTENBRINK C. M., PANG A., LODHA S. K.:
+Glyphs for visualizing uncertainty in vector fields. IEEE Trans.
+Vis. Comput. Graph 2, 3 (1996), 266–279. 20
+[You01] YOUSEF M. K.: Assessment of metaphor efficacy in user
+interfaces for the elderly: a tentative model for enhancing acces-
+sibility. In Proceedings of the 2001 EC/NSF workshop on Uni-
+versal accessibility of ubiquitous computing: providing for the
+elderly (2001), WUAUC’01, ACM, pp. 120–124. 7
+(cid:13)c The Eurographics Association 2013.

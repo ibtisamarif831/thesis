@@ -103,7 +103,7 @@ function main() {
       {
         generated: "2026-06-22",
         source: "https://github.com/blissymbolics/blissymbols",
-        renderer: "scripts/render_blissymbolics_images.js",
+        renderer: "code/render_blissymbolics_images.js",
         counts: {
           chars: charRecords.length,
           words: wordRecords.length,

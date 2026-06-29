@@ -25,7 +25,7 @@ OUTPUT_DIR = ANALYSIS_DIR / "analysis_dashboard"
 ASSETS_DIR = OUTPUT_DIR / "assets"
 PLOTLY_ASSET = ASSETS_DIR / "plotly.min.js"
 
-PER_SET_LIMIT = 100
+PER_SET_SAMPLE_SIZE = 10
 K_VALUES = (3, 5, 7, 10)
 PRIMARY_K = 7
 RANDOM_SEED = 42
@@ -87,22 +87,28 @@ def write_rows(path: Path, rows: list[dict]) -> None:
         path.write_text("", encoding="utf-8")
         return
     with path.open("w", newline="", encoding="utf-8") as handle:
-        writer = csv.DictWriter(handle, fieldnames=list(rows[0].keys()))
+        writer = csv.DictWriter(handle, fieldnames=list(rows[0].keys()), lineterminator="\n")
         writer.writeheader()
         writer.writerows(rows)
 
 
-def sample_per_set(rows: list[dict[str, str]], per_set_limit: int) -> list[dict[str, str]]:
-    counts: dict[str, int] = {}
-    sampled = []
-    for row in rows:
-        set_id = row["set_id"]
-        count = counts.get(set_id, 0)
-        if count >= per_set_limit:
+def sample_random_rows_per_set(rows: list[dict[str, str]], per_set_sample_size: int, seed: int) -> list[dict[str, str]]:
+    rows_by_set: dict[str, list[tuple[int, dict[str, str]]]] = defaultdict(list)
+    for index, row in enumerate(rows):
+        rows_by_set[row["set_id"]].append((index, row))
+
+    rng = np.random.default_rng(seed)
+    indices = []
+    for set_id in sorted(rows_by_set):
+        set_rows = rows_by_set[set_id]
+        if len(set_rows) <= per_set_sample_size:
+            indices.extend(index for index, _ in set_rows)
             continue
-        sampled.append(row)
-        counts[set_id] = count + 1
-    return sampled
+        local_indices = rng.choice(len(set_rows), size=per_set_sample_size, replace=False).tolist()
+        indices.extend(set_rows[local_index][0] for local_index in local_indices)
+
+    indices = sorted(indices)
+    return [rows[index] for index in indices]
 
 
 def enrich_metadata_rows(rows: list[dict[str, str]]) -> list[dict[str, str]]:
@@ -565,7 +571,8 @@ def write_dashboard_data(rows: list[dict], feature_by_id: dict[str, dict], matri
         "metadata": {
             "generated_from": str(DATASET_PATH.relative_to(ROOT)),
             "row_count": len(records),
-            "per_set_limit": PER_SET_LIMIT,
+            "per_set_sample_size": PER_SET_SAMPLE_SIZE,
+            "random_seed": RANDOM_SEED,
             "k_values": list(K_VALUES),
             "primary_k": PRIMARY_K,
             "feature_variants": list(FEATURE_VARIANTS),
@@ -619,9 +626,12 @@ def write_index_html() -> None:
     .checklist {{ border: 1px solid var(--border); border-radius: 6px; padding: 6px 8px; max-height: 180px; overflow: auto; background: white; }}
     .plot-wrap {{ padding: 10px; min-width: 0; }}
     #scatter {{ width: 100%; height: calc(100vh - 76px); }}
-    #hoverPreview {{ position: fixed; z-index: 20; display: none; pointer-events: none; max-width: 260px; padding: 8px; border: 1px solid var(--border); border-radius: 8px; background: rgba(255,255,255,.98); box-shadow: 0 8px 24px rgba(20,30,45,.16); font-size: 12px; }}
-    #hoverPreview img {{ width: 72px; height: 72px; object-fit: contain; border: 1px solid var(--border); background: white; float: left; margin-right: 8px; }}
-    #hoverPreview b {{ font-size: 13px; }}
+    #hoverPreview {{ position: fixed; z-index: 20; display: none; pointer-events: none; max-width: 360px; padding: 8px 10px; border-radius: 0; background: #0b930b; color: white; box-shadow: none; font-size: 18px; line-height: 1.28; }}
+    #hoverPreview img {{ width: 84px; height: 84px; object-fit: contain; border: 1px solid rgba(255,255,255,.65); background: white; margin: 8px 10px 2px 0; vertical-align: top; }}
+    #hoverPreview b {{ font-size: 18px; }}
+    #hoverPreview .hover-grid {{ display: grid; grid-template-columns: 94px minmax(0, 1fr); align-items: start; gap: 0; margin-bottom: 4px; }}
+    #hoverPreview .hover-meta {{ min-width: 0; }}
+    #hoverPreview .hover-features {{ clear: both; }}
     .detail-img {{ width: 96px; height: 96px; object-fit: contain; border: 1px solid var(--border); background: white; }}
     .muted {{ color: var(--muted); }}
     .pill {{ display: inline-block; padding: 2px 6px; border: 1px solid var(--border); border-radius: 999px; margin: 2px; font-size: 12px; background: var(--panel); }}
@@ -646,9 +656,7 @@ def write_index_html() -> None:
       </section>
       <section class="control">
         <h2>Clustering</h2>
-        <div hidden>
-          <label>Method<select id="methodSelect"><option value="kmeans">K-Means</option><option value="hierarchical">Hierarchical</option></select></label>
-        </div>
+        <label>Method<select id="methodSelect"><option value="kmeans">K-Means</option><option value="hierarchical">Hierarchical</option></select></label>
         <label>Cluster count<select id="kSelect"></select></label>
         <label>Color by<select id="colorSelect"></select></label>
       </section>
@@ -660,14 +668,14 @@ def write_index_html() -> None:
         <h2>Filters</h2>
         <label>Icon sets<select id="setFilter" multiple size="8"></select></label>
         <div class="selected-pills" id="setFilterPills"></div>
-        <div hidden>
-          <label>Categories<select id="categoryFilter" multiple size="8"></select></label>
-          <div class="selected-pills" id="categoryFilterPills"></div>
-          <label>Styles<select id="styleFilter" multiple size="5"></select></label>
-          <div class="selected-pills" id="styleFilterPills"></div>
-        </div>
+        <label>Categories<select id="categoryFilter" multiple size="8"></select></label>
+        <div class="selected-pills" id="categoryFilterPills"></div>
+        <label>Styles<select id="styleFilter" multiple size="5"></select></label>
+        <div class="selected-pills" id="styleFilterPills"></div>
         <div class="button-row">
           <button type="button" id="clearSetFilter">Clear sets</button>
+          <button type="button" id="clearCategoryFilter">Clear categories</button>
+          <button type="button" id="clearStyleFilter">Clear styles</button>
           <button type="button" id="resetFilters">Reset filters</button>
         </div>
       </section>
@@ -709,7 +717,7 @@ def write_index_html() -> None:
 
     function initializeControls() {{
       document.getElementById("datasetSummary").textContent =
-        `${{dashboard.metadata.row_count}} icons, ${{dashboard.metadata.per_set_limit}} max per set`;
+        `${{dashboard.metadata.row_count}} icons, ${{dashboard.metadata.per_set_sample_size}} random per dataset`;
 
       fillSelect("variantSelect", dashboard.metadata.feature_variants.map(v => [v, title(v)]), state.variant);
       fillSelect("kSelect", dashboard.metadata.k_values.map(k => [String(k), String(k)]), state.k);
@@ -916,13 +924,20 @@ def write_index_html() -> None:
 
     function renderHoverPreview(record, cluster, event) {{
       const preview = document.getElementById("hoverPreview");
+      const features = Array.from(state.activeFeatures)
+        .map(feature => `${{title(feature)}}: ${{record.image_features[feature]}}`)
+        .join("<br>");
       preview.innerHTML = `
-        <img src="${{record.normalized_path}}" alt="">
-        <b>${{escapeHtml(record.label)}}</b><br>
-        <span class="muted">${{escapeHtml(record.set_name)}}</span><br>
-        <span>${{escapeHtml(record.category || "Uncategorized")}}</span><br>
-        <span>Cluster: ${{cluster}}</span>
-        <div style="clear: both;"></div>`;
+        <div class="hover-grid">
+          <img src="${{record.normalized_path}}" alt="">
+          <div class="hover-meta">
+            <b>${{escapeHtml(record.label)}}</b><br>
+            ${{escapeHtml(record.set_name)}}<br>
+            ${{escapeHtml(record.category || "Uncategorized")}}<br>
+            <b>Cluster: ${{cluster}}</b>
+          </div>
+        </div>
+        <div class="hover-features">${{features}}</div>`;
       const x = Math.min(event.clientX + 14, window.innerWidth - 280);
       const y = Math.min(event.clientY + 14, window.innerHeight - 150);
       preview.style.left = `${{Math.max(8, x)}}px`;
@@ -1126,7 +1141,8 @@ def write_index_html() -> None:
 def write_metadata_report(rows: list[dict], failures: list[dict] | None = None) -> None:
     report = {
         "rows": len(rows),
-        "per_set_limit": PER_SET_LIMIT,
+        "per_set_sample_size": PER_SET_SAMPLE_SIZE,
+        "random_seed": RANDOM_SEED,
         "set_counts": dict(sorted(Counter(row["set_id"] for row in rows).items())),
         "missing_category": sum(1 for row in rows if not row.get("category")),
         "missing_metadata_tokens": sum(1 for row in rows if not row.get("metadata_tokens")),
@@ -1161,7 +1177,7 @@ def write_plotly_placeholder_if_missing() -> None:
 def main() -> None:
     OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
     all_rows = read_csv(DATASET_PATH)
-    sampled_source_rows = sample_per_set(all_rows, PER_SET_LIMIT)
+    sampled_source_rows = sample_random_rows_per_set(all_rows, PER_SET_SAMPLE_SIZE, RANDOM_SEED)
     metadata_rows = enrich_metadata_rows(sampled_source_rows)
     write_rows(OUTPUT_DIR / "sample_metadata.csv", metadata_rows)
     write_metadata_report(metadata_rows)

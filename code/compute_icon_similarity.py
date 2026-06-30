@@ -11,22 +11,16 @@ from pathlib import Path
 import numpy as np
 import pandas as pd
 from PIL import Image, ImageDraw, ImageFont
-from sklearn.metrics import pairwise_distances
-from sklearn.preprocessing import StandardScaler
+
+import extract_icon_features
 
 
 ROOT = Path(__file__).resolve().parents[1]
 FEATURES_CSV = ROOT / "icon_data/analysis/features.csv"
 OUTPUT_DIR = ROOT / "icon_data/analysis/similarity"
 
-FEATURE_COLUMNS = [
-    "foreground_area_ratio",
-    "canny_edge_density",
-    "connected_components",
-    "quadtree_leaf_count",
-    "quadtree_structural_variability",
-    "quadtree_mean_leaf_size",
-]
+FEATURE_COLUMNS = list(extract_icon_features.FEATURE_COLUMNS)
+FEATURE_GROUPS = [list(group) for group in extract_icon_features.FEATURE_GROUPS]
 
 METADATA_COLUMNS = [
     "icon_id",
@@ -49,12 +43,42 @@ def load_features(path: Path) -> pd.DataFrame:
 
 
 def compute_distances(frame: pd.DataFrame) -> tuple[np.ndarray, np.ndarray]:
-    scaled = StandardScaler().fit_transform(frame[FEATURE_COLUMNS].to_numpy(dtype=float))
-    euclidean = pairwise_distances(scaled, metric="euclidean")
-    cosine = pairwise_distances(scaled, metric="cosine")
+    values = frame[FEATURE_COLUMNS].to_numpy(dtype=float)
+    means = values.mean(axis=0)
+    stds = values.std(axis=0)
+    stds = np.where(stds == 0, 1.0, stds)
+    scaled = (values - means) / stds
+    scaled = apply_group_weights(scaled, FEATURE_COLUMNS, FEATURE_GROUPS)
+    euclidean = euclidean_distances(scaled)
+    cosine = cosine_distances(scaled)
     np.fill_diagonal(euclidean, np.inf)
     np.fill_diagonal(cosine, np.inf)
     return euclidean, cosine
+
+
+def apply_group_weights(values: np.ndarray, columns: list[str], groups: list[list[str]]) -> np.ndarray:
+    weighted = values.copy()
+    column_index = {column: index for index, column in enumerate(columns)}
+    for group in groups:
+        indices = [column_index[column] for column in group if column in column_index]
+        if not indices:
+            continue
+        weighted[:, indices] /= math.sqrt(len(indices))
+    return weighted
+
+
+def euclidean_distances(values: np.ndarray) -> np.ndarray:
+    norms = (values**2).sum(axis=1)
+    squared = norms[:, None] + norms[None, :] - 2 * values @ values.T
+    return np.sqrt(np.maximum(squared, 0.0))
+
+
+def cosine_distances(values: np.ndarray) -> np.ndarray:
+    norms = np.linalg.norm(values, axis=1)
+    safe = np.where(norms == 0, 1.0, norms)
+    normalized = values / safe[:, None]
+    similarity = normalized @ normalized.T
+    return 1.0 - np.clip(similarity, -1.0, 1.0)
 
 
 def write_distance_matrix(frame: pd.DataFrame, distances: np.ndarray, output: Path) -> None:
@@ -179,7 +203,8 @@ def write_metadata(output_dir: Path, frame: pd.DataFrame, neighbors: int, closes
         "input": relative_label(FEATURES_CSV),
         "row_count": int(len(frame)),
         "feature_columns": FEATURE_COLUMNS,
-        "standardization": "StandardScaler over feature columns",
+        "standardization": "column-wise z-score, then equal weighting by extractor feature group",
+        "feature_groups": {extractor.name: list(extractor.columns) for extractor in extract_icon_features.FEATURE_EXTRACTORS},
         "distance_metrics": ["euclidean", "cosine"],
         "neighbors_per_icon": neighbors,
         "closest_pair_limit": closest_pairs,

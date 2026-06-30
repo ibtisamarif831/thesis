@@ -1,0 +1,343 @@
+- generic [active] [ref=e1]:
+  - banner [ref=e2]:
+    - heading "Analysis Icon Clustering Dashboard" [level=1] [ref=e3]
+    - generic [ref=e4]: 129 icons, 10 random per dataset
+  - main [ref=e5]:
+    - complementary [ref=e6]:
+      - generic [ref=e7]:
+        - heading "Feature Variant" [level=2] [ref=e8]
+        - combobox [ref=e10]:
+          - option "Image" [selected]
+          - option "Metadata"
+          - option "Combined"
+      - generic [ref=e11]:
+        - heading "Clustering" [level=2] [ref=e12]
+        - generic [ref=e13]:
+          - text: Method
+          - combobox "Method" [ref=e14]:
+            - option "K-Means" [selected]
+            - option "Hierarchical"
+        - generic [ref=e15]:
+          - text: Cluster count
+          - combobox "Cluster count" [ref=e16]:
+            - option "3"
+            - option "5"
+            - option "7" [selected]
+            - option "10"
+        - generic [ref=e17]:
+          - text: Color by
+          - combobox "Color by" [ref=e18]:
+            - option "Cluster" [selected]
+            - option "Icon set"
+            - option "Foreground area ratio"
+            - option "Connected components"
+            - option "Quadtree leaf count"
+            - option "Quadtree structural variability"
+            - option "Quadtree mean leaf size"
+            - option "Bounding-box occupancy"
+            - option "Bounding-box aspect ratio"
+            - option "Solidity"
+            - option "Contour count"
+            - option "Holes count"
+            - option "Closed-contour ratio"
+            - option "Monochrome flag"
+            - option "Color count"
+            - option "Mean saturation"
+            - option "Colorfulness"
+            - option "Foreground-background contrast"
+            - option "Edge density"
+            - option "Perimeter-area ratio"
+            - option "Filled-vs-outline proxy"
+            - option "Horizontal symmetry"
+            - option "Vertical symmetry"
+            - option "Horizontal line orientation"
+            - option "Diagonal 45 degree orientation"
+            - option "Vertical line orientation"
+            - option "Diagonal 135 degree orientation"
+      - generic [ref=e19]:
+        - heading "Image Features" [level=2] [ref=e20]
+        - generic [ref=e21]:
+          - button "All" [ref=e22] [cursor=pointer]
+          - button "Shape" [ref=e23] [cursor=pointer]
+          - button "Color" [ref=e24] [cursor=pointer]
+          - button "Style" [ref=e25] [cursor=pointer]
+        - generic [ref=e26]:
+          - generic [ref=e27]:
+            - generic [ref=e28]:
+              - generic [ref=e29]: Shape Features
+              - generic [ref=e30]:
+                - button "Select all" [ref=e31] [cursor=pointer]
+                - button "Clear" [ref=e32] [cursor=pointer]
+            - generic [ref=e33]: Geometry, contour, density, and structural complexity features that describe the icon body.
+            - generic [ref=e34]:
+              - generic [ref=e35]:
+                - checkbox "Foreground area ratio" [checked] [ref=e36]
+                - generic [ref=e37]: Foreground area ratio
+              - generic [ref=e38]:
+                - checkbox "Connected components" [checked] [ref=e39]
+                - generic [ref=e40]: Connected components
+              - generic [ref=e41]:
+                - checkbox "Quadtree leaf count" [checked] [ref=e42]
+                - generic [ref=e43]: Quadtree leaf count
+              - generic [ref=e44]:
+                - checkbox "Quadtree structural variability" [checked] [ref=e45]
+                - generic [ref=e46]: Quadtree structural variability
+              - generic [ref=e47]:
+                - checkbox "Quadtree mean leaf size" [checked] [ref=e48]
+                - generic [ref=e49]: Quadtree mean leaf size
+              - generic [ref=e50]:
+                - checkbox "Bounding-box occupancy" [checked] [ref=e51]
+                - generic [ref=e52]: Bounding-box occupancy
+              - generic [ref=e53]:
+                - checkbox "Bounding-box aspect ratio" [checked] [ref=e54]
+                - generic [ref=e55]: Bounding-box aspect ratio
+              - generic [ref=e56]:
+                - checkbox "Solidity" [checked] [ref=e57]
+                - generic [ref=e58]: Solidity
+              - generic [ref=e59]:
+                - checkbox "Contour count" [checked] [ref=e60]
+                - generic [ref=e61]: Contour count
+              - generic [ref=e62]:
+                - checkbox "Holes count" [checked] [ref=e63]
+                - generic [ref=e64]: Holes count
+              - generic [ref=e65]:
+                - checkbox "Closed-contour ratio" [checked] [ref=e66]
+                - generic [ref=e67]: Closed-contour ratio
+          - generic [ref=e68]:
+            - generic [ref=e69]:
+              - generic [ref=e70]: Color Features
+              - generic [ref=e71]:
+                - button "Select all" [ref=e72] [cursor=pointer]
+                - button "Clear" [ref=e73] [cursor=pointer]
+            - generic [ref=e74]: Color presence, richness, saturation, and foreground-background contrast.
+            - generic [ref=e75]:
+              - generic [ref=e76]:
+                - checkbox "Monochrome flag" [checked] [ref=e77]
+                - generic [ref=e78]: Monochrome flag
+              - generic [ref=e79]:
+                - checkbox "Color count" [checked] [ref=e80]
+                - generic [ref=e81]: Color count
+              - generic [ref=e82]:
+                - checkbox "Mean saturation" [checked] [ref=e83]
+                - generic [ref=e84]: Mean saturation
+              - generic [ref=e85]:
+                - checkbox "Colorfulness" [checked] [ref=e86]
+                - generic [ref=e87]: Colorfulness
+              - generic [ref=e88]:
+                - checkbox "Foreground-background contrast" [checked] [ref=e89]
+                - generic [ref=e90]: Foreground-background contrast
+          - generic [ref=e91]:
+            - generic [ref=e92]:
+              - generic [ref=e93]: Style Features
+              - generic [ref=e94]:
+                - button "Select all" [ref=e95] [cursor=pointer]
+                - button "Clear" [ref=e96] [cursor=pointer]
+            - generic [ref=e97]: "Measured rendering style: edge load, outline-vs-fill behavior, symmetry, and dominant line direction."
+            - generic [ref=e98]:
+              - generic [ref=e99]:
+                - checkbox "Edge density" [checked] [ref=e100]
+                - generic [ref=e101]: Edge density
+              - generic [ref=e102]:
+                - checkbox "Perimeter-area ratio" [checked] [ref=e103]
+                - generic [ref=e104]: Perimeter-area ratio
+              - generic [ref=e105]:
+                - checkbox "Filled-vs-outline proxy" [checked] [ref=e106]
+                - generic [ref=e107]: Filled-vs-outline proxy
+              - generic [ref=e108]:
+                - checkbox "Horizontal symmetry" [checked] [ref=e109]
+                - generic [ref=e110]: Horizontal symmetry
+              - generic [ref=e111]:
+                - checkbox "Vertical symmetry" [checked] [ref=e112]
+                - generic [ref=e113]: Vertical symmetry
+              - generic [ref=e114]:
+                - checkbox "Horizontal line orientation" [checked] [ref=e115]
+                - generic [ref=e116]: Horizontal line orientation
+              - generic [ref=e117]:
+                - checkbox "Diagonal 45 degree orientation" [checked] [ref=e118]
+                - generic [ref=e119]: Diagonal 45 degree orientation
+              - generic [ref=e120]:
+                - checkbox "Vertical line orientation" [checked] [ref=e121]
+                - generic [ref=e122]: Vertical line orientation
+              - generic [ref=e123]:
+                - checkbox "Diagonal 135 degree orientation" [checked] [ref=e124]
+                - generic [ref=e125]: Diagonal 135 degree orientation
+      - generic [ref=e126]:
+        - heading "Filters" [level=2] [ref=e127]
+        - generic [ref=e128]:
+          - text: Icon sets
+          - listbox "Icon sets" [ref=e129]:
+            - option "AIGA/DOT Symbol Signs" [ref=e130]
+            - option "ARASAAC Pictograms" [ref=e131]
+            - option "Blissymbolics" [ref=e132]
+            - option "GHS Hazard Pictograms" [ref=e133]
+            - option "ISO 15223 Medical Device Symbols" [ref=e134]
+            - option "ISO 7010 Safety Signs" [ref=e135]
+            - option "Mapbox Maki" [ref=e136]
+            - option "McDougall Symbol/Icon Set" [ref=e137]
+            - option "Mulberry Symbols" [ref=e138]
+            - option "OCHA Humanitarian Icons" [ref=e139]
+            - option "OpenMoji" [ref=e140]
+            - option "USP Pictograms" [ref=e141]
+            - option "Universal Symbols Healthcare Webfont" [ref=e142]
+        - generic [ref=e144]: All
+        - generic [ref=e145]:
+          - button "Clear sets" [ref=e146] [cursor=pointer]
+          - button "Reset filters" [ref=e147] [cursor=pointer]
+    - generic [ref=e149]:
+      - generic:
+        - generic:
+          - img:
+            - generic:
+              - generic:
+                - generic:
+                  - generic:
+                    - generic: −4
+                  - generic:
+                    - generic: −2
+                  - generic:
+                    - generic: "0"
+                  - generic:
+                    - generic: "2"
+                  - generic:
+                    - generic: "4"
+                  - generic:
+                    - generic: "6"
+                  - generic:
+                    - generic: "8"
+                - generic:
+                  - generic:
+                    - generic: −4
+                  - generic:
+                    - generic: −3
+                  - generic:
+                    - generic: −2
+                  - generic:
+                    - generic: −1
+                  - generic:
+                    - generic: "0"
+                  - generic:
+                    - generic: "1"
+                  - generic:
+                    - generic: "2"
+                  - generic:
+                    - generic: "3"
+                  - generic:
+                    - generic: "4"
+          - img:
+            - generic:
+              - generic:
+                - generic: PCA 1
+              - generic:
+                - generic: PCA 2
+          - generic [ref=e163]:
+            - img [ref=e166] [cursor=pointer]
+            - generic [ref=e168]:
+              - img [ref=e170] [cursor=pointer]
+              - img [ref=e173] [cursor=pointer]
+              - img [ref=e176] [cursor=pointer]
+              - img [ref=e179] [cursor=pointer]
+            - generic [ref=e181]:
+              - img [ref=e183] [cursor=pointer]
+              - img [ref=e186] [cursor=pointer]
+              - img [ref=e189] [cursor=pointer]
+              - img [ref=e192] [cursor=pointer]
+            - link "plotly-logomark" [ref=e195] [cursor=pointer]:
+              - /url: https://plotly.com/
+              - img "plotly-logomark" [ref=e196]
+          - img
+    - complementary [ref=e209]:
+      - generic [ref=e210]:
+        - heading "Selected Icon" [level=2] [ref=e211]
+        - generic [ref=e212]: Click a point to inspect an icon.
+      - generic [ref=e213]:
+        - heading "Cluster Summary" [level=2] [ref=e214]
+        - generic [ref=e215]:
+          - generic [ref=e216]:
+            - text: Cluster 0 (1 icons)
+            - text: "Sets: McDougall Symbol/Icon Set (1)"
+            - generic [ref=e217]:
+              - text: "Distinctive groups: Shape (2.27z), Style (2.05z)"
+              - text: "Top features: Connected components (7.73z), Contour count (7.73z), Perimeter-area ratio (4.93z)"
+            - img "Binary file" [ref=e219]
+          - generic [ref=e220]:
+            - text: Cluster 1 (7 icons)
+            - text: "Sets: ISO 15223 Medical Device Symbols (7)"
+            - generic [ref=e221]:
+              - text: "Distinctive groups: Shape (1.06z), Style (0.84z)"
+              - text: "Top features: Bounding-box aspect ratio (2.44z), Quadtree structural variability (1.64z), Quadtree leaf count (1.64z)"
+            - generic [ref=e222]:
+              - img "batch code" [ref=e223]
+              - img "catalogue number" [ref=e224]
+              - img "serial number" [ref=e225]
+              - img "sterile" [ref=e226]
+              - img "sterilized using ethylene oxide" [ref=e227]
+              - img "sterilized using steam or dry heat" [ref=e228]
+              - img "udi" [ref=e229]
+          - generic [ref=e230]:
+            - text: Cluster 2 (47 icons)
+            - text: "Sets: OpenMoji (8), Mulberry Symbols (7)"
+            - generic [ref=e231]:
+              - text: "Distinctive groups: Color (0.30z), Style (0.29z)"
+              - text: "Top features: Color count (0.55z), Vertical symmetry (0.43z), Diagonal 135 degree orientation (0.37z)"
+            - generic [ref=e232]:
+              - img "Colour area" [ref=e233]
+              - img "Football" [ref=e234]
+              - img "Slow" [ref=e235]
+              - img "Aiga baggage check in" [ref=e236]
+              - img "Aiga fire extinguisher" [ref=e237]
+              - img "Aiga mail white" [ref=e238]
+              - img "Aiga restaurant" [ref=e239]
+              - img "Aiga uparrow" [ref=e240]
+          - generic [ref=e241]:
+            - text: Cluster 3 (43 icons)
+            - text: "Sets: ISO 7010 Safety Signs (10), USP Pictograms (10)"
+            - generic [ref=e242]:
+              - text: "Distinctive groups: Shape (0.67z), Color (0.59z)"
+              - text: "Top features: Bounding-box occupancy (1.17z), Solidity (1.07z), Foreground area ratio (1.07z)"
+            - generic [ref=e243]:
+              - img "casino" [ref=e244]
+              - img "defibrillator" [ref=e245]
+              - img "fire station" [ref=e246]
+              - img "waste basket" [ref=e247]
+              - img "food" [ref=e248]
+              - img "potable water" [ref=e249]
+              - img "remove" [ref=e250]
+              - img "toilet" [ref=e251]
+          - generic [ref=e252]:
+            - text: Cluster 4 (10 icons)
+            - text: "Sets: GHS Hazard Pictograms (8), ARASAAC Pictograms (2)"
+            - generic [ref=e253]:
+              - text: "Distinctive groups: Color (1.41z), Shape (0.90z)"
+              - text: "Top features: Mean saturation (2.60z), Colorfulness (2.43z), Quadtree leaf count (1.43z)"
+            - generic [ref=e254]:
+              - img "all" [ref=e255]
+              - img "fight" [ref=e256]
+              - img "corrosion" [ref=e257]
+              - img "exclamation mark" [ref=e258]
+              - img "exploding bomb" [ref=e259]
+              - img "flame" [ref=e260]
+              - img "flame over circle" [ref=e261]
+              - img "gas cylinder" [ref=e262]
+          - generic [ref=e263]:
+            - text: Cluster 5 (20 icons)
+            - text: "Sets: McDougall Symbol/Icon Set (5), AIGA/DOT Symbol Signs (4)"
+            - generic [ref=e264]:
+              - text: "Distinctive groups: Style (0.59z), Shape (0.49z)"
+              - text: "Top features: Vertical symmetry (1.40z), Horizontal symmetry (1.19z), Solidity (1.17z)"
+            - generic [ref=e265]:
+              - img "Bitmap" [ref=e266]
+              - img "Football ground" [ref=e267]
+              - img "Mouse properties" [ref=e268]
+              - img "Protect from heat and radioactive" [ref=e269]
+              - img "Windscreen demisting and defrosting" [ref=e270]
+              - img "Aiga drinkingfountain" [ref=e271]
+              - img "Aiga escalator down mirror" [ref=e272]
+              - img "Aiga immigration" [ref=e273]
+          - generic [ref=e274]:
+            - text: Cluster 6 (1 icons)
+            - text: "Sets: McDougall Symbol/Icon Set (1)"
+            - generic [ref=e275]:
+              - text: "Distinctive groups: Style (2.06z), Shape (1.01z)"
+              - text: "Top features: Perimeter-area ratio (3.86z), Horizontal line orientation (3.59z), Filled-vs-outline proxy (3.28z)"
+            - img "Opening of selvedge loops" [ref=e277]
+  - img [ref=e278]

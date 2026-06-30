@@ -10,7 +10,6 @@
     "dashboard_data.json",
     "index.html"
   ],
-  "missing_category": 0,
   "missing_metadata_tokens": 0,
   "missing_normalized_paths": 0,
   "per_set_sample_size": 10,

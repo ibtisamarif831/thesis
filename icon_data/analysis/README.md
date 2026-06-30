@@ -44,12 +44,12 @@ python3 code/build_icon_dataset.py --normalize --workers 8
 Feature extraction is implemented in:
 
 ```bash
-/Users/macbook/.cache/codex-runtimes/codex-primary-runtime/dependencies/python/bin/python3 code/extract_icon_features.py --per-set-limit 100 --workers 8
+/Users/macbook/.cache/codex-runtimes/codex-primary-runtime/dependencies/python/bin/python3 code/extract_icon_features.py --per-set-limit 100 --workers 4
 ```
 
-The extractor reads normalized 256x256 PNGs from `icon_data/normalized_256/` and writes a balanced pilot sample to `features.csv`. The current run uses up to 100 icons per icon set, producing 855 feature rows because some sets contain fewer than 100 canonical icons.
+The extractor reads normalized 256x256 PNGs from `icon_data/normalized_256/` and writes a balanced pilot sample to `features.csv`. The current run uses up to 100 icons per icon set, producing 1,038 feature rows because some sets contain fewer than 100 canonical icons.
 
-OpenCV is used for Canny edge detection when available; the script keeps a local NumPy/Pillow fallback for portability.
+OpenCV is used for Canny/contour helpers when available; the script keeps local NumPy/Pillow fallbacks for portability.
 
 Current feature columns:
 
@@ -59,6 +59,27 @@ Current feature columns:
 - `quadtree_leaf_count`
 - `quadtree_structural_variability`
 - `quadtree_mean_leaf_size`
+- `bounding_box_occupancy`
+- `bounding_box_aspect_ratio`
+- `solidity`
+- `centroid_distance_from_center`
+- `horizontal_symmetry`
+- `vertical_symmetry`
+- `perimeter_area_ratio`
+- `filled_vs_outline_proxy`
+- `contour_count`
+- `holes_count`
+- `closed_contour_ratio`
+- `line_orientation_0`
+- `line_orientation_45`
+- `line_orientation_90`
+- `line_orientation_135`
+- `is_monochrome`
+- `color_count`
+- `mean_saturation`
+- `colorfulness`
+- `foreground_background_contrast`
+- `grid_foreground_0_0` through `grid_foreground_3_3`
 
 The extractor is plugin-style: each metric is a `FeatureExtractor` subclass registered in `FEATURE_EXTRACTORS`.
 
@@ -88,7 +109,7 @@ The report is written to:
 
 `icon_data/analysis/similarity/index.html`
 
-The script standardizes the extracted feature columns, computes Euclidean and cosine distance matrices, writes nearest-neighbor tables, and generates visual sheets for the closest all-set, same-set, and cross-set icon pairs.
+The script applies column-wise z-score standardization, then weights each extractor feature group equally before computing Euclidean and cosine distance matrices. This prevents multi-column groups such as the 4x4 layout grid from dominating the distinguishability score only because they contain more columns. It then writes nearest-neighbor tables and generates visual sheets for the closest all-set, same-set, and cross-set icon pairs.
 
 ## Canonical Selection Rules
 

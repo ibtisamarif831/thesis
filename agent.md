@@ -31,12 +31,17 @@ The repo is not mainly a generic icon collection. It is an empirical/computation
 | Blissymbolics rendering | `code/render_blissymbolics_images.js` | `icon_data/iconsets/06_blissymbolics/rendered_svg/`, `metadata/rendered_symbols.json` |
 | Source provenance / old source plan | `data/10 icons.md`, `icon_data/MANIFEST.md` | `git show HEAD:source.md` if `source.md` is absent/deleted |
 | Generated output status | `icon_data/analysis/README.md` | specific subfolder READMEs |
+| Extracted paper text / literature evidence | `papers/extracted_text/README.md`, `notes/paper_feature_review.md` | original PDFs in `papers/` |
 
 ## Current Working State To Know
 
 - The active canonical dataset is `icon_data/analysis/dataset.csv`.
+- Current dataset size: **28,749** canonical rows in `dataset.csv`.
 - Normalized PNGs are generated under `icon_data/normalized_256/`; this directory is large/generated and may be ignored by git.
+- Current visual-feature sample: **1,038** rows in `icon_data/analysis/features.csv`, with **42 numeric image-feature columns** plus metadata columns.
+- Current feature extraction failures: `[]` in `icon_data/analysis/feature_failures.json`.
 - The interactive dashboard is generated under `icon_data/analysis/analysis_dashboard/`.
+- Current dashboard sample: **129** rows in `icon_data/analysis/analysis_dashboard/dashboard_data.json`.
 - As of the latest dashboard change, the dashboard sample is **up to 10 random icons from each dataset**, using fixed `RANDOM_SEED = 42` in `code/build_analysis_dashboard.py`.
 - The dashboard currently supports:
   - image, metadata, and combined feature variants;
@@ -45,7 +50,11 @@ The repo is not mainly a generic icon collection. It is an empirical/computation
   - coloring by cluster, set, category, style, or numeric image feature;
   - filtering by icon set, category, and style;
   - selected icon details and cluster summaries.
-- Older task notes may still mention the previous 1,038-icon dashboard sample. Treat `icon_data/analysis/analysis_dashboard/README.md` and `code/build_analysis_dashboard.py` as the current source of truth.
+- Similarity outputs in `icon_data/analysis/similarity/` are based on the 1,038-row feature sample.
+- Similarity and dashboard image-feature clustering use z-scored columns with equal weighting by extractor feature group.
+- The 7 thesis PDFs have extracted page-marked text under `papers/extracted_text/`; regenerate with `code/extract_paper_text.py`.
+- Static feature visualizations under `icon_data/analysis/visualizations/` are summary-only when `matplotlib` is unavailable in the runtime. The interactive Plotly dashboard is the stronger current visual interface.
+- Older task notes may still mention previous dashboard/feature states. Treat `icon_data/analysis/README.md`, generated metadata JSON files, and current scripts as the source of truth.
 - `source.md` is tracked historically but may be deleted in the working tree. Do not restore it unless explicitly asked; use `git show HEAD:source.md` for its last committed content.
 
 ## Runtime Notes
@@ -60,9 +69,11 @@ Common examples:
 
 ```bash
 /Users/macbook/.cache/codex-runtimes/codex-primary-runtime/dependencies/python/bin/python3 code/build_analysis_dashboard.py
-/Users/macbook/.cache/codex-runtimes/codex-primary-runtime/dependencies/python/bin/python3 code/extract_icon_features.py --per-set-limit 100 --workers 8
+/Users/macbook/.cache/codex-runtimes/codex-primary-runtime/dependencies/python/bin/python3 code/extract_icon_features.py --per-set-limit 100 --workers 4
 /Users/macbook/.cache/codex-runtimes/codex-primary-runtime/dependencies/python/bin/python3 code/compute_icon_similarity.py
 ```
+
+The bundled runtime has NumPy/Pandas/Pillow, but not necessarily `matplotlib` or `sklearn`. Current similarity, dashboard, and PCA helpers do not require `sklearn`. `code/visualize_icon_features.py` writes a summary-only report if `matplotlib` is missing.
 
 For static dashboard verification:
 
@@ -83,7 +94,7 @@ http://127.0.0.1:8765/icon_data/analysis/analysis_dashboard/index.html
 | `agent.md` | This routing/orientation guide for agents. |
 | `THESIS_CHECKLIST.md` | Thesis roadmap and high-level completion checklist. |
 | `data/10 icons.md` | Thesis-aligned icon/glyph source plan and rationale. |
-| `papers/` | Core literature PDFs. Treat these as the thesis literature backbone. |
+| `papers/` | Core literature PDFs plus extracted text under `papers/extracted_text/`. Treat these as the thesis literature backbone. |
 | `notes/` | Short explanatory notes, especially feature-taxonomy provenance. |
 | `tasks/` | Weekly planning/progress notes. Some contain older status and should be read as historical context. |
 | `code/` | Download, extraction, normalization, feature, similarity, metadata, and dashboard builders. |
@@ -119,13 +130,13 @@ This is the main canonical analysis area.
 Important files:
 
 - `dataset.csv`: one row per canonical icon selected for analysis.
-- `features.csv`: older balanced pilot visual-feature sample.
+- `features.csv`: current balanced pilot visual-feature sample, 1,038 rows and 42 numeric image-feature columns.
 - `features_metadata.json`: feature extraction settings and registry.
 - `feature_failures.json`: latest visual-feature extraction failures.
 - `normalization_failures.json`: latest normalization/conversion failures.
-- `clustering_metadata_sample.csv`: metadata-enriched sample matching the older `features.csv` pilot.
+- `clustering_metadata_sample.csv`: metadata-enriched sample from the earlier feature pilot; regenerate if it needs to match the current 1,038-row `features.csv` exactly.
 - `clustering_metadata_missing_report.json`: metadata coverage report.
-- `similarity/`: pairwise distance matrices, nearest-neighbor CSVs, visual similarity reports.
+- `similarity/`: pairwise distance matrices, nearest-neighbor CSVs, visual similarity reports using group-weighted image features.
 - `analysis_dashboard/`: current interactive dashboard outputs.
 
 ### `icon_data/analysis/analysis_dashboard/`
@@ -159,9 +170,9 @@ Current dashboard sample:
 | Script | Purpose | Primary outputs |
 |---|---|---|
 | `code/build_icon_dataset.py` | Builds canonical dataset rows and can normalize icon media to 256x256 PNGs. | `icon_data/analysis/dataset.csv`, `icon_data/normalized_256/`, normalization failure logs |
-| `code/extract_icon_features.py` | Extracts small explicit set of visual complexity/structure features from normalized PNGs. | `icon_data/analysis/features.csv`, `feature_failures.json`, `features_metadata.json` |
-| `code/visualize_icon_features.py` | Creates static visual reports from `features.csv`. | `icon_data/analysis/visualizations/` |
-| `code/compute_icon_similarity.py` | Computes standardized Euclidean/cosine distances and nearest-neighbor outputs. | `icon_data/analysis/similarity/` |
+| `code/extract_icon_features.py` | Extracts the current compact image-feature set from normalized PNGs: complexity, geometry/contour, symmetry, orientation, color/contrast, and 4x4 layout. | `icon_data/analysis/features.csv`, `feature_failures.json`, `features_metadata.json` |
+| `code/visualize_icon_features.py` | Creates static visual reports from `features.csv`; writes summary-only output when `matplotlib` is unavailable. | `icon_data/analysis/visualizations/` |
+| `code/compute_icon_similarity.py` | Computes group-weighted z-score Euclidean/cosine distances and nearest-neighbor outputs. | `icon_data/analysis/similarity/` |
 | `code/build_clustering_metadata_sample.py` | Enriches feature sample with metadata tokens/categories and McDougall ratings. | `clustering_metadata_sample.csv`, `clustering_metadata_missing_report.json` |
 | `code/build_analysis_dashboard.py` | Builds current static Plotly clustering dashboard. | `icon_data/analysis/analysis_dashboard/` |
 | `code/extract_mcdougall_icons.py` | Crops McDougall appendix icons from rendered appendix pages. | `01_mcdougall_symbol_icon_set/extracted_icons_png/` |
@@ -170,6 +181,7 @@ Current dashboard sample:
 | `code/download_arasaac.py` | Downloads ARASAAC English metadata and 300px PNGs. | `07_arasaac_pictograms/metadata/`, `png_300/` |
 | `code/download_commons_category.py` | Generic Wikimedia Commons category downloader. | caller-specified output |
 | `code/download_ghs_standard.py` | Downloads standard GHS hazard pictograms. | `08_ghs_hazard_pictograms/` |
+| `code/extract_paper_text.py` | Extracts page-marked text from thesis PDFs. | `papers/extracted_text/` |
 
 ## Feature Set
 
@@ -181,12 +193,34 @@ Current visual features are:
 - `quadtree_leaf_count`
 - `quadtree_structural_variability`
 - `quadtree_mean_leaf_size`
+- `bounding_box_occupancy`
+- `bounding_box_aspect_ratio`
+- `solidity`
+- `centroid_distance_from_center`
+- `horizontal_symmetry`
+- `vertical_symmetry`
+- `perimeter_area_ratio`
+- `filled_vs_outline_proxy`
+- `contour_count`
+- `holes_count`
+- `closed_contour_ratio`
+- `line_orientation_0`
+- `line_orientation_45`
+- `line_orientation_90`
+- `line_orientation_135`
+- `is_monochrome`
+- `color_count`
+- `mean_saturation`
+- `colorfulness`
+- `foreground_background_contrast`
+- `grid_foreground_0_0` through `grid_foreground_3_3`
 
 Feature provenance:
 
 - Strongly paper-backed by Forsythe-style complexity measurement: foreground amount, object/component count, edge detection, quadtree structural variability.
 - Compatible with Garcia-style abstractness/component analysis, but not a full implementation of Garcia's exact taxonomy.
-- Additional engineering proxies are acceptable if described as proxies, not as direct paper replications.
+- Additional engineering proxies cover bounding-box layout, symmetry, filled-vs-outline style, color, contrast, and coarse 4x4 spatial layout. Describe these as computational proxies, not direct paper replications.
+- Similarity and dashboard image-feature clustering use z-scored columns with equal weighting by extractor feature group, so the 4x4 grid layout columns do not dominate distances simply because there are more of them.
 
 See `notes/feature_extraction_taxonomies.md` before making strong claims about feature origin.
 
@@ -208,16 +242,17 @@ Use `papers/` for the thesis literature review. Core roles:
 
 Recommended narrow thesis direction:
 
-> Compare icon/glyph sets through automated visual complexity features, metadata features, pairwise similarity, and clustering, then discuss whether these metrics align with known human-facing properties such as McDougall complexity and semantic categories.
+> Compare icon/glyph sets through automated visual features, metadata features, pairwise distinguishability/similarity, and clustering, then test whether these computational measures align with quantitative human judgments.
 
 Good research questions:
 
-1. Can automated visual complexity metrics predict perceived complexity or related McDougall norm ratings?
-2. Do visual-feature clusters align more strongly with dataset/style, semantic category, or neither?
-3. Where do visual nearest neighbors reveal potential confusion across different icon sets?
-4. Can metadata and image features be combined to produce more interpretable icon groupings?
+1. Can automated visual complexity/structure metrics predict perceived complexity or related McDougall norm ratings?
+2. Which visual-feature differences best predict quantitative human judgments of distinguishability or similarity?
+3. Do visual-feature clusters align more strongly with dataset/style, semantic category, or neither?
+4. Where do visual nearest neighbors reveal potential confusion across different icon sets?
+5. Can metadata and image features be combined to produce more interpretable icon groupings?
 
-Avoid broad claims that the pipeline fully measures perception. The current repo supports computational pilot analysis; human validation is still a future step unless a study is added.
+Avoid broad claims that the pipeline fully measures perception. The current repo supports computational feature extraction, similarity, clustering, and literature-backed study framing; participant data collection and statistical validation still need to be added.
 
 ## Known Gaps And Missing Pieces
 
@@ -230,9 +265,9 @@ Current important gaps:
 - ISO 7010 rows preserve code-like IDs more than human-readable warning meanings.
 - McDougall ratings have been extracted locally, but the original standalone stimulus files remain request-only.
 - The dashboard has no dendrogram visualization; hierarchical clustering is exposed as precomputed cuts/labels.
-- The dashboard is a computational visualization only; it does not include human verification or participant-study results.
+- The dashboard is a computational visualization only; it does not include quantitative human-study results yet.
 - `icon_data/iconsets/README.md` is older and incomplete compared with `icon_data/MANIFEST.md`; prefer the manifest.
-- `tasks/week-2026-06-22-machine-clustering-visualization.md` is historical and may mention the old 1,038-row dashboard sample.
+- `tasks/week-2026-06-22-machine-clustering-visualization.md` is historical and may mention older dashboard/feature states.
 
 Recommended metadata enrichment order:
 
@@ -256,27 +291,38 @@ Recommended metadata enrichment order:
 
 ## Quick Verification Recipes
 
-Count current dashboard rows:
+Count current generated rows:
 
 ```bash
 /Users/macbook/.cache/codex-runtimes/codex-primary-runtime/dependencies/python/bin/python3 - <<'PY'
-import json
+import csv, json
 from pathlib import Path
-data = json.loads(Path('icon_data/analysis/analysis_dashboard/dashboard_data.json').read_text())
-print(data['metadata']['row_count'])
+for path in [
+    'icon_data/analysis/dataset.csv',
+    'icon_data/analysis/features.csv',
+    'icon_data/analysis/analysis_dashboard/features_image.csv',
+    'icon_data/analysis/similarity/nearest_neighbors_euclidean.csv',
+]:
+    with open(path, newline='', encoding='utf-8') as handle:
+        reader = csv.reader(handle)
+        header = next(reader)
+        rows = sum(1 for _ in reader)
+    print(path, rows, len(header))
+dashboard = json.loads(Path('icon_data/analysis/analysis_dashboard/dashboard_data.json').read_text())
+print('dashboard row_count', dashboard['metadata']['row_count'])
 PY
 ```
 
 Check Python generator syntax:
 
 ```bash
-/Users/macbook/.cache/codex-runtimes/codex-primary-runtime/dependencies/python/bin/python3 -m py_compile code/build_analysis_dashboard.py
+/Users/macbook/.cache/codex-runtimes/codex-primary-runtime/dependencies/python/bin/python3 -m py_compile code/extract_icon_features.py code/compute_icon_similarity.py code/build_analysis_dashboard.py code/visualize_icon_features.py
 ```
 
-Check for stale dashboard sample text:
+Check feature extraction failures:
 
 ```bash
-rg -n "1038|1,038|100 max|per_set_limit|max per set" code/build_analysis_dashboard.py icon_data/analysis/analysis_dashboard -g '!assets/**'
+cat icon_data/analysis/feature_failures.json
 ```
 
 Check working tree before editing:

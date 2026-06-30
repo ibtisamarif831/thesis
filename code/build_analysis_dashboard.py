@@ -36,10 +36,6 @@ METADATA_COLUMNS = [
     "set_name",
     "icon_name",
     "label",
-    "category",
-    "original_category",
-    "category_source",
-    "style_label",
     "source",
     "source_url",
     "format",
@@ -49,20 +45,218 @@ METADATA_COLUMNS = [
     "notes",
     "metadata_text",
     "metadata_tokens",
-    "has_category",
     "has_notes",
     "source_path_exists",
     "normalized_path_exists",
 ]
 
-IMAGE_FEATURE_COLUMNS = [
-    "foreground_area_ratio",
-    "canny_edge_density",
-    "connected_components",
-    "quadtree_leaf_count",
-    "quadtree_structural_variability",
-    "quadtree_mean_leaf_size",
+IMAGE_FEATURE_COLUMNS = list(extract_icon_features.FEATURE_COLUMNS)
+IMAGE_FEATURE_GROUPS = [list(group) for group in extract_icon_features.FEATURE_GROUPS]
+
+GRID_FEATURE_COLUMNS = [f"grid_foreground_{row}_{col}" for row in range(4) for col in range(4)]
+
+DASHBOARD_FEATURE_SECTIONS = [
+    {
+        "id": "shape",
+        "title": "Shape Features",
+        "description": "Geometry, contour, density, and structural complexity features that describe the icon body.",
+        "feature_ids": [
+            "foreground_area_ratio",
+            "connected_components",
+            "quadtree_leaf_count",
+            "quadtree_structural_variability",
+            "quadtree_mean_leaf_size",
+            "bounding_box_occupancy",
+            "bounding_box_aspect_ratio",
+            "solidity",
+            "contour_count",
+            "holes_count",
+            "closed_contour_ratio",
+        ],
+    },
+    {
+        "id": "color",
+        "title": "Color Features",
+        "description": "Color presence, richness, saturation, and foreground-background contrast.",
+        "feature_ids": [
+            "is_monochrome",
+            "color_count",
+            "mean_saturation",
+            "colorfulness",
+            "foreground_background_contrast",
+        ],
+    },
+    {
+        "id": "style",
+        "title": "Style Features",
+        "description": "Measured rendering style: edge load, outline-vs-fill behavior, symmetry, and dominant line direction.",
+        "feature_ids": [
+            "canny_edge_density",
+            "perimeter_area_ratio",
+            "filled_vs_outline_proxy",
+            "horizontal_symmetry",
+            "vertical_symmetry",
+            "line_orientation_0",
+            "line_orientation_45",
+            "line_orientation_90",
+            "line_orientation_135",
+        ],
+    },
+    {
+        "id": "spatial_layout",
+        "title": "Spatial Layout Features",
+        "description": "Where visual mass sits on the canvas, including center offset and a 4x4 foreground grid.",
+        "visible": False,
+        "feature_ids": [
+            "centroid_distance_from_center",
+            *GRID_FEATURE_COLUMNS,
+        ],
+    },
 ]
+
+FEATURE_LABELS = {
+    "foreground_area_ratio": "Foreground area ratio",
+    "canny_edge_density": "Edge density",
+    "connected_components": "Connected components",
+    "quadtree_leaf_count": "Quadtree leaf count",
+    "quadtree_structural_variability": "Quadtree structural variability",
+    "quadtree_mean_leaf_size": "Quadtree mean leaf size",
+    "bounding_box_occupancy": "Bounding-box occupancy",
+    "bounding_box_aspect_ratio": "Bounding-box aspect ratio",
+    "solidity": "Solidity",
+    "centroid_distance_from_center": "Center offset",
+    "horizontal_symmetry": "Horizontal symmetry",
+    "vertical_symmetry": "Vertical symmetry",
+    "perimeter_area_ratio": "Perimeter-area ratio",
+    "filled_vs_outline_proxy": "Filled-vs-outline proxy",
+    "contour_count": "Contour count",
+    "holes_count": "Holes count",
+    "closed_contour_ratio": "Closed-contour ratio",
+    "line_orientation_0": "Horizontal line orientation",
+    "line_orientation_45": "Diagonal 45 degree orientation",
+    "line_orientation_90": "Vertical line orientation",
+    "line_orientation_135": "Diagonal 135 degree orientation",
+    "is_monochrome": "Monochrome flag",
+    "color_count": "Color count",
+    "mean_saturation": "Mean saturation",
+    "colorfulness": "Colorfulness",
+    "foreground_background_contrast": "Foreground-background contrast",
+}
+
+FEATURE_MEANINGS = {
+    "foreground_area_ratio": "How much of the canvas is occupied by visible foreground pixels.",
+    "canny_edge_density": "How much edge/detail structure appears in the icon.",
+    "connected_components": "How many separated foreground parts the icon contains.",
+    "quadtree_leaf_count": "How many spatial subdivisions are needed to describe the foreground pattern.",
+    "quadtree_structural_variability": "How unevenly structure is distributed across the icon.",
+    "quadtree_mean_leaf_size": "Average quadtree region size; smaller values imply more localized detail.",
+    "bounding_box_occupancy": "How densely the icon fills its active bounding box.",
+    "bounding_box_aspect_ratio": "Whether the active icon shape is tall, wide, or square-like.",
+    "solidity": "How compactly the foreground fills its outer convex envelope.",
+    "centroid_distance_from_center": "How far the icon's visual mass is from the canvas center.",
+    "horizontal_symmetry": "How balanced the icon is across the left-right axis.",
+    "vertical_symmetry": "How balanced the icon is across the top-bottom axis.",
+    "perimeter_area_ratio": "How much boundary length exists relative to filled area.",
+    "filled_vs_outline_proxy": "Whether the icon behaves more like a filled mark or an outline/line drawing.",
+    "contour_count": "How many contour boundaries are present.",
+    "holes_count": "How many enclosed empty spaces appear inside foreground shapes.",
+    "closed_contour_ratio": "How strongly the icon is composed of closed shapes.",
+    "line_orientation_0": "Share of detected line structure that is mostly horizontal.",
+    "line_orientation_45": "Share of detected line structure that follows a 45 degree diagonal.",
+    "line_orientation_90": "Share of detected line structure that is mostly vertical.",
+    "line_orientation_135": "Share of detected line structure that follows a 135 degree diagonal.",
+    "is_monochrome": "Whether the icon is effectively black-and-white or grayscale.",
+    "color_count": "Approximate number of distinct foreground colors.",
+    "mean_saturation": "Average foreground color saturation.",
+    "colorfulness": "Overall richness and variation of foreground colors.",
+    "foreground_background_contrast": "How strongly the foreground separates from its background.",
+}
+
+FEATURE_CATEGORY_REASONS = {
+    "foreground_area_ratio": "It belongs in Shape because foreground area describes the amount of visible shape material.",
+    "connected_components": "It belongs in Shape because separated parts change the icon's object structure.",
+    "quadtree_leaf_count": "It belongs in Shape because more spatial subdivisions indicate more structural shape detail.",
+    "quadtree_structural_variability": "It belongs in Shape because uneven spatial structure changes visual complexity.",
+    "quadtree_mean_leaf_size": "It belongs in Shape because smaller regions indicate finer structural shape detail.",
+    "bounding_box_occupancy": "It belongs in Shape because it measures how tightly the visible form fills its active shape area.",
+    "bounding_box_aspect_ratio": "It belongs in Shape because it captures whether the icon's form is tall, wide, or square.",
+    "solidity": "It belongs in Shape because compactness versus gaps changes the perceived silhouette.",
+    "contour_count": "It belongs in Shape because contours describe the number of visible shape boundaries.",
+    "holes_count": "It belongs in Shape because enclosed empty regions are part of the icon's internal structure.",
+    "closed_contour_ratio": "It belongs in Shape because closure describes whether the icon is built from enclosed forms.",
+    "is_monochrome": "It belongs in Color because it tells whether color is available as a visual channel.",
+    "color_count": "It belongs in Color because it measures how many distinct colors help distinguish the icon.",
+    "mean_saturation": "It belongs in Color because saturation describes how vivid or muted the icon colors are.",
+    "colorfulness": "It belongs in Color because it summarizes overall color richness and variation.",
+    "foreground_background_contrast": "It belongs in Color because contrast describes foreground-background separation and legibility.",
+    "canny_edge_density": "It belongs in Style because edge load reflects rendering detail and line-art feel.",
+    "perimeter_area_ratio": "It belongs in Style because boundary-heavy icons often read as outline or line style.",
+    "filled_vs_outline_proxy": "It belongs in Style because it directly separates filled marks from outline-like rendering.",
+    "horizontal_symmetry": "It belongs in Style because visual balance is a design-style property.",
+    "vertical_symmetry": "It belongs in Style because top-bottom balance affects the icon's visual style.",
+    "line_orientation_0": "It belongs in Style because dominant horizontal strokes describe rendering direction.",
+    "line_orientation_45": "It belongs in Style because diagonal strokes often signal action, motion, or angular rendering.",
+    "line_orientation_90": "It belongs in Style because vertical strokes describe the icon's directional rendering.",
+    "line_orientation_135": "It belongs in Style because diagonal strokes describe the icon's angular rendering.",
+    "centroid_distance_from_center": "It belongs in Spatial Layout because it measures where visual mass sits on the canvas.",
+}
+
+FEATURE_VISUAL_CATEGORIZATIONS = {
+    "foreground_area_ratio": ["Sparse vs dense"],
+    "canny_edge_density": ["Simple vs complex"],
+    "connected_components": ["Single-object vs multi-part"],
+    "quadtree_leaf_count": ["Simple vs complex"],
+    "quadtree_structural_variability": ["Simple vs complex"],
+    "quadtree_mean_leaf_size": ["Simple vs complex"],
+    "bounding_box_occupancy": ["Sparse vs dense"],
+    "bounding_box_aspect_ratio": ["Compact vs spread-out"],
+    "solidity": ["Compact vs spread-out"],
+    "centroid_distance_from_center": ["Centered vs off-center"],
+    "horizontal_symmetry": ["Balanced vs unbalanced"],
+    "vertical_symmetry": ["Balanced vs unbalanced"],
+    "perimeter_area_ratio": ["Filled vs outline"],
+    "filled_vs_outline_proxy": ["Filled vs outline"],
+    "contour_count": ["Single-object vs multi-part"],
+    "holes_count": ["Open vs closed shape"],
+    "closed_contour_ratio": ["Open vs closed shape"],
+    "line_orientation_0": ["Directional/geometric structure"],
+    "line_orientation_45": ["Directional/geometric structure"],
+    "line_orientation_90": ["Directional/geometric structure"],
+    "line_orientation_135": ["Directional/geometric structure"],
+    "is_monochrome": ["Black-and-white vs colored"],
+    "color_count": ["Black-and-white vs colored"],
+    "mean_saturation": ["Color intensity/style"],
+    "colorfulness": ["Color intensity/style"],
+    "foreground_background_contrast": ["High contrast vs low contrast"],
+}
+
+FEATURE_VISUAL_CATEGORY_LABELS = {
+    "Sparse vs dense": "sparse icon, dense icon",
+    "Simple vs complex": "simple icon, complex icon",
+    "Single-object vs multi-part": "single-object symbol, multi-component symbol",
+    "Compact vs spread-out": "compact icon, tall icon, wide icon, fragmented icon",
+    "Centered vs off-center": "centered icon, off-center icon",
+    "Balanced vs unbalanced": "symmetric icon, asymmetric icon",
+    "Filled vs outline": "filled pictogram, outline icon, line icon",
+    "Open vs closed shape": "closed-shape icon, open-line icon",
+    "Directional/geometric structure": "horizontal icon, vertical icon, diagonal/action icon",
+    "Black-and-white vs colored": "monochrome icon, colored icon",
+    "Color intensity/style": "muted icon, vivid icon, emoji-like icon",
+    "High contrast vs low contrast": "high-contrast icon, low-contrast icon",
+    "Spatial layout similarity": "top-heavy icon, left-heavy icon, central icon",
+}
+
+for row in range(4):
+    for col in range(4):
+        feature_id = f"grid_foreground_{row}_{col}"
+        FEATURE_LABELS[feature_id] = f"Grid foreground r{row + 1} c{col + 1}"
+        FEATURE_MEANINGS[feature_id] = (
+            f"Foreground share in the 4x4 layout grid at row {row + 1}, column {col + 1}."
+        )
+        FEATURE_CATEGORY_REASONS[feature_id] = (
+            "It belongs in Spatial Layout because it records where foreground mass appears in the icon grid."
+        )
+        FEATURE_VISUAL_CATEGORIZATIONS[feature_id] = ["Spatial layout similarity"]
 
 MCDOUGALL_NUMERIC_COLUMNS = [
     "mcdougall_concreteness",
@@ -75,6 +269,53 @@ MCDOUGALL_NUMERIC_COLUMNS = [
 ]
 
 FEATURE_VARIANTS = ("image", "metadata", "combined")
+
+
+def image_feature_sections() -> list[dict[str, object]]:
+    expected = set(IMAGE_FEATURE_COLUMNS)
+    seen = []
+    sections = []
+    for section in DASHBOARD_FEATURE_SECTIONS:
+        feature_ids = list(section["feature_ids"])
+        seen.extend(feature_ids)
+        sections.append(
+            {
+                "id": section["id"],
+                "title": section["title"],
+                "description": section["description"],
+                "visible": section.get("visible", True),
+                "features": [
+                    {
+                        "id": feature_id,
+                        "label": FEATURE_LABELS.get(feature_id, feature_id.replace("_", " ").title()),
+                        "group": section["id"],
+                        "group_title": section["title"],
+                        "meaning": FEATURE_MEANINGS.get(feature_id, "Extracted visual feature."),
+                        "visual_categorizations": FEATURE_VISUAL_CATEGORIZATIONS.get(feature_id, []),
+                        "visual_category_labels": [
+                            FEATURE_VISUAL_CATEGORY_LABELS[category]
+                            for category in FEATURE_VISUAL_CATEGORIZATIONS.get(feature_id, [])
+                            if category in FEATURE_VISUAL_CATEGORY_LABELS
+                        ],
+                        "category_reason": FEATURE_CATEGORY_REASONS.get(
+                            feature_id,
+                            f"It belongs in {section['title']} because it describes that visual channel.",
+                        ),
+                    }
+                    for feature_id in feature_ids
+                ],
+            }
+        )
+
+    duplicate_features = sorted({feature_id for feature_id in seen if seen.count(feature_id) > 1})
+    missing_features = sorted(expected - set(seen))
+    unknown_features = sorted(set(seen) - expected)
+    if duplicate_features or missing_features or unknown_features:
+        raise ValueError(
+            "Invalid dashboard feature sections: "
+            f"duplicates={duplicate_features}, missing={missing_features}, unknown={unknown_features}"
+        )
+    return sections
 
 
 def read_csv(path: Path) -> list[dict[str, str]]:
@@ -119,17 +360,11 @@ def enrich_metadata_rows(rows: list[dict[str, str]]) -> list[dict[str, str]]:
         set_id = row["set_id"]
         label = row.get("label", "")
         notes = row.get("notes", "")
-        category = row.get("category", "")
-        original_category = category
-        category_source = "dataset.csv" if category else ""
         rating = None
 
         if set_id == "01_mcdougall_symbol_icon_set":
             appendix_item = metadata_helpers.notes_value(notes, "appendix_item")
             rating = ratings.get(appendix_item)
-            if not category:
-                category = metadata_helpers.infer_mcdougall_category(label, rating)
-                category_source = "inferred_from_mcdougall_label_and_ratings"
             if rating:
                 rating_note = (
                     "mcdougall_ratings="
@@ -144,13 +379,7 @@ def enrich_metadata_rows(rows: list[dict[str, str]]) -> list[dict[str, str]]:
                 )
                 notes = "; ".join(part for part in [notes, rating_note] if part)
 
-        if set_id == "02_aiga_dot_symbol_signs" and not category:
-            category = metadata_helpers.infer_aiga_category(label)
-            category_source = "inferred_from_aiga_label"
-
-        metadata_text = " | ".join(
-            value for value in [label, category, row.get("set_name", ""), notes] if value
-        )
+        metadata_text = " | ".join(value for value in [label, row.get("set_name", ""), notes] if value)
         enriched.append(
             {
                 "icon_id": row["icon_id"],
@@ -158,10 +387,6 @@ def enrich_metadata_rows(rows: list[dict[str, str]]) -> list[dict[str, str]]:
                 "set_name": row["set_name"],
                 "icon_name": label,
                 "label": label,
-                "category": category,
-                "original_category": original_category,
-                "category_source": category_source,
-                "style_label": metadata_helpers.infer_style_label(row),
                 "source": row.get("source", ""),
                 "source_url": row.get("source_url", ""),
                 "format": row.get("format", ""),
@@ -170,7 +395,7 @@ def enrich_metadata_rows(rows: list[dict[str, str]]) -> list[dict[str, str]]:
                 "normalized_path": row.get("normalized_path", ""),
                 "notes": notes,
                 "metadata_text": metadata_text,
-                "metadata_tokens": metadata_helpers.text_tokens(label, category, row.get("set_name", ""), notes),
+                "metadata_tokens": metadata_helpers.text_tokens(label, row.get("set_name", ""), notes),
                 "mcdougall_concreteness": (rating or {}).get("concreteness", ""),
                 "mcdougall_complexity": (rating or {}).get("complexity", ""),
                 "mcdougall_familiarity": (rating or {}).get("familiarity", ""),
@@ -179,7 +404,6 @@ def enrich_metadata_rows(rows: list[dict[str, str]]) -> list[dict[str, str]]:
                 "mcdougall_concept_agreement": (rating or {}).get("concept_agreement", ""),
                 "mcdougall_name_agreement": (rating or {}).get("name_agreement", ""),
                 "mcdougall_common_response": (rating or {}).get("common_response", ""),
-                "has_category": str(bool(category)).lower(),
                 "has_notes": str(bool(notes)).lower(),
                 "source_path_exists": str((ROOT / row.get("relative_path", "")).exists()).lower(),
                 "normalized_path_exists": str((ROOT / row.get("normalized_path", "")).exists()).lower(),
@@ -231,6 +455,17 @@ def standardize(matrix: np.ndarray) -> tuple[np.ndarray, list[float], list[float
     return (matrix - means) / stds, means.tolist(), stds.tolist()
 
 
+def apply_group_weights(matrix: np.ndarray, columns: list[str], groups: list[list[str]]) -> np.ndarray:
+    weighted = matrix.copy()
+    column_index = {column: index for index, column in enumerate(columns)}
+    for group in groups:
+        indices = [column_index[column] for column in group if column in column_index]
+        if not indices:
+            continue
+        weighted[:, indices] /= math.sqrt(len(indices))
+    return weighted
+
+
 def one_hot(rows: list[dict], column: str, prefix: str, max_values: int | None = None) -> tuple[np.ndarray, list[str]]:
     counts = Counter(row.get(column, "") or "missing" for row in rows)
     values = [value for value, _ in counts.most_common(max_values)]
@@ -266,10 +501,9 @@ def feature_matrices(rows: list[dict], feature_by_id: dict[str, dict]) -> dict[s
         dtype=float,
     )
     image_scaled, image_means, image_stds = standardize(image)
+    image_scaled = apply_group_weights(image_scaled, IMAGE_FEATURE_COLUMNS, IMAGE_FEATURE_GROUPS)
 
     set_matrix, set_columns = one_hot(rows, "set_name", "set")
-    category_matrix, category_columns = one_hot(rows, "category", "category", max_values=60)
-    style_matrix, style_columns = one_hot(rows, "style_label", "style")
     token_matrix, token_columns = token_features(rows)
     mcdougall = np.array(
         [[to_float(row.get(column)) for column in MCDOUGALL_NUMERIC_COLUMNS] for row in rows],
@@ -277,8 +511,8 @@ def feature_matrices(rows: list[dict], feature_by_id: dict[str, dict]) -> dict[s
     )
     mcdougall_scaled, _, _ = standardize(mcdougall)
 
-    metadata_matrix = np.hstack([set_matrix, category_matrix, style_matrix, token_matrix, mcdougall_scaled])
-    metadata_columns = set_columns + category_columns + style_columns + token_columns + MCDOUGALL_NUMERIC_COLUMNS
+    metadata_matrix = np.hstack([set_matrix, token_matrix, mcdougall_scaled])
+    metadata_columns = set_columns + token_columns + MCDOUGALL_NUMERIC_COLUMNS
     combined_matrix = np.hstack([image_scaled, metadata_matrix])
 
     return {
@@ -448,7 +682,6 @@ def cluster_summary(rows: list[dict], matrix: np.ndarray, labels: np.ndarray, me
         indices = [idx for idx, label in enumerate(labels) if label == cluster]
         subset = [rows[idx] for idx in indices]
         set_counts = Counter(row["set_name"] for row in subset).most_common(5)
-        category_counts = Counter(row["category"] for row in subset).most_common(5)
         summaries.append(
             {
                 "method": method,
@@ -457,7 +690,6 @@ def cluster_summary(rows: list[dict], matrix: np.ndarray, labels: np.ndarray, me
                 "cluster": int(cluster),
                 "size": len(indices),
                 "top_sets": json.dumps(set_counts, ensure_ascii=False),
-                "top_categories": json.dumps(category_counts, ensure_ascii=False),
                 "representative_icon_ids": " ".join(rows[idx]["icon_id"] for idx in reps[int(cluster)]),
             }
         )
@@ -557,8 +789,6 @@ def write_dashboard_data(rows: list[dict], feature_by_id: dict[str, dict], matri
                 "label": row.get("label", ""),
                 "set_id": row.get("set_id", ""),
                 "set_name": row.get("set_name", ""),
-                "category": row.get("category", ""),
-                "style_label": row.get("style_label", ""),
                 "format": row.get("format", ""),
                 "normalized_path": relative_to_dashboard(ROOT / row.get("normalized_path", "")),
                 "metadata_tokens": row.get("metadata_tokens", ""),
@@ -577,6 +807,10 @@ def write_dashboard_data(rows: list[dict], feature_by_id: dict[str, dict], matri
             "primary_k": PRIMARY_K,
             "feature_variants": list(FEATURE_VARIANTS),
             "image_feature_columns": IMAGE_FEATURE_COLUMNS,
+            "image_feature_groups": {
+                extractor.name: list(extractor.columns) for extractor in extract_icon_features.FEATURE_EXTRACTORS
+            },
+            "image_feature_sections": image_feature_sections(),
             "mcdougall_numeric_columns": MCDOUGALL_NUMERIC_COLUMNS,
         },
         "records": records,
@@ -623,21 +857,52 @@ def write_index_html() -> None:
     .filter-pill {{ display: inline-flex; align-items: center; gap: 5px; max-width: 100%; padding: 3px 7px; border: 1px solid #cbd2de; border-radius: 999px; background: #eef2f7; font-size: 12px; color: #18202f; }}
     .filter-pill button {{ border: 0; background: transparent; padding: 0; width: 16px; height: 16px; line-height: 14px; font-size: 14px; color: #4d5665; }}
     .filter-pill button:hover {{ background: #dde3ec; border-radius: 999px; }}
-    .checklist {{ border: 1px solid var(--border); border-radius: 6px; padding: 6px 8px; max-height: 180px; overflow: auto; background: white; }}
+    .checklist {{ display: grid; gap: 8px; }}
+    .preset-row {{ display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 8px; }}
+    .feature-section {{ border: 1px solid var(--border); border-radius: 6px; background: white; padding: 8px; }}
+    .feature-head {{ display: flex; align-items: center; justify-content: space-between; gap: 8px; }}
+    .feature-head b {{ font-size: 13px; }}
+    .feature-description {{ color: var(--muted); font-size: 12px; line-height: 1.35; margin: 4px 0 6px; }}
+    .feature-actions {{ display: flex; gap: 4px; flex-shrink: 0; }}
+    .feature-actions button, .preset-row button {{ padding: 3px 6px; font-size: 12px; }}
+    .feature-list {{ max-height: 150px; overflow: auto; border-top: 1px solid #edf0f4; padding-top: 4px; }}
+    .feature-list label {{ margin: 4px 0; line-height: 1.3; }}
+    .feature-choice {{ position: relative; display: flex; align-items: flex-start; gap: 6px; padding: 3px 4px; border-radius: 4px; }}
+    .feature-choice:hover, .feature-choice:focus-within {{ background: #f3f5f9; }}
+    .feature-tooltip {{ display: none; position: fixed; z-index: 30; width: 280px; padding: 9px 10px; border-radius: 6px; background: #18202f; color: white; font-size: 12px; line-height: 1.35; box-shadow: 0 8px 24px rgba(24,32,47,.22); pointer-events: none; }}
+    .feature-tooltip b {{ display: block; font-size: 13px; margin-bottom: 4px; }}
+    .feature-tooltip .tooltip-section {{ color: #c8d2e2; margin-bottom: 5px; }}
+    .feature-tooltip .tooltip-label {{ color: #c8d2e2; margin-top: 7px; }}
+    .method-note {{ margin-top: 5px; font-size: 12px; line-height: 1.35; color: var(--muted); }}
     .plot-wrap {{ padding: 10px; min-width: 0; }}
     #scatter {{ width: 100%; height: calc(100vh - 76px); }}
-    #hoverPreview {{ position: fixed; z-index: 20; display: none; pointer-events: none; max-width: 360px; padding: 8px 10px; border-radius: 0; background: #0b930b; color: white; box-shadow: none; font-size: 18px; line-height: 1.28; }}
+    #hoverPreview {{ position: fixed; z-index: 20; display: none; pointer-events: none; max-width: 360px; max-height: calc(100vh - 16px); overflow: hidden; padding: 8px 10px; border-radius: 0; background: #a000a8; color: white; box-shadow: none; font-size: 18px; line-height: 1.28; }}
     #hoverPreview img {{ width: 84px; height: 84px; object-fit: contain; border: 1px solid rgba(255,255,255,.65); background: white; margin: 8px 10px 2px 0; vertical-align: top; }}
     #hoverPreview b {{ font-size: 18px; }}
     #hoverPreview .hover-grid {{ display: grid; grid-template-columns: 94px minmax(0, 1fr); align-items: start; gap: 0; margin-bottom: 4px; }}
     #hoverPreview .hover-meta {{ min-width: 0; }}
     #hoverPreview .hover-features {{ clear: both; }}
+    #hoverPreview .feature-group-detail h4 {{ color: white; }}
+    #hoverPreview .feature-group-detail p, #hoverPreview .muted {{ color: rgba(255,255,255,.82); }}
+    #hoverPreview table {{ color: white; }}
+    #hoverPreview td {{ border-bottom: 1px solid rgba(255,255,255,.42); }}
+    #hoverPreview td:last-child {{ color: white; font-variant-numeric: tabular-nums; }}
     .detail-img {{ width: 96px; height: 96px; object-fit: contain; border: 1px solid var(--border); background: white; }}
     .muted {{ color: var(--muted); }}
     .pill {{ display: inline-block; padding: 2px 6px; border: 1px solid var(--border); border-radius: 999px; margin: 2px; font-size: 12px; background: var(--panel); }}
-    .summary-cluster {{ border: 1px solid var(--border); border-radius: 8px; padding: 8px; margin: 8px 0; background: white; }}
-    .rep-icons {{ display: flex; gap: 4px; flex-wrap: wrap; margin-top: 6px; }}
-    .rep-icons img {{ width: 34px; height: 34px; object-fit: contain; border: 1px solid var(--border); }}
+    .summary-cluster {{ border: 1px solid var(--border); border-radius: 8px; margin: 8px 0; background: white; overflow: hidden; }}
+    .summary-cluster summary {{ cursor: pointer; padding: 8px; list-style-position: inside; }}
+    .summary-cluster summary:hover {{ background: var(--panel); }}
+    .summary-cluster[open] summary {{ border-bottom: 1px solid var(--border); background: #fbfcfe; }}
+    .summary-details {{ padding: 8px; }}
+    .summary-explain {{ margin-top: 4px; font-size: 12px; color: #3d4656; }}
+    .rep-icons {{ display: grid; grid-template-columns: repeat(auto-fill, minmax(72px, 1fr)); gap: 8px; margin-top: 8px; }}
+    .rep-icon {{ min-width: 0; }}
+    .rep-icon img {{ width: 72px; height: 72px; object-fit: contain; border: 1px solid var(--border); background: white; display: block; }}
+    .rep-icon span {{ display: block; margin-top: 3px; font-size: 11px; color: var(--muted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }}
+    .feature-group-detail {{ margin: 10px 0; }}
+    .feature-group-detail h4 {{ font-size: 13px; margin: 0 0 2px; }}
+    .feature-group-detail p {{ margin: 0 0 4px; font-size: 12px; color: var(--muted); line-height: 1.35; }}
     table {{ width: 100%; border-collapse: collapse; font-size: 12px; }}
     td {{ border-bottom: 1px solid #edf0f4; padding: 4px 0; vertical-align: top; }}
     td:last-child {{ text-align: right; color: #334; }}
@@ -656,26 +921,22 @@ def write_index_html() -> None:
       </section>
       <section class="control">
         <h2>Clustering</h2>
-        <label>Method<select id="methodSelect"><option value="kmeans">K-Means</option><option value="hierarchical">Hierarchical</option></select></label>
+        <label>Method<select id="methodSelect"><option value="kmeans">K-Means clustering</option><option value="hierarchical">Hierarchical clustering</option></select></label>
+        <div class="method-note" id="methodNote"></div>
         <label>Cluster count<select id="kSelect"></select></label>
         <label>Color by<select id="colorSelect"></select></label>
       </section>
       <section class="control">
         <h2>Image Features</h2>
+        <div class="preset-row" id="featurePresets"></div>
         <div class="checklist" id="featureChecks"></div>
       </section>
       <section class="control">
         <h2>Filters</h2>
         <label>Icon sets<select id="setFilter" multiple size="8"></select></label>
         <div class="selected-pills" id="setFilterPills"></div>
-        <label>Categories<select id="categoryFilter" multiple size="8"></select></label>
-        <div class="selected-pills" id="categoryFilterPills"></div>
-        <label>Styles<select id="styleFilter" multiple size="5"></select></label>
-        <div class="selected-pills" id="styleFilterPills"></div>
         <div class="button-row">
           <button type="button" id="clearSetFilter">Clear sets</button>
-          <button type="button" id="clearCategoryFilter">Clear categories</button>
-          <button type="button" id="clearStyleFilter">Clear styles</button>
           <button type="button" id="resetFilters">Reset filters</button>
         </div>
       </section>
@@ -704,9 +965,7 @@ def write_index_html() -> None:
       k: "{PRIMARY_K}",
       color: "cluster",
       activeFeatures: new Set(),
-      setFilter: new Set(),
-      categoryFilter: new Set(),
-      styleFilter: new Set()
+      setFilter: new Set()
     }};
 
     fetch("dashboard_data.json").then(r => r.json()).then(data => {{
@@ -721,34 +980,17 @@ def write_index_html() -> None:
 
       fillSelect("variantSelect", dashboard.metadata.feature_variants.map(v => [v, title(v)]), state.variant);
       fillSelect("kSelect", dashboard.metadata.k_values.map(k => [String(k), String(k)]), state.k);
-      fillSelect("colorSelect", [
-        ["cluster", "Cluster"],
-        ["set_name", "Icon set"],
-        ["category", "Category"],
-        ["style_label", "Style"],
-        ...dashboard.metadata.image_feature_columns.map(f => [f, title(f)])
-      ], state.color);
+      fillColorSelect("colorSelect", state.color);
+      renderMethodNote();
 
-      state.activeFeatures = new Set(dashboard.metadata.image_feature_columns);
-      const featureChecks = document.getElementById("featureChecks");
-      dashboard.metadata.image_feature_columns.forEach(feature => {{
-        const label = document.createElement("label");
-        label.innerHTML = `<input type="checkbox" value="${{feature}}" checked> ${{title(feature)}}`;
-        featureChecks.appendChild(label);
-      }});
+      renderFeatureControls();
 
       const sets = unique(dashboard.records.map(r => r.set_name)).sort();
-      const categories = unique(dashboard.records.map(r => r.category)).sort();
-      const styles = unique(dashboard.records.map(r => r.style_label)).sort();
       fillSelect("setFilter", sets.map(v => [v, v]), "", true);
-      fillSelect("categoryFilter", categories.map(v => [v, v]), "", true);
-      fillSelect("styleFilter", styles.map(v => [v, v]), "", true);
       installToggleMultiSelect("setFilter", "setFilter");
-      installToggleMultiSelect("categoryFilter", "categoryFilter");
-      installToggleMultiSelect("styleFilter", "styleFilter");
 
       document.getElementById("variantSelect").addEventListener("change", e => {{ state.variant = e.target.value; render(); }});
-      document.getElementById("methodSelect").addEventListener("change", e => {{ state.method = e.target.value; render(); }});
+      document.getElementById("methodSelect").addEventListener("change", e => {{ state.method = e.target.value; renderMethodNote(); render(); }});
       document.getElementById("kSelect").addEventListener("change", e => {{ state.k = e.target.value; render(); }});
       document.getElementById("colorSelect").addEventListener("change", e => {{ state.color = e.target.value; render(); }});
       document.getElementById("setFilter").addEventListener("change", e => {{
@@ -756,28 +998,198 @@ def write_index_html() -> None:
         renderFilterPills();
         render();
       }});
-      document.getElementById("categoryFilter").addEventListener("change", e => {{
-        state.categoryFilter = new Set(Array.from(e.target.selectedOptions).map(o => o.value));
-        renderFilterPills();
-        render();
-      }});
-      document.getElementById("styleFilter").addEventListener("change", e => {{
-        state.styleFilter = new Set(Array.from(e.target.selectedOptions).map(o => o.value));
-        renderFilterPills();
-        render();
-      }});
       document.getElementById("clearSetFilter").addEventListener("click", () => clearSelectFilter("setFilter", "setFilter"));
-      document.getElementById("clearCategoryFilter").addEventListener("click", () => clearSelectFilter("categoryFilter", "categoryFilter"));
-      document.getElementById("clearStyleFilter").addEventListener("click", () => clearSelectFilter("styleFilter", "styleFilter"));
       document.getElementById("resetFilters").addEventListener("click", resetFilters);
-      featureChecks.addEventListener("change", () => {{
-        state.activeFeatures = new Set(Array.from(featureChecks.querySelectorAll("input:checked")).map(i => i.value));
-        render();
-      }});
       renderFilterPills();
     }}
 
+    function renderMethodNote() {{
+      const note = document.getElementById("methodNote");
+      if (!note) return;
+      note.textContent = state.method === "hierarchical"
+        ? "Hierarchical clustering builds nearest-neighbor links between icons, then cuts the tree at the selected cluster count."
+        : "K-Means clustering groups icons around cluster centers at the selected cluster count.";
+    }}
+
+    function featureSections() {{
+      return dashboard.metadata.image_feature_sections || [{{
+        id: "image",
+        title: "Image Features",
+        description: "Extracted visual features.",
+        features: dashboard.metadata.image_feature_columns.map(feature => ({{
+          id: feature,
+          label: title(feature),
+          group: "image",
+          group_title: "Image Features",
+          meaning: "Extracted visual feature."
+        }}))
+      }}];
+    }}
+
+    function visibleFeatureSections() {{
+      return featureSections().filter(section => section.visible !== false);
+    }}
+
+    function allFeatureIds() {{
+      return featureSections().flatMap(section => section.features.map(feature => feature.id));
+    }}
+
+    function visibleFeatureIds() {{
+      return visibleFeatureSections().flatMap(section => section.features.map(feature => feature.id));
+    }}
+
+    function selectedFeatureIds() {{
+      const ordered = visibleFeatureIds().filter(feature => state.activeFeatures.has(feature));
+      return ordered;
+    }}
+
+    function sectionById(sectionId) {{
+      return visibleFeatureSections().find(section => section.id === sectionId);
+    }}
+
+    function featureInfo(featureId) {{
+      for (const section of featureSections()) {{
+        const feature = section.features.find(item => item.id === featureId);
+        if (feature) return feature;
+      }}
+      return {{id: featureId, label: title(featureId), group: "", group_title: "", meaning: ""}};
+    }}
+
+    function renderFeatureControls() {{
+      const presets = document.getElementById("featurePresets");
+      const checks = document.getElementById("featureChecks");
+      presets.innerHTML = [
+        '<button type="button" data-feature-preset="all">All</button>',
+        ...visibleFeatureSections().map(section => `<button type="button" data-feature-preset="${{section.id}}">${{escapeHtml(section.title.replace(" Features", ""))}}</button>`)
+      ].join("");
+      checks.innerHTML = visibleFeatureSections().map(section => `
+        <div class="feature-section" data-section-id="${{escapeHtml(section.id)}}">
+          <div class="feature-head">
+            <b>${{escapeHtml(section.title)}}</b>
+            <span class="feature-actions">
+              <button type="button" data-feature-action="select" data-section-id="${{escapeHtml(section.id)}}">Select all</button>
+              <button type="button" data-feature-action="clear" data-section-id="${{escapeHtml(section.id)}}">Clear</button>
+            </span>
+          </div>
+          <div class="feature-description">${{escapeHtml(section.description)}}</div>
+          <div class="feature-list">
+            ${{section.features.map(feature => `
+              <label class="feature-choice" data-feature-id="${{escapeHtml(feature.id)}}" data-feature-label="${{escapeHtml(feature.label)}}" data-feature-group="${{escapeHtml(feature.group_title)}}" data-feature-meaning="${{escapeHtml(feature.meaning)}}" data-feature-visual="${{escapeHtml((feature.visual_categorizations || []).join(", "))}}" data-feature-examples="${{escapeHtml((feature.visual_category_labels || []).join("; "))}}" data-feature-reason="${{escapeHtml(feature.category_reason)}}">
+                <input class="feature-toggle" type="checkbox" value="${{escapeHtml(feature.id)}}" data-feature-id="${{escapeHtml(feature.id)}}">
+                <span>${{escapeHtml(feature.label)}}</span>
+              </label>`).join("")}}
+          </div>
+        </div>`).join("");
+
+      presets.addEventListener("click", event => {{
+        const button = event.target.closest("button[data-feature-preset]");
+        if (!button) return;
+        const preset = button.dataset.featurePreset;
+        const section = sectionById(preset);
+        setActiveFeatures(preset === "all" ? visibleFeatureIds() : section.features.map(feature => feature.id));
+      }});
+
+      checks.addEventListener("click", event => {{
+        const button = event.target.closest("button[data-feature-action]");
+        if (!button) return;
+        const section = sectionById(button.dataset.sectionId);
+        if (!section) return;
+        const next = new Set(state.activeFeatures);
+        section.features.forEach(feature => {{
+          if (button.dataset.featureAction === "select") next.add(feature.id);
+          if (button.dataset.featureAction === "clear") next.delete(feature.id);
+        }});
+        setActiveFeatures(Array.from(next));
+      }});
+
+      checks.addEventListener("change", event => {{
+        if (!event.target.classList.contains("feature-toggle")) return;
+        state.activeFeatures = new Set(Array.from(checks.querySelectorAll(".feature-toggle:checked")).map(input => input.value));
+        computedCache.clear();
+        render();
+      }});
+
+      checks.addEventListener("mouseover", event => {{
+        const choice = event.target.closest(".feature-choice");
+        if (choice) showFeatureTooltip(choice, event);
+      }});
+      checks.addEventListener("mousemove", event => {{
+        if (event.target.closest(".feature-choice")) moveFeatureTooltip(event);
+      }});
+      checks.addEventListener("mouseout", event => {{
+        if (event.target.closest(".feature-choice")) hideFeatureTooltip();
+      }});
+      checks.addEventListener("focusin", event => {{
+        const choice = event.target.closest(".feature-choice");
+        if (choice) showFeatureTooltip(choice, null);
+      }});
+      checks.addEventListener("focusout", hideFeatureTooltip);
+
+      syncFeatureCheckboxes();
+    }}
+
+    function showFeatureTooltip(choice, event) {{
+      let tooltip = document.getElementById("featureTooltip");
+      if (!tooltip) {{
+        tooltip = document.createElement("div");
+        tooltip.id = "featureTooltip";
+        tooltip.className = "feature-tooltip";
+        document.body.appendChild(tooltip);
+      }}
+      tooltip.innerHTML = `
+        <b>${{escapeHtml(choice.dataset.featureLabel)}}</b>
+        <div class="tooltip-section">${{escapeHtml(choice.dataset.featureGroup)}}</div>
+        <div>${{escapeHtml(choice.dataset.featureMeaning)}}</div>
+        ${{choice.dataset.featureVisual ? `<div class="tooltip-label">Visual categorization</div><div>${{escapeHtml(choice.dataset.featureVisual)}}</div>` : ""}}
+        ${{choice.dataset.featureExamples ? `<div class="tooltip-label">Example labels</div><div>${{escapeHtml(choice.dataset.featureExamples)}}</div>` : ""}}
+        <div style="margin-top:6px;">${{escapeHtml(choice.dataset.featureReason)}}</div>`;
+      tooltip.style.display = "block";
+      if (event) {{
+        moveFeatureTooltip(event);
+      }} else {{
+        const rect = choice.getBoundingClientRect();
+        placeFeatureTooltip(rect.right + 12, rect.top);
+      }}
+    }}
+
+    function moveFeatureTooltip(event) {{
+      placeFeatureTooltip(event.clientX + 14, event.clientY + 14);
+    }}
+
+    function placeFeatureTooltip(x, y) {{
+      const tooltip = document.getElementById("featureTooltip");
+      if (!tooltip) return;
+      const width = tooltip.offsetWidth || 280;
+      const height = tooltip.offsetHeight || 120;
+      const left = Math.min(x, window.innerWidth - width - 8);
+      const top = Math.min(y, window.innerHeight - height - 8);
+      tooltip.style.left = `${{Math.max(8, left)}}px`;
+      tooltip.style.top = `${{Math.max(8, top)}}px`;
+    }}
+
+    function hideFeatureTooltip() {{
+      const tooltip = document.getElementById("featureTooltip");
+      if (tooltip) tooltip.style.display = "none";
+    }}
+
+    function setActiveFeatures(featureIds) {{
+      state.activeFeatures = new Set(featureIds);
+      syncFeatureCheckboxes();
+      computedCache.clear();
+      render();
+    }}
+
+    function syncFeatureCheckboxes() {{
+      document.querySelectorAll(".feature-toggle").forEach(input => {{
+        input.checked = state.activeFeatures.has(input.value);
+      }});
+    }}
+
     function render() {{
+      if (state.variant === "image" && selectedFeatureIds().length === 0) {{
+        renderNoFeatureSelection();
+        return;
+      }}
       const projection = getProjection();
       const labels = projection.labels;
       const coords = projection.coords;
@@ -793,8 +1205,7 @@ def write_index_html() -> None:
         type: "scattergl",
         marker,
         customdata: customData,
-        text: filtered.map(item => hoverText(item.record, labels[item.index])),
-        hovertemplate: "%{{text}}<extra></extra>"
+        hoverinfo: "none"
       }}], {{
         margin: {{l: 42, r: 14, t: 16, b: 42}},
         xaxis: {{title: "PCA 1", zeroline: false}},
@@ -817,6 +1228,30 @@ def write_index_html() -> None:
       renderClusterSummary(labels, filtered);
     }}
 
+    function renderNoFeatureSelection() {{
+      hideHoverPreview();
+      selectedIconId = null;
+      Plotly.react("scatter", [], {{
+        margin: {{l: 42, r: 14, t: 16, b: 42}},
+        xaxis: {{title: "PCA 1", zeroline: false, visible: false}},
+        yaxis: {{title: "PCA 2", zeroline: false, visible: false}},
+        annotations: [{{
+          text: "Select one or more image features to compute PCA and clustering.",
+          xref: "paper",
+          yref: "paper",
+          x: 0.5,
+          y: 0.5,
+          showarrow: false,
+          font: {{size: 16, color: "#5d6675"}}
+        }}],
+        showlegend: false
+      }}, {{responsive: true}});
+      document.getElementById("iconDetail").innerHTML =
+        '<span class="muted">Select one or more image features, then click a point to inspect an icon.</span>';
+      document.getElementById("clusterSummary").innerHTML =
+        '<p class="muted">No feature-based clusters yet. Select features from the sidebar or use a preset.</p>';
+    }}
+
     function getProjection() {{
       if (state.variant !== "image") {{
         return {{
@@ -824,8 +1259,7 @@ def write_index_html() -> None:
           labels: dashboard.clusters[state.variant][state.method][state.k].labels
         }};
       }}
-      const features = Array.from(state.activeFeatures);
-      if (!features.length) features.push(dashboard.metadata.image_feature_columns[0]);
+      const features = selectedFeatureIds();
       const key = `${{state.method}}|${{state.k}}|${{features.join(",")}}`;
       if (computedCache.has(key)) return computedCache.get(key);
       const matrix = standardize(dashboard.records.map(record => features.map(feature => Number(record.image_features[feature] || 0))));
@@ -838,8 +1272,6 @@ def write_index_html() -> None:
 
     function passesFilters(record) {{
       if (state.setFilter.size && !state.setFilter.has(record.set_name)) return false;
-      if (state.categoryFilter.size && !state.categoryFilter.has(record.category)) return false;
-      if (state.styleFilter.size && !state.styleFilter.has(record.style_label)) return false;
       return true;
     }}
 
@@ -852,8 +1284,6 @@ def write_index_html() -> None:
 
     function resetFilters() {{
       clearSelectFilter("setFilter", "setFilter");
-      clearSelectFilter("categoryFilter", "categoryFilter");
-      clearSelectFilter("styleFilter", "styleFilter");
     }}
 
     function installToggleMultiSelect(selectId, stateKey) {{
@@ -880,8 +1310,6 @@ def write_index_html() -> None:
 
     function renderFilterPills() {{
       renderPillGroup("setFilterPills", "setFilter", "setFilter");
-      renderPillGroup("categoryFilterPills", "categoryFilter", "categoryFilter");
-      renderPillGroup("styleFilterPills", "styleFilter", "styleFilter");
     }}
 
     function renderPillGroup(containerId, selectId, stateKey) {{
@@ -918,31 +1346,42 @@ def write_index_html() -> None:
     }}
 
     function hoverText(record, cluster) {{
-      const features = Array.from(state.activeFeatures).map(f => `${{title(f)}}: ${{record.image_features[f]}}`).join("<br>");
-      return `<b>${{escapeHtml(record.label)}}</b><br>${{escapeHtml(record.set_name)}}<br>${{escapeHtml(record.category)}}<br>Cluster: ${{cluster}}<br>${{features}}`;
+      const features = featureSummaryLines(record, selectedFeatureIds(), 8).join("<br>");
+      return `<b>${{escapeHtml(record.label)}}</b><br>${{escapeHtml(record.set_name)}}<br>Cluster: ${{cluster}}<br>${{features}}`;
     }}
 
     function renderHoverPreview(record, cluster, event) {{
       const preview = document.getElementById("hoverPreview");
-      const features = Array.from(state.activeFeatures)
-        .map(feature => `${{title(feature)}}: ${{record.image_features[feature]}}`)
-        .join("<br>");
+      const features = groupedFeatureHtml(record, selectedFeatureIds(), false, 10);
       preview.innerHTML = `
         <div class="hover-grid">
           <img src="${{record.normalized_path}}" alt="">
           <div class="hover-meta">
             <b>${{escapeHtml(record.label)}}</b><br>
             ${{escapeHtml(record.set_name)}}<br>
-            ${{escapeHtml(record.category || "Uncategorized")}}<br>
             <b>Cluster: ${{cluster}}</b>
           </div>
         </div>
         <div class="hover-features">${{features}}</div>`;
-      const x = Math.min(event.clientX + 14, window.innerWidth - 280);
-      const y = Math.min(event.clientY + 14, window.innerHeight - 150);
-      preview.style.left = `${{Math.max(8, x)}}px`;
-      preview.style.top = `${{Math.max(8, y)}}px`;
       preview.style.display = "block";
+      placeHoverPreview(event);
+    }}
+
+    function placeHoverPreview(event) {{
+      const preview = document.getElementById("hoverPreview");
+      if (!preview || !event) return;
+      const margin = 8;
+      const offset = 14;
+      const width = preview.offsetWidth || 360;
+      const height = preview.offsetHeight || 180;
+      let left = event.clientX + offset;
+      let top = event.clientY + offset;
+      if (left + width + margin > window.innerWidth) left = event.clientX - width - offset;
+      if (top + height + margin > window.innerHeight) top = event.clientY - height - offset;
+      left = Math.min(Math.max(margin, left), Math.max(margin, window.innerWidth - width - margin));
+      top = Math.min(Math.max(margin, top), Math.max(margin, window.innerHeight - height - margin));
+      preview.style.left = `${{left}}px`;
+      preview.style.top = `${{top}}px`;
     }}
 
     function hideHoverPreview() {{
@@ -954,17 +1393,15 @@ def write_index_html() -> None:
       const record = dashboard.records.find(r => r.icon_id === selectedIconId);
       if (!record) return;
       const index = dashboard.records.indexOf(record);
-      const featureRows = Object.entries(record.image_features)
-        .filter(([key]) => state.activeFeatures.has(key))
-        .map(([key, value]) => `<tr><td>${{title(key)}}</td><td>${{value}}</td></tr>`).join("");
+      const featureGroups = groupedFeatureHtml(record, visibleFeatureIds(), true, null);
       const mcdougallRows = Object.entries(record.mcdougall || {{}})
         .filter(([, value]) => value !== "")
         .map(([key, value]) => `<span class="pill">${{title(key)}}: ${{escapeHtml(String(value))}}</span>`).join("");
       detail.innerHTML = `
         <img class="detail-img" src="${{record.normalized_path}}" alt="">
         <h3>${{escapeHtml(record.label)}}</h3>
-        <p class="muted">${{escapeHtml(record.set_name)}}<br>${{escapeHtml(record.category)}}<br>${{escapeHtml(record.style_label)}}<br>Cluster: ${{labels[index]}}</p>
-        <table>${{featureRows}}</table>
+        <p class="muted">${{escapeHtml(record.set_name)}}<br>Cluster: ${{labels[index]}}</p>
+        ${{featureGroups}}
         <p>${{mcdougallRows}}</p>
         <p class="muted">${{escapeHtml(record.metadata_tokens).slice(0, 300)}}</p>`;
     }}
@@ -979,12 +1416,126 @@ def write_index_html() -> None:
       }});
       container.innerHTML = Array.from(byCluster.entries()).sort((a,b) => a[0]-b[0]).map(([cluster, items]) => {{
         const topSets = topCounts(items.map(item => item.record.set_name), 2).join(", ");
-        const topCats = topCounts(items.map(item => item.record.category), 2).join(", ");
-        const icons = items.slice(0, 8).map(item => `<img src="${{item.record.normalized_path}}" title="${{escapeHtml(item.record.label)}}">`).join("");
-        return `<div class="summary-cluster"><b>Cluster ${{cluster}}</b> <span class="muted">(${{items.length}} icons)</span><br>
-          <span class="muted">Sets: ${{escapeHtml(topSets)}}<br>Categories: ${{escapeHtml(topCats)}}</span>
-          <div class="rep-icons">${{icons}}</div></div>`;
+        const explanation = clusterExplanation(labels, cluster, selectedFeatureIds());
+        const icons = items.slice(0, 12).map(item => `
+          <div class="rep-icon">
+            <img src="${{item.record.normalized_path}}" title="${{escapeHtml(item.record.label)}}" alt="">
+            <span title="${{escapeHtml(item.record.label)}}">${{escapeHtml(item.record.label)}}</span>
+          </div>`).join("");
+        return `<details class="summary-cluster">
+          <summary><b>${{methodLabel()}} cluster ${{cluster}}</b> <span class="muted">(${{items.length}} icons)</span><br>
+            <span class="muted">Sets: ${{escapeHtml(topSets)}}</span></summary>
+          <div class="summary-details">
+            ${{explanation}}
+            <div class="rep-icons">${{icons}}</div>
+          </div>
+        </details>`;
       }}).join("");
+    }}
+
+    function methodLabel() {{
+      return state.method === "hierarchical" ? "Hierarchical" : "K-Means";
+    }}
+
+    function groupedFeatureHtml(record, featureIds, includeDescriptions=true, maxFeatures=null) {{
+      const selected = new Set(featureIds);
+      const featureLimit = maxFeatures === null ? featureIds.length : maxFeatures;
+      let shown = 0;
+      const html = visibleFeatureSections().map(section => {{
+        const features = section.features.filter(feature => selected.has(feature.id));
+        if (!features.length || shown >= featureLimit) return "";
+        const visible = features.slice(0, Math.max(0, featureLimit - shown));
+        shown += visible.length;
+        const rows = visible.map(feature => `
+          <tr>
+            <td title="${{escapeHtml(feature.meaning)}}">${{escapeHtml(feature.label)}}</td>
+            <td>${{formatFeatureValue(record.image_features[feature.id])}}</td>
+          </tr>`).join("");
+        const description = includeDescriptions ? `<p>${{escapeHtml(section.description)}}</p>` : "";
+        return `<div class="feature-group-detail">
+          <h4>${{escapeHtml(section.title)}}</h4>
+          ${{description}}
+          <table>${{rows}}</table>
+        </div>`;
+      }}).join("");
+      const omitted = featureIds.length - shown;
+      return html + (omitted > 0 ? `<p class="muted">${{omitted}} more selected features.</p>` : "");
+    }}
+
+    function featureSummaryLines(record, featureIds, maxFeatures) {{
+      const selected = new Set(featureIds);
+      const lines = [];
+      for (const section of visibleFeatureSections()) {{
+        for (const feature of section.features) {{
+          if (!selected.has(feature.id)) continue;
+          if (lines.length >= maxFeatures) {{
+            lines.push(`${{featureIds.length - maxFeatures}} more selected features`);
+            return lines;
+          }}
+          lines.push(`${{escapeHtml(feature.label)}}: ${{formatFeatureValue(record.image_features[feature.id])}}`);
+        }}
+      }}
+      return lines;
+    }}
+
+    function clusterExplanation(labels, cluster, featureIds) {{
+      if (!featureIds.length) return '<div class="summary-explain">No image features selected for cluster explanation.</div>';
+      const features = featureIds;
+      const matrix = standardizedImageMatrix(features);
+      const members = labels.map((label, index) => label === cluster ? index : -1).filter(index => index >= 0);
+      if (!members.length) return "";
+      const featureIndex = new Map(features.map((feature, index) => [feature, index]));
+      const sectionScores = visibleFeatureSections().map(section => {{
+        const entries = section.features
+          .filter(feature => featureIndex.has(feature.id))
+          .map(feature => {{
+            const column = featureIndex.get(feature.id);
+            const mean = members.reduce((sum, index) => sum + matrix[index][column], 0) / members.length;
+            return {{feature, score: Math.abs(mean)}};
+          }});
+        const score = entries.length ? entries.reduce((sum, entry) => sum + entry.score, 0) / entries.length : 0;
+        return {{section, score, entries: entries.sort((a,b) => b.score - a.score)}};
+      }}).filter(item => item.entries.length).sort((a,b) => b.score - a.score);
+      const groups = sectionScores.slice(0, 2).map(item => `${{item.section.title.replace(" Features", "")}} (${{item.score.toFixed(2)}}z)`).join(", ");
+      const topFeatures = sectionScores.flatMap(item => item.entries.slice(0, 3))
+        .sort((a,b) => b.score - a.score)
+        .slice(0, 3)
+        .map(item => `${{item.feature.label}} (${{item.score.toFixed(2)}}z)`)
+        .join(", ");
+      return `<div class="summary-explain">Distinctive groups: ${{escapeHtml(groups)}}<br>Top features: ${{escapeHtml(topFeatures)}}</div>`;
+    }}
+
+    function standardizedImageMatrix(features) {{
+      return standardize(dashboard.records.map(record => features.map(feature => Number(record.image_features[feature] || 0))));
+    }}
+
+    function formatFeatureValue(value) {{
+      if (typeof value === "number") {{
+        const rounded = Math.round(value * 10000) / 10000;
+        return escapeHtml(String(rounded));
+      }}
+      return escapeHtml(String(value ?? ""));
+    }}
+
+    function fillColorSelect(id, selected) {{
+      const select = document.getElementById(id);
+      select.innerHTML = "";
+      appendOption(select, "cluster", "Cluster", selected);
+      appendOption(select, "set_name", "Icon set", selected);
+      visibleFeatureSections().forEach(section => {{
+        const group = document.createElement("optgroup");
+        group.label = section.title;
+        section.features.forEach(feature => appendOption(group, feature.id, feature.label, selected));
+        select.appendChild(group);
+      }});
+    }}
+
+    function appendOption(parent, value, label, selected) {{
+      const option = document.createElement("option");
+      option.value = value;
+      option.textContent = label;
+      option.selected = value === selected;
+      parent.appendChild(option);
     }}
 
     function fillSelect(id, options, selected, multiple=false) {{
@@ -1144,7 +1695,6 @@ def write_metadata_report(rows: list[dict], failures: list[dict] | None = None) 
         "per_set_sample_size": PER_SET_SAMPLE_SIZE,
         "random_seed": RANDOM_SEED,
         "set_counts": dict(sorted(Counter(row["set_id"] for row in rows).items())),
-        "missing_category": sum(1 for row in rows if not row.get("category")),
         "missing_metadata_tokens": sum(1 for row in rows if not row.get("metadata_tokens")),
         "missing_normalized_paths": sum(1 for row in rows if row.get("normalized_path_exists") != "true"),
         "expected_outputs": [

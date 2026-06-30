@@ -6,36 +6,37 @@ import html
 import math
 from pathlib import Path
 
-import matplotlib
-
-matplotlib.use("Agg")
-
-import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 from PIL import Image, ImageDraw, ImageFont
-from sklearn.decomposition import PCA
-from sklearn.preprocessing import StandardScaler
+
+import extract_icon_features
+
+try:
+    import matplotlib
+
+    matplotlib.use("Agg")
+    import matplotlib.pyplot as plt
+except ImportError:
+    plt = None
 
 
 ROOT = Path(__file__).resolve().parents[1]
 FEATURES_CSV = ROOT / "icon_data/analysis/features.csv"
 OUTPUT_DIR = ROOT / "icon_data/analysis/visualizations"
 
-FEATURE_COLUMNS = [
-    "foreground_area_ratio",
-    "canny_edge_density",
-    "connected_components",
-    "quadtree_leaf_count",
-    "quadtree_structural_variability",
-    "quadtree_mean_leaf_size",
-]
+FEATURE_COLUMNS = list(extract_icon_features.FEATURE_COLUMNS)
+FEATURE_GROUPS = [list(group) for group in extract_icon_features.FEATURE_GROUPS]
 
 CHART_FEATURES = [
     "foreground_area_ratio",
     "canny_edge_density",
     "connected_components",
     "quadtree_structural_variability",
+    "bounding_box_occupancy",
+    "perimeter_area_ratio",
+    "colorfulness",
+    "foreground_background_contrast",
 ]
 
 
@@ -60,7 +61,7 @@ def write_summary(frame: pd.DataFrame, output_dir: Path) -> Path:
 
 def plot_feature_distributions(frame: pd.DataFrame, output_dir: Path) -> Path:
     set_names = sorted(frame["set_name"].unique())
-    fig, axes = plt.subplots(len(CHART_FEATURES), 1, figsize=(15, 14), constrained_layout=True)
+    fig, axes = plt.subplots(len(CHART_FEATURES), 1, figsize=(15, max(14, len(CHART_FEATURES) * 3)), constrained_layout=True)
 
     for axis, feature in zip(axes, CHART_FEATURES):
         data = [frame.loc[frame["set_name"] == set_name, feature].to_numpy() for set_name in set_names]
@@ -78,13 +79,15 @@ def plot_feature_distributions(frame: pd.DataFrame, output_dir: Path) -> Path:
 
 def plot_correlation_heatmap(frame: pd.DataFrame, output_dir: Path) -> Path:
     corr = frame[FEATURE_COLUMNS].corr(method="spearman")
-    fig, axis = plt.subplots(figsize=(9, 7), constrained_layout=True)
+    size = max(9, len(FEATURE_COLUMNS) * 0.35)
+    fig, axis = plt.subplots(figsize=(size, size), constrained_layout=True)
     image = axis.imshow(corr, cmap="coolwarm", vmin=-1, vmax=1)
-    axis.set_xticks(range(len(FEATURE_COLUMNS)), labels=FEATURE_COLUMNS, rotation=35, ha="right")
-    axis.set_yticks(range(len(FEATURE_COLUMNS)), labels=FEATURE_COLUMNS)
-    for row in range(len(FEATURE_COLUMNS)):
-        for col in range(len(FEATURE_COLUMNS)):
-            axis.text(col, row, f"{corr.iloc[row, col]:.2f}", ha="center", va="center", fontsize=8)
+    axis.set_xticks(range(len(FEATURE_COLUMNS)), labels=FEATURE_COLUMNS, rotation=60, ha="right", fontsize=7)
+    axis.set_yticks(range(len(FEATURE_COLUMNS)), labels=FEATURE_COLUMNS, fontsize=7)
+    if len(FEATURE_COLUMNS) <= 16:
+        for row in range(len(FEATURE_COLUMNS)):
+            for col in range(len(FEATURE_COLUMNS)):
+                axis.text(col, row, f"{corr.iloc[row, col]:.2f}", ha="center", va="center", fontsize=8)
     axis.set_title("Spearman Feature Correlation")
     fig.colorbar(image, ax=axis, shrink=0.8)
     output = output_dir / "feature_correlation_heatmap.png"
@@ -94,8 +97,8 @@ def plot_correlation_heatmap(frame: pd.DataFrame, output_dir: Path) -> Path:
 
 
 def plot_pca_scatter(frame: pd.DataFrame, output_dir: Path) -> Path:
-    values = StandardScaler().fit_transform(frame[FEATURE_COLUMNS].to_numpy())
-    coords = PCA(n_components=2, random_state=0).fit_transform(values)
+    values = apply_group_weights(zscore(frame[FEATURE_COLUMNS].to_numpy(dtype=float)), FEATURE_COLUMNS, FEATURE_GROUPS)
+    coords = pca_2d(values)
     plot_frame = frame.copy()
     plot_frame["pc1"] = coords[:, 0]
     plot_frame["pc2"] = coords[:, 1]
@@ -118,6 +121,33 @@ def plot_pca_scatter(frame: pd.DataFrame, output_dir: Path) -> Path:
     fig.savefig(output, dpi=180)
     plt.close(fig)
     return output
+
+
+def zscore(values: np.ndarray) -> np.ndarray:
+    means = values.mean(axis=0)
+    stds = values.std(axis=0)
+    stds = np.where(stds == 0, 1.0, stds)
+    return (values - means) / stds
+
+
+def apply_group_weights(values: np.ndarray, columns: list[str], groups: list[list[str]]) -> np.ndarray:
+    weighted = values.copy()
+    column_index = {column: index for index, column in enumerate(columns)}
+    for group in groups:
+        indices = [column_index[column] for column in group if column in column_index]
+        if not indices:
+            continue
+        weighted[:, indices] /= math.sqrt(len(indices))
+    return weighted
+
+
+def pca_2d(values: np.ndarray) -> np.ndarray:
+    centered = values - values.mean(axis=0)
+    _, _, vt = np.linalg.svd(centered, full_matrices=False)
+    coords = centered @ vt[:2].T
+    if coords.shape[1] == 1:
+        coords = np.column_stack([coords[:, 0], np.zeros(len(coords))])
+    return coords[:, :2]
 
 
 def create_set_contact_sheet(frame: pd.DataFrame, output_dir: Path, per_set: int = 12) -> Path:
@@ -252,6 +282,16 @@ def main() -> None:
 
     outputs = []
     summary_csv = write_summary(frame, args.output_dir)
+    if plt is None:
+        html_report = write_html_report(outputs, summary_csv, frame, args.features, args.output_dir)
+        print(
+            "matplotlib is not available; wrote summary-only visual report. "
+            "Install matplotlib to regenerate plot images."
+        )
+        print(f"Wrote visual report to {html_report}")
+        print(summary_csv)
+        return
+
     outputs.append(plot_feature_distributions(frame, args.output_dir))
     outputs.append(plot_correlation_heatmap(frame, args.output_dir))
     outputs.append(plot_pca_scatter(frame, args.output_dir))

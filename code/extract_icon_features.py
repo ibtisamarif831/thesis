@@ -33,6 +33,7 @@ FEATURE_FAILURES_JSON = ANALYSIS_DIR / "feature_failures.json"
 @dataclass(frozen=True)
 class ImageContext:
     path: Path
+    rgb: np.ndarray
     alpha: np.ndarray
     gray: np.ndarray
     foreground: np.ndarray
@@ -88,12 +89,79 @@ class QuadtreeStructuralVariability(FeatureExtractor):
         }
 
 
+class GeometryAndContourFeatures(FeatureExtractor):
+    name = "geometry_and_contour"
+    columns = (
+        "bounding_box_occupancy",
+        "bounding_box_aspect_ratio",
+        "solidity",
+        "centroid_distance_from_center",
+        "horizontal_symmetry",
+        "vertical_symmetry",
+        "perimeter_area_ratio",
+        "filled_vs_outline_proxy",
+        "contour_count",
+        "holes_count",
+        "closed_contour_ratio",
+    )
+
+    def extract(self, context: ImageContext) -> dict[str, float]:
+        stats = geometry_stats(context.foreground)
+        contour_stats_values = contour_stats(context.foreground)
+        return {
+            **stats,
+            **contour_stats_values,
+        }
+
+
+class LineOrientationFeatures(FeatureExtractor):
+    name = "line_orientation_histogram"
+    columns = (
+        "line_orientation_0",
+        "line_orientation_45",
+        "line_orientation_90",
+        "line_orientation_135",
+    )
+
+    def extract(self, context: ImageContext) -> dict[str, float]:
+        return line_orientation_histogram(context.gray, context.foreground)
+
+
+class ColorFeatures(FeatureExtractor):
+    name = "color"
+    columns = (
+        "is_monochrome",
+        "color_count",
+        "mean_saturation",
+        "colorfulness",
+        "foreground_background_contrast",
+    )
+
+    def extract(self, context: ImageContext) -> dict[str, float]:
+        return color_stats(context.rgb, context.gray, context.foreground)
+
+
+class GridLayoutFeatures(FeatureExtractor):
+    name = "grid_layout_4x4"
+    columns = tuple(f"grid_foreground_{row}_{col}" for row in range(4) for col in range(4))
+
+    def extract(self, context: ImageContext) -> dict[str, float]:
+        return grid_foreground_stats(context.foreground, rows=4, cols=4)
+
+
 FEATURE_EXTRACTORS: tuple[FeatureExtractor, ...] = (
     ForegroundAreaRatio(),
     CannyEdgeDensity(),
     ConnectedComponents(),
     QuadtreeStructuralVariability(),
+    GeometryAndContourFeatures(),
+    LineOrientationFeatures(),
+    ColorFeatures(),
+    GridLayoutFeatures(),
 )
+
+FEATURE_COLUMNS: tuple[str, ...] = tuple(column for extractor in FEATURE_EXTRACTORS for column in extractor.columns)
+FEATURE_GROUPS: tuple[tuple[str, ...], ...] = tuple(extractor.columns for extractor in FEATURE_EXTRACTORS)
 
 
 def load_rows(limit: int | None = None, per_set_limit: int | None = None) -> list[dict[str, str]]:
@@ -131,7 +199,13 @@ def load_image(path: Path, foreground_threshold: int) -> ImageContext:
 
     gray = (0.299 * rgb[:, :, 0] + 0.587 * rgb[:, :, 1] + 0.114 * rgb[:, :, 2]) / 255.0
     gray = np.where(foreground, gray, 1.0)
-    return ImageContext(path=path, alpha=alpha, gray=gray.astype(np.float32), foreground=foreground)
+    return ImageContext(
+        path=path,
+        rgb=(rgb / 255.0).astype(np.float32),
+        alpha=alpha,
+        gray=gray.astype(np.float32),
+        foreground=foreground,
+    )
 
 
 def gaussian_blur(image: np.ndarray) -> np.ndarray:
@@ -290,6 +364,320 @@ def quadtree_stats(mask: np.ndarray, variance_threshold: float = 0.02, min_size:
         "structural_variability": leaf_count / max_leaves if max_leaves else 0.0,
         "mean_leaf_size": mean_leaf_size,
     }
+
+
+def geometry_stats(mask: np.ndarray) -> dict[str, float]:
+    height, width = mask.shape
+    ys, xs = np.nonzero(mask)
+    if len(xs) == 0:
+        return {
+            "bounding_box_occupancy": 0.0,
+            "bounding_box_aspect_ratio": 0.0,
+            "solidity": 0.0,
+            "centroid_distance_from_center": 0.0,
+            "horizontal_symmetry": 1.0,
+            "vertical_symmetry": 1.0,
+        }
+
+    min_x, max_x = int(xs.min()), int(xs.max())
+    min_y, max_y = int(ys.min()), int(ys.max())
+    bbox_width = max_x - min_x + 1
+    bbox_height = max_y - min_y + 1
+    bbox_area = bbox_width * bbox_height
+    foreground_area = int(mask.sum())
+    centroid_x = float(xs.mean()) / max(width - 1, 1)
+    centroid_y = float(ys.mean()) / max(height - 1, 1)
+    center_distance = math.hypot(centroid_x - 0.5, centroid_y - 0.5) / math.hypot(0.5, 0.5)
+
+    return {
+        "bounding_box_occupancy": float(foreground_area / bbox_area) if bbox_area else 0.0,
+        "bounding_box_aspect_ratio": float(bbox_width / bbox_height) if bbox_height else 0.0,
+        "solidity": convex_solidity(mask),
+        "centroid_distance_from_center": float(center_distance),
+        "horizontal_symmetry": symmetry_score(mask, axis="horizontal"),
+        "vertical_symmetry": symmetry_score(mask, axis="vertical"),
+    }
+
+
+def convex_solidity(mask: np.ndarray) -> float:
+    foreground_area = float(mask.sum())
+    if foreground_area == 0:
+        return 0.0
+    points = np.column_stack(np.nonzero(mask)).astype(np.int32)
+    if len(points) < 3:
+        return 1.0
+    if cv2 is None:
+        boundary = boundary_points(mask)
+        hull = convex_hull(boundary)
+        hull_area = polygon_area(hull)
+        if hull_area <= 0:
+            return 1.0
+        return float(min(foreground_area / hull_area, 1.0))
+    points_xy = points[:, ::-1]
+    hull = cv2.convexHull(points_xy)
+    hull_area = float(cv2.contourArea(hull))
+    if hull_area <= 0:
+        return 1.0
+    return float(min(foreground_area / hull_area, 1.0))
+
+
+def symmetry_score(mask: np.ndarray, axis: str) -> float:
+    flipped = np.fliplr(mask) if axis == "horizontal" else np.flipud(mask)
+    union = mask | flipped
+    if not union.any():
+        return 1.0
+    overlap = mask & flipped
+    return float(overlap.sum() / union.sum())
+
+
+def contour_stats(mask: np.ndarray) -> dict[str, float]:
+    foreground_area = float(mask.sum())
+    if foreground_area == 0:
+        return {
+            "perimeter_area_ratio": 0.0,
+            "filled_vs_outline_proxy": 0.0,
+            "contour_count": 0.0,
+            "holes_count": 0.0,
+            "closed_contour_ratio": 0.0,
+        }
+
+    if cv2 is None:
+        perimeter = mask_perimeter(mask)
+        contour_count = float(count_components(mask))
+        holes_count = float(count_holes(mask))
+        perimeter_area_ratio = float(perimeter / foreground_area)
+        filled_proxy = float(foreground_area / max(foreground_area + perimeter, 1.0))
+        closed_contour_ratio = closed_contour_proxy(perimeter_area_ratio, contour_count, holes_count)
+        return {
+            "perimeter_area_ratio": perimeter_area_ratio,
+            "filled_vs_outline_proxy": filled_proxy,
+            "contour_count": contour_count,
+            "holes_count": holes_count,
+            "closed_contour_ratio": closed_contour_ratio,
+        }
+
+    binary = (mask.astype(np.uint8) * 255)
+    contours, hierarchy = cv2.findContours(binary, cv2.RETR_CCOMP, cv2.CHAIN_APPROX_SIMPLE)
+    if not contours:
+        return {
+            "perimeter_area_ratio": 0.0,
+            "filled_vs_outline_proxy": 0.0,
+            "contour_count": 0.0,
+            "holes_count": 0.0,
+            "closed_contour_ratio": 0.0,
+        }
+
+    hierarchy_array = hierarchy[0] if hierarchy is not None else np.empty((0, 4), dtype=np.int32)
+    external_indices = [index for index, item in enumerate(hierarchy_array) if item[3] < 0]
+    hole_indices = [index for index, item in enumerate(hierarchy_array) if item[3] >= 0]
+    external_contours = [contours[index] for index in external_indices] or contours
+    perimeter = float(sum(cv2.arcLength(contour, True) for contour in external_contours))
+    contour_count = float(len(external_contours))
+    holes_count = float(len(hole_indices))
+    perimeter_area_ratio = float(perimeter / foreground_area)
+    filled_proxy = float(foreground_area / max(foreground_area + perimeter, 1.0))
+    closed_contour_ratio = closed_contour_proxy(perimeter_area_ratio, contour_count, holes_count)
+
+    return {
+        "perimeter_area_ratio": perimeter_area_ratio,
+        "filled_vs_outline_proxy": filled_proxy,
+        "contour_count": contour_count,
+        "holes_count": holes_count,
+        "closed_contour_ratio": closed_contour_ratio,
+    }
+
+
+def closed_contour_proxy(perimeter_area_ratio: float, contour_count: float, holes_count: float) -> float:
+    hole_signal = min(holes_count / max(contour_count, 1.0), 1.0)
+    compact_signal = 1.0 / (1.0 + 8.0 * max(perimeter_area_ratio, 0.0))
+    return float(max(hole_signal, compact_signal))
+
+
+def mask_perimeter(mask: np.ndarray) -> float:
+    padded = np.pad(mask, 1, mode="constant", constant_values=False)
+    center = padded[1:-1, 1:-1]
+    exposed = (
+        (center & ~padded[:-2, 1:-1]).astype(np.int16)
+        + (center & ~padded[2:, 1:-1]).astype(np.int16)
+        + (center & ~padded[1:-1, :-2]).astype(np.int16)
+        + (center & ~padded[1:-1, 2:]).astype(np.int16)
+    )
+    return float(exposed.sum())
+
+
+def boundary_points(mask: np.ndarray) -> list[tuple[int, int]]:
+    padded = np.pad(mask, 1, mode="constant", constant_values=False)
+    center = padded[1:-1, 1:-1]
+    boundary = center & (
+        ~padded[:-2, 1:-1] | ~padded[2:, 1:-1] | ~padded[1:-1, :-2] | ~padded[1:-1, 2:]
+    )
+    ys, xs = np.nonzero(boundary)
+    return [(int(x), int(y)) for y, x in zip(ys, xs)]
+
+
+def count_holes(mask: np.ndarray) -> int:
+    background = ~mask
+    if not background.any():
+        return 0
+
+    outside = np.zeros_like(background, dtype=bool)
+    outside[0, :] = background[0, :]
+    outside[-1, :] = background[-1, :]
+    outside[:, 0] |= background[:, 0]
+    outside[:, -1] |= background[:, -1]
+
+    while True:
+        expanded = dilate(outside) & background
+        if np.array_equal(expanded, outside):
+            break
+        outside = expanded
+
+    holes_mask = background & ~outside
+    return count_components(holes_mask) if holes_mask.any() else 0
+
+
+def convex_hull(points: list[tuple[int, int]]) -> list[tuple[int, int]]:
+    unique = sorted(set(points))
+    if len(unique) <= 1:
+        return unique
+
+    def cross(origin: tuple[int, int], a: tuple[int, int], b: tuple[int, int]) -> int:
+        return (a[0] - origin[0]) * (b[1] - origin[1]) - (a[1] - origin[1]) * (b[0] - origin[0])
+
+    lower: list[tuple[int, int]] = []
+    for point in unique:
+        while len(lower) >= 2 and cross(lower[-2], lower[-1], point) <= 0:
+            lower.pop()
+        lower.append(point)
+
+    upper: list[tuple[int, int]] = []
+    for point in reversed(unique):
+        while len(upper) >= 2 and cross(upper[-2], upper[-1], point) <= 0:
+            upper.pop()
+        upper.append(point)
+
+    return lower[:-1] + upper[:-1]
+
+
+def polygon_area(points: list[tuple[int, int]]) -> float:
+    if len(points) < 3:
+        return 0.0
+    area = 0.0
+    for index, (x1, y1) in enumerate(points):
+        x2, y2 = points[(index + 1) % len(points)]
+        area += x1 * y2 - x2 * y1
+    return abs(area) / 2.0
+
+
+def line_orientation_histogram(gray: np.ndarray, foreground: np.ndarray) -> dict[str, float]:
+    if not foreground.any():
+        return {
+            "line_orientation_0": 0.0,
+            "line_orientation_45": 0.0,
+            "line_orientation_90": 0.0,
+            "line_orientation_135": 0.0,
+        }
+    blurred = gaussian_blur(gray)
+    sobel_x = np.array([[-1, 0, 1], [-2, 0, 2], [-1, 0, 1]], dtype=np.float32)
+    sobel_y = np.array([[1, 2, 1], [0, 0, 0], [-1, -2, -1]], dtype=np.float32)
+    gx = convolve3(blurred, sobel_x)
+    gy = convolve3(blurred, sobel_y)
+    magnitude = np.hypot(gx, gy)
+    threshold = np.percentile(magnitude[foreground], 75) if np.any(magnitude[foreground] > 0) else 0.0
+    active = foreground & (magnitude > threshold)
+    if not active.any():
+        active = foreground & (magnitude > 0)
+    if not active.any():
+        return {
+            "line_orientation_0": 0.0,
+            "line_orientation_45": 0.0,
+            "line_orientation_90": 0.0,
+            "line_orientation_135": 0.0,
+        }
+
+    # Edge gradient is perpendicular to stroke direction.
+    orientations = (np.rad2deg(np.arctan2(gy, gx)) + 90.0) % 180.0
+    bins = {
+        "line_orientation_0": ((orientations < 22.5) | (orientations >= 157.5)),
+        "line_orientation_45": ((orientations >= 22.5) & (orientations < 67.5)),
+        "line_orientation_90": ((orientations >= 67.5) & (orientations < 112.5)),
+        "line_orientation_135": ((orientations >= 112.5) & (orientations < 157.5)),
+    }
+    weights = magnitude * active
+    total = float(weights.sum())
+    if total <= 0:
+        return {key: 0.0 for key in bins}
+    return {key: float(weights[mask].sum() / total) for key, mask in bins.items()}
+
+
+def color_stats(rgb: np.ndarray, gray: np.ndarray, foreground: np.ndarray) -> dict[str, float]:
+    if not foreground.any():
+        return {
+            "is_monochrome": 1.0,
+            "color_count": 0.0,
+            "mean_saturation": 0.0,
+            "colorfulness": 0.0,
+            "foreground_background_contrast": 0.0,
+        }
+
+    fg_rgb = rgb[foreground]
+    saturation = saturation_values(fg_rgb)
+    quantized = np.floor(np.clip(fg_rgb, 0, 1) * 7).astype(np.int16)
+    colors = np.unique(quantized, axis=0)
+    color_count = float(len(colors))
+    mean_saturation = float(saturation.mean()) if len(saturation) else 0.0
+    saturation_p95 = float(np.percentile(saturation, 95)) if len(saturation) else 0.0
+    colorfulness_value = colorfulness(fg_rgb)
+    is_monochrome = 1.0 if saturation_p95 < 0.08 and colorfulness_value < 0.05 else 0.0
+
+    fg_gray = gray[foreground]
+    bg_gray = gray[~foreground]
+    if len(bg_gray):
+        contrast = abs(float(fg_gray.mean()) - float(bg_gray.mean()))
+    else:
+        contrast = float(fg_gray.std()) if len(fg_gray) else 0.0
+
+    return {
+        "is_monochrome": is_monochrome,
+        "color_count": color_count,
+        "mean_saturation": mean_saturation,
+        "colorfulness": colorfulness_value,
+        "foreground_background_contrast": contrast,
+    }
+
+
+def saturation_values(rgb_values: np.ndarray) -> np.ndarray:
+    max_channel = rgb_values.max(axis=1)
+    min_channel = rgb_values.min(axis=1)
+    saturation = np.zeros_like(max_channel)
+    np.divide(max_channel - min_channel, max_channel, out=saturation, where=max_channel > 0)
+    return saturation
+
+
+def colorfulness(rgb_values: np.ndarray) -> float:
+    if len(rgb_values) == 0:
+        return 0.0
+    values = rgb_values * 255.0
+    red, green, blue = values[:, 0], values[:, 1], values[:, 2]
+    rg = red - green
+    yb = 0.5 * (red + green) - blue
+    std_root = math.sqrt(float(rg.std() ** 2 + yb.std() ** 2))
+    mean_root = math.sqrt(float(rg.mean() ** 2 + yb.mean() ** 2))
+    return float((std_root + 0.3 * mean_root) / 255.0)
+
+
+def grid_foreground_stats(mask: np.ndarray, rows: int, cols: int) -> dict[str, float]:
+    height, width = mask.shape
+    out: dict[str, float] = {}
+    for row in range(rows):
+        y0 = round(row * height / rows)
+        y1 = round((row + 1) * height / rows)
+        for col in range(cols):
+            x0 = round(col * width / cols)
+            x1 = round((col + 1) * width / cols)
+            cell = mask[y0:y1, x0:x1]
+            out[f"grid_foreground_{row}_{col}"] = float(cell.mean()) if cell.size else 0.0
+    return out
 
 
 def extract_row(row: dict[str, str], extractors: tuple[FeatureExtractor, ...], foreground_threshold: int):

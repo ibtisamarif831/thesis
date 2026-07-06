@@ -51,35 +51,17 @@ The extractor reads normalized 256x256 PNGs from `icon_data/normalized_256/` and
 
 OpenCV is used for Canny/contour helpers when available; the script keeps local NumPy/Pillow fallbacks for portability.
 
-Current feature columns:
+Current feature families:
 
-- `foreground_area_ratio`
-- `canny_edge_density`
-- `connected_components`
-- `quadtree_leaf_count`
-- `quadtree_structural_variability`
-- `quadtree_mean_leaf_size`
-- `bounding_box_occupancy`
-- `bounding_box_aspect_ratio`
-- `solidity`
-- `centroid_distance_from_center`
-- `horizontal_symmetry`
-- `vertical_symmetry`
-- `perimeter_area_ratio`
-- `filled_vs_outline_proxy`
-- `contour_count`
-- `holes_count`
-- `closed_contour_ratio`
-- `line_orientation_0`
-- `line_orientation_45`
-- `line_orientation_90`
-- `line_orientation_135`
-- `is_monochrome`
-- `color_count`
-- `mean_saturation`
-- `colorfulness`
-- `foreground_background_contrast`
-- `grid_foreground_0_0` through `grid_foreground_3_3`
+- foreground amount, edge density, connected components, and quadtree structure;
+- bounding-box geometry, contour closure, symmetry, fill/outline, and 4x4 grid layout;
+- circularity, rectangularity, corner count, curvature histogram, principal-axis orientation, and Hu moments;
+- stroke width, skeleton endpoints, and skeleton junctions;
+- color count, saturation, colorfulness, contrast, hue histogram, and dominant Lab colors;
+- texture entropy, local binary pattern histogram, crush-test stability, and text/letter presence proxy;
+- medium-priority directional proxies: arrowhead count, arc count, and explicit bounding-box position/size.
+
+The authoritative column registry is written to `features_metadata.json` on every extraction run.
 
 The extractor is plugin-style: each metric is a `FeatureExtractor` subclass registered in `FEATURE_EXTRACTORS`.
 

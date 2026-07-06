@@ -89,12 +89,12 @@ For the image-only variant, the dashboard can recompute PCA and clustering in th
 
 Image features currently include:
 
-- foreground area ratio;
-- Canny edge density;
-- connected components;
-- quadtree leaf count;
-- quadtree structural variability;
-- quadtree mean leaf size.
+- complexity and density features such as foreground area, Canny edge density, connected components, and quadtree structure;
+- geometry and contour features such as bounding-box occupancy, circularity, rectangularity, corners, curvature bins, closure, holes, Hu moments, and symmetry;
+- structure/style features such as line orientation, principal-axis orientation, stroke width, skeleton endpoints/junctions, arrowheads, and arcs;
+- color features such as monochrome status, color count, saturation, colorfulness, contrast, hue histogram, and dominant Lab colors;
+- spatial layout features including bounding-box center/size and the 4x4 foreground grid;
+- texture and robustness features including entropy, local binary patterns, crush-test stability, and a text/letter presence proxy.
 
 Metadata features include encoded values derived from:
 

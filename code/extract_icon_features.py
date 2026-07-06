@@ -94,6 +94,10 @@ class GeometryAndContourFeatures(FeatureExtractor):
     columns = (
         "bounding_box_occupancy",
         "bounding_box_aspect_ratio",
+        "bbox_center_x",
+        "bbox_center_y",
+        "bbox_width_ratio",
+        "bbox_height_ratio",
         "solidity",
         "centroid_distance_from_center",
         "horizontal_symmetry",
@@ -149,6 +153,80 @@ class GridLayoutFeatures(FeatureExtractor):
         return grid_foreground_stats(context.foreground, rows=4, cols=4)
 
 
+class ShapeDescriptorFeatures(FeatureExtractor):
+    name = "shape_descriptors"
+    columns = (
+        "circularity",
+        "rectangularity",
+        "corner_count",
+        "curvature_histogram_straight",
+        "curvature_histogram_gentle",
+        "curvature_histogram_sharp",
+        "principal_axis_orientation",
+        "arrowhead_count",
+        "arc_count",
+        "hu_moment_1",
+        "hu_moment_2",
+        "hu_moment_3",
+        "hu_moment_4",
+        "hu_moment_5",
+        "hu_moment_6",
+        "hu_moment_7",
+    )
+
+    def extract(self, context: ImageContext) -> dict[str, float]:
+        return shape_descriptor_stats(context.foreground)
+
+
+class StrokeSkeletonFeatures(FeatureExtractor):
+    name = "stroke_skeleton"
+    columns = (
+        "stroke_width_mean",
+        "stroke_width_std",
+        "skeleton_endpoints",
+        "skeleton_junctions",
+    )
+
+    def extract(self, context: ImageContext) -> dict[str, float]:
+        return stroke_skeleton_stats(context.foreground)
+
+
+class ExtendedColorFeatures(FeatureExtractor):
+    name = "extended_color"
+    columns = (
+        *(f"hue_histogram_{index:02d}" for index in range(12)),
+        "dominant_color_1_lab_l",
+        "dominant_color_1_lab_a",
+        "dominant_color_1_lab_b",
+        "dominant_color_2_lab_l",
+        "dominant_color_2_lab_a",
+        "dominant_color_2_lab_b",
+        "dominant_color_3_lab_l",
+        "dominant_color_3_lab_a",
+        "dominant_color_3_lab_b",
+    )
+
+    def extract(self, context: ImageContext) -> dict[str, float]:
+        return extended_color_stats(context.rgb, context.foreground)
+
+
+class TextureRobustnessFeatures(FeatureExtractor):
+    name = "texture_and_robustness"
+    columns = (
+        "texture_entropy",
+        *(f"lbp_histogram_{index:02d}" for index in range(10)),
+        "crush_test_stability",
+        "text_or_letter_presence",
+    )
+
+    def extract(self, context: ImageContext) -> dict[str, float]:
+        return {
+            **texture_stats(context.gray, context.foreground),
+            "crush_test_stability": crush_test_stability(context.foreground),
+            "text_or_letter_presence": text_or_letter_presence_proxy(context.foreground),
+        }
+
+
 FEATURE_EXTRACTORS: tuple[FeatureExtractor, ...] = (
     ForegroundAreaRatio(),
     CannyEdgeDensity(),
@@ -158,6 +236,10 @@ FEATURE_EXTRACTORS: tuple[FeatureExtractor, ...] = (
     LineOrientationFeatures(),
     ColorFeatures(),
     GridLayoutFeatures(),
+    ShapeDescriptorFeatures(),
+    StrokeSkeletonFeatures(),
+    ExtendedColorFeatures(),
+    TextureRobustnessFeatures(),
 )
 
 FEATURE_COLUMNS: tuple[str, ...] = tuple(column for extractor in FEATURE_EXTRACTORS for column in extractor.columns)
@@ -373,6 +455,10 @@ def geometry_stats(mask: np.ndarray) -> dict[str, float]:
         return {
             "bounding_box_occupancy": 0.0,
             "bounding_box_aspect_ratio": 0.0,
+            "bbox_center_x": 0.5,
+            "bbox_center_y": 0.5,
+            "bbox_width_ratio": 0.0,
+            "bbox_height_ratio": 0.0,
             "solidity": 0.0,
             "centroid_distance_from_center": 0.0,
             "horizontal_symmetry": 1.0,
@@ -392,6 +478,10 @@ def geometry_stats(mask: np.ndarray) -> dict[str, float]:
     return {
         "bounding_box_occupancy": float(foreground_area / bbox_area) if bbox_area else 0.0,
         "bounding_box_aspect_ratio": float(bbox_width / bbox_height) if bbox_height else 0.0,
+        "bbox_center_x": float((min_x + max_x) / 2.0 / max(width - 1, 1)),
+        "bbox_center_y": float((min_y + max_y) / 2.0 / max(height - 1, 1)),
+        "bbox_width_ratio": float(bbox_width / width) if width else 0.0,
+        "bbox_height_ratio": float(bbox_height / height) if height else 0.0,
         "solidity": convex_solidity(mask),
         "centroid_distance_from_center": float(center_distance),
         "horizontal_symmetry": symmetry_score(mask, axis="horizontal"),
@@ -569,6 +659,457 @@ def polygon_area(points: list[tuple[int, int]]) -> float:
     return abs(area) / 2.0
 
 
+def shape_descriptor_stats(mask: np.ndarray) -> dict[str, float]:
+    empty = {
+        "circularity": 0.0,
+        "rectangularity": 0.0,
+        "corner_count": 0.0,
+        "curvature_histogram_straight": 0.0,
+        "curvature_histogram_gentle": 0.0,
+        "curvature_histogram_sharp": 0.0,
+        "principal_axis_orientation": 0.0,
+        "arrowhead_count": 0.0,
+        "arc_count": 0.0,
+        **{f"hu_moment_{index}": 0.0 for index in range(1, 8)},
+    }
+    foreground_area = float(mask.sum())
+    if foreground_area == 0:
+        return empty
+
+    perimeter = mask_perimeter(mask)
+    circularity = 0.0
+    if perimeter > 0:
+        circularity = min(float(4.0 * math.pi * foreground_area / (perimeter * perimeter)), 1.0)
+
+    ys, xs = np.nonzero(mask)
+    rectangularity = bbox_rectangularity(mask, xs, ys)
+    principal_axis_orientation = foreground_principal_axis_orientation(xs, ys)
+
+    contours = foreground_contours(mask, mode="external", chain="simple")
+    detailed_contours = foreground_contours(mask, mode="external", chain="none")
+    corner_count = contour_corner_count(contours)
+    curvature = contour_curvature_histogram(detailed_contours)
+    arrowhead_count = contour_arrowhead_count(contours)
+    arc_count = contour_arc_count(detailed_contours)
+
+    out = {
+        "circularity": circularity,
+        "rectangularity": rectangularity,
+        "corner_count": float(corner_count),
+        "principal_axis_orientation": principal_axis_orientation,
+        "arrowhead_count": float(arrowhead_count),
+        "arc_count": float(arc_count),
+        **curvature,
+        **hu_moments(mask),
+    }
+    return {key: float(out.get(key, value)) for key, value in empty.items()}
+
+
+def bbox_rectangularity(mask: np.ndarray, xs: np.ndarray, ys: np.ndarray) -> float:
+    foreground_area = float(mask.sum())
+    if foreground_area == 0:
+        return 0.0
+    if cv2 is not None and len(xs) >= 3:
+        points = np.column_stack([xs, ys]).astype(np.float32)
+        (_, _), (rect_width, rect_height), _ = cv2.minAreaRect(points)
+        rect_area = float(rect_width * rect_height)
+    else:
+        rect_area = float((int(xs.max()) - int(xs.min()) + 1) * (int(ys.max()) - int(ys.min()) + 1))
+    if rect_area <= 0:
+        return 0.0
+    return float(min(foreground_area / rect_area, 1.0))
+
+
+def foreground_principal_axis_orientation(xs: np.ndarray, ys: np.ndarray) -> float:
+    if len(xs) < 2:
+        return 0.0
+    points = np.column_stack([xs.astype(np.float32), ys.astype(np.float32)])
+    centered = points - points.mean(axis=0)
+    covariance = np.cov(centered, rowvar=False)
+    if not np.all(np.isfinite(covariance)):
+        return 0.0
+    values, vectors = np.linalg.eigh(covariance)
+    principal = vectors[:, int(np.argmax(values))]
+    angle = math.degrees(math.atan2(float(principal[1]), float(principal[0]))) % 180.0
+    return float(angle)
+
+
+def foreground_contours(mask: np.ndarray, mode: str, chain: str) -> list[np.ndarray]:
+    if cv2 is None:
+        points = boundary_points(mask)
+        if not points:
+            return []
+        hull = convex_hull(points)
+        contour_points_value = hull if len(hull) >= 3 else points
+        return [np.array(contour_points_value, dtype=np.float32).reshape(-1, 1, 2)]
+    retrieval = cv2.RETR_EXTERNAL if mode == "external" else cv2.RETR_CCOMP
+    approximation = cv2.CHAIN_APPROX_NONE if chain == "none" else cv2.CHAIN_APPROX_SIMPLE
+    contours, _ = cv2.findContours((mask.astype(np.uint8) * 255), retrieval, approximation)
+    return list(contours)
+
+
+def contour_corner_count(contours: list[np.ndarray]) -> int:
+    count = 0
+    for contour in contours:
+        perimeter = contour_perimeter(contour)
+        if perimeter <= 0:
+            continue
+        approx = approximate_contour(contour, 0.025 * perimeter)
+        count += len(approx)
+    return count
+
+
+def contour_curvature_histogram(contours: list[np.ndarray]) -> dict[str, float]:
+    bins = {
+        "curvature_histogram_straight": 0,
+        "curvature_histogram_gentle": 0,
+        "curvature_histogram_sharp": 0,
+    }
+    for contour in contours:
+        points = contour_points(contour)
+        if len(points) < 5:
+            continue
+        step = max(2, min(8, len(points) // 40))
+        for index in range(len(points)):
+            prev_point = points[(index - step) % len(points)]
+            point = points[index]
+            next_point = points[(index + step) % len(points)]
+            angle = turn_angle(prev_point, point, next_point)
+            if angle < 12.0:
+                bins["curvature_histogram_straight"] += 1
+            elif angle < 55.0:
+                bins["curvature_histogram_gentle"] += 1
+            else:
+                bins["curvature_histogram_sharp"] += 1
+    total = sum(bins.values())
+    if total == 0:
+        return {key: 0.0 for key in bins}
+    return {key: float(value / total) for key, value in bins.items()}
+
+
+def contour_arrowhead_count(contours: list[np.ndarray]) -> int:
+    arrowheads = 0
+    sharp_tips = 0
+    for contour in contours:
+        perimeter = contour_perimeter(contour)
+        area = contour_area(contour)
+        if perimeter <= 0 or area < 8:
+            continue
+        approx = approximate_contour(contour, 0.035 * perimeter)
+        points = contour_points(approx)
+        if len(points) == 3 and contour_solidity(contour) > 0.55:
+            arrowheads += 1
+            continue
+        contour_tips = 0
+        for index, point in enumerate(points):
+            prev_point = points[index - 1]
+            next_point = points[(index + 1) % len(points)]
+            if turn_angle(prev_point, point, next_point) >= 80.0:
+                contour_tips += 1
+        if 1 <= contour_tips <= 2:
+            sharp_tips += contour_tips
+    return int(arrowheads + sharp_tips)
+
+
+def contour_arc_count(contours: list[np.ndarray]) -> int:
+    arcs = 0
+    for contour in contours:
+        points = contour_points(contour)
+        if len(points) < 12:
+            continue
+        step = max(2, min(6, len(points) // 50))
+        gentle_run = 0
+        contour_arcs = 0
+        for index in range(len(points)):
+            angle = turn_angle(points[(index - step) % len(points)], points[index], points[(index + step) % len(points)])
+            if 10.0 <= angle < 70.0:
+                gentle_run += 1
+            elif gentle_run >= max(6, len(points) // 18):
+                contour_arcs += 1
+                gentle_run = 0
+            else:
+                gentle_run = 0
+        if gentle_run >= max(6, len(points) // 18):
+            contour_arcs += 1
+        if contour_arcs == 0 and 0.12 <= contour_circularity(contour) <= 0.95:
+            contour_arcs = 1
+        arcs += contour_arcs
+    return int(arcs)
+
+
+def hu_moments(mask: np.ndarray) -> dict[str, float]:
+    if not mask.any():
+        return {f"hu_moment_{index}": 0.0 for index in range(1, 8)}
+    if cv2 is not None:
+        moments = cv2.moments((mask.astype(np.uint8) * 255), binaryImage=True)
+        hu_values = cv2.HuMoments(moments).flatten()
+    else:
+        hu_values = hu_moments_fallback(mask)
+    out = {}
+    for index, value in enumerate(hu_values, start=1):
+        signed_log = -math.copysign(math.log10(abs(float(value)) + 1e-30), float(value))
+        out[f"hu_moment_{index}"] = float(signed_log)
+    return out
+
+
+def hu_moments_fallback(mask: np.ndarray) -> np.ndarray:
+    ys, xs = np.nonzero(mask)
+    if len(xs) == 0:
+        return np.zeros(7, dtype=np.float64)
+    x = xs.astype(np.float64)
+    y = ys.astype(np.float64)
+    m00 = float(len(x))
+    x_bar = float(x.mean())
+    y_bar = float(y.mean())
+    x_centered = x - x_bar
+    y_centered = y - y_bar
+
+    def eta(p: int, q: int) -> float:
+        moment = float((x_centered**p * y_centered**q).sum())
+        return moment / (m00 ** (1.0 + (p + q) / 2.0))
+
+    n20 = eta(2, 0)
+    n02 = eta(0, 2)
+    n11 = eta(1, 1)
+    n30 = eta(3, 0)
+    n12 = eta(1, 2)
+    n21 = eta(2, 1)
+    n03 = eta(0, 3)
+
+    return np.array(
+        [
+            n20 + n02,
+            (n20 - n02) ** 2 + 4.0 * n11**2,
+            (n30 - 3.0 * n12) ** 2 + (3.0 * n21 - n03) ** 2,
+            (n30 + n12) ** 2 + (n21 + n03) ** 2,
+            (n30 - 3.0 * n12)
+            * (n30 + n12)
+            * ((n30 + n12) ** 2 - 3.0 * (n21 + n03) ** 2)
+            + (3.0 * n21 - n03)
+            * (n21 + n03)
+            * (3.0 * (n30 + n12) ** 2 - (n21 + n03) ** 2),
+            (n20 - n02) * ((n30 + n12) ** 2 - (n21 + n03) ** 2)
+            + 4.0 * n11 * (n30 + n12) * (n21 + n03),
+            (3.0 * n21 - n03)
+            * (n30 + n12)
+            * ((n30 + n12) ** 2 - 3.0 * (n21 + n03) ** 2)
+            - (n30 - 3.0 * n12)
+            * (n21 + n03)
+            * (3.0 * (n30 + n12) ** 2 - (n21 + n03) ** 2),
+        ],
+        dtype=np.float64,
+    )
+
+
+def contour_points(contour: np.ndarray) -> np.ndarray:
+    return np.asarray(contour, dtype=np.float32).reshape(-1, 2)
+
+
+def contour_perimeter(contour: np.ndarray) -> float:
+    points = contour_points(contour)
+    if len(points) < 2:
+        return 0.0
+    if cv2 is not None:
+        return float(cv2.arcLength(contour.astype(np.float32), True))
+    shifted = np.roll(points, -1, axis=0)
+    return float(np.linalg.norm(shifted - points, axis=1).sum())
+
+
+def contour_area(contour: np.ndarray) -> float:
+    points = contour_points(contour)
+    if len(points) < 3:
+        return 0.0
+    if cv2 is not None:
+        return abs(float(cv2.contourArea(contour.astype(np.float32))))
+    return polygon_area([(int(x), int(y)) for x, y in points])
+
+
+def contour_circularity(contour: np.ndarray) -> float:
+    area = contour_area(contour)
+    perimeter = contour_perimeter(contour)
+    if perimeter <= 0:
+        return 0.0
+    return float(min(4.0 * math.pi * area / (perimeter * perimeter), 1.0))
+
+
+def contour_solidity(contour: np.ndarray) -> float:
+    area = contour_area(contour)
+    points = contour_points(contour)
+    if area <= 0 or len(points) < 3:
+        return 0.0
+    if cv2 is not None:
+        hull = cv2.convexHull(points.astype(np.float32))
+        hull_area = float(cv2.contourArea(hull))
+    else:
+        hull_area = polygon_area(convex_hull([(int(x), int(y)) for x, y in points]))
+    if hull_area <= 0:
+        return 0.0
+    return float(min(area / hull_area, 1.0))
+
+
+def approximate_contour(contour: np.ndarray, epsilon: float) -> np.ndarray:
+    if cv2 is not None:
+        return cv2.approxPolyDP(contour.astype(np.float32), epsilon, True)
+    points = contour_points(contour)
+    if len(points) <= 16:
+        return contour
+    stride = max(1, round(len(points) / 16))
+    return points[::stride].reshape(-1, 1, 2)
+
+
+def turn_angle(prev_point: np.ndarray, point: np.ndarray, next_point: np.ndarray) -> float:
+    first = np.asarray(prev_point, dtype=np.float32) - np.asarray(point, dtype=np.float32)
+    second = np.asarray(next_point, dtype=np.float32) - np.asarray(point, dtype=np.float32)
+    first_norm = float(np.linalg.norm(first))
+    second_norm = float(np.linalg.norm(second))
+    if first_norm == 0 or second_norm == 0:
+        return 0.0
+    cosine = float(np.clip(np.dot(first, second) / (first_norm * second_norm), -1.0, 1.0))
+    interior = math.degrees(math.acos(cosine))
+    return abs(180.0 - interior)
+
+
+def stroke_skeleton_stats(mask: np.ndarray) -> dict[str, float]:
+    if not mask.any():
+        return {
+            "stroke_width_mean": 0.0,
+            "stroke_width_std": 0.0,
+            "skeleton_endpoints": 0.0,
+            "skeleton_junctions": 0.0,
+        }
+    skeleton = skeletonize(mask)
+    if not skeleton.any():
+        skeleton = mask.copy()
+    distances = distance_transform(mask)
+    widths = 2.0 * distances[skeleton] / max(mask.shape)
+    endpoints, junctions = skeleton_graph_counts(skeleton)
+    return {
+        "stroke_width_mean": float(widths.mean()) if widths.size else 0.0,
+        "stroke_width_std": float(widths.std()) if widths.size else 0.0,
+        "skeleton_endpoints": float(endpoints),
+        "skeleton_junctions": float(junctions),
+    }
+
+
+def skeletonize(mask: np.ndarray) -> np.ndarray:
+    if cv2 is not None:
+        image = (mask.astype(np.uint8) * 255)
+        skeleton = np.zeros_like(image)
+        element = cv2.getStructuringElement(cv2.MORPH_CROSS, (3, 3))
+        for _ in range(max(mask.shape) * 2):
+            if not np.any(image):
+                break
+            eroded = cv2.erode(image, element)
+            opened = cv2.dilate(eroded, element)
+            skeleton = cv2.bitwise_or(skeleton, cv2.subtract(image, opened))
+            image = eroded
+        return skeleton > 0
+    return distance_ridge_skeleton(mask)
+
+
+def distance_ridge_skeleton(mask: np.ndarray) -> np.ndarray:
+    distances = distance_transform(mask)
+    if not np.any(distances > 0):
+        return mask.copy()
+    padded = np.pad(distances, 1, mode="constant", constant_values=0.0)
+    local_max = mask.copy()
+    for y_offset in range(3):
+        for x_offset in range(3):
+            if y_offset == 1 and x_offset == 1:
+                continue
+            local_max &= distances >= padded[y_offset : y_offset + mask.shape[0], x_offset : x_offset + mask.shape[1]]
+    if local_max.any():
+        return local_max
+    threshold = np.percentile(distances[mask], 80)
+    return mask & (distances >= threshold)
+
+
+def zhang_suen_thinning(mask: np.ndarray) -> np.ndarray:
+    image = mask.astype(np.uint8).copy()
+    changed = True
+    while changed:
+        changed = False
+        for phase in (0, 1):
+            to_remove = []
+            ys, xs = np.nonzero(image)
+            for y, x in zip(ys, xs):
+                if y == 0 or x == 0 or y == image.shape[0] - 1 or x == image.shape[1] - 1:
+                    continue
+                neighbors = [
+                    image[y - 1, x],
+                    image[y - 1, x + 1],
+                    image[y, x + 1],
+                    image[y + 1, x + 1],
+                    image[y + 1, x],
+                    image[y + 1, x - 1],
+                    image[y, x - 1],
+                    image[y - 1, x - 1],
+                ]
+                count = sum(neighbors)
+                transitions = sum((neighbors[index] == 0 and neighbors[(index + 1) % 8] == 1) for index in range(8))
+                if not (2 <= count <= 6 and transitions == 1):
+                    continue
+                if phase == 0:
+                    keep = neighbors[0] * neighbors[2] * neighbors[4] == 0 and neighbors[2] * neighbors[4] * neighbors[6] == 0
+                else:
+                    keep = neighbors[0] * neighbors[2] * neighbors[6] == 0 and neighbors[0] * neighbors[4] * neighbors[6] == 0
+                if keep:
+                    to_remove.append((y, x))
+            if to_remove:
+                changed = True
+                for y, x in to_remove:
+                    image[y, x] = 0
+    return image.astype(bool)
+
+
+def distance_transform(mask: np.ndarray) -> np.ndarray:
+    if cv2 is not None:
+        return cv2.distanceTransform(mask.astype(np.uint8), cv2.DIST_L2, 3).astype(np.float32)
+    height, width = mask.shape
+    inf = float(height + width)
+    distances = np.where(mask, inf, 0.0).astype(np.float32)
+    for y in range(height):
+        for x in range(width):
+            if not mask[y, x]:
+                continue
+            best = distances[y, x]
+            if y > 0:
+                best = min(best, distances[y - 1, x] + 1.0)
+            if x > 0:
+                best = min(best, distances[y, x - 1] + 1.0)
+            if y > 0 and x > 0:
+                best = min(best, distances[y - 1, x - 1] + 1.414)
+            distances[y, x] = best
+    for y in range(height - 1, -1, -1):
+        for x in range(width - 1, -1, -1):
+            if not mask[y, x]:
+                continue
+            best = distances[y, x]
+            if y + 1 < height:
+                best = min(best, distances[y + 1, x] + 1.0)
+            if x + 1 < width:
+                best = min(best, distances[y, x + 1] + 1.0)
+            if y + 1 < height and x + 1 < width:
+                best = min(best, distances[y + 1, x + 1] + 1.414)
+            distances[y, x] = best
+    return distances
+
+
+def skeleton_graph_counts(skeleton: np.ndarray) -> tuple[int, int]:
+    padded = np.pad(skeleton, 1, mode="constant", constant_values=False)
+    neighbor_counts = np.zeros_like(skeleton, dtype=np.uint8)
+    for y_offset in range(3):
+        for x_offset in range(3):
+            if y_offset == 1 and x_offset == 1:
+                continue
+            neighbor_counts += padded[y_offset : y_offset + skeleton.shape[0], x_offset : x_offset + skeleton.shape[1]]
+    endpoint_regions = skeleton & (neighbor_counts == 1)
+    junction_regions = skeleton & (neighbor_counts >= 3)
+    endpoints = count_components(endpoint_regions) if endpoint_regions.any() else 0
+    junctions = count_components(junction_regions) if junction_regions.any() else 0
+    return endpoints, junctions
+
+
 def line_orientation_histogram(gray: np.ndarray, foreground: np.ndarray) -> dict[str, float]:
     if not foreground.any():
         return {
@@ -664,6 +1205,185 @@ def colorfulness(rgb_values: np.ndarray) -> float:
     std_root = math.sqrt(float(rg.std() ** 2 + yb.std() ** 2))
     mean_root = math.sqrt(float(rg.mean() ** 2 + yb.mean() ** 2))
     return float((std_root + 0.3 * mean_root) / 255.0)
+
+
+def extended_color_stats(rgb: np.ndarray, foreground: np.ndarray) -> dict[str, float]:
+    out = {f"hue_histogram_{index:02d}": 0.0 for index in range(12)}
+    for color_index in range(1, 4):
+        out.update(
+            {
+                f"dominant_color_{color_index}_lab_l": 0.0,
+                f"dominant_color_{color_index}_lab_a": 0.0,
+                f"dominant_color_{color_index}_lab_b": 0.0,
+            }
+        )
+    if not foreground.any():
+        return out
+
+    fg_rgb = np.clip(rgb[foreground], 0.0, 1.0)
+    hue, saturation, _ = rgb_to_hsv(fg_rgb)
+    chromatic = saturation > 0.08
+    if np.any(chromatic):
+        histogram, _ = np.histogram(hue[chromatic], bins=12, range=(0.0, 360.0))
+        total = float(histogram.sum())
+        if total > 0:
+            for index, value in enumerate(histogram):
+                out[f"hue_histogram_{index:02d}"] = float(value / total)
+
+    quantized = np.floor(fg_rgb * 7.0).astype(np.int16)
+    colors, counts = np.unique(quantized, axis=0, return_counts=True)
+    order = np.argsort(counts)[::-1]
+    for rank, color_row in enumerate(colors[order[:3]], start=1):
+        color = (color_row.astype(np.float32) + 0.5) / 7.0
+        lab_l, lab_a, lab_b = rgb_to_lab(color.reshape(1, 3))[0]
+        out[f"dominant_color_{rank}_lab_l"] = float(lab_l)
+        out[f"dominant_color_{rank}_lab_a"] = float(lab_a)
+        out[f"dominant_color_{rank}_lab_b"] = float(lab_b)
+    return out
+
+
+def rgb_to_hsv(rgb_values: np.ndarray) -> tuple[np.ndarray, np.ndarray, np.ndarray]:
+    red = rgb_values[:, 0]
+    green = rgb_values[:, 1]
+    blue = rgb_values[:, 2]
+    max_channel = rgb_values.max(axis=1)
+    min_channel = rgb_values.min(axis=1)
+    delta = max_channel - min_channel
+
+    hue = np.zeros_like(max_channel)
+    red_mask = (max_channel == red) & (delta > 0)
+    green_mask = (max_channel == green) & (delta > 0)
+    blue_mask = (max_channel == blue) & (delta > 0)
+    hue[red_mask] = (60.0 * ((green[red_mask] - blue[red_mask]) / delta[red_mask])) % 360.0
+    hue[green_mask] = 60.0 * ((blue[green_mask] - red[green_mask]) / delta[green_mask] + 2.0)
+    hue[blue_mask] = 60.0 * ((red[blue_mask] - green[blue_mask]) / delta[blue_mask] + 4.0)
+
+    saturation = np.zeros_like(max_channel)
+    np.divide(delta, max_channel, out=saturation, where=max_channel > 0)
+    return hue, saturation, max_channel
+
+
+def rgb_to_lab(rgb_values: np.ndarray) -> np.ndarray:
+    rgb_linear = np.where(
+        rgb_values <= 0.04045,
+        rgb_values / 12.92,
+        ((rgb_values + 0.055) / 1.055) ** 2.4,
+    )
+    transform = np.array(
+        [
+            [0.4124564, 0.3575761, 0.1804375],
+            [0.2126729, 0.7151522, 0.0721750],
+            [0.0193339, 0.1191920, 0.9503041],
+        ],
+        dtype=np.float32,
+    )
+    xyz = rgb_linear @ transform.T
+    white = np.array([0.95047, 1.0, 1.08883], dtype=np.float32)
+    xyz_scaled = xyz / white
+    epsilon = 216.0 / 24389.0
+    kappa = 24389.0 / 27.0
+    f_xyz = np.where(xyz_scaled > epsilon, np.cbrt(xyz_scaled), (kappa * xyz_scaled + 16.0) / 116.0)
+    lab_l = 116.0 * f_xyz[:, 1] - 16.0
+    lab_a = 500.0 * (f_xyz[:, 0] - f_xyz[:, 1])
+    lab_b = 200.0 * (f_xyz[:, 1] - f_xyz[:, 2])
+    return np.column_stack([lab_l, lab_a, lab_b]).astype(np.float32)
+
+
+def texture_stats(gray: np.ndarray, foreground: np.ndarray) -> dict[str, float]:
+    out = {
+        "texture_entropy": 0.0,
+        **{f"lbp_histogram_{index:02d}": 0.0 for index in range(10)},
+    }
+    if not foreground.any():
+        return out
+
+    values = gray[foreground]
+    histogram, _ = np.histogram(values, bins=32, range=(0.0, 1.0))
+    probabilities = histogram.astype(np.float32)
+    probabilities = probabilities[probabilities > 0]
+    if probabilities.size:
+        probabilities /= probabilities.sum()
+        out["texture_entropy"] = float(-(probabilities * np.log2(probabilities)).sum() / math.log2(32))
+
+    lbp_values = local_binary_pattern_uniform(gray, foreground)
+    if lbp_values.size:
+        lbp_histogram, _ = np.histogram(lbp_values, bins=np.arange(11), range=(0, 10))
+        total = float(lbp_histogram.sum())
+        if total > 0:
+            for index, value in enumerate(lbp_histogram):
+                out[f"lbp_histogram_{index:02d}"] = float(value / total)
+    return out
+
+
+def local_binary_pattern_uniform(gray: np.ndarray, foreground: np.ndarray) -> np.ndarray:
+    if gray.shape[0] < 3 or gray.shape[1] < 3:
+        return np.array([], dtype=np.uint8)
+    center = gray[1:-1, 1:-1]
+    active = foreground[1:-1, 1:-1]
+    if not active.any():
+        return np.array([], dtype=np.uint8)
+    neighbors = [
+        gray[:-2, :-2],
+        gray[:-2, 1:-1],
+        gray[:-2, 2:],
+        gray[1:-1, 2:],
+        gray[2:, 2:],
+        gray[2:, 1:-1],
+        gray[2:, :-2],
+        gray[1:-1, :-2],
+    ]
+    bits = np.stack([(neighbor >= center).astype(np.uint8) for neighbor in neighbors], axis=0)
+    transitions = np.zeros(center.shape, dtype=np.uint8)
+    for index in range(8):
+        transitions += bits[index] != bits[(index + 1) % 8]
+    ones = bits.sum(axis=0).astype(np.uint8)
+    uniform_bins = np.where(transitions <= 2, ones, 9).astype(np.uint8)
+    return uniform_bins[active]
+
+
+def crush_test_stability(mask: np.ndarray, crush_size: int = 32) -> float:
+    if not mask.any():
+        return 1.0
+    image = Image.fromarray((mask.astype(np.uint8) * 255), mode="L")
+    small = image.resize((crush_size, crush_size), Image.Resampling.BILINEAR)
+    restored = small.resize((mask.shape[1], mask.shape[0]), Image.Resampling.NEAREST)
+    crushed = np.asarray(restored) > 127
+
+    union = mask | crushed
+    iou = float((mask & crushed).sum() / union.sum()) if union.any() else 1.0
+    area_delta = abs(float(mask.mean()) - float(crushed.mean())) / max(float(mask.mean()), 1e-6)
+    area_stability = max(0.0, 1.0 - min(area_delta, 1.0))
+    return float((iou + area_stability) / 2.0)
+
+
+def text_or_letter_presence_proxy(mask: np.ndarray) -> float:
+    if not mask.any():
+        return 0.0
+    area_ratio = float(mask.mean())
+    components = count_components(mask)
+    contours = foreground_contours(mask, mode="external", chain="simple")
+    corners = contour_corner_count(contours)
+    holes = count_holes(mask)
+    stats = geometry_stats(mask)
+    aspect = stats["bounding_box_aspect_ratio"]
+    occupancy = stats["bounding_box_occupancy"]
+
+    score = 0.0
+    if 0.02 <= area_ratio <= 0.38:
+        score += 0.2
+    if 1 <= components <= 5:
+        score += 0.2
+    if 0.35 <= aspect <= 3.0:
+        score += 0.15
+    if 0.10 <= occupancy <= 0.68:
+        score += 0.15
+    if 4 <= corners <= 28:
+        score += 0.15
+    if 0 <= holes <= 3:
+        score += 0.15
+    if score < 0.6:
+        return 0.0
+    return float((score - 0.6) / 0.4)
 
 
 def grid_foreground_stats(mask: np.ndarray, rows: int, cols: int) -> dict[str, float]:

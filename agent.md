@@ -2,6 +2,10 @@
 
 This file is the first-stop orientation map for future agents working in this repository. Use it to route questions to the relevant area before searching broadly.
 
+## After Each Task
+
+Before closing any task in this repository, review `agent.md` and improve it with any newly discovered guidance that would help the next agent start faster or avoid repeating investigation. Keep updates concise, factual, and scoped to durable repository knowledge: current generated-output state, routing hints, workflow rules, verification commands, known gaps, or pitfalls encountered during the task. Do not add transient narration or duplicate details already captured elsewhere.
+
 ## Repository Purpose
 
 This workspace supports a thesis on icon/glyph perception, visual complexity, similarity, clustering, and evidence-based symbol-set design.
@@ -86,6 +90,60 @@ Then open:
 ```text
 http://127.0.0.1:8765/icon_data/analysis/analysis_dashboard/index.html
 ```
+
+## Python Code Organization Rules
+
+Future Python code generated for this repository must not continue the current large single-file pattern unless the change is a tiny one-off script. Existing large scripts can remain until there is a concrete reason to refactor them, but new substantive work should be organized as importable modules with thin command-line entrypoints.
+
+Use this preferred layout for new Python pipeline code:
+
+```text
+code/
+  thesis_pipeline/
+    __init__.py
+    paths.py
+    io.py
+    features/
+      __init__.py
+      extraction.py
+      registry.py
+    clustering/
+      __init__.py
+      distance.py
+      metadata.py
+    dashboard/
+      __init__.py
+      build.py
+      templates.py
+  build_new_output.py
+```
+
+Conventions for new code:
+
+- Keep command-line scripts in `code/*.py` as thin wrappers: parse arguments, call a `main()` function from `code/thesis_pipeline/...`, and exit.
+- Put reusable logic in modules under `code/thesis_pipeline/`.
+- Do not put downloading, parsing, feature extraction, clustering, HTML generation, and file writing in one file.
+- Split code by responsibility: paths/configuration, input/output, data normalization, feature computation, clustering/statistics, visualization/dashboard assembly, and reporting.
+- Prefer pure functions for transformations: input data in, output data out, no hidden file writes.
+- Keep file-system writes near the orchestration layer, not inside low-level feature/statistics functions.
+- Use `dataclasses.dataclass(frozen=True)` for small configuration and result objects when dictionaries become unclear.
+- Use `pathlib.Path` instead of string path manipulation.
+- Use `argparse` for command-line options; do not hard-code new experiment parameters unless they are true repo constants.
+- Add type hints to new public functions and return values.
+- Keep functions short enough to inspect easily. If a function needs several phases, split it into named helpers.
+- Name generated outputs explicitly in constants or config objects so it is easy to see what a script creates.
+- Use structured readers/writers (`csv.DictReader`, `csv.DictWriter`, `json`, `pandas` when already appropriate) instead of ad hoc string parsing.
+- Avoid global mutable state. Constants are fine; caches and accumulators should live inside functions/classes.
+- Make random sampling deterministic with an explicit seed in config.
+- Keep generated HTML/CSS/JS templates separate from Python computation when the template is more than a small literal.
+- Add focused tests or smoke checks for new shared modules when behavior is non-trivial.
+
+Refactoring guidance:
+
+- When touching an existing large script for a small bug, make the smallest safe change.
+- When adding a substantial feature to an existing large script, first extract the relevant reusable pieces into `code/thesis_pipeline/`, then keep the old script as a compatibility wrapper if needed.
+- Do not rewrite every existing script just for style. Prefer incremental extraction that reduces real complexity.
+- After moving code, run `py_compile` on both the wrapper and the new modules, then run the specific generator or a small sample mode if available.
 
 ## Top-Level Layout
 

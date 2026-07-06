@@ -373,22 +373,23 @@
       const labels = projection.labels;
       const coords = projection.coords;
       const filtered = dashboard.records.map((record, index) => ({record, index})).filter(item => passesFilters(item.record));
-      const colorValues = filtered.map(item => colorValue(item.record, labels[item.index]));
-      const marker = markerFor(colorValues, state.color);
       const customData = filtered.map(item => [item.record.icon_id]);
+      const plotPoints = filtered.map(item => [coords[item.index][0], coords[item.index][1]]);
+      const ranges = plotRanges(plotPoints);
 
       Plotly.react("scatter", [{
         x: filtered.map(item => coords[item.index][0]),
         y: filtered.map(item => coords[item.index][1]),
         mode: "markers",
-        type: "scattergl",
-        marker,
+        type: "scatter",
+        marker: interactionMarker(),
         customdata: customData,
         hoverinfo: "none"
       }], {
         margin: {l: 42, r: 14, t: 16, b: 42},
-        xaxis: {title: "PCA 1", zeroline: false},
-        yaxis: {title: "PCA 2", zeroline: false},
+        xaxis: {title: "PCA 1", zeroline: false, range: ranges.x},
+        yaxis: {title: "PCA 2", zeroline: false, range: ranges.y},
+        images: plotImages(filtered, coords, ranges),
         showlegend: false
       }, {responsive: true});
 
@@ -508,25 +509,52 @@
       });
     }
 
-    function colorValue(record, cluster) {
-      if (state.color === "cluster") return `Cluster ${cluster}`;
-      if (record.image_features && state.color in record.image_features) return record.image_features[state.color];
-      return record[state.color] || "";
+    function interactionMarker() {
+      return {
+        size: 30,
+        color: "rgba(24,32,47,0.01)",
+        line: {width: 0},
+        opacity: 0.01
+      };
     }
 
-    function markerFor(values, mode) {
-      if (dashboard.metadata.image_feature_columns.includes(mode)) {
-        return {size: 8, color: values, colorscale: "Viridis", showscale: true, opacity: 0.78};
-      }
-      const categories = unique(values);
-      const palette = ["#3366cc","#dc3912","#ff9900","#109618","#990099","#0099c6","#dd4477","#66aa00","#b82e2e","#316395","#994499","#22aa99","#aaaa11","#6633cc"];
-      const map = new Map(categories.map((value, index) => [value, palette[index % palette.length]]));
-      return {size: 8, color: values.map(value => map.get(value)), opacity: 0.78};
+    function plotRanges(points) {
+      if (!points.length) return {x: [-1, 1], y: [-1, 1], spanX: 2, spanY: 2};
+      const xs = points.map(point => point[0]);
+      const ys = points.map(point => point[1]);
+      const minX = Math.min(...xs);
+      const maxX = Math.max(...xs);
+      const minY = Math.min(...ys);
+      const maxY = Math.max(...ys);
+      const spanX = Math.max(maxX - minX, 1);
+      const spanY = Math.max(maxY - minY, 1);
+      const padX = spanX * 0.12;
+      const padY = spanY * 0.12;
+      return {
+        x: [minX - padX, maxX + padX],
+        y: [minY - padY, maxY + padY],
+        spanX,
+        spanY
+      };
     }
 
-    function hoverText(record, cluster) {
-      const features = featureSummaryLines(record, selectedFeatureIds(), 8).join("<br>");
-      return `<b>${escapeHtml(record.label)}</b><br>${escapeHtml(record.set_name)}<br>Cluster: ${cluster}<br>${features}`;
+    function plotImages(filtered, coords, ranges) {
+      const sizeX = ranges.spanX * 0.055;
+      const sizeY = ranges.spanY * 0.055;
+      return filtered.map(item => ({
+        source: item.record.normalized_path,
+        xref: "x",
+        yref: "y",
+        x: coords[item.index][0],
+        y: coords[item.index][1],
+        sizex: sizeX,
+        sizey: sizeY,
+        xanchor: "center",
+        yanchor: "middle",
+        sizing: "contain",
+        layer: "above",
+        opacity: 0.96
+      }));
     }
 
     function renderHoverPreview(record, cluster, event) {

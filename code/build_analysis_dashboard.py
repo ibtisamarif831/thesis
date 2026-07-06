@@ -57,62 +57,177 @@ GRID_FEATURE_COLUMNS = [f"grid_foreground_{row}_{col}" for row in range(4) for c
 
 DASHBOARD_FEATURE_SECTIONS = [
     {
-        "id": "shape",
-        "title": "Shape Features",
-        "description": "Geometry, contour, density, and structural complexity features that describe the icon body.",
+        "id": "complexity",
+        "title": "Complexity Features",
+        "description": "Detail load, structural subdivision, component count, contour count, holes, perimeter load, and angular point count.",
+        "perception": "This family approximates how visually busy or effortful a glyph is to parse.",
+        "low_value": "Lower values usually mean a simpler, cleaner symbol with fewer parts, edges, holes, or sharp details.",
+        "high_value": "Higher values usually mean a more intricate symbol that may take more attention to inspect and distinguish.",
         "feature_ids": [
-            "foreground_area_ratio",
-            "connected_components",
+            "canny_edge_density",
             "quadtree_leaf_count",
             "quadtree_structural_variability",
             "quadtree_mean_leaf_size",
-            "bounding_box_occupancy",
-            "bounding_box_aspect_ratio",
-            "solidity",
+            "connected_components",
             "contour_count",
             "holes_count",
-            "closed_contour_ratio",
+            "perimeter_area_ratio",
+            "corner_count",
         ],
     },
     {
-        "id": "color",
-        "title": "Color Features",
-        "description": "Color presence, richness, saturation, and foreground-background contrast.",
+        "id": "shape",
+        "title": "Shape Features",
+        "description": "Silhouette, closure, roundness, rectangularity, curvature, and global shape descriptors.",
+        "perception": "This family captures the overall form humans use to recognize a glyph as round, box-like, elongated, open, closed, curved, or angular.",
+        "low_value": "Lower values depend on the specific feature: for example, low circularity means less round, low closure means more open, and low Hu/moment values indicate a different global silhouette profile.",
+        "high_value": "Higher values indicate stronger presence of that shape property, such as more circular, more rectangular, more closed, or more strongly matching a particular moment descriptor.",
+        "feature_ids": [
+            "bounding_box_aspect_ratio",
+            "solidity",
+            "closed_contour_ratio",
+            "circularity",
+            "rectangularity",
+            "curvature_histogram_straight",
+            "curvature_histogram_gentle",
+            "curvature_histogram_sharp",
+            "hu_moment_1",
+            "hu_moment_2",
+            "hu_moment_3",
+            "hu_moment_4",
+            "hu_moment_5",
+            "hu_moment_6",
+            "hu_moment_7",
+        ],
+    },
+    {
+        "id": "structure",
+        "title": "Structure Features",
+        "description": "Directional strokes, principal orientation, arrows, arcs, skeleton graph structure, and text-like marks.",
+        "perception": "This family captures internal organization: direction, branching, endpoints, arrows, arcs, and letter-like structure that guide how people read or follow a glyph.",
+        "low_value": "Lower values usually mean less explicit directionality, fewer skeleton branches/endpoints, fewer arrows/arcs, or weaker text-like structure.",
+        "high_value": "Higher values usually mean stronger directional cues, more branching structure, more endpoints/junctions, or clearer arrow/text-like components.",
+        "feature_ids": [
+            "line_orientation_0",
+            "line_orientation_45",
+            "line_orientation_90",
+            "line_orientation_135",
+            "principal_axis_orientation",
+            "arrowhead_count",
+            "arc_count",
+            "skeleton_endpoints",
+            "skeleton_junctions",
+            "text_or_letter_presence",
+        ],
+    },
+    {
+        "id": "density_fill",
+        "title": "Density/Fill Features",
+        "description": "Foreground amount, bounding-box fill, outline-vs-fill behavior, and stroke thickness.",
+        "perception": "This family describes whether a glyph reads as sparse line art, a filled silhouette, or a heavy/thick mark.",
+        "low_value": "Lower values usually mean a lighter, thinner, more open, or less filled glyph.",
+        "high_value": "Higher values usually mean a denser, more filled, more visually heavy glyph with thicker strokes or stronger occupancy.",
+        "feature_ids": [
+            "foreground_area_ratio",
+            "bounding_box_occupancy",
+            "filled_vs_outline_proxy",
+            "stroke_width_mean",
+            "stroke_width_std",
+        ],
+    },
+    {
+        "id": "balance_layout",
+        "title": "Balance/Layout Features",
+        "description": "Centering, symmetry, active bounding-box position/size, and 4x4 foreground grid layout.",
+        "perception": "This family captures where visual mass sits and whether the glyph feels centered, balanced, symmetric, top-heavy, side-heavy, compact, or spread out.",
+        "low_value": "Lower values often mean less offset or less occupancy in a given region; for symmetry scores, lower means less balanced.",
+        "high_value": "Higher values often mean stronger occupancy in a region, larger active extent, more offset for distance features, or stronger balance for symmetry scores.",
+        "feature_ids": [
+            "centroid_distance_from_center",
+            "horizontal_symmetry",
+            "vertical_symmetry",
+            "bbox_center_x",
+            "bbox_center_y",
+            "bbox_width_ratio",
+            "bbox_height_ratio",
+            *GRID_FEATURE_COLUMNS,
+        ],
+    },
+    {
+        "id": "color_contrast",
+        "title": "Color/Contrast Features",
+        "description": "Color presence, saturation, colorfulness, foreground-background contrast, hue distribution, and dominant Lab colors.",
+        "perception": "This family captures color channels humans use for quick grouping, salience, and foreground-background separation.",
+        "low_value": "Lower values usually mean less color, lower saturation/colorfulness, weaker contrast, or less presence of a given hue bin.",
+        "high_value": "Higher values usually mean stronger color signal, more vividness, clearer contrast, or stronger presence of a particular hue/dominant color channel.",
         "feature_ids": [
             "is_monochrome",
             "color_count",
             "mean_saturation",
             "colorfulness",
             "foreground_background_contrast",
+            *(f"hue_histogram_{index:02d}" for index in range(12)),
+            "dominant_color_1_lab_l",
+            "dominant_color_1_lab_a",
+            "dominant_color_1_lab_b",
+            "dominant_color_2_lab_l",
+            "dominant_color_2_lab_a",
+            "dominant_color_2_lab_b",
+            "dominant_color_3_lab_l",
+            "dominant_color_3_lab_a",
+            "dominant_color_3_lab_b",
         ],
     },
     {
-        "id": "style",
-        "title": "Style Features",
-        "description": "Measured rendering style: edge load, outline-vs-fill behavior, symmetry, and dominant line direction.",
+        "id": "texture",
+        "title": "Texture Features",
+        "description": "Foreground tonal entropy and local binary pattern texture distribution.",
+        "perception": "This family captures repeated marks, hatching, dotting, internal variation, and other surface patterns that affect perceived detail.",
+        "low_value": "Lower values usually mean flatter, more uniform foreground regions with little internal texture.",
+        "high_value": "Higher values usually mean more internal variation or repeated local patterns that can make the glyph feel more textured or detailed.",
         "feature_ids": [
-            "canny_edge_density",
-            "perimeter_area_ratio",
-            "filled_vs_outline_proxy",
-            "horizontal_symmetry",
-            "vertical_symmetry",
-            "line_orientation_0",
-            "line_orientation_45",
-            "line_orientation_90",
-            "line_orientation_135",
+            "texture_entropy",
+            *(f"lbp_histogram_{index:02d}" for index in range(10)),
         ],
     },
     {
-        "id": "spatial_layout",
-        "title": "Spatial Layout Features",
-        "description": "Where visual mass sits on the canvas, including center offset and a 4x4 foreground grid.",
-        "visible": False,
+        "id": "robustness",
+        "title": "Robustness Features",
+        "description": "Stability of the icon when downsampled and reconstructed.",
+        "perception": "This family estimates whether the glyph remains visually stable when shown small or degraded.",
+        "low_value": "Lower values mean the glyph changes more under downsampling, so small-size recognition may be less reliable.",
+        "high_value": "Higher values mean the glyph preserves its foreground shape better at reduced resolution.",
         "feature_ids": [
-            "centroid_distance_from_center",
-            *GRID_FEATURE_COLUMNS,
+            "crush_test_stability",
         ],
     },
 ]
+
+DERIVED_FEATURE_FAMILIES = [
+    {
+        "id": "distinctiveness",
+        "title": "Distinctiveness",
+        "description": "Derived set-level evidence from pairwise distances, nearest-neighbor rank, clustering, and quasi-Hamming style comparisons.",
+        "sources": ["similarity outputs", "cluster assignments", "nearest-neighbor tables"],
+    },
+    {
+        "id": "semantics",
+        "title": "Semantics",
+        "description": "Metadata and human-response evidence from labels, categories, metadata tokens, McDougall ratings, and semantic fields.",
+        "sources": ["metadata tokens", "labels/categories", "McDougall numeric ratings"],
+    },
+]
+
+THESIS_FAMILY_REASONS = {
+    "complexity": "It belongs in Complexity because it measures detail load, subdivision, part count, boundary load, holes, or angular detail.",
+    "shape": "It belongs in Shape because it describes the icon's silhouette, closure, roundness, rectangularity, curvature, or global form.",
+    "structure": "It belongs in Structure because it measures directional strokes, graph structure, arcs, arrows, or text-like visual components.",
+    "density_fill": "It belongs in Density/Fill because it measures foreground amount, occupancy, fill style, or stroke thickness.",
+    "balance_layout": "It belongs in Balance/Layout because it measures centering, symmetry, bounding-box placement, or spatial foreground distribution.",
+    "color_contrast": "It belongs in Color/Contrast because it measures color availability, hue, saturation, dominant colors, or foreground-background separation.",
+    "texture": "It belongs in Texture because it measures tonal variation or local repeated pixel patterns.",
+    "robustness": "It belongs in Robustness because it measures stability under downsampling.",
+}
 
 FEATURE_LABELS = {
     "foreground_area_ratio": "Foreground area ratio",
@@ -258,6 +373,81 @@ for row in range(4):
         )
         FEATURE_VISUAL_CATEGORIZATIONS[feature_id] = ["Spatial layout similarity"]
 
+FEATURE_LABELS.update(
+    {
+        "bbox_center_x": "Bounding-box center x",
+        "bbox_center_y": "Bounding-box center y",
+        "bbox_width_ratio": "Bounding-box width ratio",
+        "bbox_height_ratio": "Bounding-box height ratio",
+        "circularity": "Circularity",
+        "rectangularity": "Rectangularity",
+        "corner_count": "Corner count",
+        "curvature_histogram_straight": "Straight-contour share",
+        "curvature_histogram_gentle": "Gentle-curvature share",
+        "curvature_histogram_sharp": "Sharp-curvature share",
+        "principal_axis_orientation": "Principal-axis orientation",
+        "arrowhead_count": "Arrowhead count",
+        "arc_count": "Arc count",
+        "stroke_width_mean": "Mean stroke width",
+        "stroke_width_std": "Stroke-width variation",
+        "skeleton_endpoints": "Skeleton endpoints",
+        "skeleton_junctions": "Skeleton junctions",
+        "texture_entropy": "Texture entropy",
+        "crush_test_stability": "Crush-test stability",
+        "text_or_letter_presence": "Text/letter presence proxy",
+    }
+)
+
+for feature_id in [
+    "bbox_center_x",
+    "bbox_center_y",
+    "bbox_width_ratio",
+    "bbox_height_ratio",
+    "circularity",
+    "rectangularity",
+    "corner_count",
+    "curvature_histogram_straight",
+    "curvature_histogram_gentle",
+    "curvature_histogram_sharp",
+    "principal_axis_orientation",
+    "arrowhead_count",
+    "arc_count",
+    "stroke_width_mean",
+    "stroke_width_std",
+    "skeleton_endpoints",
+    "skeleton_junctions",
+    "texture_entropy",
+    "crush_test_stability",
+    "text_or_letter_presence",
+]:
+    FEATURE_MEANINGS.setdefault(feature_id, "Extracted visual feature added for glyph distinguishability analysis.")
+    FEATURE_CATEGORY_REASONS.setdefault(feature_id, "It belongs in this group because it measures that visual channel.")
+
+for index in range(1, 8):
+    feature_id = f"hu_moment_{index}"
+    FEATURE_LABELS[feature_id] = f"Hu moment {index}"
+    FEATURE_MEANINGS[feature_id] = "Global silhouette moment descriptor."
+    FEATURE_CATEGORY_REASONS[feature_id] = "It belongs in Shape because Hu moments summarize global form."
+
+for index in range(12):
+    feature_id = f"hue_histogram_{index:02d}"
+    FEATURE_LABELS[feature_id] = f"Hue bin {index + 1}"
+    FEATURE_MEANINGS[feature_id] = "Share of saturated foreground pixels in this hue interval."
+    FEATURE_CATEGORY_REASONS[feature_id] = "It belongs in Color because hue bins represent color-family channels."
+
+for rank in range(1, 4):
+    for channel in ("l", "a", "b"):
+        feature_id = f"dominant_color_{rank}_lab_{channel}"
+        FEATURE_LABELS[feature_id] = f"Dominant color {rank} Lab {channel.upper()}"
+        FEATURE_MEANINGS[feature_id] = "Lab channel value for one of the dominant foreground colors."
+        FEATURE_CATEGORY_REASONS[feature_id] = "It belongs in Color because dominant Lab values encode foreground color appearance."
+
+for index in range(10):
+    feature_id = f"lbp_histogram_{index:02d}"
+    FEATURE_LABELS[feature_id] = f"LBP texture bin {index}"
+    FEATURE_MEANINGS[feature_id] = "Uniform local binary pattern texture share; bin 9 stores non-uniform patterns."
+    FEATURE_CATEGORY_REASONS[feature_id] = "It belongs in Style because local binary patterns describe repeated marks and texture."
+
 MCDOUGALL_NUMERIC_COLUMNS = [
     "mcdougall_concreteness",
     "mcdougall_complexity",
@@ -283,6 +473,9 @@ def image_feature_sections() -> list[dict[str, object]]:
                 "id": section["id"],
                 "title": section["title"],
                 "description": section["description"],
+                "perception": section.get("perception", ""),
+                "low_value": section.get("low_value", ""),
+                "high_value": section.get("high_value", ""),
                 "visible": section.get("visible", True),
                 "features": [
                     {
@@ -297,9 +490,12 @@ def image_feature_sections() -> list[dict[str, object]]:
                             for category in FEATURE_VISUAL_CATEGORIZATIONS.get(feature_id, [])
                             if category in FEATURE_VISUAL_CATEGORY_LABELS
                         ],
-                        "category_reason": FEATURE_CATEGORY_REASONS.get(
-                            feature_id,
-                            f"It belongs in {section['title']} because it describes that visual channel.",
+                        "category_reason": THESIS_FAMILY_REASONS.get(
+                            section["id"],
+                            FEATURE_CATEGORY_REASONS.get(
+                                feature_id,
+                                f"It belongs in {section['title']} because it describes that visual channel.",
+                            ),
                         ),
                     }
                     for feature_id in feature_ids
@@ -811,6 +1007,7 @@ def write_dashboard_data(rows: list[dict], feature_by_id: dict[str, dict], matri
                 extractor.name: list(extractor.columns) for extractor in extract_icon_features.FEATURE_EXTRACTORS
             },
             "image_feature_sections": image_feature_sections(),
+            "derived_feature_families": DERIVED_FEATURE_FAMILIES,
             "mcdougall_numeric_columns": MCDOUGALL_NUMERIC_COLUMNS,
         },
         "records": records,
@@ -863,6 +1060,9 @@ def write_index_html() -> None:
     .feature-head {{ display: flex; align-items: center; justify-content: space-between; gap: 8px; }}
     .feature-head b {{ font-size: 13px; }}
     .feature-description {{ color: var(--muted); font-size: 12px; line-height: 1.35; margin: 4px 0 6px; }}
+    .feature-interpretation {{ color: #3d4656; font-size: 12px; line-height: 1.35; margin: 6px 0 8px; padding: 6px 7px; border-left: 3px solid #d8dde6; background: #fbfcfe; }}
+    .feature-interpretation div + div {{ margin-top: 3px; }}
+    .feature-interpretation b {{ font-weight: 650; }}
     .feature-actions {{ display: flex; gap: 4px; flex-shrink: 0; }}
     .feature-actions button, .preset-row button {{ padding: 3px 6px; font-size: 12px; }}
     .feature-list {{ max-height: 150px; overflow: auto; border-top: 1px solid #edf0f4; padding-top: 4px; }}
@@ -903,6 +1103,7 @@ def write_index_html() -> None:
     .feature-group-detail {{ margin: 10px 0; }}
     .feature-group-detail h4 {{ font-size: 13px; margin: 0 0 2px; }}
     .feature-group-detail p {{ margin: 0 0 4px; font-size: 12px; color: var(--muted); line-height: 1.35; }}
+    .feature-group-detail .family-reading {{ color: #3d4656; }}
     table {{ width: 100%; border-collapse: collapse; font-size: 12px; }}
     td {{ border-bottom: 1px solid #edf0f4; padding: 4px 0; vertical-align: top; }}
     td:last-child {{ text-align: right; color: #334; }}
@@ -1072,6 +1273,11 @@ def write_index_html() -> None:
             </span>
           </div>
           <div class="feature-description">${{escapeHtml(section.description)}}</div>
+          <div class="feature-interpretation">
+            <div><b>Human perception:</b> ${{escapeHtml(section.perception || "This family describes a perceptual visual channel.")}}</div>
+            <div><b>Low:</b> ${{escapeHtml(section.low_value || "Lower values mean less of this family signal.")}}</div>
+            <div><b>High:</b> ${{escapeHtml(section.high_value || "Higher values mean more of this family signal.")}}</div>
+          </div>
           <div class="feature-list">
             ${{section.features.map(feature => `
               <label class="feature-choice" data-feature-id="${{escapeHtml(feature.id)}}" data-feature-label="${{escapeHtml(feature.label)}}" data-feature-group="${{escapeHtml(feature.group_title)}}" data-feature-meaning="${{escapeHtml(feature.meaning)}}" data-feature-visual="${{escapeHtml((feature.visual_categorizations || []).join(", "))}}" data-feature-examples="${{escapeHtml((feature.visual_category_labels || []).join("; "))}}" data-feature-reason="${{escapeHtml(feature.category_reason)}}">
@@ -1452,9 +1658,14 @@ def write_index_html() -> None:
             <td>${{formatFeatureValue(record.image_features[feature.id])}}</td>
           </tr>`).join("");
         const description = includeDescriptions ? `<p>${{escapeHtml(section.description)}}</p>` : "";
+        const familyReading = includeDescriptions ? `
+          <p class="family-reading"><b>Human perception:</b> ${{escapeHtml(section.perception || "This family describes a perceptual visual channel.")}}</p>
+          <p class="family-reading"><b>Low:</b> ${{escapeHtml(section.low_value || "Lower values mean less of this family signal.")}}</p>
+          <p class="family-reading"><b>High:</b> ${{escapeHtml(section.high_value || "Higher values mean more of this family signal.")}}</p>` : "";
         return `<div class="feature-group-detail">
           <h4>${{escapeHtml(section.title)}}</h4>
           ${{description}}
+          ${{familyReading}}
           <table>${{rows}}</table>
         </div>`;
       }}).join("");

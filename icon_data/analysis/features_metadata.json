@@ -5,8 +5,8 @@
   "selected_row_count": 1038,
   "per_set_limit": 100,
   "dependencies": {
-    "opencv_available": false,
-    "opencv_version": null
+    "opencv_available": true,
+    "opencv_version": "5.0.0"
   },
   "features": [
     {
@@ -40,6 +40,10 @@
       "columns": [
         "bounding_box_occupancy",
         "bounding_box_aspect_ratio",
+        "bbox_center_x",
+        "bbox_center_y",
+        "bbox_width_ratio",
+        "bbox_height_ratio",
         "solidity",
         "centroid_distance_from_center",
         "horizontal_symmetry",
@@ -89,6 +93,80 @@
         "grid_foreground_3_1",
         "grid_foreground_3_2",
         "grid_foreground_3_3"
+      ]
+    },
+    {
+      "name": "shape_descriptors",
+      "columns": [
+        "circularity",
+        "rectangularity",
+        "corner_count",
+        "curvature_histogram_straight",
+        "curvature_histogram_gentle",
+        "curvature_histogram_sharp",
+        "principal_axis_orientation",
+        "arrowhead_count",
+        "arc_count",
+        "hu_moment_1",
+        "hu_moment_2",
+        "hu_moment_3",
+        "hu_moment_4",
+        "hu_moment_5",
+        "hu_moment_6",
+        "hu_moment_7"
+      ]
+    },
+    {
+      "name": "stroke_skeleton",
+      "columns": [
+        "stroke_width_mean",
+        "stroke_width_std",
+        "skeleton_endpoints",
+        "skeleton_junctions"
+      ]
+    },
+    {
+      "name": "extended_color",
+      "columns": [
+        "hue_histogram_00",
+        "hue_histogram_01",
+        "hue_histogram_02",
+        "hue_histogram_03",
+        "hue_histogram_04",
+        "hue_histogram_05",
+        "hue_histogram_06",
+        "hue_histogram_07",
+        "hue_histogram_08",
+        "hue_histogram_09",
+        "hue_histogram_10",
+        "hue_histogram_11",
+        "dominant_color_1_lab_l",
+        "dominant_color_1_lab_a",
+        "dominant_color_1_lab_b",
+        "dominant_color_2_lab_l",
+        "dominant_color_2_lab_a",
+        "dominant_color_2_lab_b",
+        "dominant_color_3_lab_l",
+        "dominant_color_3_lab_a",
+        "dominant_color_3_lab_b"
+      ]
+    },
+    {
+      "name": "texture_and_robustness",
+      "columns": [
+        "texture_entropy",
+        "lbp_histogram_00",
+        "lbp_histogram_01",
+        "lbp_histogram_02",
+        "lbp_histogram_03",
+        "lbp_histogram_04",
+        "lbp_histogram_05",
+        "lbp_histogram_06",
+        "lbp_histogram_07",
+        "lbp_histogram_08",
+        "lbp_histogram_09",
+        "crush_test_stability",
+        "text_or_letter_presence"
       ]
     }
   ]

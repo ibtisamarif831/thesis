@@ -33,6 +33,9 @@
     .feature-head { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
     .feature-head b { font-size: 13px; }
     .feature-description { color: var(--muted); font-size: 12px; line-height: 1.35; margin: 4px 0 6px; }
+    .feature-interpretation { color: #3d4656; font-size: 12px; line-height: 1.35; margin: 6px 0 8px; padding: 6px 7px; border-left: 3px solid #d8dde6; background: #fbfcfe; }
+    .feature-interpretation div + div { margin-top: 3px; }
+    .feature-interpretation b { font-weight: 650; }
     .feature-actions { display: flex; gap: 4px; flex-shrink: 0; }
     .feature-actions button, .preset-row button { padding: 3px 6px; font-size: 12px; }
     .feature-list { max-height: 150px; overflow: auto; border-top: 1px solid #edf0f4; padding-top: 4px; }
@@ -73,6 +76,7 @@
     .feature-group-detail { margin: 10px 0; }
     .feature-group-detail h4 { font-size: 13px; margin: 0 0 2px; }
     .feature-group-detail p { margin: 0 0 4px; font-size: 12px; color: var(--muted); line-height: 1.35; }
+    .feature-group-detail .family-reading { color: #3d4656; }
     table { width: 100%; border-collapse: collapse; font-size: 12px; }
     td { border-bottom: 1px solid #edf0f4; padding: 4px 0; vertical-align: top; }
     td:last-child { text-align: right; color: #334; }
@@ -242,6 +246,11 @@
             </span>
           </div>
           <div class="feature-description">${escapeHtml(section.description)}</div>
+          <div class="feature-interpretation">
+            <div><b>Human perception:</b> ${escapeHtml(section.perception || "This family describes a perceptual visual channel.")}</div>
+            <div><b>Low:</b> ${escapeHtml(section.low_value || "Lower values mean less of this family signal.")}</div>
+            <div><b>High:</b> ${escapeHtml(section.high_value || "Higher values mean more of this family signal.")}</div>
+          </div>
           <div class="feature-list">
             ${section.features.map(feature => `
               <label class="feature-choice" data-feature-id="${escapeHtml(feature.id)}" data-feature-label="${escapeHtml(feature.label)}" data-feature-group="${escapeHtml(feature.group_title)}" data-feature-meaning="${escapeHtml(feature.meaning)}" data-feature-visual="${escapeHtml((feature.visual_categorizations || []).join(", "))}" data-feature-examples="${escapeHtml((feature.visual_category_labels || []).join("; "))}" data-feature-reason="${escapeHtml(feature.category_reason)}">
@@ -622,9 +631,14 @@
             <td>${formatFeatureValue(record.image_features[feature.id])}</td>
           </tr>`).join("");
         const description = includeDescriptions ? `<p>${escapeHtml(section.description)}</p>` : "";
+        const familyReading = includeDescriptions ? `
+          <p class="family-reading"><b>Human perception:</b> ${escapeHtml(section.perception || "This family describes a perceptual visual channel.")}</p>
+          <p class="family-reading"><b>Low:</b> ${escapeHtml(section.low_value || "Lower values mean less of this family signal.")}</p>
+          <p class="family-reading"><b>High:</b> ${escapeHtml(section.high_value || "Higher values mean more of this family signal.")}</p>` : "";
         return `<div class="feature-group-detail">
           <h4>${escapeHtml(section.title)}</h4>
           ${description}
+          ${familyReading}
           <table>${rows}</table>
         </div>`;
       }).join("");

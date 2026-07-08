@@ -2,7 +2,7 @@
   "input_dataset": "icon_data/analysis/dataset.csv",
   "input_features": "icon_data/analysis/features.csv",
   "missing_by_field": {
-    "notes": 555
+    "notes": 638
   },
   "missing_by_set": {
     "02_aiga_dot_symbol_signs": {
@@ -28,22 +28,27 @@
     },
     "12_iso_15223_medical_device_symbols": {
       "notes": 29
+    },
+    "13_usp_pictograms_manual": {
+      "notes": 83
     }
   },
   "output": "icon_data/analysis/clustering_metadata_sample.csv",
-  "rows": 855,
+  "rows": 1038,
   "set_counts": {
     "01_mcdougall_symbol_icon_set": 100,
     "02_aiga_dot_symbol_signs": 80,
     "03_mapbox_maki_icons": 100,
     "04_ocha_humanitarian_icons": 100,
     "05_mulberry_symbols": 100,
+    "06_blissymbolics": 100,
     "07_arasaac_pictograms": 100,
     "08_ghs_hazard_pictograms": 9,
     "09_universal_symbols_healthcare_webfont": 100,
     "10_openmoji": 100,
     "11_iso_7010_safety_signs": 37,
-    "12_iso_15223_medical_device_symbols": 29
+    "12_iso_15223_medical_device_symbols": 29,
+    "13_usp_pictograms_manual": 83
   },
   "unresolved_paths": []
 }

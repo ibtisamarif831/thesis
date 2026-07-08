@@ -12,6 +12,7 @@ import numpy as np
 import pandas as pd
 from PIL import Image, ImageDraw, ImageFont
 
+import build_analysis_dashboard
 import extract_icon_features
 
 
@@ -20,7 +21,23 @@ FEATURES_CSV = ROOT / "icon_data/analysis/features.csv"
 OUTPUT_DIR = ROOT / "icon_data/analysis/similarity"
 
 FEATURE_COLUMNS = list(extract_icon_features.FEATURE_COLUMNS)
-FEATURE_GROUPS = [list(group) for group in extract_icon_features.FEATURE_GROUPS]
+HUE_COLUMNS = [f"hue_histogram_{index:02d}" for index in range(12)]
+ORIENTATION_COLUMN = "principal_axis_orientation"
+ORIENTATION_DERIVED_COLUMNS = [
+    "principal_axis_orientation_cos2",
+    "principal_axis_orientation_sin2",
+]
+BINARY_FEATURE_COLUMNS = {"is_monochrome"}
+BOUNDED_VECTOR_FEATURE_COLUMNS = set(ORIENTATION_DERIVED_COLUMNS)
+ROBUST_CLIP_Z = 5.0
+
+FAMILY_RELIABILITY_WEIGHTS = {
+    "Texture": 0.75,
+}
+
+FEATURE_CONFIDENCE_WEIGHTS = {
+    "closed_contour_ratio": 0.75,
+}
 
 METADATA_COLUMNS = [
     "icon_id",
@@ -43,12 +60,12 @@ def load_features(path: Path) -> pd.DataFrame:
 
 
 def compute_distances(frame: pd.DataFrame) -> tuple[np.ndarray, np.ndarray]:
-    values = frame[FEATURE_COLUMNS].to_numpy(dtype=float)
-    means = values.mean(axis=0)
-    stds = values.std(axis=0)
-    stds = np.where(stds == 0, 1.0, stds)
-    scaled = (values - means) / stds
-    scaled = apply_group_weights(scaled, FEATURE_COLUMNS, FEATURE_GROUPS)
+    similarity_frame = transformed_similarity_features(frame)
+    similarity_columns = active_similarity_feature_columns()
+    similarity_frame = similarity_frame[similarity_columns]
+    scaled = robust_standardize(similarity_frame.to_numpy(dtype=float), similarity_columns)
+    scaled = apply_feature_confidence_weights(scaled, similarity_columns)
+    scaled = apply_group_weights(scaled, similarity_columns, similarity_feature_groups())
     euclidean = euclidean_distances(scaled)
     cosine = cosine_distances(scaled)
     np.fill_diagonal(euclidean, np.inf)
@@ -56,14 +73,99 @@ def compute_distances(frame: pd.DataFrame) -> tuple[np.ndarray, np.ndarray]:
     return euclidean, cosine
 
 
-def apply_group_weights(values: np.ndarray, columns: list[str], groups: list[list[str]]) -> np.ndarray:
+def transformed_similarity_features(frame: pd.DataFrame) -> pd.DataFrame:
+    values_by_column = {column: frame[column].to_numpy(dtype=float) for column in FEATURE_COLUMNS}
+    if all(column in values_by_column for column in HUE_COLUMNS):
+        hue_values = np.column_stack([values_by_column[column] for column in HUE_COLUMNS])
+        smoothed = circular_smooth_histogram(hue_values)
+        for index, column in enumerate(HUE_COLUMNS):
+            values_by_column[column] = smoothed[:, index]
+
+    transformed: dict[str, np.ndarray] = {}
+    for column in FEATURE_COLUMNS:
+        if column == ORIENTATION_COLUMN:
+            radians = np.deg2rad(values_by_column[column] * 2.0)
+            transformed[ORIENTATION_DERIVED_COLUMNS[0]] = np.cos(radians)
+            transformed[ORIENTATION_DERIVED_COLUMNS[1]] = np.sin(radians)
+        else:
+            transformed[column] = values_by_column[column]
+    return pd.DataFrame(transformed, columns=similarity_feature_columns())
+
+
+def circular_smooth_histogram(values: np.ndarray) -> np.ndarray:
+    return 0.50 * values + 0.25 * np.roll(values, 1, axis=1) + 0.25 * np.roll(values, -1, axis=1)
+
+
+def similarity_feature_columns() -> list[str]:
+    columns = []
+    for column in FEATURE_COLUMNS:
+        if column == ORIENTATION_COLUMN:
+            columns.extend(ORIENTATION_DERIVED_COLUMNS)
+        else:
+            columns.append(column)
+    return columns
+
+
+def active_similarity_feature_columns() -> list[str]:
+    grouped_columns = []
+    for group_columns in similarity_feature_groups().values():
+        grouped_columns.extend(group_columns)
+    return grouped_columns
+
+
+def similarity_feature_groups() -> dict[str, list[str]]:
+    groups = {}
+    for section in build_analysis_dashboard.image_feature_sections():
+        group_columns = []
+        for feature in section["features"]:
+            feature_id = feature["id"]
+            if feature_id == ORIENTATION_COLUMN:
+                group_columns.extend(ORIENTATION_DERIVED_COLUMNS)
+            else:
+                group_columns.append(feature_id)
+        groups[section["title"]] = group_columns
+    return groups
+
+
+def robust_standardize(values: np.ndarray, columns: list[str]) -> np.ndarray:
+    scaled = np.zeros_like(values, dtype=float)
+    for index, column in enumerate(columns):
+        column_values = values[:, index]
+        if column in BOUNDED_VECTOR_FEATURE_COLUMNS:
+            scaled[:, index] = column_values
+            continue
+        if column in BINARY_FEATURE_COLUMNS:
+            scaled[:, index] = column_values - float(np.nanmean(column_values))
+            continue
+
+        median = float(np.nanmedian(column_values))
+        q25, q75 = np.nanpercentile(column_values, [25, 75])
+        scale = float((q75 - q25) / 1.349)
+        if not np.isfinite(scale) or scale <= 1e-12:
+            scale = float(np.nanstd(column_values))
+        if not np.isfinite(scale) or scale <= 1e-12:
+            scale = 1.0
+        scaled[:, index] = np.clip((column_values - median) / scale, -ROBUST_CLIP_Z, ROBUST_CLIP_Z)
+    return scaled
+
+
+def apply_feature_confidence_weights(values: np.ndarray, columns: list[str]) -> np.ndarray:
+    weighted = values.copy()
+    for index, column in enumerate(columns):
+        weighted[:, index] *= FEATURE_CONFIDENCE_WEIGHTS.get(column, 1.0)
+    return weighted
+
+
+def apply_group_weights(values: np.ndarray, columns: list[str], groups: dict[str, list[str]] | list[list[str]]) -> np.ndarray:
     weighted = values.copy()
     column_index = {column: index for index, column in enumerate(columns)}
-    for group in groups:
+    group_items = groups.items() if isinstance(groups, dict) else [(None, group) for group in groups]
+    for group_name, group in group_items:
         indices = [column_index[column] for column in group if column in column_index]
         if not indices:
             continue
-        weighted[:, indices] /= math.sqrt(len(indices))
+        family_weight = FAMILY_RELIABILITY_WEIGHTS.get(str(group_name), 1.0)
+        weighted[:, indices] *= family_weight / math.sqrt(len(indices))
     return weighted
 
 
@@ -199,12 +301,28 @@ def short_label(value: str, limit: int) -> str:
 
 def write_metadata(output_dir: Path, frame: pd.DataFrame, neighbors: int, closest_pairs: int) -> Path:
     output = output_dir / "similarity_metadata.json"
+    groups = similarity_feature_groups()
     metadata = {
         "input": relative_label(FEATURES_CSV),
         "row_count": int(len(frame)),
         "feature_columns": FEATURE_COLUMNS,
-        "standardization": "column-wise z-score, then equal weighting by extractor feature group",
-        "feature_groups": {extractor.name: list(extractor.columns) for extractor in extract_icon_features.FEATURE_EXTRACTORS},
+        "similarity_feature_columns": similarity_feature_columns(),
+        "active_similarity_feature_columns": active_similarity_feature_columns(),
+        "excluded_feature_columns": sorted(build_analysis_dashboard.EXCLUDED_IMAGE_FEATURES),
+        "excluded_feature_reasons": build_analysis_dashboard.EXCLUDED_IMAGE_FEATURE_REASONS,
+        "preprocessing": [
+            "principal_axis_orientation is encoded as cos/sin of doubled angle so 0 and 180 degrees compare as the same axis",
+            "hue histogram bins are circularly smoothed with wraparound before scaling",
+            "binary flags are centered without variance expansion",
+            "bounded circular vector features keep their native -1..1 scale",
+        ],
+        "standardization": f"column-wise robust median/IQR scaling clipped to +/-{ROBUST_CLIP_Z:g} before feature and family weighting",
+        "feature_groups": groups,
+        "extractor_feature_groups": {
+            extractor.name: list(extractor.columns) for extractor in extract_icon_features.FEATURE_EXTRACTORS
+        },
+        "family_reliability_weights": FAMILY_RELIABILITY_WEIGHTS,
+        "feature_confidence_weights": FEATURE_CONFIDENCE_WEIGHTS,
         "distance_metrics": ["euclidean", "cosine"],
         "neighbors_per_icon": neighbors,
         "closest_pair_limit": closest_pairs,

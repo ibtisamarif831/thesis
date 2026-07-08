@@ -5,9 +5,32 @@
   "selected_row_count": 1038,
   "per_set_limit": 100,
   "dependencies": {
-    "opencv_available": false,
-    "opencv_version": null
+    "opencv_available": true,
+    "opencv_version": "5.0.0",
+    "tesseract_available": true,
+    "tesseract_path": "/opt/homebrew/bin/tesseract",
+    "tesseract_version": "tesseract 5.5.1"
   },
+  "metadata_columns": [
+    "icon_id",
+    "set_id",
+    "set_name",
+    "label",
+    "category",
+    "normalized_path",
+    "recognized_text",
+    "recognized_text_source",
+    "recognized_text_confidence",
+    "ocr_text_raw",
+    "ocr_text_confidence",
+    "semantic_symbol_type",
+    "semantic_identity_source",
+    "semantic_is_arrow",
+    "semantic_arrow_direction",
+    "semantic_is_object",
+    "semantic_object_label",
+    "semantic_object_category"
+  ],
   "features": [
     {
       "name": "foreground_area_ratio",

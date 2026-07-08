@@ -2,6 +2,20 @@
 
 Generated: 2026-06-15
 
+## Thesis Role
+
+This analysis folder supports the thesis comparison between human icon/glyph perception and computer-measured visual feature families.
+
+The intended workflow is:
+
+1. Use the literature to identify visual factors involved in glyph/icon identification, distinguishability, similarity, and confusability.
+2. Organize those factors into computer-measurable feature families.
+3. Extract feature-family scores from normalized glyph/icon images.
+4. Record human-study identification/perception scores for the same stimuli.
+5. Compare human scores with computer-derived visual scores to find agreement, mismatch, and the visual factors that influence both.
+
+Semantic meaning, historical/cultural interpretation, familiarity, metaphor, and learnability are not active computer-vision feature families here. They may be retained as metadata or human-study variables, but they should not be treated as image-derived visual features.
+
 ## Files
 
 - `dataset.csv`: one row per canonical icon selected for analysis.
@@ -51,15 +65,24 @@ The extractor reads normalized 256x256 PNGs from `icon_data/normalized_256/` and
 
 OpenCV is used for Canny/contour helpers when available; the script keeps local NumPy/Pillow fallbacks for portability.
 
-Current feature families:
+Current active visual feature families:
 
-- foreground amount, edge density, connected components, and quadtree structure;
-- bounding-box geometry, contour closure, symmetry, fill/outline, and 4x4 grid layout;
-- circularity, rectangularity, corner count, curvature histogram, principal-axis orientation, and Hu moments;
-- stroke width, skeleton endpoints, and skeleton junctions;
-- color count, saturation, colorfulness, contrast, hue histogram, and dominant Lab colors;
-- texture entropy, local binary pattern histogram, crush-test stability, and text/letter presence proxy;
-- medium-priority directional proxies: arrowhead count, arc count, and explicit bounding-box position/size.
+- Complexity: edge density, quadtree structure, components, contours, holes, perimeter load, and corner count.
+- Shape/silhouette: aspect ratio, solidity, closure proxy, circularity, rectangularity, and curvature bins.
+- Stroke/structure: line orientation, principal-axis orientation, arrowheads, arcs, skeleton endpoints, and skeleton junctions.
+- Density/fill: foreground amount, bounding-box occupancy, filled/outline proxy, and stroke width.
+- Balance/layout: centroid offset, symmetry, bounding-box position/size, and 4x4 foreground grid layout.
+- Color/contrast: monochrome status, color count, saturation, colorfulness, foreground/background contrast, hue histogram, and dominant Lab colors.
+- Texture: foreground tonal entropy.
+
+The raw extractor still preserves additional columns for traceability, but the active literature-mapped visual family set excludes weak or non-interpretable channels such as Hu moments, local binary pattern bins, text/letter heuristic scores, and crush-test stability.
+
+The feature CSV also includes non-distance metadata identity columns:
+
+- exact text identity when available from labels or gated Tesseract OCR: `recognized_text`, `recognized_text_source`, `recognized_text_confidence`, `ocr_text_raw`, `ocr_text_confidence`;
+- semantic identity from labels/categories: `semantic_symbol_type`, `semantic_is_arrow`, `semantic_arrow_direction`, `semantic_is_object`, `semantic_object_label`, and `semantic_object_category`.
+
+These metadata columns are not part of the active visual feature-family comparison. They can support filtering, controls, or later human-study interpretation, but they should not be presented as computer-vision evidence for semantic understanding.
 
 The authoritative column registry is written to `features_metadata.json` on every extraction run.
 
@@ -91,7 +114,7 @@ The report is written to:
 
 `icon_data/analysis/similarity/index.html`
 
-The script applies column-wise z-score standardization, then weights each extractor feature group equally before computing Euclidean and cosine distance matrices. This prevents multi-column groups such as the 4x4 layout grid from dominating the distinguishability score only because they contain more columns. It then writes nearest-neighbor tables and generates visual sheets for the closest all-set, same-set, and cross-set icon pairs.
+The script uses the active visual feature families from the dashboard metadata. It applies robust scaling, handles circular orientation and hue channels, excludes weak/non-interpretable raw channels, weights by visual family, and then computes Euclidean and cosine distance matrices. It writes nearest-neighbor tables and visual sheets for the closest all-set, same-set, and cross-set icon pairs.
 
 ## Canonical Selection Rules
 

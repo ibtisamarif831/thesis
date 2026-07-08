@@ -7,8 +7,13 @@ subclassing FeatureExtractor and adding it to FEATURE_EXTRACTORS.
 
 import argparse
 import csv
+import io
 import json
 import math
+import re
+import shutil
+import subprocess
+import tempfile
 from collections import deque
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from dataclasses import dataclass
@@ -28,6 +33,68 @@ ANALYSIS_DIR = ROOT / "icon_data/analysis"
 DATASET_CSV = ANALYSIS_DIR / "dataset.csv"
 FEATURES_CSV = ANALYSIS_DIR / "features.csv"
 FEATURE_FAILURES_JSON = ANALYSIS_DIR / "feature_failures.json"
+TESSERACT_PATH = shutil.which("tesseract")
+
+METADATA_COLUMNS = [
+    "icon_id",
+    "set_id",
+    "set_name",
+    "label",
+    "category",
+    "normalized_path",
+    "recognized_text",
+    "recognized_text_source",
+    "recognized_text_confidence",
+    "ocr_text_raw",
+    "ocr_text_confidence",
+    "semantic_symbol_type",
+    "semantic_identity_source",
+    "semantic_is_arrow",
+    "semantic_arrow_direction",
+    "semantic_is_object",
+    "semantic_object_label",
+    "semantic_object_category",
+]
+
+TEXT_IDENTITY_PATTERNS = (
+    re.compile(r"^(?:letter\s+)?([a-z])$", re.IGNORECASE),
+    re.compile(r"^([a-z])\s+(?:lowercase|lower\s+case)$", re.IGNORECASE),
+    re.compile(r"^([a-z])\s+(?:uppercase|upper\s+case|capital)$", re.IGNORECASE),
+    re.compile(r"^(?:number|digit)\s+([0-9])$", re.IGNORECASE),
+    re.compile(r"^([0-9])$", re.IGNORECASE),
+)
+DIRECTION_TERMS = {
+    "up-left": ("up left", "upper left", "north west", "northwest", "nw", "upleft", "up-left"),
+    "up-right": ("up right", "upper right", "north east", "northeast", "ne", "upright", "up-right"),
+    "down-left": ("down left", "lower left", "south west", "southwest", "sw", "downleft", "down-left"),
+    "down-right": ("down right", "lower right", "south east", "southeast", "se", "downright", "down-right"),
+    "left-right": ("left right", "left/right", "horizontal", "leftright", "left-right"),
+    "up-down": ("up down", "up/down", "vertical", "updown", "up-down"),
+    "left": ("left", "west", "leftarrow", "arrowleft"),
+    "right": ("right", "east", "rightarrow", "arrowright"),
+    "up": ("up", "north", "ascending", "uparrow", "arrowup"),
+    "down": ("down", "south", "descending", "downarrow", "arrowdown"),
+    "forward": ("forward", "ahead"),
+    "back": ("back", "backward", "reverse"),
+}
+ARROW_TERMS = ("arrow", "direction", "directional", "navigation", "next", "previous", "forward", "back")
+OBJECT_STOPWORDS = {
+    "a",
+    "an",
+    "and",
+    "the",
+    "icon",
+    "symbol",
+    "sign",
+    "outline",
+    "filled",
+    "black",
+    "white",
+    "left",
+    "right",
+    "up",
+    "down",
+}
 
 
 @dataclass(frozen=True)
@@ -1386,6 +1453,270 @@ def text_or_letter_presence_proxy(mask: np.ndarray) -> float:
     return float((score - 0.6) / 0.4)
 
 
+def text_identity(row: dict[str, str], context: ImageContext) -> dict[str, float | str]:
+    metadata_text = text_identity_from_metadata(row.get("label", ""))
+    ocr_result = ocr_text_identity(row, context)
+
+    recognized_text = ""
+    recognized_source = ""
+    recognized_confidence = 0.0
+
+    if metadata_text:
+        recognized_text = metadata_text
+        recognized_source = "label_metadata"
+        recognized_confidence = 1.0
+    elif accept_ocr_text_identity(row, ocr_result):
+        recognized_text = ocr_result["text"]
+        recognized_source = "tesseract_ocr"
+        recognized_confidence = ocr_result["confidence"]
+
+    return {
+        "recognized_text": recognized_text,
+        "recognized_text_source": recognized_source,
+        "recognized_text_confidence": float(recognized_confidence),
+        "ocr_text_raw": ocr_result["raw_text"],
+        "ocr_text_confidence": float(ocr_result["confidence"]),
+    }
+
+
+def text_identity_from_metadata(label: str) -> str:
+    text = normalize_label_text(label)
+    for pattern in TEXT_IDENTITY_PATTERNS:
+        match = pattern.match(text)
+        if match:
+            value = match.group(1)
+            if "upper" in text or "capital" in text:
+                return value.upper()
+            return value.lower()
+    quoted = re.search(r"['\"]([A-Za-z0-9])['\"]", label or "")
+    if quoted:
+        return quoted.group(1)
+    return ""
+
+
+def ocr_text_identity(row: dict[str, str], context: ImageContext) -> dict[str, float | str]:
+    if TESSERACT_PATH is None:
+        return {"text": "", "raw_text": "", "confidence": 0.0}
+    if not metadata_suggests_text_identity(row):
+        return {"text": "", "raw_text": "", "confidence": 0.0}
+
+    image = prepare_ocr_image(context)
+    best = {"text": "", "raw_text": "", "confidence": 0.0}
+    with tempfile.NamedTemporaryFile(suffix=".png") as handle:
+        image.save(handle.name)
+        for page_segmentation_mode in ("10", "13", "7", "6"):
+            result = run_tesseract_tsv(handle.name, page_segmentation_mode)
+            if result["confidence"] > best["confidence"]:
+                best = result
+    return best
+
+
+def accept_ocr_text_identity(row: dict[str, str], ocr_result: dict[str, float | str]) -> bool:
+    text = str(ocr_result["text"])
+    confidence = float(ocr_result["confidence"])
+    if not text or confidence < 0.75:
+        return False
+    return metadata_suggests_text_identity(row)
+
+
+def metadata_suggests_text_identity(row: dict[str, str]) -> bool:
+    combined = normalize_label_text(" ".join([row.get("label", ""), row.get("category", ""), row.get("notes", "")]))
+    return any(
+        term in combined
+        for term in (
+            "letter",
+            "lower case",
+            "uppercase",
+            "upper case",
+            "capital",
+            "alphabet",
+            "number",
+            "digit",
+            "character",
+            "text",
+            "font",
+            "word",
+        )
+    )
+
+
+def prepare_ocr_image(context: ImageContext) -> Image.Image:
+    gray = np.where(context.foreground, context.gray, 255).astype(np.uint8)
+    ys, xs = np.nonzero(context.foreground)
+    if len(xs) and len(ys):
+        pad = 18
+        min_x = max(0, int(xs.min()) - pad)
+        max_x = min(gray.shape[1], int(xs.max()) + pad + 1)
+        min_y = max(0, int(ys.min()) - pad)
+        max_y = min(gray.shape[0], int(ys.max()) + pad + 1)
+        gray = gray[min_y:max_y, min_x:max_x]
+    image = Image.fromarray(gray, mode="L")
+    scale = max(1, math.ceil(384 / max(image.size)))
+    if scale > 1:
+        image = image.resize((image.width * scale, image.height * scale), Image.Resampling.LANCZOS)
+    return image
+
+
+def run_tesseract_tsv(image_path: str, page_segmentation_mode: str) -> dict[str, float | str]:
+    try:
+        completed = subprocess.run(
+            [
+                TESSERACT_PATH or "tesseract",
+                image_path,
+                "stdout",
+                "--psm",
+                page_segmentation_mode,
+                "-l",
+                "eng",
+                "tsv",
+            ],
+            check=False,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.DEVNULL,
+            text=True,
+            timeout=6,
+        )
+    except (OSError, subprocess.TimeoutExpired):
+        return {"text": "", "raw_text": "", "confidence": 0.0}
+    if completed.returncode not in (0, 1):
+        return {"text": "", "raw_text": "", "confidence": 0.0}
+
+    words = []
+    confidences = []
+    reader = csv.DictReader(io.StringIO(completed.stdout), delimiter="\t")
+    for row in reader:
+        text = normalize_ocr_text(row.get("text", ""))
+        if not text:
+            continue
+        try:
+            confidence = float(row.get("conf", "-1"))
+        except ValueError:
+            confidence = -1.0
+        if confidence < 0:
+            continue
+        words.append(text)
+        confidences.append(confidence)
+
+    raw_text = " ".join(words).strip()
+    if not raw_text or not confidences:
+        return {"text": "", "raw_text": raw_text, "confidence": 0.0}
+    confidence = max(0.0, min(1.0, sum(confidences) / len(confidences) / 100.0))
+    return {
+        "text": compact_ocr_identity(raw_text),
+        "raw_text": raw_text,
+        "confidence": confidence,
+    }
+
+
+def normalize_ocr_text(value: str) -> str:
+    return re.sub(r"[^A-Za-z0-9&+\-/#%.]", "", value or "").strip()
+
+
+def compact_ocr_identity(value: str) -> str:
+    text = " ".join(part for part in (normalize_ocr_text(part) for part in value.split()) if part)
+    if len(text) > 32:
+        return text[:32]
+    return text
+
+
+def semantic_identity(row: dict[str, str]) -> dict[str, str]:
+    label = row.get("label", "")
+    category = row.get("category", "")
+    combined = normalize_label_text(" ".join([label, category, row.get("notes", "")]))
+    is_arrow = semantic_arrow_match(combined)
+    direction = semantic_arrow_direction(combined) if is_arrow else ""
+    object_label = semantic_object_label(label)
+    object_category = category.strip()
+    has_text_identity = bool(text_identity_from_metadata(label))
+
+    if has_text_identity:
+        symbol_type = "text"
+    elif is_arrow:
+        symbol_type = "arrow"
+    elif "flag" in combined:
+        symbol_type = "flag"
+    elif any(term in combined for term in ("hazard", "warning", "danger", "prohibition")):
+        symbol_type = "safety_symbol"
+    elif object_label:
+        symbol_type = "object_or_concept"
+    else:
+        symbol_type = "unknown"
+
+    return {
+        "semantic_symbol_type": symbol_type,
+        "semantic_identity_source": "label_category_metadata" if symbol_type != "unknown" else "",
+        "semantic_is_arrow": str(is_arrow).lower(),
+        "semantic_arrow_direction": direction,
+        "semantic_is_object": str(bool(object_label and not is_arrow and not has_text_identity)).lower(),
+        "semantic_object_label": "" if is_arrow or has_text_identity else object_label,
+        "semantic_object_category": object_category,
+    }
+
+
+def semantic_arrow_match(text: str) -> bool:
+    if "arrow" in text:
+        return True
+    padded = f" {text} "
+    if any(f" {term} " in padded for term in ARROW_TERMS if term != "arrow"):
+        return True
+    if "directional navigation" in text:
+        return True
+    return False
+
+
+def semantic_arrow_direction(text: str) -> str:
+    compound_directions = []
+    simple_directions = []
+    padded = f" {text} "
+    compact = re.sub(r"[^a-z0-9]+", "", text)
+    for direction, terms in DIRECTION_TERMS.items():
+        if any(f" {term} " in padded or term in compact for term in terms):
+            if "-" in direction:
+                compound_directions.append(direction)
+            else:
+                simple_directions.append(direction)
+    if not compound_directions and not simple_directions and "arrow" in compact:
+        for direction in ("left", "right", "up", "down", "forward", "back"):
+            if direction in compact:
+                simple_directions.append(direction)
+    directions = compound_directions or simple_directions
+    if not directions:
+        return "unspecified"
+    deduped = list(dict.fromkeys(directions))
+    return "+".join(deduped)
+
+
+def semantic_object_label(label: str) -> str:
+    tokens = [
+        token
+        for token in re.split(r"[^a-z0-9]+", (label or "").lower())
+        if len(token) > 1 and token not in OBJECT_STOPWORDS
+    ]
+    return " ".join(tokens[:6])
+
+
+def normalize_label_text(value: str) -> str:
+    return re.sub(r"\s+", " ", re.sub(r"[_:/\\-]+", " ", value or "").strip().lower())
+
+
+def tesseract_version() -> str | None:
+    if TESSERACT_PATH is None:
+        return None
+    try:
+        completed = subprocess.run(
+            [TESSERACT_PATH, "--version"],
+            check=False,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.DEVNULL,
+            text=True,
+            timeout=3,
+        )
+    except (OSError, subprocess.TimeoutExpired):
+        return None
+    first_line = completed.stdout.splitlines()[0] if completed.stdout else ""
+    return first_line or None
+
+
 def grid_foreground_stats(mask: np.ndarray, rows: int, cols: int) -> dict[str, float]:
     height, width = mask.shape
     out: dict[str, float] = {}
@@ -1414,6 +1745,9 @@ def extract_row(row: dict[str, str], extractors: tuple[FeatureExtractor, ...], f
         "category": row["category"],
         "normalized_path": row["normalized_path"],
     }
+    semantic_values = semantic_identity(row)
+    feature_values.update(text_identity(row, context))
+    feature_values.update(semantic_values)
     for extractor in extractors:
         feature_values.update(extractor.extract(context))
     return feature_values, None
@@ -1421,10 +1755,9 @@ def extract_row(row: dict[str, str], extractors: tuple[FeatureExtractor, ...], f
 
 def write_features(rows: list[dict[str, float | str]], output: Path, extractors: tuple[FeatureExtractor, ...]) -> None:
     output.parent.mkdir(parents=True, exist_ok=True)
-    metadata_columns = ["icon_id", "set_id", "set_name", "label", "category", "normalized_path"]
     feature_columns = [column for extractor in extractors for column in extractor.columns]
     with output.open("w", newline="", encoding="utf-8") as file:
-        writer = csv.DictWriter(file, fieldnames=metadata_columns + feature_columns)
+        writer = csv.DictWriter(file, fieldnames=METADATA_COLUMNS + feature_columns)
         writer.writeheader()
         writer.writerows(rows)
 
@@ -1450,7 +1783,11 @@ def write_feature_metadata(
         "dependencies": {
             "opencv_available": cv2 is not None,
             "opencv_version": getattr(cv2, "__version__", None) if cv2 is not None else None,
+            "tesseract_available": TESSERACT_PATH is not None,
+            "tesseract_path": TESSERACT_PATH,
+            "tesseract_version": tesseract_version(),
         },
+        "metadata_columns": METADATA_COLUMNS,
         "features": [
             {
                 "name": extractor.name,

@@ -8,19 +8,25 @@ Before closing any task in this repository, review `agent.md` and improve it wit
 
 ## Repository Purpose
 
-This workspace supports a thesis on icon/glyph perception, visual complexity, similarity, clustering, and evidence-based symbol-set design.
+This workspace supports a thesis on human and computer-based identification of icons/glyphs through literature-derived visual feature families.
 
 Working thesis direction:
 
-> Build and evaluate a computational icon/glyph analysis pipeline that measures visual features, metadata features, similarity, and clustering structure across research-relevant icon sets, with McDougall norm ratings as the strongest validation anchor.
+> This thesis investigates how visual factors identified in the glyph/icon perception literature can be organized into computer-measurable feature families, and how those computational feature scores compare with human identification and perception scores. The study uses icon/glyph datasets as stimuli, extracts visual feature-family scores from each glyph, records human-study judgments, and analyzes which visual factors explain agreement or mismatch between human perception and computer-based glyph identification.
 
-The repo is not mainly a generic icon collection. It is an empirical/computational thesis workspace for comparing symbol-like visual stimuli.
+The repo is not mainly a generic icon collection, a semantic icon-understanding project, or a general clustering demo. It is an empirical/computational thesis workspace for comparing literature-grounded visual feature families against human judgments of icon/glyph identification and perception.
+
+Boundary for future work:
+
+- Active feature families must be visually observable and computable from the glyph image.
+- Semantic meaning, historical/cultural knowledge, familiarity, metaphor, and learnability are not computer-vision feature families. They may appear only as metadata, controls, study prompts, or human-study outcomes.
+- Clustering and nearest-neighbor reports are analysis tools. They are not the thesis goal by themselves; they support comparison between computer-derived visual scores and human responses.
 
 ## Route Queries Here First
 
 | Query type | Start here | Then check |
 |---|---|---|
-| Thesis framing, research questions, paper themes | `agent.md`, `THESIS_CHECKLIST.md` | `tasks/*.md`, `papers/` |
+| Thesis framing, research questions, current progress | `THESIS_STATUS.md`, `agent.md`, `THESIS_CHECKLIST.md` | `tasks/current-thesis-next-steps.md`, `papers/` |
 | Which icon sets exist locally | `icon_data/MANIFEST.md` | `icon_data/iconsets/README.md`, `data/10 icons.md` |
 | Canonical icon dataset rows | `icon_data/analysis/dataset.csv` | `code/build_icon_dataset.py` |
 | Normalized image generation | `code/build_icon_dataset.py` | `icon_data/analysis/README.md`, `icon_data/normalized_256/` |
@@ -42,7 +48,7 @@ The repo is not mainly a generic icon collection. It is an empirical/computation
 - The active canonical dataset is `icon_data/analysis/dataset.csv`.
 - Current dataset size: **28,749** canonical rows in `dataset.csv`.
 - Normalized PNGs are generated under `icon_data/normalized_256/`; this directory is large/generated and may be ignored by git.
-- Current visual-feature sample: **1,038** rows in `icon_data/analysis/features.csv`, with **42 numeric image-feature columns** plus metadata columns.
+- Current visual-feature sample: **1,038** rows in `icon_data/analysis/features.csv`, with **100 raw numeric image-feature columns** plus metadata columns. The active literature-mapped visual family set uses **81** of those raw columns; weak/non-interpretable channels remain only for traceability.
 - Current feature extraction failures: `[]` in `icon_data/analysis/feature_failures.json`.
 - The interactive dashboard is generated under `icon_data/analysis/analysis_dashboard/`.
 - Current dashboard sample: **129** rows in `icon_data/analysis/analysis_dashboard/dashboard_data.json`.
@@ -55,10 +61,10 @@ The repo is not mainly a generic icon collection. It is an empirical/computation
   - filtering by icon set, category, and style;
   - selected icon details and cluster summaries.
 - Similarity outputs in `icon_data/analysis/similarity/` are based on the 1,038-row feature sample.
-- Similarity and dashboard image-feature clustering use z-scored columns with equal weighting by extractor feature group.
+- Similarity and dashboard image-feature clustering use the active visual feature families from `code/build_analysis_dashboard.py`. Excluded raw channels are not used for active visual-family clustering or similarity ranking.
 - The 7 thesis PDFs have extracted page-marked text under `papers/extracted_text/`; regenerate with `code/extract_paper_text.py`.
 - Static feature visualizations under `icon_data/analysis/visualizations/` are summary-only when `matplotlib` is unavailable in the runtime. The interactive Plotly dashboard is the stronger current visual interface.
-- Older task notes may still mention previous dashboard/feature states. Treat `icon_data/analysis/README.md`, generated metadata JSON files, and current scripts as the source of truth.
+- Treat `THESIS_STATUS.md`, `icon_data/analysis/README.md`, generated metadata JSON files, and current scripts as the source of truth for current state.
 - `source.md` is tracked historically but may be deleted in the working tree. Do not restore it unless explicitly asked; use `git show HEAD:source.md` for its last committed content.
 
 ## Runtime Notes
@@ -151,10 +157,11 @@ Refactoring guidance:
 |---|---|
 | `agent.md` | This routing/orientation guide for agents. |
 | `THESIS_CHECKLIST.md` | Thesis roadmap and high-level completion checklist. |
+| `THESIS_STATUS.md` | Current thesis state, completed work, open gaps, and next step. |
 | `data/10 icons.md` | Thesis-aligned icon/glyph source plan and rationale. |
 | `papers/` | Core literature PDFs plus extracted text under `papers/extracted_text/`. Treat these as the thesis literature backbone. |
 | `notes/` | Short explanatory notes, especially feature-taxonomy provenance. |
-| `tasks/` | Weekly planning/progress notes. Some contain older status and should be read as historical context. |
+| `tasks/` | Current task tracker. Historical weekly planning files were removed after the July 2026 thesis-direction cleanup. |
 | `code/` | Download, extraction, normalization, feature, similarity, metadata, and dashboard builders. |
 | `icon_data/` | Main data area: raw icon sets, canonical CSVs, generated analysis outputs, metadata, checksums. |
 | `tmp/` | Temporary OCR/crop/debug images. Do not treat as canonical output. |
@@ -188,13 +195,13 @@ This is the main canonical analysis area.
 Important files:
 
 - `dataset.csv`: one row per canonical icon selected for analysis.
-- `features.csv`: current balanced pilot visual-feature sample, 1,038 rows and 42 numeric image-feature columns.
+- `features.csv`: current balanced pilot visual-feature sample, 1,038 rows and 100 raw numeric image-feature columns.
 - `features_metadata.json`: feature extraction settings and registry.
 - `feature_failures.json`: latest visual-feature extraction failures.
 - `normalization_failures.json`: latest normalization/conversion failures.
 - `clustering_metadata_sample.csv`: metadata-enriched sample from the earlier feature pilot; regenerate if it needs to match the current 1,038-row `features.csv` exactly.
 - `clustering_metadata_missing_report.json`: metadata coverage report.
-- `similarity/`: pairwise distance matrices, nearest-neighbor CSVs, visual similarity reports using group-weighted image features.
+- `similarity/`: pairwise distance matrices, nearest-neighbor CSVs, visual similarity reports using active visual feature families.
 - `analysis_dashboard/`: current interactive dashboard outputs.
 
 ### `icon_data/analysis/analysis_dashboard/`
@@ -228,9 +235,9 @@ Current dashboard sample:
 | Script | Purpose | Primary outputs |
 |---|---|---|
 | `code/build_icon_dataset.py` | Builds canonical dataset rows and can normalize icon media to 256x256 PNGs. | `icon_data/analysis/dataset.csv`, `icon_data/normalized_256/`, normalization failure logs |
-| `code/extract_icon_features.py` | Extracts the current compact image-feature set from normalized PNGs: complexity, geometry/contour, symmetry, orientation, color/contrast, and 4x4 layout. | `icon_data/analysis/features.csv`, `feature_failures.json`, `features_metadata.json` |
+| `code/extract_icon_features.py` | Extracts raw visual measurements from normalized PNGs for the thesis feature-family pipeline. | `icon_data/analysis/features.csv`, `feature_failures.json`, `features_metadata.json` |
 | `code/visualize_icon_features.py` | Creates static visual reports from `features.csv`; writes summary-only output when `matplotlib` is unavailable. | `icon_data/analysis/visualizations/` |
-| `code/compute_icon_similarity.py` | Computes group-weighted z-score Euclidean/cosine distances and nearest-neighbor outputs. | `icon_data/analysis/similarity/` |
+| `code/compute_icon_similarity.py` | Computes Euclidean/cosine distances and nearest-neighbor outputs from active visual feature families. | `icon_data/analysis/similarity/` |
 | `code/build_clustering_metadata_sample.py` | Enriches feature sample with metadata tokens/categories and McDougall ratings. | `clustering_metadata_sample.csv`, `clustering_metadata_missing_report.json` |
 | `code/build_analysis_dashboard.py` | Builds current static Plotly clustering dashboard. | `icon_data/analysis/analysis_dashboard/` |
 | `code/extract_mcdougall_icons.py` | Crops McDougall appendix icons from rendered appendix pages. | `01_mcdougall_symbol_icon_set/extracted_icons_png/` |
@@ -243,44 +250,25 @@ Current dashboard sample:
 
 ## Feature Set
 
-Current visual features are:
+The extractor stores 100 raw numeric image-feature columns for traceability. The active thesis mapping currently uses 81 of those columns, grouped into literature-aligned visual feature families:
 
-- `foreground_area_ratio`
-- `canny_edge_density`
-- `connected_components`
-- `quadtree_leaf_count`
-- `quadtree_structural_variability`
-- `quadtree_mean_leaf_size`
-- `bounding_box_occupancy`
-- `bounding_box_aspect_ratio`
-- `solidity`
-- `centroid_distance_from_center`
-- `horizontal_symmetry`
-- `vertical_symmetry`
-- `perimeter_area_ratio`
-- `filled_vs_outline_proxy`
-- `contour_count`
-- `holes_count`
-- `closed_contour_ratio`
-- `line_orientation_0`
-- `line_orientation_45`
-- `line_orientation_90`
-- `line_orientation_135`
-- `is_monochrome`
-- `color_count`
-- `mean_saturation`
-- `colorfulness`
-- `foreground_background_contrast`
-- `grid_foreground_0_0` through `grid_foreground_3_3`
+- Complexity.
+- Shape/silhouette.
+- Stroke/structure.
+- Density/fill.
+- Balance/layout.
+- Color/contrast.
+- Texture.
+
+Excluded raw channels are retained in exports but not used as active visual-family evidence: Hu moments, local binary pattern bins, `text_or_letter_presence`, and `crush_test_stability`.
 
 Feature provenance:
 
-- Strongly paper-backed by Forsythe-style complexity measurement: foreground amount, object/component count, edge detection, quadtree structural variability.
-- Compatible with Garcia-style abstractness/component analysis, but not a full implementation of Garcia's exact taxonomy.
-- Additional engineering proxies cover bounding-box layout, symmetry, filled-vs-outline style, color, contrast, and coarse 4x4 spatial layout. Describe these as computational proxies, not direct paper replications.
-- Similarity and dashboard image-feature clustering use z-scored columns with equal weighting by extractor feature group, so the 4x4 grid layout columns do not dominate distances simply because there are more of them.
+- Stronger paper support exists for complexity, contour/closure, visual channels, distinguishability, and glyph-design taxonomies.
+- Engineering proxies such as grid layout, stroke skeletons, and closure approximation must be described as computational proxies, not direct human-perception measurements.
+- Similarity and dashboard image-feature clustering should use active visual feature families, not raw extractor groups or semantic metadata.
 
-See `notes/feature_extraction_taxonomies.md` before making strong claims about feature origin.
+See `notes/feature_extraction_taxonomies.md` and `notes/literature_mapping_deep_pass_2026-07-08.md` before making strong claims about feature origin.
 
 ## Literature Backbone
 
@@ -298,19 +286,19 @@ Use `papers/` for the thesis literature review. Core roles:
 
 ## Research Direction
 
-Recommended narrow thesis direction:
+Current thesis statement:
 
-> Compare icon/glyph sets through automated visual features, metadata features, pairwise distinguishability/similarity, and clustering, then test whether these computational measures align with quantitative human judgments.
+> From the literature on glyph/icon perception, identify the visual factors humans use when distinguishing and identifying glyphs; organize those factors into computer-measurable feature families; compute those family scores for icon/glyph stimuli; collect human identification/perception scores for the same stimuli; and compare the two sets of scores to determine which visual factors influence agreement, mismatch, confusability, and distinguishability between humans and computer-based analysis.
 
-Good research questions:
+Core research questions:
 
-1. Can automated visual complexity/structure metrics predict perceived complexity or related McDougall norm ratings?
-2. Which visual-feature differences best predict quantitative human judgments of distinguishability or similarity?
-3. Do visual-feature clusters align more strongly with dataset/style, semantic category, or neither?
-4. Where do visual nearest neighbors reveal potential confusion across different icon sets?
-5. Can metadata and image features be combined to produce more interpretable icon groupings?
+1. Which visual feature families from the literature can be measured reliably from glyph/icon images?
+2. Which computed visual feature-family scores align with human identification or perception scores?
+3. Where do humans and computer-based visual analysis disagree, and which feature families explain those mismatches?
+4. Which feature families most influence perceived distinguishability, similarity, or confusability between glyphs?
+5. How should semantic meaning, familiarity, and cultural/historical knowledge be separated from computable visual features in the analysis?
 
-Avoid broad claims that the pipeline fully measures perception. The current repo supports computational feature extraction, similarity, clustering, and literature-backed study framing; participant data collection and statistical validation still need to be added.
+Avoid broad claims that the pipeline fully measures perception or semantic understanding. The current repo supports literature-backed visual feature extraction, feature-family organization, similarity/confusability reports, and dashboard exploration. Human-study data collection and statistical comparison against those computed scores still need to be added.
 
 ## Known Gaps And Missing Pieces
 
@@ -325,7 +313,7 @@ Current important gaps:
 - The dashboard has no dendrogram visualization; hierarchical clustering is exposed as precomputed cuts/labels.
 - The dashboard is a computational visualization only; it does not include quantitative human-study results yet.
 - `icon_data/iconsets/README.md` is older and incomplete compared with `icon_data/MANIFEST.md`; prefer the manifest.
-- `tasks/week-2026-06-22-machine-clustering-visualization.md` is historical and may mention older dashboard/feature states.
+- `tasks/current-thesis-next-steps.md` is the current task tracker; old weekly plans were removed because they contradicted the current thesis direction.
 
 Recommended metadata enrichment order:
 

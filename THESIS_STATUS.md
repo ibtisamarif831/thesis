@@ -16,6 +16,7 @@ The project has a working computer-side pipeline:
 - Active visual feature families are defined and used consistently by the dashboard and similarity outputs.
 - Weak/non-interpretable raw channels have been removed from active feature-family analysis.
 - Similarity outputs are rebuilt using the active visual families.
+- Evaluation layers are specified in `code/evaluation/evaluation_layers.md`.
 - README/guide files now describe the current thesis direction.
 
 ## Active Visual Families
@@ -67,6 +68,8 @@ Design the human-study layer:
 3. Create the response table/schema.
 4. Export matching computer-side family scores for the same stimuli.
 5. Run a small pilot before collecting full data.
+
+Use `code/evaluation/evaluation_layers.md` as the evaluation-layer reference.
 
 ## Current Source Of Truth
 

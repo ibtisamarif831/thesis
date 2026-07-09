@@ -27,6 +27,7 @@ Computer-side scores come from active visual feature families. Human-side scores
 - Dashboard, feature review, feature explorer, clustering, and similarity now use active visual families.
 - Similarity math now handles circular orientation and hue correctly.
 - Project README/guide files were aligned with the current thesis direction.
+- Evaluation layers were documented in `code/evaluation/evaluation_layers.md`.
 
 ## Immediate Next Tasks
 
@@ -59,6 +60,10 @@ Computer-side scores come from active visual feature families. Human-side scores
    - Compare agreement and mismatch cases.
    - Report which visual families most influence identification, similarity, and confusability.
 
+7. Implement evaluation scripts under `code/evaluation/`.
+   - Start with stimulus selection and feature-family score exports.
+   - Then add human-response joins and agreement/mismatch analysis.
+
 ## Not Current Scope
 
 - Semantic image understanding from pixels.
@@ -76,3 +81,4 @@ Computer-side scores come from active visual feature families. Human-side scores
 - `notes/human_to_computer_glyph_feature_mapping.md`
 - `notes/literature_mapping_deep_pass_2026-07-08.md`
 - `tasks/current-thesis-next-steps.md`
+- `code/evaluation/evaluation_layers.md`

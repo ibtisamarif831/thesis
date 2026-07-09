@@ -32,6 +32,7 @@ Boundary for future work:
 | Normalized image generation | `code/build_icon_dataset.py` | `icon_data/analysis/README.md`, `icon_data/normalized_256/` |
 | Visual feature extraction | `code/extract_icon_features.py` | `icon_data/analysis/features.csv`, `features_metadata.json`, `feature_failures.json` |
 | Similarity / nearest-neighbor analysis | `code/compute_icon_similarity.py` | `icon_data/analysis/similarity/` |
+| Thesis evaluation layers | `code/evaluation/evaluation_layers.md` | `tasks/current-thesis-next-steps.md`, `THESIS_STATUS.md` |
 | Feature visual reports | `code/visualize_icon_features.py` | `icon_data/analysis/visualizations/` if present |
 | Metadata enrichment for clustering | `code/build_clustering_metadata_sample.py` | `icon_data/analysis/clustering_metadata_sample.csv`, `clustering_metadata_missing_report.json` |
 | Interactive analytics dashboard | `code/build_analysis_dashboard.py` | `icon_data/analysis/analysis_dashboard/README.md`, `index.html`, `dashboard_data.json` |

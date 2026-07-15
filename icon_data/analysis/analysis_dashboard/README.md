@@ -73,6 +73,12 @@ The right sidebar shows:
 - cluster summaries;
 - representative icons for visible clusters.
 
+The **Feature Values** tab contains up to two low-redundancy features from each active visual family. Selection reuses Feature Review's Spearman analysis: non-constant features are ranked within each family by their strongest absolute correlation with any other active feature, and the two lowest values are retained. Higher standard deviation and then label break ties. This produces 13 features: two from six families and the single active Texture feature, `texture_entropy`; excluded LBP channels are not reintroduced merely to fill a second Texture slot. For the selected feature, the tab shows its family uniqueness rank, strongest absolute Spearman correlation, summary statistics, and representative icons in three value bands:
+
+- low values (smallest measurements);
+- medium values (measurements nearest the dataset mean);
+- high values (largest measurements).
+
 For the image-only variant, the dashboard can recompute PCA and clustering in the browser when image features are selected or deselected. Metadata-only and combined variants use the precomputed coordinates and cluster labels from `dashboard_data.json`.
 
 ## Files

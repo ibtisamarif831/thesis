@@ -16,6 +16,7 @@ import numpy as np
 
 import build_clustering_metadata_sample as metadata_helpers
 import extract_icon_features
+from thesis_pipeline.dashboard.feature_selection import select_unique_family_features
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -957,8 +958,13 @@ def strongest_signed_partners(feature_id: str, pairs: list[dict]) -> dict:
 def build_feature_explorer(records: list[dict], feature_by_id: dict[str, dict], feature_review: dict) -> dict:
     rows, source = feature_explorer_source_rows(records, feature_by_id)
     metadata = feature_metadata_by_id()
+    family_order = [section["id"] for section in image_feature_sections()]
+    selected_review_rows = select_unique_family_features(
+        feature_review.get("features", []), family_order, per_family=2
+    )
+    selected_by_id = {row["feature_id"]: row for row in selected_review_rows}
     features = []
-    for feature_id in active_image_feature_columns():
+    for feature_id in selected_by_id:
         entries = [
             (row, finite_float(row.get(feature_id)))
             for row in rows
@@ -980,6 +986,7 @@ def build_feature_explorer(records: list[dict], feature_by_id: dict[str, dict], 
             low_examples = mean_examples = high_examples = []
 
         feature_meta = metadata.get(feature_id, {})
+        selection = selected_by_id[feature_id]
         partners = strongest_signed_partners(feature_id, feature_review.get("pairs", []))
         features.append(
             {
@@ -1002,6 +1009,12 @@ def build_feature_explorer(records: list[dict], feature_by_id: dict[str, dict], 
                     "high": [explorer_icon_example(row, value, source) for row, value in high_examples],
                 },
                 "correlations": partners,
+                "selection": {
+                    "rank_in_family": selection["uniqueness_rank_in_family"],
+                    "strongest_abs_spearman": selection["strongest_abs_correlation"],
+                    "strongest_partner": selection["strongest_partner"],
+                    "strongest_partner_label": selection["strongest_partner_label"],
+                },
             }
         )
 
@@ -1010,6 +1023,9 @@ def build_feature_explorer(records: list[dict], feature_by_id: dict[str, dict], 
             "source": source,
             "row_count": len(rows),
             "examples_per_band": 6,
+            "feature_count": len(features),
+            "features_per_family_limit": 2,
+            "selection_method": "Up to two non-constant features per family with the lowest strongest absolute Spearman correlation; higher standard deviation then label break ties. Texture currently has one active feature.",
             "method": "Low, nearest-mean, and high feature-value examples with Spearman partners",
         },
         "features": features,
@@ -1549,7 +1565,11 @@ def write_index_html() -> None:
     .explorer-stat b {{ display: block; font-size: 14px; font-variant-numeric: tabular-nums; overflow-wrap: anywhere; }}
     .explorer-stat span {{ color: var(--muted); font-size: 11px; }}
     .example-section {{ margin-bottom: 18px; }}
-    .example-section h3 {{ margin: 0 0 8px; font-size: 14px; }}
+    .example-section h3 {{ display: flex; align-items: center; gap: 7px; margin: 0 0 8px; font-size: 14px; }}
+    .value-band-dot {{ width: 9px; height: 9px; border-radius: 999px; background: #8a94a5; flex: 0 0 auto; }}
+    .example-section[data-band="low"] .value-band-dot {{ background: #2f855a; }}
+    .example-section[data-band="medium"] .value-band-dot {{ background: #d69e2e; }}
+    .example-section[data-band="high"] .value-band-dot {{ background: #c53030; }}
     .example-strip {{ display: grid; grid-template-columns: repeat(6, minmax(120px, 1fr)); gap: 10px; }}
     .example-card {{ border: 1px solid var(--border); border-radius: 6px; background: white; padding: 8px; min-width: 0; }}
     .example-card img {{ width: 100%; aspect-ratio: 1; object-fit: contain; border: 1px solid #edf0f4; background: white; display: block; }}
@@ -1582,6 +1602,7 @@ def write_index_html() -> None:
     <nav class="tab-nav" aria-label="Dashboard views">
       <button type="button" class="active" data-view="clustering">Clustering</button>
       <button type="button" data-view="featureGroups">Feature Groups</button>
+      <button type="button" data-view="featureExplorer">Feature Values</button>
       <button type="button" data-view="featureReview">Feature Review</button>
     </nav>
   </header>
@@ -1661,6 +1682,10 @@ def write_index_html() -> None:
     </div>
   </section>
   <section id="featureExplorerView" class="view feature-explorer">
+    <div class="explorer-header">
+      <h2>Feature Values</h2>
+      <p>Browse up to two least-redundant active features from each visual family and compare representative icons with low, medium, and high values. Texture currently has one active feature.</p>
+    </div>
     <div class="explorer-toolbar">
       <label>Search feature<input id="featureExplorerSearch" type="search" placeholder="Search by name"></label>
       <label>Feature<select id="featureExplorerFeature"></select></label>
@@ -2183,11 +2208,12 @@ def write_index_html() -> None:
               <h2>${{escapeHtml(feature.label)}}</h2>
               <span class="pill">${{escapeHtml(feature.group_title || "Image feature")}}</span>
               <p>${{escapeHtml(feature.meaning || "Extracted image feature.")}}</p>
+              <p class="muted">Uniqueness rank #${{escapeHtml(feature.selection.rank_in_family)}} in family · strongest |ρ| ${{formatNumber(feature.selection.strongest_abs_spearman)}}</p>
             </div>
             <div class="explorer-stats">${{stats}}</div>
-            ${{exampleSectionHtml("Low Values", feature.examples.low, "Icons with the smallest raw values for this feature.")}}
-            ${{exampleSectionHtml("Near Mean", feature.examples.mean, "Icons closest to the average feature value.")}}
-            ${{exampleSectionHtml("High Values", feature.examples.high, "Icons with the largest raw values for this feature.")}}
+            ${{exampleSectionHtml("Low Values", feature.examples.low, "Icons with the smallest raw values for this feature.", "low")}}
+            ${{exampleSectionHtml("Medium Values", feature.examples.mean, "Icons closest to the average feature value.", "medium")}}
+            ${{exampleSectionHtml("High Values", feature.examples.high, "Icons with the largest raw values for this feature.", "high")}}
           </div>
           <aside class="explorer-side">
             <div class="correlation-panel">
@@ -2203,7 +2229,7 @@ def write_index_html() -> None:
       }});
     }}
 
-    function exampleSectionHtml(titleText, examples, description) {{
+    function exampleSectionHtml(titleText, examples, description, band) {{
       const cards = (examples || []).map(example => `
         <div class="example-card">
           <img src="${{escapeHtml(example.normalized_path)}}" alt="">
@@ -2211,8 +2237,8 @@ def write_index_html() -> None:
           <span title="${{escapeHtml(example.set_name)}}">${{escapeHtml(example.set_name || "Unknown set")}}</span>
           <code>${{formatFeatureValue(example.value)}}</code>
         </div>`).join("");
-      return `<section class="example-section">
-        <h3>${{escapeHtml(titleText)}}</h3>
+      return `<section class="example-section" data-band="${{escapeHtml(band || "")}}">
+        <h3><span class="value-band-dot" aria-hidden="true"></span>${{escapeHtml(titleText)}}</h3>
         <p class="muted">${{escapeHtml(description)}}</p>
         <div class="example-strip">${{cards || '<span class="muted">No examples available.</span>'}}</div>
       </section>`;

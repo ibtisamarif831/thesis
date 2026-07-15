@@ -1,6 +1,6 @@
 # Current Thesis Next Steps
 
-Updated: 2026-07-08
+Updated: 2026-07-13
 
 ## Current Thesis Direction
 
@@ -30,6 +30,8 @@ Computer-side scores come from active visual feature families. Human-side scores
 - Evaluation layers were documented in `code/evaluation/evaluation_layers.md`.
 
 ## Immediate Next Tasks
+
+The meeting-note implementation backlog is captured in [`tasks/tickets/`](tickets/README.md), with the Feature Groups work first and the human-study work following stimulus selection.
 
 1. Select the human-study stimulus subset.
    - Choose a manageable set of icons with good coverage across active visual families.

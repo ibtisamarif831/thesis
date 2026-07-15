@@ -60,7 +60,8 @@ Boundary for future work:
   - k/cut values 3, 5, 7, and 10;
   - coloring by cluster, set, category, style, or numeric image feature;
   - filtering by icon set, category, and style;
-  - selected icon details and cluster summaries.
+  - selected icon details and cluster summaries;
+  - a Feature Values tab restricted to up to two non-constant, lowest-redundancy features per visual family (13 total: two for six families and the single active Texture feature), selected from Feature Review's strongest absolute Spearman correlations, with searchable low/mean-nearest/high examples.
 - Similarity outputs in `icon_data/analysis/similarity/` are based on the 1,038-row feature sample.
 - Similarity and dashboard image-feature clustering use the active visual feature families from `code/build_analysis_dashboard.py`. Excluded raw channels are not used for active visual-family clustering or similarity ranking.
 - The 7 thesis PDFs have extracted page-marked text under `papers/extracted_text/`; regenerate with `code/extract_paper_text.py`.

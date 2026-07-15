@@ -151,7 +151,11 @@
     .explorer-stat b { display: block; font-size: 14px; font-variant-numeric: tabular-nums; overflow-wrap: anywhere; }
     .explorer-stat span { color: var(--muted); font-size: 11px; }
     .example-section { margin-bottom: 18px; }
-    .example-section h3 { margin: 0 0 8px; font-size: 14px; }
+    .example-section h3 { display: flex; align-items: center; gap: 7px; margin: 0 0 8px; font-size: 14px; }
+    .value-band-dot { width: 9px; height: 9px; border-radius: 999px; background: #8a94a5; flex: 0 0 auto; }
+    .example-section[data-band="low"] .value-band-dot { background: #2f855a; }
+    .example-section[data-band="medium"] .value-band-dot { background: #d69e2e; }
+    .example-section[data-band="high"] .value-band-dot { background: #c53030; }
     .example-strip { display: grid; grid-template-columns: repeat(6, minmax(120px, 1fr)); gap: 10px; }
     .example-card { border: 1px solid var(--border); border-radius: 6px; background: white; padding: 8px; min-width: 0; }
     .example-card img { width: 100%; aspect-ratio: 1; object-fit: contain; border: 1px solid #edf0f4; background: white; display: block; }
@@ -184,6 +188,7 @@
     <nav class="tab-nav" aria-label="Dashboard views">
       <button type="button" class="active" data-view="clustering">Clustering</button>
       <button type="button" data-view="featureGroups">Feature Groups</button>
+      <button type="button" data-view="featureExplorer">Feature Values</button>
       <button type="button" data-view="featureReview">Feature Review</button>
     </nav>
   </header>
@@ -263,6 +268,10 @@
     </div>
   </section>
   <section id="featureExplorerView" class="view feature-explorer">
+    <div class="explorer-header">
+      <h2>Feature Values</h2>
+      <p>Browse up to two least-redundant active features from each visual family and compare representative icons with low, medium, and high values. Texture currently has one active feature.</p>
+    </div>
     <div class="explorer-toolbar">
       <label>Search feature<input id="featureExplorerSearch" type="search" placeholder="Search by name"></label>
       <label>Feature<select id="featureExplorerFeature"></select></label>
@@ -785,11 +794,12 @@
               <h2>${escapeHtml(feature.label)}</h2>
               <span class="pill">${escapeHtml(feature.group_title || "Image feature")}</span>
               <p>${escapeHtml(feature.meaning || "Extracted image feature.")}</p>
+              <p class="muted">Uniqueness rank #${escapeHtml(feature.selection.rank_in_family)} in family · strongest |ρ| ${formatNumber(feature.selection.strongest_abs_spearman)}</p>
             </div>
             <div class="explorer-stats">${stats}</div>
-            ${exampleSectionHtml("Low Values", feature.examples.low, "Icons with the smallest raw values for this feature.")}
-            ${exampleSectionHtml("Near Mean", feature.examples.mean, "Icons closest to the average feature value.")}
-            ${exampleSectionHtml("High Values", feature.examples.high, "Icons with the largest raw values for this feature.")}
+            ${exampleSectionHtml("Low Values", feature.examples.low, "Icons with the smallest raw values for this feature.", "low")}
+            ${exampleSectionHtml("Medium Values", feature.examples.mean, "Icons closest to the average feature value.", "medium")}
+            ${exampleSectionHtml("High Values", feature.examples.high, "Icons with the largest raw values for this feature.", "high")}
           </div>
           <aside class="explorer-side">
             <div class="correlation-panel">
@@ -805,7 +815,7 @@
       });
     }
 
-    function exampleSectionHtml(titleText, examples, description) {
+    function exampleSectionHtml(titleText, examples, description, band) {
       const cards = (examples || []).map(example => `
         <div class="example-card">
           <img src="${escapeHtml(example.normalized_path)}" alt="">
@@ -813,8 +823,8 @@
           <span title="${escapeHtml(example.set_name)}">${escapeHtml(example.set_name || "Unknown set")}</span>
           <code>${formatFeatureValue(example.value)}</code>
         </div>`).join("");
-      return `<section class="example-section">
-        <h3>${escapeHtml(titleText)}</h3>
+      return `<section class="example-section" data-band="${escapeHtml(band || "")}">
+        <h3><span class="value-band-dot" aria-hidden="true"></span>${escapeHtml(titleText)}</h3>
         <p class="muted">${escapeHtml(description)}</p>
         <div class="example-strip">${cards || '<span class="muted">No examples available.</span>'}</div>
       </section>`;

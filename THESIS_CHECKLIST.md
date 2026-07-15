@@ -2,14 +2,25 @@
 
 Welcome to your thesis workspace! This interactive checklist is designed to help you organize your workflow, maintain momentum, and complete your thesis as efficiently as possible.
 
-Based on the reference papers in your repository, your thesis lies at the intersection of **Data Glyphs, Visual/Icon Complexity, and Perception/Design Guidelines**.
+Based on the reference papers in this repository, the thesis is about **how humans identify and perceive icons/glyphs, how those visual factors can be organized into computer-measurable feature families, and how human-study scores compare with computer-derived visual feature scores**.
+
+Working thesis statement:
+
+> This thesis investigates how visual factors identified in glyph/icon perception literature can be organized into computer-measurable feature families, and compares those computational feature scores with human identification/perception scores to determine which visual factors influence agreement, mismatch, distinguishability, and confusability between humans and computer-based glyph analysis.
+
+Scope boundary:
+
+- Use visual features that can be computed from the glyph image.
+- Keep semantic meaning, historical/cultural knowledge, familiarity, metaphor, and learnability outside the active computer-vision feature families.
+- Treat metadata as context or a study/control variable, not as computer-based semantic understanding.
 
 ---
 
 ## ⚡ Fast-Track Strategy (How to Finish Quickly)
-1. **Scope Narrowly:** Focus on one clear research question (e.g., "Does contour styling improve star glyph readability under noise?" or "Does automated visual complexity predict user search time for custom glyphs?"). Do not try to solve everything.
-2. **Reuse Existing Tools:** If measuring visual complexity, adapt Forsythe's or Garcia's metrics using existing Python libraries (e.g., OpenCV, skimage) rather than building pixel-analysis algorithms from scratch.
-3. **Draft Iteratively:** Write the methodology and literature review *while* building or running your study. Do not wait until the end to start writing.
+1. **Scope Narrowly:** Focus on comparing literature-derived visual feature families with human identification/perception scores for the same glyph/icon stimuli.
+2. **Reuse Existing Tools:** Use the existing feature extraction, dashboard, and similarity pipeline as the computer-measurement side of the study.
+3. **Keep The Boundary Clear:** Do not treat semantic meaning, familiarity, or historical/cultural interpretation as computer-vision features.
+4. **Draft Iteratively:** Write the methodology and literature review while refining the feature families and study protocol.
 
 ---
 
@@ -44,32 +55,41 @@ gantt
   - [ ] *Glyph Visualization: A Fail-Safe Design Scheme Based on Quasi-Hamming Distances* (Analyze mathematical error correction/optimization in glyph spacing).
   - [ ] *Taxonomy-Based Glyph Design with a Case Study...* (Domain-specific glyph application workflow).
 - [ ] **Define your exact thesis question & contribution:**
-  - *Goal:* Write a 1-page summary specifying what you are testing, measuring, or building, and get supervisor sign-off.
+  - *Goal:* Write a 1-page summary explaining the literature-derived visual feature families, the computer-measured scores, the human-study scores, and the comparison method.
 - [ ] **Draft Chapter 1 (Introduction) & Chapter 2 (Literature Review):**
   - *Tip:* Use references directly from the papers' bibliographies to trace relevant work.
 
 ### 📐 Phase 2: Methodology & Design
-- [ ] **Design the core artifact or experiment:**
-  - [ ] If building a tool: Map out the system architecture (e.g., Python/JavaScript pipeline to compute complexity metrics).
-  - [ ] If running an experiment: Define independent variables (e.g., glyph contour, complexity level) and dependent variables (e.g., response time, error rate).
+- [ ] **Define the active visual feature families:**
+  - [ ] Complexity.
+  - [ ] Shape/silhouette.
+  - [ ] Stroke/structure.
+  - [ ] Density/fill.
+  - [ ] Balance/layout.
+  - [ ] Color/contrast.
+  - [ ] Texture.
+- [ ] **Design the human study:**
+  - [ ] Select glyph/icon stimuli from the local datasets.
+  - [ ] Decide what human scores will be recorded, such as identification accuracy, confidence, perceived similarity, perceived complexity, or confusability.
+  - [ ] Ensure the same stimuli have computer-derived visual feature-family scores.
 - [ ] **Write a study protocol / pilot test plan:**
-  - Run a quick pilot test with 1-2 peers to catch software bugs or confusing instructions before launching the main study.
+  - Run a quick pilot test with 1-2 peers to catch confusing instructions, ambiguous stimuli, and data-logging issues before launching the main study.
 
 ### 💻 Phase 3: Implementation & Development
 - [ ] **Set up development environment in this repository:**
   - Create `/src` for code, `/data` for datasets, and `/docs` for draft chapters.
 - [ ] **Build the prototype / metrics calculator / stimulus generator:**
-  - Focus on a Minimum Viable Product (MVP) that outputs clean data (e.g., CSV with participant responses or computed complexity scores).
+  - Focus on a Minimum Viable Product (MVP) that outputs clean data: participant responses and the matching computer-derived visual feature-family scores.
 - [ ] **Automate data logging:**
   - Ensure all experimental runs or metric computations are automatically saved to file to prevent manual data-entry errors.
 
 ### 📊 Phase 4: Evaluation & Analysis
 - [ ] **Collect data:**
-  - Recruit participants or run the automated pipeline across your dataset.
+  - Recruit participants and record human identification/perception scores for the selected glyph/icon stimuli.
 - [ ] **Perform statistical analysis:**
-  - Use Python (Pandas/SciPy) or R to run basic significance tests (e.g., t-test, ANOVA) to check if your hypothesis holds.
+  - Compare human scores with computer-derived feature-family scores using correlations, regression, agreement/mismatch analysis, or cluster/nearest-neighbor comparisons.
 - [ ] **Create visualizations:**
-  - Generate clean plots (box plots, scatter plots) for your results section.
+  - Generate plots showing which visual feature families align with or diverge from human identification/perception.
 
 ### ✍️ Phase 5: Writing & Finalization
 - [ ] **Draft the remaining chapters:**

@@ -23,7 +23,7 @@ This table keeps the feature set compact. Each visual category has only the stro
 | Spatial layout similarity | foreground ratio in 4x4 grid cells | Coarse distribution of visual mass across the icon | top-heavy icon, left-heavy icon, central icon |
 | Visually distinctive vs confusable | overall feature distance, nearest-neighbor rank, cluster isolation score | How close or far an icon is from others in feature space | distinctive icon, confusable icon |
 | Explainable pairwise distinguishability | shape distance, color distance, complexity distance, number of different feature channels | Which visual channels differ between two icons | shape-distinct pair, color-distinct pair, visually similar pair |
-| Semantic-category alignment check | visual cluster id, metadata category, label tokens | Whether visual clusters overlap with meaning labels | healthcare cluster, hazard cluster, transport cluster |
+| Human/computer comparison check | active visual family scores, nearest-neighbor rank, human-study score | Whether computer-side visual scores align with human identification/perception | human-aligned icon, computer-human mismatch |
 
 ## Table 2: Reasoning Behind Strongest Core Features
 
@@ -66,8 +66,8 @@ For thesis analysis, use interpretable features as the main model and advanced f
 1. Shape and structure features for explainable visual categorization.
 2. Color features to handle the mixed colored and black-and-white dataset.
 3. Pairwise distances to estimate distinguishability.
-4. Metadata/text features only when testing semantic category alignment.
+4. Metadata/text fields only as context, controls, or human-study variables; not as active computer-vision feature families.
 
 The strongest claim should be:
 
-> Visual features can categorize icons by appearance and estimate distinguishability. Semantic categorization requires metadata or labels, but visual clusters can be compared against semantic categories and human quantitative judgments.
+> Visual features can categorize icons by appearance and estimate distinguishability. Semantic interpretation requires metadata, labels, or human responses. The thesis comparison should test where active visual feature-family scores align with human identification/perception judgments.

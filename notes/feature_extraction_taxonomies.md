@@ -45,6 +45,6 @@ These are engineering features I proposed because they are useful for icon compa
 
 So the clean wording should be:
 
-> The feature set combines established paper-backed icon complexity metrics from Forsythe and Garcia with additional computational proxies for shape, symmetry, density, and style that support clustering and similarity analysis.
+> The feature set combines established paper-backed icon complexity metrics from Forsythe and Garcia with additional computational proxies for shape, symmetry, density, layout, color, and style. These features support the computer-side visual-family scores that will be compared with human identification/perception judgments.
 
 I would not claim all of them are “from the papers.”

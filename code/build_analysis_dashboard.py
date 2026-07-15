@@ -16,11 +16,13 @@ import numpy as np
 
 import build_clustering_metadata_sample as metadata_helpers
 import extract_icon_features
+from thesis_pipeline.dashboard.feature_selection import select_unique_family_features
 
 
 ROOT = Path(__file__).resolve().parents[1]
 ANALYSIS_DIR = ROOT / "icon_data" / "analysis"
 DATASET_PATH = ANALYSIS_DIR / "dataset.csv"
+FEATURES_PATH = ANALYSIS_DIR / "features.csv"
 OUTPUT_DIR = ANALYSIS_DIR / "analysis_dashboard"
 ASSETS_DIR = OUTPUT_DIR / "assets"
 PLOTLY_ASSET = ASSETS_DIR / "plotly.min.js"
@@ -51,16 +53,35 @@ METADATA_COLUMNS = [
 ]
 
 IMAGE_FEATURE_COLUMNS = list(extract_icon_features.FEATURE_COLUMNS)
-IMAGE_FEATURE_GROUPS = [list(group) for group in extract_icon_features.FEATURE_GROUPS]
 
 GRID_FEATURE_COLUMNS = [f"grid_foreground_{row}_{col}" for row in range(4) for col in range(4)]
+EXCLUDED_IMAGE_FEATURES = {
+    *(f"hu_moment_{index}" for index in range(1, 8)),
+    *(f"lbp_histogram_{index:02d}" for index in range(10)),
+    "text_or_letter_presence",
+    "crush_test_stability",
+}
+EXCLUDED_IMAGE_FEATURE_REASONS = {
+    **{
+        f"hu_moment_{index}": "Excluded from active visual-family mapping because Hu moments are useful for machine shape matching but do not map cleanly to an interpretable human perception cue."
+        for index in range(1, 8)
+    },
+    **{
+        f"lbp_histogram_{index:02d}": "Excluded from active visual-family mapping because local binary patterns often capture antialiasing/rendering artifacts in flat vector icons."
+        for index in range(10)
+    },
+    "text_or_letter_presence": "Excluded from active visual-family mapping because the current heuristic is too indirect for reliable glyph-identification claims.",
+    "crush_test_stability": "Excluded from active visual-family mapping because it measures processing robustness rather than a direct visible identification feature.",
+}
 
 DASHBOARD_FEATURE_SECTIONS = [
     {
         "id": "complexity",
-        "title": "Complexity Features",
+        "title": "Complexity",
         "description": "Detail load, structural subdivision, component count, contour count, holes, perimeter load, and angular point count.",
-        "perception": "This family approximates how visually busy or effortful a glyph is to parse.",
+        "human_category": "Complexity",
+        "family_summary": "edge density, perimeter/area, quadtree variability, components, contours, holes",
+        "perception": "This family approximates how visually busy or effortful a glyph is to parse. Component and contour counts are pixel-level proxies; human grouping can still differ.",
         "low_value": "Lower values usually mean a simpler, cleaner symbol with fewer parts, edges, holes, or sharp details.",
         "high_value": "Higher values usually mean a more intricate symbol that may take more attention to inspect and distinguish.",
         "feature_ids": [
@@ -77,11 +98,13 @@ DASHBOARD_FEATURE_SECTIONS = [
     },
     {
         "id": "shape",
-        "title": "Shape Features",
-        "description": "Silhouette, closure, roundness, rectangularity, curvature, and global shape descriptors.",
-        "perception": "This family captures the overall form humans use to recognize a glyph as round, box-like, elongated, open, closed, curved, or angular.",
-        "low_value": "Lower values depend on the specific feature: for example, low circularity means less round, low closure means more open, and low Hu/moment values indicate a different global silhouette profile.",
-        "high_value": "Higher values indicate stronger presence of that shape property, such as more circular, more rectangular, more closed, or more strongly matching a particular moment descriptor.",
+        "title": "Shape/silhouette",
+        "description": "Silhouette, closure, roundness, rectangularity, and curvature.",
+        "human_category": "Shape/silhouette",
+        "family_summary": "aspect ratio, solidity, closure proxy, circularity/rectangularity, curvature",
+        "perception": "This family captures the overall visible form of a glyph: roundness, box-like form, elongation, closure, curvature, and global silhouette.",
+        "low_value": "Lower values depend on the feature: low circularity means less round, and low closure-proxy values suggest more open or line-like form.",
+        "high_value": "Higher values indicate stronger presence of that specific shape property, such as more circular, more rectangular, or more closed by proxy.",
         "feature_ids": [
             "bounding_box_aspect_ratio",
             "solidity",
@@ -91,22 +114,17 @@ DASHBOARD_FEATURE_SECTIONS = [
             "curvature_histogram_straight",
             "curvature_histogram_gentle",
             "curvature_histogram_sharp",
-            "hu_moment_1",
-            "hu_moment_2",
-            "hu_moment_3",
-            "hu_moment_4",
-            "hu_moment_5",
-            "hu_moment_6",
-            "hu_moment_7",
         ],
     },
     {
         "id": "structure",
-        "title": "Structure Features",
-        "description": "Directional strokes, principal orientation, arrows, arcs, skeleton graph structure, and text-like marks.",
-        "perception": "This family captures internal organization: direction, branching, endpoints, arrows, arcs, and letter-like structure that guide how people read or follow a glyph.",
-        "low_value": "Lower values usually mean less explicit directionality, fewer skeleton branches/endpoints, fewer arrows/arcs, or weaker text-like structure.",
-        "high_value": "Higher values usually mean stronger directional cues, more branching structure, more endpoints/junctions, or clearer arrow/text-like components.",
+        "title": "Stroke/structure",
+        "description": "Directional strokes, principal orientation, arrows, arcs, and skeleton graph structure.",
+        "human_category": "Stroke/structure",
+        "family_summary": "line orientation, principal axis, arrows, arcs, skeleton graph",
+        "perception": "This family captures internal organization: stroke direction, branching, endpoints, arrows, and arcs. It describes visible structure, not exact text or semantic identity.",
+        "low_value": "Lower values usually mean less explicit directionality, fewer skeleton branches/endpoints, or fewer arrows/arcs.",
+        "high_value": "Higher values usually mean stronger directional cues, more branching structure, more endpoints/junctions, or clearer arrow components.",
         "feature_ids": [
             "line_orientation_0",
             "line_orientation_45",
@@ -117,13 +135,14 @@ DASHBOARD_FEATURE_SECTIONS = [
             "arc_count",
             "skeleton_endpoints",
             "skeleton_junctions",
-            "text_or_letter_presence",
         ],
     },
     {
         "id": "density_fill",
-        "title": "Density/Fill Features",
+        "title": "Density/fill",
         "description": "Foreground amount, bounding-box fill, outline-vs-fill behavior, and stroke thickness.",
+        "human_category": "Density/fill",
+        "family_summary": "foreground amount, bounding-box occupancy, filled/outline proxy, stroke width",
         "perception": "This family describes whether a glyph reads as sparse line art, a filled silhouette, or a heavy/thick mark.",
         "low_value": "Lower values usually mean a lighter, thinner, more open, or less filled glyph.",
         "high_value": "Higher values usually mean a denser, more filled, more visually heavy glyph with thicker strokes or stronger occupancy.",
@@ -137,9 +156,11 @@ DASHBOARD_FEATURE_SECTIONS = [
     },
     {
         "id": "balance_layout",
-        "title": "Balance/Layout Features",
+        "title": "Balance/layout",
         "description": "Centering, symmetry, active bounding-box position/size, and 4x4 foreground grid layout.",
-        "perception": "This family captures where visual mass sits and whether the glyph feels centered, balanced, symmetric, top-heavy, side-heavy, compact, or spread out.",
+        "human_category": "Balance/layout",
+        "family_summary": "symmetry, centroid, bounding-box position/size, 4x4 grid occupancy",
+        "perception": "This family captures where visual mass sits and whether the glyph feels centered, balanced, symmetric, top-heavy, side-heavy, compact, or spread out. Grid features should be treated as one layout channel when comparing families.",
         "low_value": "Lower values often mean less offset or less occupancy in a given region; for symmetry scores, lower means less balanced.",
         "high_value": "Higher values often mean stronger occupancy in a region, larger active extent, more offset for distance features, or stronger balance for symmetry scores.",
         "feature_ids": [
@@ -155,11 +176,13 @@ DASHBOARD_FEATURE_SECTIONS = [
     },
     {
         "id": "color_contrast",
-        "title": "Color/Contrast Features",
+        "title": "Color/contrast",
         "description": "Color presence, saturation, colorfulness, foreground-background contrast, hue distribution, and dominant Lab colors.",
+        "human_category": "Color/contrast",
+        "family_summary": "monochrome flag, color count, saturation, colorfulness, foreground-background contrast, hue histogram, dominant Lab colors",
         "perception": "This family captures color channels humans use for quick grouping, salience, and foreground-background separation.",
-        "low_value": "Lower values usually mean less color, lower saturation/colorfulness, weaker contrast, or less presence of a given hue bin.",
-        "high_value": "Higher values usually mean stronger color signal, more vividness, clearer contrast, or stronger presence of a particular hue/dominant color channel.",
+        "low_value": "Lower values usually mean less saturation/colorfulness, weaker contrast, or less presence of a given hue bin. For `is_monochrome`, lower means color is present.",
+        "high_value": "Higher values usually mean stronger signal for that specific color feature. For `is_monochrome`, higher means grayscale/monochrome rather than more color.",
         "feature_ids": [
             "is_monochrome",
             "color_count",
@@ -180,54 +203,18 @@ DASHBOARD_FEATURE_SECTIONS = [
     },
     {
         "id": "texture",
-        "title": "Texture Features",
-        "description": "Foreground tonal entropy and local binary pattern texture distribution.",
-        "perception": "This family captures repeated marks, hatching, dotting, internal variation, and other surface patterns that affect perceived detail.",
-        "low_value": "Lower values usually mean flatter, more uniform foreground regions with little internal texture.",
-        "high_value": "Higher values usually mean more internal variation or repeated local patterns that can make the glyph feel more textured or detailed.",
+        "title": "Texture",
+        "description": "Foreground tonal entropy.",
+        "human_category": "Texture",
+        "family_summary": "foreground tonal entropy",
+        "perception": "This family captures internal tonal variation that can affect perceived detail. Artifact-prone local binary pattern bins are excluded from the active visual-family mapping.",
+        "low_value": "Lower values usually mean flatter, more uniform foreground regions with little internal texture or local tonal variation.",
+        "high_value": "Higher values usually mean more internal tonal variation that can make the glyph feel more textured.",
         "feature_ids": [
             "texture_entropy",
-            *(f"lbp_histogram_{index:02d}" for index in range(10)),
-        ],
-    },
-    {
-        "id": "robustness",
-        "title": "Robustness Features",
-        "description": "Stability of the icon when downsampled and reconstructed.",
-        "perception": "This family estimates whether the glyph remains visually stable when shown small or degraded.",
-        "low_value": "Lower values mean the glyph changes more under downsampling, so small-size recognition may be less reliable.",
-        "high_value": "Higher values mean the glyph preserves its foreground shape better at reduced resolution.",
-        "feature_ids": [
-            "crush_test_stability",
         ],
     },
 ]
-
-DERIVED_FEATURE_FAMILIES = [
-    {
-        "id": "distinctiveness",
-        "title": "Distinctiveness",
-        "description": "Derived set-level evidence from pairwise distances, nearest-neighbor rank, clustering, and quasi-Hamming style comparisons.",
-        "sources": ["similarity outputs", "cluster assignments", "nearest-neighbor tables"],
-    },
-    {
-        "id": "semantics",
-        "title": "Semantics",
-        "description": "Metadata and human-response evidence from labels, categories, metadata tokens, McDougall ratings, and semantic fields.",
-        "sources": ["metadata tokens", "labels/categories", "McDougall numeric ratings"],
-    },
-]
-
-THESIS_FAMILY_REASONS = {
-    "complexity": "It belongs in Complexity because it measures detail load, subdivision, part count, boundary load, holes, or angular detail.",
-    "shape": "It belongs in Shape because it describes the icon's silhouette, closure, roundness, rectangularity, curvature, or global form.",
-    "structure": "It belongs in Structure because it measures directional strokes, graph structure, arcs, arrows, or text-like visual components.",
-    "density_fill": "It belongs in Density/Fill because it measures foreground amount, occupancy, fill style, or stroke thickness.",
-    "balance_layout": "It belongs in Balance/Layout because it measures centering, symmetry, bounding-box placement, or spatial foreground distribution.",
-    "color_contrast": "It belongs in Color/Contrast because it measures color availability, hue, saturation, dominant colors, or foreground-background separation.",
-    "texture": "It belongs in Texture because it measures tonal variation or local repeated pixel patterns.",
-    "robustness": "It belongs in Robustness because it measures stability under downsampling.",
-}
 
 FEATURE_LABELS = {
     "foreground_area_ratio": "Foreground area ratio",
@@ -246,7 +233,7 @@ FEATURE_LABELS = {
     "filled_vs_outline_proxy": "Filled-vs-outline proxy",
     "contour_count": "Contour count",
     "holes_count": "Holes count",
-    "closed_contour_ratio": "Closed-contour ratio",
+    "closed_contour_ratio": "Closure proxy",
     "line_orientation_0": "Horizontal line orientation",
     "line_orientation_45": "Diagonal 45 degree orientation",
     "line_orientation_90": "Vertical line orientation",
@@ -275,7 +262,7 @@ FEATURE_MEANINGS = {
     "filled_vs_outline_proxy": "Whether the icon behaves more like a filled mark or an outline/line drawing.",
     "contour_count": "How many contour boundaries are present.",
     "holes_count": "How many enclosed empty spaces appear inside foreground shapes.",
-    "closed_contour_ratio": "How strongly the icon is composed of closed shapes.",
+    "closed_contour_ratio": "Proxy for closed-shape behavior from contours, holes, and compactness; not a direct human closure judgment.",
     "line_orientation_0": "Share of detected line structure that is mostly horizontal.",
     "line_orientation_45": "Share of detected line structure that follows a 45 degree diagonal.",
     "line_orientation_90": "Share of detected line structure that is mostly vertical.",
@@ -288,32 +275,32 @@ FEATURE_MEANINGS = {
 }
 
 FEATURE_CATEGORY_REASONS = {
-    "foreground_area_ratio": "It belongs in Shape because foreground area describes the amount of visible shape material.",
-    "connected_components": "It belongs in Shape because separated parts change the icon's object structure.",
-    "quadtree_leaf_count": "It belongs in Shape because more spatial subdivisions indicate more structural shape detail.",
-    "quadtree_structural_variability": "It belongs in Shape because uneven spatial structure changes visual complexity.",
-    "quadtree_mean_leaf_size": "It belongs in Shape because smaller regions indicate finer structural shape detail.",
-    "bounding_box_occupancy": "It belongs in Shape because it measures how tightly the visible form fills its active shape area.",
-    "bounding_box_aspect_ratio": "It belongs in Shape because it captures whether the icon's form is tall, wide, or square.",
-    "solidity": "It belongs in Shape because compactness versus gaps changes the perceived silhouette.",
-    "contour_count": "It belongs in Shape because contours describe the number of visible shape boundaries.",
-    "holes_count": "It belongs in Shape because enclosed empty regions are part of the icon's internal structure.",
-    "closed_contour_ratio": "It belongs in Shape because closure describes whether the icon is built from enclosed forms.",
-    "is_monochrome": "It belongs in Color because it tells whether color is available as a visual channel.",
+    "foreground_area_ratio": "It belongs in Density/fill because it measures how much visible material occupies the canvas.",
+    "connected_components": "It belongs in Complexity because separated foreground parts add visual structure, while remaining a pixel-level grouping proxy.",
+    "quadtree_leaf_count": "It belongs in Complexity because more spatial subdivisions indicate more local structural variation.",
+    "quadtree_structural_variability": "It belongs in Complexity because uneven spatial structure changes perceived visual detail.",
+    "quadtree_mean_leaf_size": "It belongs in Complexity because smaller regions indicate finer localized detail.",
+    "bounding_box_occupancy": "It belongs in Density/fill because it measures how tightly the visible form fills its active area.",
+    "bounding_box_aspect_ratio": "It belongs in Shape/silhouette because it captures whether the active form is tall, wide, or square.",
+    "solidity": "It belongs in Shape/silhouette because compactness versus gaps changes the perceived silhouette.",
+    "contour_count": "It belongs in Complexity because multiple boundaries add visual detail and potential parts.",
+    "holes_count": "It belongs in Complexity because enclosed empty regions add internal detail.",
+    "closed_contour_ratio": "It belongs in Shape/silhouette because it approximates whether the glyph behaves like an enclosed form.",
+    "is_monochrome": "It belongs in Color/contrast because it marks whether color is unavailable as a visual channel; 1 means monochrome.",
     "color_count": "It belongs in Color because it measures how many distinct colors help distinguish the icon.",
     "mean_saturation": "It belongs in Color because saturation describes how vivid or muted the icon colors are.",
     "colorfulness": "It belongs in Color because it summarizes overall color richness and variation.",
     "foreground_background_contrast": "It belongs in Color because contrast describes foreground-background separation and legibility.",
-    "canny_edge_density": "It belongs in Style because edge load reflects rendering detail and line-art feel.",
-    "perimeter_area_ratio": "It belongs in Style because boundary-heavy icons often read as outline or line style.",
-    "filled_vs_outline_proxy": "It belongs in Style because it directly separates filled marks from outline-like rendering.",
-    "horizontal_symmetry": "It belongs in Style because visual balance is a design-style property.",
-    "vertical_symmetry": "It belongs in Style because top-bottom balance affects the icon's visual style.",
-    "line_orientation_0": "It belongs in Style because dominant horizontal strokes describe rendering direction.",
-    "line_orientation_45": "It belongs in Style because diagonal strokes often signal action, motion, or angular rendering.",
-    "line_orientation_90": "It belongs in Style because vertical strokes describe the icon's directional rendering.",
-    "line_orientation_135": "It belongs in Style because diagonal strokes describe the icon's angular rendering.",
-    "centroid_distance_from_center": "It belongs in Spatial Layout because it measures where visual mass sits on the canvas.",
+    "canny_edge_density": "It belongs in Complexity because edge load reflects visual detail and local structure.",
+    "perimeter_area_ratio": "It belongs in Complexity because boundary-heavy icons often contain more contour detail relative to area.",
+    "filled_vs_outline_proxy": "It belongs in Density/fill because it separates filled marks from outline-like rendering.",
+    "horizontal_symmetry": "It belongs in Balance/layout because left-right symmetry affects visual balance.",
+    "vertical_symmetry": "It belongs in Balance/layout because top-bottom symmetry affects visual balance.",
+    "line_orientation_0": "It belongs in Stroke/structure because dominant horizontal strokes describe internal direction.",
+    "line_orientation_45": "It belongs in Stroke/structure because diagonal strokes describe internal direction.",
+    "line_orientation_90": "It belongs in Stroke/structure because vertical strokes describe internal direction.",
+    "line_orientation_135": "It belongs in Stroke/structure because diagonal strokes describe internal direction.",
+    "centroid_distance_from_center": "It belongs in Balance/layout because it measures where visual mass sits on the canvas.",
 }
 
 FEATURE_VISUAL_CATEGORIZATIONS = {
@@ -350,28 +337,26 @@ FEATURE_VISUAL_CATEGORY_LABELS = {
     "Simple vs complex": "simple icon, complex icon",
     "Single-object vs multi-part": "single-object symbol, multi-component symbol",
     "Compact vs spread-out": "compact icon, tall icon, wide icon, fragmented icon",
+    "Round vs rectangular": "round icon, rectangular icon, box-like icon",
+    "Curved vs angular": "curved icon, angular icon, sharp-cornered icon",
     "Centered vs off-center": "centered icon, off-center icon",
     "Balanced vs unbalanced": "symmetric icon, asymmetric icon",
     "Filled vs outline": "filled pictogram, outline icon, line icon",
     "Open vs closed shape": "closed-shape icon, open-line icon",
     "Directional/geometric structure": "horizontal icon, vertical icon, diagonal/action icon",
+    "Arrow/directional symbol": "arrow icon, pointer icon, directional symbol",
     "Black-and-white vs colored": "monochrome icon, colored icon",
+    "Hue/color family": "red icon, green icon, blue icon, multicolor icon",
     "Color intensity/style": "muted icon, vivid icon, emoji-like icon",
     "High contrast vs low contrast": "high-contrast icon, low-contrast icon",
+    "Thin vs thick strokes": "thin-line icon, thick-stroke icon",
+    "Skeleton graph complexity": "simple line graph, branching line graph",
+    "Texture/pattern": "flat icon, textured icon, hatched icon",
+    "Resolution robustness": "small-size robust icon, fragile detailed icon",
+    "Text-like mark": "letter icon, text-like symbol",
     "Spatial layout similarity": "top-heavy icon, left-heavy icon, central icon",
+    "Global silhouette descriptor": "global-shape descriptor, advanced silhouette profile",
 }
-
-for row in range(4):
-    for col in range(4):
-        feature_id = f"grid_foreground_{row}_{col}"
-        FEATURE_LABELS[feature_id] = f"Grid foreground r{row + 1} c{col + 1}"
-        FEATURE_MEANINGS[feature_id] = (
-            f"Foreground share in the 4x4 layout grid at row {row + 1}, column {col + 1}."
-        )
-        FEATURE_CATEGORY_REASONS[feature_id] = (
-            "It belongs in Spatial Layout because it records where foreground mass appears in the icon grid."
-        )
-        FEATURE_VISUAL_CATEGORIZATIONS[feature_id] = ["Spatial layout similarity"]
 
 FEATURE_LABELS.update(
     {
@@ -398,55 +383,123 @@ FEATURE_LABELS.update(
     }
 )
 
-for feature_id in [
-    "bbox_center_x",
-    "bbox_center_y",
-    "bbox_width_ratio",
-    "bbox_height_ratio",
-    "circularity",
-    "rectangularity",
-    "corner_count",
-    "curvature_histogram_straight",
-    "curvature_histogram_gentle",
-    "curvature_histogram_sharp",
-    "principal_axis_orientation",
-    "arrowhead_count",
-    "arc_count",
-    "stroke_width_mean",
-    "stroke_width_std",
-    "skeleton_endpoints",
-    "skeleton_junctions",
-    "texture_entropy",
-    "crush_test_stability",
-    "text_or_letter_presence",
-]:
-    FEATURE_MEANINGS.setdefault(feature_id, "Extracted visual feature added for glyph distinguishability analysis.")
-    FEATURE_CATEGORY_REASONS.setdefault(feature_id, "It belongs in this group because it measures that visual channel.")
+FEATURE_MEANINGS.update(
+    {
+        "bbox_center_x": "Horizontal center of the active bounding box in canvas coordinates.",
+        "bbox_center_y": "Vertical center of the active bounding box in canvas coordinates.",
+        "bbox_width_ratio": "Share of canvas width covered by the active bounding box.",
+        "bbox_height_ratio": "Share of canvas height covered by the active bounding box.",
+        "circularity": "How close the foreground silhouette is to a compact circle.",
+        "rectangularity": "How densely foreground fills its minimum enclosing rectangle.",
+        "corner_count": "Approximate number of polygon corners across external contours.",
+        "curvature_histogram_straight": "Share of contour samples that behave like straight segments.",
+        "curvature_histogram_gentle": "Share of contour samples with gradual curve behavior.",
+        "curvature_histogram_sharp": "Share of contour samples with sharp turns or angular corners.",
+        "principal_axis_orientation": "Dominant orientation of foreground pixels from a PCA axis; pairwise comparison should treat it as circular over 180 degrees.",
+        "arrowhead_count": "Approximate count of triangular or sharp directional tips.",
+        "arc_count": "Approximate count of curved arc-like contour runs.",
+        "stroke_width_mean": "Average normalized stroke width estimated from the foreground skeleton.",
+        "stroke_width_std": "Variation in normalized stroke width across the skeleton.",
+        "skeleton_endpoints": "Number of terminal points in the foreground skeleton graph.",
+        "skeleton_junctions": "Number of branching points in the foreground skeleton graph.",
+        "texture_entropy": "Normalized grayscale entropy within foreground pixels.",
+        "crush_test_stability": "How well foreground shape survives one downsampling and re-expansion crush test.",
+        "text_or_letter_presence": "Heuristic score for letter-like or text-like visual structure.",
+    }
+)
+
+FEATURE_CATEGORY_REASONS.update(
+    {
+        "bbox_center_x": "It belongs in Balance/layout because it records where the active shape sits horizontally.",
+        "bbox_center_y": "It belongs in Balance/layout because it records where the active shape sits vertically.",
+        "bbox_width_ratio": "It belongs in Balance/layout because it measures how much horizontal canvas span the icon uses.",
+        "bbox_height_ratio": "It belongs in Balance/layout because it measures how much vertical canvas span the icon uses.",
+        "circularity": "It belongs in Shape/silhouette because roundness changes the perceived silhouette.",
+        "rectangularity": "It belongs in Shape/silhouette because box-like forms are a distinct shape family.",
+        "corner_count": "It belongs in Complexity because corners and polygon vertices add angular detail.",
+        "curvature_histogram_straight": "It belongs in Shape/silhouette because straight contour segments affect perceived geometry.",
+        "curvature_histogram_gentle": "It belongs in Shape/silhouette because arcs and gentle curves affect perceived geometry.",
+        "curvature_histogram_sharp": "It belongs in Shape/silhouette because sharp turns mark angular geometry.",
+        "principal_axis_orientation": "It belongs in Stroke/structure because it captures the icon's dominant visual direction.",
+        "arrowhead_count": "It belongs in Stroke/structure because arrowheads are visible direction cues.",
+        "arc_count": "It belongs in Stroke/structure because arcs distinguish curved line construction.",
+        "stroke_width_mean": "It belongs in Density/fill because line thickness changes visual weight.",
+        "stroke_width_std": "It belongs in Density/fill because stroke-width variation changes visual weight and fill behavior.",
+        "skeleton_endpoints": "It belongs in Stroke/structure because endpoints describe line-graph structure.",
+        "skeleton_junctions": "It belongs in Stroke/structure because junctions describe branching line-graph structure.",
+        "texture_entropy": "It belongs in Texture because entropy measures internal tonal variation.",
+        "crush_test_stability": EXCLUDED_IMAGE_FEATURE_REASONS["crush_test_stability"],
+        "text_or_letter_presence": EXCLUDED_IMAGE_FEATURE_REASONS["text_or_letter_presence"],
+    }
+)
+
+FEATURE_VISUAL_CATEGORIZATIONS.update(
+    {
+        "bbox_center_x": ["Spatial layout similarity"],
+        "bbox_center_y": ["Spatial layout similarity"],
+        "bbox_width_ratio": ["Spatial layout similarity"],
+        "bbox_height_ratio": ["Spatial layout similarity"],
+        "circularity": ["Round vs rectangular"],
+        "rectangularity": ["Round vs rectangular"],
+        "corner_count": ["Curved vs angular"],
+        "curvature_histogram_straight": ["Curved vs angular"],
+        "curvature_histogram_gentle": ["Curved vs angular"],
+        "curvature_histogram_sharp": ["Curved vs angular"],
+        "principal_axis_orientation": ["Directional/geometric structure"],
+        "arrowhead_count": ["Arrow/directional symbol"],
+        "arc_count": ["Curved vs angular"],
+        "stroke_width_mean": ["Thin vs thick strokes"],
+        "stroke_width_std": ["Thin vs thick strokes"],
+        "skeleton_endpoints": ["Skeleton graph complexity"],
+        "skeleton_junctions": ["Skeleton graph complexity"],
+        "texture_entropy": ["Texture/pattern"],
+        "crush_test_stability": [],
+        "text_or_letter_presence": [],
+    }
+)
 
 for index in range(1, 8):
     feature_id = f"hu_moment_{index}"
     FEATURE_LABELS[feature_id] = f"Hu moment {index}"
-    FEATURE_MEANINGS[feature_id] = "Global silhouette moment descriptor."
-    FEATURE_CATEGORY_REASONS[feature_id] = "It belongs in Shape because Hu moments summarize global form."
+    FEATURE_MEANINGS[feature_id] = "Advanced global silhouette descriptor; useful for shape matching but not directly human-readable on its own."
+    FEATURE_CATEGORY_REASONS[feature_id] = EXCLUDED_IMAGE_FEATURE_REASONS[feature_id]
+    FEATURE_VISUAL_CATEGORIZATIONS[feature_id] = []
 
 for index in range(12):
     feature_id = f"hue_histogram_{index:02d}"
-    FEATURE_LABELS[feature_id] = f"Hue bin {index + 1}"
-    FEATURE_MEANINGS[feature_id] = "Share of saturated foreground pixels in this hue interval."
+    start = index * 30
+    end = start + 30
+    FEATURE_LABELS[feature_id] = f"Hue {start}-{end} deg"
+    FEATURE_MEANINGS[feature_id] = f"Share of saturated foreground pixels with hue between {start} and {end} degrees; hue is circular, so neighboring bins wrap around at red."
     FEATURE_CATEGORY_REASONS[feature_id] = "It belongs in Color because hue bins represent color-family channels."
+    FEATURE_VISUAL_CATEGORIZATIONS[feature_id] = ["Hue/color family"]
 
 for rank in range(1, 4):
-    for channel in ("l", "a", "b"):
+    for channel, label in [("l", "L"), ("a", "a"), ("b", "b")]:
         feature_id = f"dominant_color_{rank}_lab_{channel}"
-        FEATURE_LABELS[feature_id] = f"Dominant color {rank} Lab {channel.upper()}"
-        FEATURE_MEANINGS[feature_id] = "Lab channel value for one of the dominant foreground colors."
+        FEATURE_LABELS[feature_id] = f"Dominant color {rank} Lab {label}"
+        FEATURE_MEANINGS[feature_id] = f"Lab {label} channel for dominant foreground color {rank}."
         FEATURE_CATEGORY_REASONS[feature_id] = "It belongs in Color because dominant Lab values encode foreground color appearance."
+        FEATURE_VISUAL_CATEGORIZATIONS[feature_id] = ["Hue/color family"]
 
 for index in range(10):
     feature_id = f"lbp_histogram_{index:02d}"
     FEATURE_LABELS[feature_id] = f"LBP texture bin {index}"
     FEATURE_MEANINGS[feature_id] = "Uniform local binary pattern texture share; bin 9 stores non-uniform patterns."
-    FEATURE_CATEGORY_REASONS[feature_id] = "It belongs in Style because local binary patterns describe repeated marks and texture."
+    FEATURE_CATEGORY_REASONS[feature_id] = EXCLUDED_IMAGE_FEATURE_REASONS[feature_id]
+    FEATURE_VISUAL_CATEGORIZATIONS[feature_id] = []
+
+for row in range(4):
+    for col in range(4):
+        feature_id = f"grid_foreground_{row}_{col}"
+        FEATURE_LABELS[feature_id] = f"Grid foreground r{row + 1} c{col + 1}"
+        FEATURE_MEANINGS[feature_id] = (
+            f"Foreground share in the 4x4 layout grid at row {row + 1}, column {col + 1}."
+        )
+        FEATURE_CATEGORY_REASONS[feature_id] = (
+            "It belongs in Balance/layout because it records where foreground mass appears in the icon grid."
+        )
+        FEATURE_VISUAL_CATEGORIZATIONS[feature_id] = ["Spatial layout similarity"]
 
 MCDOUGALL_NUMERIC_COLUMNS = [
     "mcdougall_concreteness",
@@ -459,10 +512,12 @@ MCDOUGALL_NUMERIC_COLUMNS = [
 ]
 
 FEATURE_VARIANTS = ("image", "metadata", "combined")
+REDUNDANCY_HIGH_THRESHOLD = 0.85
+REDUNDANCY_MODERATE_THRESHOLD = 0.70
 
 
 def image_feature_sections() -> list[dict[str, object]]:
-    expected = set(IMAGE_FEATURE_COLUMNS)
+    expected = set(IMAGE_FEATURE_COLUMNS) - EXCLUDED_IMAGE_FEATURES
     seen = []
     sections = []
     for section in DASHBOARD_FEATURE_SECTIONS:
@@ -473,6 +528,8 @@ def image_feature_sections() -> list[dict[str, object]]:
                 "id": section["id"],
                 "title": section["title"],
                 "description": section["description"],
+                "human_category": section.get("human_category", section["title"].replace(" Features", "")),
+                "family_summary": section.get("family_summary", ""),
                 "perception": section.get("perception", ""),
                 "low_value": section.get("low_value", ""),
                 "high_value": section.get("high_value", ""),
@@ -490,12 +547,9 @@ def image_feature_sections() -> list[dict[str, object]]:
                             for category in FEATURE_VISUAL_CATEGORIZATIONS.get(feature_id, [])
                             if category in FEATURE_VISUAL_CATEGORY_LABELS
                         ],
-                        "category_reason": THESIS_FAMILY_REASONS.get(
-                            section["id"],
-                            FEATURE_CATEGORY_REASONS.get(
-                                feature_id,
-                                f"It belongs in {section['title']} because it describes that visual channel.",
-                            ),
+                        "category_reason": FEATURE_CATEGORY_REASONS.get(
+                            feature_id,
+                            f"It belongs in {section['title']} because it describes that visual channel.",
                         ),
                     }
                     for feature_id in feature_ids
@@ -512,6 +566,17 @@ def image_feature_sections() -> list[dict[str, object]]:
             f"duplicates={duplicate_features}, missing={missing_features}, unknown={unknown_features}"
         )
     return sections
+
+
+def active_image_feature_columns() -> list[str]:
+    feature_ids = []
+    for section in image_feature_sections():
+        feature_ids.extend(feature["id"] for feature in section["features"])
+    return feature_ids
+
+
+def active_image_feature_groups() -> list[list[str]]:
+    return [[feature["id"] for feature in section["features"]] for section in image_feature_sections()]
 
 
 def read_csv(path: Path) -> list[dict[str, str]]:
@@ -651,6 +716,322 @@ def standardize(matrix: np.ndarray) -> tuple[np.ndarray, list[float], list[float
     return (matrix - means) / stds, means.tolist(), stds.tolist()
 
 
+def finite_float(value: object) -> float:
+    if value is None or value == "":
+        return float("nan")
+    try:
+        number = float(value)
+    except (TypeError, ValueError):
+        return float("nan")
+    if math.isnan(number) or math.isinf(number):
+        return float("nan")
+    return number
+
+
+def average_ranks(values: np.ndarray) -> np.ndarray:
+    order = np.argsort(values, kind="mergesort")
+    ranks = np.zeros(len(values), dtype=float)
+    start = 0
+    while start < len(values):
+        end = start + 1
+        while end < len(values) and values[order[end]] == values[order[start]]:
+            end += 1
+        average_rank = (start + end - 1) / 2.0 + 1.0
+        ranks[order[start:end]] = average_rank
+        start = end
+    return ranks
+
+
+def spearman_correlation(left: np.ndarray, right: np.ndarray) -> tuple[float, int]:
+    mask = np.isfinite(left) & np.isfinite(right)
+    pair_count = int(mask.sum())
+    if pair_count < 2:
+        return 0.0, pair_count
+    left_ranks = average_ranks(left[mask])
+    right_ranks = average_ranks(right[mask])
+    left_std = left_ranks.std()
+    right_std = right_ranks.std()
+    if left_std == 0 or right_std == 0:
+        return 0.0, pair_count
+    correlation = float(np.corrcoef(left_ranks, right_ranks)[0, 1])
+    if math.isnan(correlation) or math.isinf(correlation):
+        return 0.0, pair_count
+    return correlation, pair_count
+
+
+def redundancy_band(abs_correlation: float) -> str:
+    if abs_correlation >= REDUNDANCY_HIGH_THRESHOLD:
+        return "high"
+    if abs_correlation >= REDUNDANCY_MODERATE_THRESHOLD:
+        return "moderate"
+    return "low"
+
+
+def title_case(value: str) -> str:
+    return value.replace("_", " ").title()
+
+
+def feature_metadata_by_id() -> dict[str, dict[str, str]]:
+    metadata = {}
+    for section in image_feature_sections():
+        for feature in section["features"]:
+            metadata[feature["id"]] = {
+                "label": feature["label"],
+                "group": feature["group"],
+                "group_title": feature["group_title"],
+                "meaning": feature["meaning"],
+            }
+    return metadata
+
+
+def feature_review_source_rows(feature_by_id: dict[str, dict]) -> tuple[list[dict], str]:
+    if FEATURES_PATH.exists():
+        rows = read_csv(FEATURES_PATH)
+        if rows and all(column in rows[0] for column in IMAGE_FEATURE_COLUMNS):
+            return rows, str(FEATURES_PATH.relative_to(ROOT))
+    return list(feature_by_id.values()), "analysis_dashboard_sample"
+
+
+def build_feature_review(feature_by_id: dict[str, dict]) -> dict:
+    rows, source = feature_review_source_rows(feature_by_id)
+    metadata = feature_metadata_by_id()
+    active_columns = active_image_feature_columns()
+    matrix = np.array(
+        [[finite_float(row.get(column)) for column in active_columns] for row in rows],
+        dtype=float,
+    )
+
+    feature_rows = []
+    for column_index, feature_id in enumerate(active_columns):
+        values = matrix[:, column_index]
+        valid_values = values[np.isfinite(values)]
+        feature_rows.append(
+            {
+                "feature_id": feature_id,
+                "label": metadata.get(feature_id, {}).get("label", FEATURE_LABELS.get(feature_id, title_case(feature_id))),
+                "group": metadata.get(feature_id, {}).get("group", ""),
+                "group_title": metadata.get(feature_id, {}).get("group_title", ""),
+                "meaning": metadata.get(feature_id, {}).get("meaning", ""),
+                "std": round(float(valid_values.std()) if len(valid_values) else 0.0, 6),
+                "variance": round(float(valid_values.var()) if len(valid_values) else 0.0, 6),
+                "missing_count": int(len(values) - len(valid_values)),
+                "strongest_abs_correlation": 0.0,
+                "strongest_correlation": 0.0,
+                "strongest_partner": "",
+                "strongest_partner_label": "",
+                "strongest_partner_group": "",
+                "redundancy_band": "low",
+            }
+        )
+
+    pair_rows = []
+    feature_index = {row["feature_id"]: index for index, row in enumerate(feature_rows)}
+    for left_index, left_feature in enumerate(active_columns):
+        for right_index in range(left_index + 1, len(active_columns)):
+            right_feature = active_columns[right_index]
+            correlation, pair_count = spearman_correlation(matrix[:, left_index], matrix[:, right_index])
+            abs_correlation = abs(correlation)
+            left_meta = feature_rows[left_index]
+            right_meta = feature_rows[right_index]
+            pair_rows.append(
+                {
+                    "feature_a": left_feature,
+                    "feature_a_label": left_meta["label"],
+                    "feature_a_group": left_meta["group"],
+                    "feature_a_group_title": left_meta["group_title"],
+                    "feature_b": right_feature,
+                    "feature_b_label": right_meta["label"],
+                    "feature_b_group": right_meta["group"],
+                    "feature_b_group_title": right_meta["group_title"],
+                    "correlation": round(correlation, 6),
+                    "abs_correlation": round(abs_correlation, 6),
+                    "band": redundancy_band(abs_correlation),
+                    "shared_group": left_meta["group"] == right_meta["group"],
+                    "pair_count": pair_count,
+                }
+            )
+
+            for feature_id, partner_id, partner_meta in (
+                (left_feature, right_feature, right_meta),
+                (right_feature, left_feature, left_meta),
+            ):
+                row = feature_rows[feature_index[feature_id]]
+                if abs_correlation > row["strongest_abs_correlation"]:
+                    row["strongest_abs_correlation"] = round(abs_correlation, 6)
+                    row["strongest_correlation"] = round(correlation, 6)
+                    row["strongest_partner"] = partner_id
+                    row["strongest_partner_label"] = partner_meta["label"]
+                    row["strongest_partner_group"] = partner_meta["group_title"]
+                    row["redundancy_band"] = redundancy_band(abs_correlation)
+
+    pair_rows.sort(key=lambda row: (-row["abs_correlation"], row["feature_a_label"], row["feature_b_label"]))
+    feature_rows.sort(key=lambda row: (-row["strongest_abs_correlation"], row["label"]))
+    high_pair_count = sum(1 for row in pair_rows if row["band"] == "high")
+    moderate_pair_count = sum(1 for row in pair_rows if row["band"] == "moderate")
+    low_pair_count = sum(1 for row in pair_rows if row["band"] == "low")
+
+    return {
+        "metadata": {
+            "source": source,
+            "row_count": len(rows),
+            "method": "Spearman correlation over image feature columns",
+            "high_threshold": REDUNDANCY_HIGH_THRESHOLD,
+            "moderate_threshold": REDUNDANCY_MODERATE_THRESHOLD,
+        },
+        "summary": {
+            "feature_count": len(feature_rows),
+            "pair_count": len(pair_rows),
+            "high_pair_count": high_pair_count,
+            "moderate_pair_count": moderate_pair_count,
+            "low_pair_count": low_pair_count,
+        },
+        "features": feature_rows,
+        "pairs": pair_rows,
+    }
+
+
+def feature_explorer_source_rows(records: list[dict], feature_by_id: dict[str, dict]) -> tuple[list[dict], str]:
+    if FEATURES_PATH.exists():
+        rows = read_csv(FEATURES_PATH)
+        if rows and all(column in rows[0] for column in IMAGE_FEATURE_COLUMNS):
+            return rows, str(FEATURES_PATH.relative_to(ROOT))
+
+    rows = []
+    for record in records:
+        feature_row = feature_by_id.get(record["icon_id"], {})
+        rows.append(
+            {
+                "icon_id": record["icon_id"],
+                "label": record.get("label", ""),
+                "set_name": record.get("set_name", ""),
+                "normalized_path": record.get("normalized_path", ""),
+                **{column: feature_row.get(column, "") for column in IMAGE_FEATURE_COLUMNS},
+            }
+        )
+    return rows, "analysis_dashboard_sample"
+
+
+def explorer_icon_example(row: dict, value: float, source: str) -> dict:
+    normalized_path = row.get("normalized_path", "")
+    if source != "analysis_dashboard_sample" and normalized_path:
+        normalized_path = relative_to_dashboard(ROOT / normalized_path)
+    return {
+        "icon_id": row.get("icon_id", ""),
+        "label": row.get("label", ""),
+        "set_name": row.get("set_name", ""),
+        "normalized_path": normalized_path,
+        "value": round(float(value), 6),
+    }
+
+
+def strongest_signed_partners(feature_id: str, pairs: list[dict]) -> dict:
+    positive = None
+    negative = None
+    for pair in pairs:
+        if pair["feature_a"] == feature_id:
+            partner_id = pair["feature_b"]
+            partner_label = pair["feature_b_label"]
+            partner_group = pair["feature_b_group_title"]
+        elif pair["feature_b"] == feature_id:
+            partner_id = pair["feature_a"]
+            partner_label = pair["feature_a_label"]
+            partner_group = pair["feature_a_group_title"]
+        else:
+            continue
+
+        partner = {
+            "feature_id": partner_id,
+            "label": partner_label,
+            "group_title": partner_group,
+            "correlation": pair["correlation"],
+            "abs_correlation": pair["abs_correlation"],
+            "band": pair["band"],
+            "pair_count": pair["pair_count"],
+        }
+        if pair["correlation"] > 0 and (positive is None or pair["correlation"] > positive["correlation"]):
+            positive = partner
+        if pair["correlation"] < 0 and (negative is None or pair["correlation"] < negative["correlation"]):
+            negative = partner
+    return {"positive": positive, "negative": negative}
+
+
+def build_feature_explorer(records: list[dict], feature_by_id: dict[str, dict], feature_review: dict) -> dict:
+    rows, source = feature_explorer_source_rows(records, feature_by_id)
+    metadata = feature_metadata_by_id()
+    family_order = [section["id"] for section in image_feature_sections()]
+    selected_review_rows = select_unique_family_features(
+        feature_review.get("features", []), family_order, per_family=2
+    )
+    selected_by_id = {row["feature_id"]: row for row in selected_review_rows}
+    features = []
+    for feature_id in selected_by_id:
+        entries = [
+            (row, finite_float(row.get(feature_id)))
+            for row in rows
+            if math.isfinite(finite_float(row.get(feature_id)))
+        ]
+        values = np.array([value for _, value in entries], dtype=float)
+        if len(values):
+            mean = float(values.mean())
+            median = float(np.median(values))
+            variance = float(values.var())
+            std = float(values.std())
+            min_value = float(values.min())
+            max_value = float(values.max())
+            low_examples = sorted(entries, key=lambda item: (item[1], item[0].get("label", "")))[:6]
+            mean_examples = sorted(entries, key=lambda item: (abs(item[1] - mean), item[0].get("label", "")))[:6]
+            high_examples = sorted(entries, key=lambda item: (-item[1], item[0].get("label", "")))[:6]
+        else:
+            mean = median = variance = std = min_value = max_value = 0.0
+            low_examples = mean_examples = high_examples = []
+
+        feature_meta = metadata.get(feature_id, {})
+        selection = selected_by_id[feature_id]
+        partners = strongest_signed_partners(feature_id, feature_review.get("pairs", []))
+        features.append(
+            {
+                "feature_id": feature_id,
+                "label": feature_meta.get("label", FEATURE_LABELS.get(feature_id, title_case(feature_id))),
+                "group": feature_meta.get("group", ""),
+                "group_title": feature_meta.get("group_title", ""),
+                "meaning": feature_meta.get("meaning", ""),
+                "min": round(min_value, 6),
+                "max": round(max_value, 6),
+                "mean": round(mean, 6),
+                "median": round(median, 6),
+                "variance": round(variance, 6),
+                "std": round(std, 6),
+                "valid_count": int(len(values)),
+                "missing_count": int(len(rows) - len(values)),
+                "examples": {
+                    "low": [explorer_icon_example(row, value, source) for row, value in low_examples],
+                    "mean": [explorer_icon_example(row, value, source) for row, value in mean_examples],
+                    "high": [explorer_icon_example(row, value, source) for row, value in high_examples],
+                },
+                "correlations": partners,
+                "selection": {
+                    "rank_in_family": selection["uniqueness_rank_in_family"],
+                    "strongest_abs_spearman": selection["strongest_abs_correlation"],
+                    "strongest_partner": selection["strongest_partner"],
+                    "strongest_partner_label": selection["strongest_partner_label"],
+                },
+            }
+        )
+
+    return {
+        "metadata": {
+            "source": source,
+            "row_count": len(rows),
+            "examples_per_band": 6,
+            "feature_count": len(features),
+            "features_per_family_limit": 2,
+            "selection_method": "Up to two non-constant features per family with the lowest strongest absolute Spearman correlation; higher standard deviation then label break ties. Texture currently has one active feature.",
+            "method": "Low, nearest-mean, and high feature-value examples with Spearman partners",
+        },
+        "features": features,
+    }
+
+
 def apply_group_weights(matrix: np.ndarray, columns: list[str], groups: list[list[str]]) -> np.ndarray:
     weighted = matrix.copy()
     column_index = {column: index for index, column in enumerate(columns)}
@@ -692,12 +1073,13 @@ def token_features(rows: list[dict], max_tokens: int = 80) -> tuple[np.ndarray, 
 
 
 def feature_matrices(rows: list[dict], feature_by_id: dict[str, dict]) -> dict[str, dict]:
+    image_columns = active_image_feature_columns()
     image = np.array(
-        [[to_float(feature_by_id[row["icon_id"]].get(column)) for column in IMAGE_FEATURE_COLUMNS] for row in rows],
+        [[to_float(feature_by_id[row["icon_id"]].get(column)) for column in image_columns] for row in rows],
         dtype=float,
     )
     image_scaled, image_means, image_stds = standardize(image)
-    image_scaled = apply_group_weights(image_scaled, IMAGE_FEATURE_COLUMNS, IMAGE_FEATURE_GROUPS)
+    image_scaled = apply_group_weights(image_scaled, image_columns, active_image_feature_groups())
 
     set_matrix, set_columns = one_hot(rows, "set_name", "set")
     token_matrix, token_columns = token_features(rows)
@@ -714,7 +1096,7 @@ def feature_matrices(rows: list[dict], feature_by_id: dict[str, dict]) -> dict[s
     return {
         "image": {
             "matrix": image_scaled,
-            "columns": IMAGE_FEATURE_COLUMNS,
+            "columns": image_columns,
             "raw_matrix": image,
             "means": image_means,
             "stds": image_stds,
@@ -725,7 +1107,7 @@ def feature_matrices(rows: list[dict], feature_by_id: dict[str, dict]) -> dict[s
         },
         "combined": {
             "matrix": combined_matrix,
-            "columns": IMAGE_FEATURE_COLUMNS + metadata_columns,
+            "columns": image_columns + metadata_columns,
         },
     }
 
@@ -993,6 +1375,7 @@ def write_dashboard_data(rows: list[dict], feature_by_id: dict[str, dict], matri
             }
         )
 
+    feature_review = build_feature_review(feature_by_id)
     data = {
         "metadata": {
             "generated_from": str(DATASET_PATH.relative_to(ROOT)),
@@ -1002,17 +1385,21 @@ def write_dashboard_data(rows: list[dict], feature_by_id: dict[str, dict], matri
             "k_values": list(K_VALUES),
             "primary_k": PRIMARY_K,
             "feature_variants": list(FEATURE_VARIANTS),
-            "image_feature_columns": IMAGE_FEATURE_COLUMNS,
+            "image_feature_columns": matrices["image"]["columns"],
+            "raw_image_feature_columns": IMAGE_FEATURE_COLUMNS,
+            "excluded_image_features": sorted(EXCLUDED_IMAGE_FEATURES),
+            "excluded_image_feature_reasons": EXCLUDED_IMAGE_FEATURE_REASONS,
             "image_feature_groups": {
                 extractor.name: list(extractor.columns) for extractor in extract_icon_features.FEATURE_EXTRACTORS
             },
             "image_feature_sections": image_feature_sections(),
-            "derived_feature_families": DERIVED_FEATURE_FAMILIES,
             "mcdougall_numeric_columns": MCDOUGALL_NUMERIC_COLUMNS,
         },
         "records": records,
         "feature_columns": {variant: matrices[variant]["columns"] for variant in FEATURE_VARIANTS},
         "clusters": clusters,
+        "feature_review": feature_review,
+        "feature_explorer": build_feature_explorer(records, feature_by_id, feature_review),
     }
     (OUTPUT_DIR / "dashboard_data.json").write_text(
         json.dumps(data, ensure_ascii=False, separators=(",", ":")),
@@ -1036,17 +1423,22 @@ def write_index_html() -> None:
     :root {{ color-scheme: light; --border: #d8dde6; --muted: #5d6675; --panel: #f7f8fb; }}
     * {{ box-sizing: border-box; }}
     body {{ margin: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; color: #18202f; background: white; }}
-    header {{ padding: 14px 18px; border-bottom: 1px solid var(--border); display: flex; align-items: baseline; gap: 18px; }}
+    header {{ padding: 10px 18px; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 18px; }}
     h1 {{ font-size: 18px; margin: 0; font-weight: 650; }}
     header span {{ color: var(--muted); font-size: 13px; }}
-    main {{ display: grid; grid-template-columns: 300px minmax(520px, 1fr) 330px; min-height: calc(100vh - 52px); }}
+    .tab-nav {{ display: flex; gap: 6px; margin-left: auto; }}
+    .tab-nav button {{ font-size: 13px; padding: 6px 10px; }}
+    .tab-nav button.active {{ background: #18202f; color: white; border-color: #18202f; }}
+    .view {{ display: none; }}
+    .view.active {{ display: block; }}
+    #clusteringView.active {{ display: grid; grid-template-columns: 300px minmax(520px, 1fr) 330px; min-height: calc(100vh - 52px); }}
     aside {{ border-right: 1px solid var(--border); padding: 14px; overflow: auto; max-height: calc(100vh - 52px); }}
     aside.right {{ border-left: 1px solid var(--border); border-right: 0; }}
     section.control {{ margin-bottom: 18px; }}
     h2 {{ font-size: 13px; margin: 0 0 8px; text-transform: uppercase; color: #3d4656; letter-spacing: .04em; }}
     label {{ display: block; font-size: 13px; margin: 7px 0; }}
-    select, input[type="range"] {{ width: 100%; }}
-    select {{ min-height: 30px; border: 1px solid var(--border); border-radius: 6px; background: white; padding: 4px 6px; }}
+    select, input[type="range"], input[type="search"] {{ width: 100%; }}
+    select, input[type="search"] {{ min-height: 30px; border: 1px solid var(--border); border-radius: 6px; background: white; padding: 4px 6px; }}
     button {{ border: 1px solid var(--border); border-radius: 6px; background: white; padding: 6px 9px; color: #18202f; cursor: pointer; }}
     button:hover {{ background: var(--panel); }}
     .button-row {{ display: flex; gap: 6px; flex-wrap: wrap; margin-top: 8px; }}
@@ -1107,14 +1499,114 @@ def write_index_html() -> None:
     table {{ width: 100%; border-collapse: collapse; font-size: 12px; }}
     td {{ border-bottom: 1px solid #edf0f4; padding: 4px 0; vertical-align: top; }}
     td:last-child {{ text-align: right; color: #334; }}
+    .feature-review, .feature-explorer, .feature-groups {{ padding: 16px 18px 24px; }}
+    .review-toolbar, .explorer-toolbar {{ display: flex; align-items: end; gap: 12px; flex-wrap: wrap; margin-bottom: 14px; }}
+    .review-toolbar label, .explorer-toolbar label {{ min-width: 180px; margin: 0; }}
+    .explorer-toolbar label:nth-child(2) {{ min-width: 240px; }}
+    .explorer-toolbar label:nth-child(3) {{ min-width: 280px; flex: 1; }}
+    .feature-groups-header {{ max-width: 980px; margin-bottom: 16px; }}
+    .feature-groups-header h2 {{ margin: 0 0 6px; font-size: 20px; text-transform: none; letter-spacing: 0; color: #18202f; }}
+    .feature-groups-header p {{ margin: 0; color: #3d4656; font-size: 13px; line-height: 1.45; }}
+    .feature-groups-content {{ display: grid; gap: 14px; max-width: 1280px; }}
+    .feature-family-overview {{ border: 1px solid var(--border); border-radius: 6px; background: white; padding: 14px; }}
+    .feature-family-overview h2 {{ margin: 0 0 6px; font-size: 18px; text-transform: none; letter-spacing: 0; color: #18202f; }}
+    .feature-family-overview p {{ margin: 0 0 10px; color: #3d4656; font-size: 13px; line-height: 1.45; }}
+    .family-overview-table-wrap {{ overflow: auto; border: 1px solid var(--border); border-radius: 6px; }}
+    .family-overview-table {{ min-width: 760px; }}
+    .family-overview-table th {{ background: #f4f6fa; border-bottom: 1px solid var(--border); padding: 7px 8px; text-align: left; font-size: 12px; color: #3d4656; }}
+    .family-overview-table td {{ padding: 10px 8px; text-align: left; vertical-align: top; font-size: 13px; line-height: 1.45; }}
+    .family-overview-table td:last-child {{ text-align: left; color: #334; }}
+    .family-overview-table b {{ color: #18202f; }}
+    .feature-group-panel {{ border: 1px solid var(--border); border-radius: 6px; background: white; padding: 14px; }}
+    .feature-group-panel h2 {{ margin: 0; font-size: 16px; text-transform: none; letter-spacing: 0; color: #18202f; }}
+    .feature-group-panel p {{ margin: 7px 0 0; color: #3d4656; font-size: 13px; line-height: 1.45; }}
+    .feature-group-heading {{ display: flex; justify-content: space-between; gap: 12px; align-items: start; margin-bottom: 10px; }}
+    .feature-group-count {{ flex-shrink: 0; color: var(--muted); font-size: 12px; }}
+    .feature-reading-grid {{ display: grid; grid-template-columns: repeat(3, minmax(180px, 1fr)); gap: 10px; margin: 12px 0; }}
+    .feature-reading-item {{ border-left: 3px solid #d8dde6; background: #fbfcfe; padding: 8px 9px; font-size: 12px; line-height: 1.4; color: #3d4656; }}
+    .feature-reading-item b {{ display: block; margin-bottom: 3px; color: #18202f; }}
+    .feature-group-table-wrap {{ overflow: auto; border: 1px solid var(--border); border-radius: 6px; }}
+    .feature-group-table {{ min-width: 920px; }}
+    .feature-group-table th {{ background: #f4f6fa; border-bottom: 1px solid var(--border); padding: 7px 8px; text-align: left; font-size: 12px; color: #3d4656; }}
+    .feature-group-table td {{ padding: 7px 8px; text-align: left; }}
+    .feature-group-table td:last-child {{ text-align: left; color: #334; }}
+    .feature-id {{ font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 11px; color: var(--muted); }}
+    .review-summary {{ display: grid; grid-template-columns: repeat(4, minmax(140px, 1fr)); gap: 10px; margin-bottom: 14px; }}
+    .review-metric {{ border: 1px solid var(--border); border-radius: 6px; padding: 10px; background: #fbfcfe; }}
+    .review-metric b {{ display: block; font-size: 22px; margin-bottom: 2px; }}
+    .review-metric span {{ color: var(--muted); font-size: 12px; }}
+    .review-layout {{ display: grid; grid-template-columns: minmax(560px, 1fr) 340px; gap: 16px; align-items: start; }}
+    .review-panel {{ min-width: 0; }}
+    .review-panel h2 {{ margin-top: 0; }}
+    .review-table-wrap {{ overflow: auto; border: 1px solid var(--border); border-radius: 6px; background: white; margin-bottom: 16px; max-height: 360px; }}
+    .review-table {{ min-width: 760px; }}
+    .review-table th {{ position: sticky; top: 0; background: #f4f6fa; border-bottom: 1px solid var(--border); padding: 7px 8px; text-align: left; font-size: 12px; color: #3d4656; }}
+    .review-table td {{ padding: 6px 8px; text-align: left; }}
+    .review-table td:last-child {{ text-align: left; }}
+    .review-row-button {{ border: 0; background: transparent; padding: 0; color: #18202f; text-align: left; font-weight: 600; }}
+    .review-row-button:hover {{ background: transparent; text-decoration: underline; }}
+    .band {{ display: inline-block; min-width: 70px; padding: 2px 6px; border-radius: 999px; font-size: 11px; text-align: center; border: 1px solid var(--border); }}
+    .band-high {{ background: #ffe8e1; border-color: #f0b7a6; color: #8d2e16; }}
+    .band-moderate {{ background: #fff4d7; border-color: #e6cd86; color: #725300; }}
+    .band-low {{ background: #edf7ef; border-color: #b7d9bf; color: #245b31; }}
+    .review-detail {{ border: 1px solid var(--border); border-radius: 6px; padding: 12px; background: white; position: sticky; top: 12px; }}
+    .review-detail h3 {{ margin: 0 0 4px; font-size: 16px; }}
+    .review-detail p {{ font-size: 13px; line-height: 1.4; }}
+    .partner-list {{ margin-top: 10px; }}
+    .partner-list div {{ display: flex; justify-content: space-between; gap: 12px; border-bottom: 1px solid #edf0f4; padding: 5px 0; font-size: 12px; }}
+    .explorer-content {{ max-width: 1280px; }}
+    .explorer-layout {{ display: grid; grid-template-columns: minmax(0, 1fr) 320px; gap: 16px; align-items: start; }}
+    .explorer-main, .explorer-side {{ min-width: 0; }}
+    .explorer-header {{ margin-bottom: 14px; }}
+    .explorer-header h2 {{ margin: 0 0 6px; font-size: 20px; text-transform: none; letter-spacing: 0; color: #18202f; }}
+    .explorer-header p {{ max-width: 820px; margin: 8px 0 0; color: #3d4656; font-size: 13px; line-height: 1.45; }}
+    .explorer-stats {{ display: grid; grid-template-columns: repeat(6, minmax(100px, 1fr)); gap: 8px; margin-bottom: 14px; }}
+    .explorer-stat {{ border: 1px solid var(--border); border-radius: 6px; background: #fbfcfe; padding: 8px; min-width: 0; }}
+    .explorer-stat b {{ display: block; font-size: 14px; font-variant-numeric: tabular-nums; overflow-wrap: anywhere; }}
+    .explorer-stat span {{ color: var(--muted); font-size: 11px; }}
+    .example-section {{ margin-bottom: 18px; }}
+    .example-section h3 {{ display: flex; align-items: center; gap: 7px; margin: 0 0 8px; font-size: 14px; }}
+    .value-band-dot {{ width: 9px; height: 9px; border-radius: 999px; background: #8a94a5; flex: 0 0 auto; }}
+    .example-section[data-band="low"] .value-band-dot {{ background: #2f855a; }}
+    .example-section[data-band="medium"] .value-band-dot {{ background: #d69e2e; }}
+    .example-section[data-band="high"] .value-band-dot {{ background: #c53030; }}
+    .example-strip {{ display: grid; grid-template-columns: repeat(6, minmax(120px, 1fr)); gap: 10px; }}
+    .example-card {{ border: 1px solid var(--border); border-radius: 6px; background: white; padding: 8px; min-width: 0; }}
+    .example-card img {{ width: 100%; aspect-ratio: 1; object-fit: contain; border: 1px solid #edf0f4; background: white; display: block; }}
+    .example-card b {{ display: block; margin-top: 6px; font-size: 12px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }}
+    .example-card span {{ display: block; color: var(--muted); font-size: 11px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }}
+    .example-card code {{ display: block; margin-top: 4px; font-size: 11px; color: #18202f; font-variant-numeric: tabular-nums; overflow-wrap: anywhere; }}
+    .correlation-panel {{ border: 1px solid var(--border); border-radius: 6px; background: white; padding: 12px; position: sticky; top: 12px; }}
+    .correlation-panel h3 {{ margin: 0 0 8px; font-size: 15px; }}
+    .correlation-item {{ border-top: 1px solid #edf0f4; padding: 9px 0; }}
+    .correlation-item:first-of-type {{ border-top: 0; }}
+    .correlation-item span {{ display: block; color: var(--muted); font-size: 11px; text-transform: uppercase; letter-spacing: .03em; }}
+    .correlation-item button {{ margin: 3px 0; border: 0; background: transparent; padding: 0; color: #18202f; font-weight: 650; text-align: left; }}
+    .correlation-item button:hover {{ background: transparent; text-decoration: underline; }}
+    .correlation-item b {{ display: block; font-size: 13px; font-variant-numeric: tabular-nums; }}
+    @media (max-width: 980px) {{
+      #clusteringView.active {{ grid-template-columns: 1fr; }}
+      aside, aside.right {{ max-height: none; border: 0; border-bottom: 1px solid var(--border); }}
+      .review-layout, .explorer-layout {{ grid-template-columns: 1fr; }}
+      .review-detail, .correlation-panel {{ position: static; }}
+      .feature-reading-grid {{ grid-template-columns: 1fr; }}
+      .explorer-stats {{ grid-template-columns: repeat(2, minmax(120px, 1fr)); }}
+      .example-strip {{ grid-template-columns: repeat(2, minmax(120px, 1fr)); }}
+    }}
   </style>
 </head>
 <body>
   <header>
     <h1>Analysis Icon Clustering Dashboard</h1>
     <span id="datasetSummary">Loading data...</span>
+    <nav class="tab-nav" aria-label="Dashboard views">
+      <button type="button" class="active" data-view="clustering">Clustering</button>
+      <button type="button" data-view="featureGroups">Feature Groups</button>
+      <button type="button" data-view="featureExplorer">Feature Values</button>
+      <button type="button" data-view="featureReview">Feature Review</button>
+    </nav>
   </header>
-  <main>
+  <main id="clusteringView" class="view active">
     <aside>
       <section class="control">
         <h2>Feature Variant</h2>
@@ -1154,6 +1646,54 @@ def write_index_html() -> None:
       </section>
     </aside>
   </main>
+  <section id="featureReviewView" class="view feature-review">
+    <div class="review-toolbar">
+      <label>Feature ranking<select id="featureReviewSort">
+        <option value="redundancy">Strongest redundancy</option>
+        <option value="group">Group</option>
+        <option value="label">Feature name</option>
+      </select></label>
+      <label>Pair threshold<select id="featureReviewThreshold">
+        <option value="high">High only</option>
+        <option value="moderate" selected>Moderate+</option>
+        <option value="all">All pairs</option>
+      </select></label>
+    </div>
+    <div class="review-summary" id="featureReviewSummary"></div>
+    <div class="review-layout">
+      <div class="review-panel">
+        <h2>Feature Ranking</h2>
+        <div class="review-table-wrap"><table class="review-table" id="featureRankingTable"></table></div>
+        <h2>Redundant Feature Pairs</h2>
+        <div class="review-table-wrap"><table class="review-table" id="featurePairTable"></table></div>
+      </div>
+      <aside class="review-detail" id="featureReviewDetail">
+        <span class="muted">Select a feature to inspect redundancy evidence.</span>
+      </aside>
+    </div>
+  </section>
+  <section id="featureGroupsView" class="view feature-groups">
+    <div class="feature-groups-header">
+      <h2>Feature Groups</h2>
+      <p>Feature groups organize image measurements into qualitative families based on human icon perception. This view is intentionally concise: it shows the study-level family and the features grouped under it.</p>
+    </div>
+    <div class="feature-groups-content" id="featureGroupsContent">
+      <span class="muted">Loading feature groups...</span>
+    </div>
+  </section>
+  <section id="featureExplorerView" class="view feature-explorer">
+    <div class="explorer-header">
+      <h2>Feature Values</h2>
+      <p>Browse up to two least-redundant active features from each visual family and compare representative icons with low, medium, and high values. Texture currently has one active feature.</p>
+    </div>
+    <div class="explorer-toolbar">
+      <label>Search feature<input id="featureExplorerSearch" type="search" placeholder="Search by name"></label>
+      <label>Feature<select id="featureExplorerFeature"></select></label>
+    </div>
+    <div class="explorer-content" id="featureExplorerContent">
+      <span class="muted">Loading feature examples...</span>
+    </div>
+  </section>
   <div id="hoverPreview"></div>
   <script>
     let dashboard = null;
@@ -1168,6 +1708,18 @@ def write_index_html() -> None:
       activeFeatures: new Set(),
       setFilter: new Set()
     }};
+    const reviewState = {{
+      view: "clustering",
+      group: "all",
+      sort: "redundancy",
+      threshold: "moderate",
+      selectedFeatureId: null
+    }};
+    const explorerState = {{
+      group: "all",
+      search: "",
+      selectedFeatureId: null
+    }};
 
     fetch("dashboard_data.json").then(r => r.json()).then(data => {{
       dashboard = data;
@@ -1179,12 +1731,15 @@ def write_index_html() -> None:
       document.getElementById("datasetSummary").textContent =
         `${{dashboard.metadata.row_count}} icons, ${{dashboard.metadata.per_set_sample_size}} random per dataset`;
 
+      installViewTabs();
       fillSelect("variantSelect", dashboard.metadata.feature_variants.map(v => [v, title(v)]), state.variant);
       fillSelect("kSelect", dashboard.metadata.k_values.map(k => [String(k), String(k)]), state.k);
       fillColorSelect("colorSelect", state.color);
       renderMethodNote();
 
       renderFeatureControls();
+      initializeFeatureReviewControls();
+      initializeFeatureExplorerControls();
 
       const sets = unique(dashboard.records.map(r => r.set_name)).sort();
       fillSelect("setFilter", sets.map(v => [v, v]), "", true);
@@ -1202,6 +1757,52 @@ def write_index_html() -> None:
       document.getElementById("clearSetFilter").addEventListener("click", () => clearSelectFilter("setFilter", "setFilter"));
       document.getElementById("resetFilters").addEventListener("click", resetFilters);
       renderFilterPills();
+      renderFeatureGroups();
+      renderFeatureReview();
+      renderFeatureExplorer();
+    }}
+
+    function installViewTabs() {{
+      document.querySelectorAll(".tab-nav button").forEach(button => {{
+        button.addEventListener("click", () => activateView(button.dataset.view));
+      }});
+    }}
+
+    function activateView(view) {{
+      reviewState.view = view;
+      document.querySelectorAll(".tab-nav button").forEach(item => item.classList.toggle("active", item.dataset.view === view));
+      document.getElementById("clusteringView").classList.toggle("active", view === "clustering");
+      document.getElementById("featureGroupsView").classList.toggle("active", view === "featureGroups");
+      document.getElementById("featureReviewView").classList.toggle("active", view === "featureReview");
+      document.getElementById("featureExplorerView").classList.toggle("active", view === "featureExplorer");
+      hideHoverPreview();
+      if (view === "clustering") render();
+      if (view === "featureGroups") renderFeatureGroups();
+      if (view === "featureReview") renderFeatureReview();
+      if (view === "featureExplorer") renderFeatureExplorer();
+    }}
+
+    function initializeFeatureReviewControls() {{
+      document.getElementById("featureReviewSort").addEventListener("change", event => {{
+        reviewState.sort = event.target.value;
+        renderFeatureReview();
+      }});
+      document.getElementById("featureReviewThreshold").addEventListener("change", event => {{
+        reviewState.threshold = event.target.value;
+        renderFeatureReview();
+      }});
+    }}
+
+    function initializeFeatureExplorerControls() {{
+      document.getElementById("featureExplorerSearch").addEventListener("input", event => {{
+        explorerState.search = event.target.value;
+        explorerState.selectedFeatureId = null;
+        renderFeatureExplorer();
+      }});
+      document.getElementById("featureExplorerFeature").addEventListener("change", event => {{
+        explorerState.selectedFeatureId = event.target.value;
+        renderFeatureExplorerDetail();
+      }});
     }}
 
     function renderMethodNote() {{
@@ -1378,6 +1979,34 @@ def write_index_html() -> None:
       if (tooltip) tooltip.style.display = "none";
     }}
 
+    function renderFeatureGroups() {{
+      const container = document.getElementById("featureGroupsContent");
+      if (!container) return;
+      const sections = visibleFeatureSections();
+      if (!sections.length) {{
+        container.innerHTML = '<span class="muted">No feature group metadata is available.</span>';
+        return;
+      }}
+      const overview = `
+        <section class="feature-family-overview">
+          <h2>Recommended Feature Families For Analysis</h2>
+          <p>For thesis experiments, group the features into interpretable families:</p>
+          <div class="family-overview-table-wrap">
+            <table class="family-overview-table">
+              <thead><tr><th>Human category</th><th>Computer feature family</th></tr></thead>
+              <tbody>
+                ${{sections.map(section => `
+                  <tr>
+                    <td><b>${{escapeHtml(section.human_category || section.title.replace(" Features", ""))}}</b></td>
+                    <td>${{escapeHtml(section.family_summary || section.features.map(feature => feature.label.toLowerCase()).join(", "))}}</td>
+                  </tr>`).join("")}}
+              </tbody>
+            </table>
+          </div>
+        </section>`;
+      container.innerHTML = overview;
+    }}
+
     function setActiveFeatures(featureIds) {{
       state.activeFeatures = new Set(featureIds);
       syncFeatureCheckboxes();
@@ -1389,6 +2018,256 @@ def write_index_html() -> None:
       document.querySelectorAll(".feature-toggle").forEach(input => {{
         input.checked = state.activeFeatures.has(input.value);
       }});
+    }}
+
+    function renderFeatureReview() {{
+      const review = dashboard.feature_review;
+      if (!review) {{
+        document.getElementById("featureReviewSummary").innerHTML = "";
+        document.getElementById("featureRankingTable").innerHTML = "";
+        document.getElementById("featurePairTable").innerHTML = "";
+        document.getElementById("featureReviewDetail").innerHTML = '<span class="muted">No feature review data is available.</span>';
+        return;
+      }}
+      renderFeatureReviewSummary(review);
+      const features = filteredReviewFeatures(review);
+      const pairs = filteredReviewPairs(review);
+      if (!reviewState.selectedFeatureId || !features.some(feature => feature.feature_id === reviewState.selectedFeatureId)) {{
+        reviewState.selectedFeatureId = features[0] ? features[0].feature_id : null;
+      }}
+      renderFeatureRankingTable(features);
+      renderFeaturePairTable(pairs);
+      renderFeatureReviewDetail(review);
+    }}
+
+    function renderFeatureReviewSummary(review) {{
+      const summary = review.summary || {{}};
+      document.getElementById("featureReviewSummary").innerHTML = [
+        ["Features", summary.feature_count || 0],
+        ["High redundancy pairs", summary.high_pair_count || 0],
+        ["Moderate pairs", summary.moderate_pair_count || 0],
+        ["Source rows", (review.metadata || {{}}).row_count || 0]
+      ].map(([label, value]) => `<div class="review-metric"><b>${{escapeHtml(value)}}</b><span>${{escapeHtml(label)}}</span></div>`).join("");
+    }}
+
+    function filteredReviewFeatures(review) {{
+      const sorted = review.features.slice();
+      sorted.sort((a, b) => {{
+        if (reviewState.sort === "label") return a.label.localeCompare(b.label);
+        if (reviewState.sort === "group") return (a.group_title || "").localeCompare(b.group_title || "") || a.label.localeCompare(b.label);
+        return Number(b.strongest_abs_correlation || 0) - Number(a.strongest_abs_correlation || 0) || a.label.localeCompare(b.label);
+      }});
+      return sorted;
+    }}
+
+    function filteredReviewPairs(review) {{
+      return review.pairs.filter(pair => {{
+        if (reviewState.threshold === "high") return pair.band === "high";
+        if (reviewState.threshold === "moderate") return pair.band === "high" || pair.band === "moderate";
+        return true;
+      }});
+    }}
+
+    function renderFeatureRankingTable(features) {{
+      const table = document.getElementById("featureRankingTable");
+      if (!features.length) {{
+        table.innerHTML = '<tbody><tr><td class="muted">No features match this filter.</td></tr></tbody>';
+        return;
+      }}
+      const rows = features.map(feature => `
+        <tr>
+          <td><button class="review-row-button" type="button" data-feature-id="${{escapeHtml(feature.feature_id)}}">${{escapeHtml(feature.label)}}</button></td>
+          <td>${{escapeHtml(feature.group_title || "")}}</td>
+          <td><span class="band band-${{escapeHtml(feature.redundancy_band)}}">${{escapeHtml(bandLabel(feature.redundancy_band))}}</span></td>
+          <td>${{formatNumber(feature.strongest_abs_correlation)}}</td>
+          <td>${{escapeHtml(feature.strongest_partner_label || "")}}</td>
+          <td>${{formatNumber(feature.std)}}</td>
+          <td>${{escapeHtml(feature.missing_count)}}</td>
+        </tr>`).join("");
+      table.innerHTML = `
+        <thead><tr>
+          <th>Feature</th><th>Group</th><th>Band</th><th>Strongest |rho|</th><th>Strongest partner</th><th>Std</th><th>Missing</th>
+        </tr></thead><tbody>${{rows}}</tbody>`;
+      table.querySelectorAll("button[data-feature-id]").forEach(button => {{
+        button.addEventListener("click", () => {{
+          reviewState.selectedFeatureId = button.dataset.featureId;
+          renderFeatureReviewDetail(dashboard.feature_review);
+        }});
+      }});
+    }}
+
+    function renderFeaturePairTable(pairs) {{
+      const table = document.getElementById("featurePairTable");
+      if (!pairs.length) {{
+        table.innerHTML = '<tbody><tr><td class="muted">No feature pairs match this threshold.</td></tr></tbody>';
+        return;
+      }}
+      const rows = pairs.map(pair => `
+        <tr>
+          <td>${{escapeHtml(pair.feature_a_label)}}</td>
+          <td>${{escapeHtml(pair.feature_b_label)}}</td>
+          <td><span class="band band-${{escapeHtml(pair.band)}}">${{escapeHtml(bandLabel(pair.band))}}</span></td>
+          <td>${{formatSigned(pair.correlation)}}</td>
+          <td>${{pair.shared_group ? "Same" : "Different"}}</td>
+          <td>${{escapeHtml(pair.pair_count)}}</td>
+        </tr>`).join("");
+      table.innerHTML = `
+        <thead><tr>
+          <th>Feature A</th><th>Feature B</th><th>Band</th><th>Spearman rho</th><th>Group</th><th>N</th>
+        </tr></thead><tbody>${{rows}}</tbody>`;
+    }}
+
+    function renderFeatureReviewDetail(review) {{
+      const feature = review.features.find(item => item.feature_id === reviewState.selectedFeatureId);
+      const detail = document.getElementById("featureReviewDetail");
+      if (!feature) {{
+        detail.innerHTML = '<span class="muted">Select a feature to inspect redundancy evidence.</span>';
+        return;
+      }}
+      const partners = review.pairs
+        .filter(pair => pair.feature_a === feature.feature_id || pair.feature_b === feature.feature_id)
+        .sort((a, b) => Number(b.abs_correlation) - Number(a.abs_correlation))
+        .slice(0, 8)
+        .map(pair => {{
+          const partnerLabel = pair.feature_a === feature.feature_id ? pair.feature_b_label : pair.feature_a_label;
+          return `<div><span>${{escapeHtml(partnerLabel)}}</span><b>${{formatSigned(pair.correlation)}}</b></div>`;
+        }}).join("");
+      detail.innerHTML = `
+        <h3>${{escapeHtml(feature.label)}}</h3>
+        <span class="pill">${{escapeHtml(feature.group_title || "Image feature")}}</span>
+        <span class="band band-${{escapeHtml(feature.redundancy_band)}}">${{escapeHtml(bandLabel(feature.redundancy_band))}}</span>
+        <p>${{escapeHtml(feature.meaning || "Extracted image feature.")}}</p>
+        <table>
+          <tr><td>Strongest absolute correlation</td><td>${{formatNumber(feature.strongest_abs_correlation)}}</td></tr>
+          <tr><td>Strongest partner</td><td>${{escapeHtml(feature.strongest_partner_label || "")}}</td></tr>
+          <tr><td>Signed correlation</td><td>${{formatSigned(feature.strongest_correlation)}}</td></tr>
+          <tr><td>Variance</td><td>${{formatNumber(feature.variance)}}</td></tr>
+          <tr><td>Std</td><td>${{formatNumber(feature.std)}}</td></tr>
+          <tr><td>Missing values</td><td>${{escapeHtml(feature.missing_count)}}</td></tr>
+        </table>
+        <div class="partner-list">
+          <h2>Top Partners</h2>
+          ${{partners || '<span class="muted">No correlation partners available.</span>'}}
+        </div>`;
+    }}
+
+    function renderFeatureExplorer() {{
+      const explorer = dashboard.feature_explorer;
+      const container = document.getElementById("featureExplorerContent");
+      if (!explorer) {{
+        container.innerHTML = '<span class="muted">No feature explorer data is available.</span>';
+        return;
+      }}
+      const features = filteredExplorerFeatures();
+      if (!features.length) {{
+        explorerState.selectedFeatureId = null;
+        renderFeatureExplorerControls(features);
+        container.innerHTML = '<span class="muted">No features match this filter.</span>';
+        return;
+      }}
+      if (!explorerState.selectedFeatureId || !features.some(feature => feature.feature_id === explorerState.selectedFeatureId)) {{
+        explorerState.selectedFeatureId = features[0].feature_id;
+      }}
+      renderFeatureExplorerControls(features);
+      renderFeatureExplorerDetail();
+    }}
+
+    function filteredExplorerFeatures() {{
+      const explorer = dashboard.feature_explorer;
+      const query = explorerState.search.trim().toLowerCase();
+      return (explorer.features || [])
+        .filter(feature => !query || `${{feature.label}} ${{feature.feature_id}} ${{feature.group_title}}`.toLowerCase().includes(query))
+        .sort((a, b) => (a.group_title || "").localeCompare(b.group_title || "") || a.label.localeCompare(b.label));
+    }}
+
+    function renderFeatureExplorerControls(features) {{
+      const options = features.map(feature => [feature.feature_id, `${{feature.label}} - ${{feature.group_title || "Image feature"}}`]);
+      fillSelect("featureExplorerFeature", options, explorerState.selectedFeatureId || "");
+    }}
+
+    function renderFeatureExplorerDetail() {{
+      const explorer = dashboard.feature_explorer;
+      const feature = (explorer.features || []).find(item => item.feature_id === explorerState.selectedFeatureId);
+      const container = document.getElementById("featureExplorerContent");
+      if (!feature) {{
+        container.innerHTML = '<span class="muted">Select a feature to inspect visual examples.</span>';
+        return;
+      }}
+      const stats = [
+        ["Min", feature.min],
+        ["Mean", feature.mean],
+        ["Max", feature.max],
+        ["Variance", feature.variance],
+        ["Std", feature.std],
+        ["Missing", feature.missing_count]
+      ].map(([label, value]) => `<div class="explorer-stat"><b>${{label === "Missing" ? escapeHtml(value) : formatNumber(value)}}</b><span>${{escapeHtml(label)}}</span></div>`).join("");
+      container.innerHTML = `
+        <div class="explorer-layout">
+          <div class="explorer-main">
+            <div class="explorer-header">
+              <h2>${{escapeHtml(feature.label)}}</h2>
+              <span class="pill">${{escapeHtml(feature.group_title || "Image feature")}}</span>
+              <p>${{escapeHtml(feature.meaning || "Extracted image feature.")}}</p>
+              <p class="muted">Uniqueness rank #${{escapeHtml(feature.selection.rank_in_family)}} in family · strongest |ρ| ${{formatNumber(feature.selection.strongest_abs_spearman)}}</p>
+            </div>
+            <div class="explorer-stats">${{stats}}</div>
+            ${{exampleSectionHtml("Low Values", feature.examples.low, "Icons with the smallest raw values for this feature.", "low")}}
+            ${{exampleSectionHtml("Medium Values", feature.examples.mean, "Icons closest to the average feature value.", "medium")}}
+            ${{exampleSectionHtml("High Values", feature.examples.high, "Icons with the largest raw values for this feature.", "high")}}
+          </div>
+          <aside class="explorer-side">
+            <div class="correlation-panel">
+              <h3>Correlation Partners</h3>
+              <p class="muted">Spearman rho values show how this feature moves with other features.</p>
+              ${{correlationPartnerHtml("Strongest positive", feature.correlations.positive)}}
+              ${{correlationPartnerHtml("Strongest negative", feature.correlations.negative)}}
+            </div>
+          </aside>
+        </div>`;
+      container.querySelectorAll("button[data-explorer-partner]").forEach(button => {{
+        button.addEventListener("click", () => openFeatureInExplorer(button.dataset.explorerPartner));
+      }});
+    }}
+
+    function exampleSectionHtml(titleText, examples, description, band) {{
+      const cards = (examples || []).map(example => `
+        <div class="example-card">
+          <img src="${{escapeHtml(example.normalized_path)}}" alt="">
+          <b title="${{escapeHtml(example.label)}}">${{escapeHtml(example.label || example.icon_id)}}</b>
+          <span title="${{escapeHtml(example.set_name)}}">${{escapeHtml(example.set_name || "Unknown set")}}</span>
+          <code>${{formatFeatureValue(example.value)}}</code>
+        </div>`).join("");
+      return `<section class="example-section" data-band="${{escapeHtml(band || "")}}">
+        <h3><span class="value-band-dot" aria-hidden="true"></span>${{escapeHtml(titleText)}}</h3>
+        <p class="muted">${{escapeHtml(description)}}</p>
+        <div class="example-strip">${{cards || '<span class="muted">No examples available.</span>'}}</div>
+      </section>`;
+    }}
+
+    function correlationPartnerHtml(label, partner) {{
+      if (!partner) {{
+        return `<div class="correlation-item"><span>${{escapeHtml(label)}}</span><p class="muted">No partner available.</p></div>`;
+      }}
+      return `<div class="correlation-item">
+        <span>${{escapeHtml(label)}}</span>
+        <button type="button" data-explorer-partner="${{escapeHtml(partner.feature_id)}}">${{escapeHtml(partner.label)}}</button>
+        <b>rho ${{formatSigned(partner.correlation)}} · ${{escapeHtml(bandLabel(partner.band))}}</b>
+        <p class="muted">${{escapeHtml(partner.group_title || "Image feature")}} · N=${{escapeHtml(partner.pair_count)}}</p>
+      </div>`;
+    }}
+
+    function openFeatureInExplorer(featureId) {{
+      explorerState.group = "all";
+      explorerState.search = "";
+      explorerState.selectedFeatureId = featureId;
+      document.getElementById("featureExplorerSearch").value = "";
+      activateView("featureExplorer");
+    }}
+
+    function bandLabel(band) {{
+      if (band === "high") return "High";
+      if (band === "moderate") return "Moderate";
+      return "Low";
     }}
 
     function render() {{
@@ -1754,6 +2633,19 @@ def write_index_html() -> None:
         return escapeHtml(String(rounded));
       }}
       return escapeHtml(String(value ?? ""));
+    }}
+
+    function formatNumber(value) {{
+      const number = Number(value);
+      if (!Number.isFinite(number)) return "";
+      return escapeHtml(number.toFixed(3));
+    }}
+
+    function formatSigned(value) {{
+      const number = Number(value);
+      if (!Number.isFinite(number)) return "";
+      const formatted = `${{number >= 0 ? "+" : ""}}${{number.toFixed(3)}}`;
+      return escapeHtml(formatted);
     }}
 
     function fillColorSelect(id, selected) {{

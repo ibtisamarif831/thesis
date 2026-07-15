@@ -27,6 +27,20 @@ MCDOUGALL_RATINGS_PATH = (
 
 
 TEXT_SPLIT_RE = re.compile(r"[^a-z0-9]+")
+FEATURE_METADATA_COLUMNS = [
+    "recognized_text",
+    "recognized_text_source",
+    "recognized_text_confidence",
+    "ocr_text_raw",
+    "ocr_text_confidence",
+    "semantic_symbol_type",
+    "semantic_identity_source",
+    "semantic_is_arrow",
+    "semantic_arrow_direction",
+    "semantic_is_object",
+    "semantic_object_label",
+    "semantic_object_category",
+]
 
 
 def read_csv(path: Path) -> list[dict[str, str]]:
@@ -221,6 +235,7 @@ def main() -> None:
             "mcdougall_concept_agreement": (mcdougall_rating or {}).get("concept_agreement", ""),
             "mcdougall_name_agreement": (mcdougall_rating or {}).get("name_agreement", ""),
             "mcdougall_common_response": (mcdougall_rating or {}).get("common_response", ""),
+            **{column: feature_row.get(column, "") for column in FEATURE_METADATA_COLUMNS},
             "has_category": str(bool(category)).lower(),
             "has_notes": str(bool(notes)).lower(),
             "source_path_exists": str((ROOT / source_path).exists()).lower(),

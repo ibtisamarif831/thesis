@@ -73,7 +73,7 @@ The right sidebar shows:
 - cluster summaries;
 - representative icons for visible clusters.
 
-The **Feature Values** tab contains up to two low-redundancy features from each active visual family. Selection reuses Feature Review's Spearman analysis: non-constant features are ranked within each family by their strongest absolute correlation with any other active feature, and the two lowest values are retained. Higher standard deviation and then label break ties. This produces 13 features: two from six families and the single active Texture feature, `texture_entropy`; excluded LBP channels are not reintroduced merely to fill a second Texture slot. For the selected feature, the tab shows its family uniqueness rank, strongest absolute Spearman correlation, summary statistics, and representative icons in three value bands:
+The **Feature Values** tab contains the two strongest complementary representatives from each active visual family. Candidate strength is ranked first from the local literature mapping, interpretability, measurement directness, and observed quality in the 1,038-icon feature sample. Spearman is then used only as a direct pairwise redundancy screen: the selected pair must have `|ρ| < 0.70`. This produces 14 features, including `texture_entropy` and the literature-derived `texture_coarseness` (`ρ = -0.028712`). Excluded LBP channels are not reintroduced merely to fill a slot. The tab labels the representatives as 1st and 2nd and shows their direct pair correlation, summary statistics, and representative icons in three value bands:
 
 - low values (smallest measurements);
 - medium values (measurements nearest the dataset mean);
@@ -109,7 +109,7 @@ Active image feature families currently include:
 - Density/fill: foreground amount, bounding-box occupancy, filled/outline proxy, and stroke width.
 - Balance/layout: centroid offset, symmetry, bounding-box position/size, and 4x4 foreground grid layout.
 - Color/contrast: monochrome status, color count, saturation, colorfulness, foreground/background contrast, hue histogram, and dominant Lab colors.
-- Texture: foreground tonal entropy.
+- Texture: foreground tonal entropy and normalized Tamura spatial coarseness.
 
 Excluded raw channels are preserved in source exports but are not active visual-family features: Hu moments, local binary pattern bins, text/letter heuristic scores, and crush-test stability.
 

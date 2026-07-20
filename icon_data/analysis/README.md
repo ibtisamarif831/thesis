@@ -73,7 +73,7 @@ Current active visual feature families:
 - Density/fill: foreground amount, bounding-box occupancy, filled/outline proxy, and stroke width.
 - Balance/layout: centroid offset, symmetry, bounding-box position/size, and 4x4 foreground grid layout.
 - Color/contrast: monochrome status, color count, saturation, colorfulness, foreground/background contrast, hue histogram, and dominant Lab colors.
-- Texture: foreground tonal entropy.
+- Texture: foreground tonal entropy and normalized Tamura spatial coarseness.
 
 The raw extractor still preserves additional columns for traceability, but the active literature-mapped visual family set excludes weak or non-interpretable channels such as Hu moments, local binary pattern bins, text/letter heuristic scores, and crush-test stability.
 

@@ -16,7 +16,7 @@ import numpy as np
 
 import build_clustering_metadata_sample as metadata_helpers
 import extract_icon_features
-from thesis_pipeline.dashboard.feature_selection import select_unique_family_features
+from thesis_pipeline.dashboard.feature_selection import select_strong_family_features
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -204,14 +204,15 @@ DASHBOARD_FEATURE_SECTIONS = [
     {
         "id": "texture",
         "title": "Texture",
-        "description": "Foreground tonal entropy.",
+        "description": "Foreground tonal entropy and the spatial scale of fine versus coarse intensity structure.",
         "human_category": "Texture",
-        "family_summary": "foreground tonal entropy",
-        "perception": "This family captures internal tonal variation that can affect perceived detail. Artifact-prone local binary pattern bins are excluded from the active visual-family mapping.",
-        "low_value": "Lower values usually mean flatter, more uniform foreground regions with little internal texture or local tonal variation.",
-        "high_value": "Higher values usually mean more internal tonal variation that can make the glyph feel more textured.",
+        "family_summary": "tonal entropy and Tamura spatial coarseness",
+        "perception": "Entropy captures how varied foreground tones are, while Tamura coarseness captures whether intensity structure is composed of fine/repeated or large/simple elements. Artifact-prone local binary pattern bins are excluded from the active visual-family mapping.",
+        "low_value": "Lower entropy means more uniform tones; lower coarseness means finer or more frequently repeated intensity structure.",
+        "high_value": "Higher entropy means more tonal variation; higher coarseness means larger, simpler intensity elements.",
         "feature_ids": [
             "texture_entropy",
+            "texture_coarseness",
         ],
     },
 ]
@@ -378,6 +379,7 @@ FEATURE_LABELS.update(
         "skeleton_endpoints": "Skeleton endpoints",
         "skeleton_junctions": "Skeleton junctions",
         "texture_entropy": "Texture entropy",
+        "texture_coarseness": "Texture coarseness",
         "crush_test_stability": "Crush-test stability",
         "text_or_letter_presence": "Text/letter presence proxy",
     }
@@ -403,6 +405,7 @@ FEATURE_MEANINGS.update(
         "skeleton_endpoints": "Number of terminal points in the foreground skeleton graph.",
         "skeleton_junctions": "Number of branching points in the foreground skeleton graph.",
         "texture_entropy": "Normalized grayscale entropy within foreground pixels.",
+        "texture_coarseness": "Normalized Tamura coarseness over the scale-standardized foreground bounding-box picture; higher values indicate larger, simpler intensity elements.",
         "crush_test_stability": "How well foreground shape survives one downsampling and re-expansion crush test.",
         "text_or_letter_presence": "Heuristic score for letter-like or text-like visual structure.",
     }
@@ -428,6 +431,7 @@ FEATURE_CATEGORY_REASONS.update(
         "skeleton_endpoints": "It belongs in Stroke/structure because endpoints describe line-graph structure.",
         "skeleton_junctions": "It belongs in Stroke/structure because junctions describe branching line-graph structure.",
         "texture_entropy": "It belongs in Texture because entropy measures internal tonal variation.",
+        "texture_coarseness": "It belongs in Texture because Tamura coarseness measures the perceived scale and repetition of intensity elements.",
         "crush_test_stability": EXCLUDED_IMAGE_FEATURE_REASONS["crush_test_stability"],
         "text_or_letter_presence": EXCLUDED_IMAGE_FEATURE_REASONS["text_or_letter_presence"],
     }
@@ -453,6 +457,7 @@ FEATURE_VISUAL_CATEGORIZATIONS.update(
         "skeleton_endpoints": ["Skeleton graph complexity"],
         "skeleton_junctions": ["Skeleton graph complexity"],
         "texture_entropy": ["Texture/pattern"],
+        "texture_coarseness": ["Texture/pattern"],
         "crush_test_stability": [],
         "text_or_letter_presence": [],
     }
@@ -514,6 +519,68 @@ MCDOUGALL_NUMERIC_COLUMNS = [
 FEATURE_VARIANTS = ("image", "metadata", "combined")
 REDUNDANCY_HIGH_THRESHOLD = 0.85
 REDUNDANCY_MODERATE_THRESHOLD = 0.70
+REPRESENTATIVE_MAX_ABS_SPEARMAN = REDUNDANCY_MODERATE_THRESHOLD
+
+# This ordering is the substantive definition of "strongest" until human-study
+# outcomes exist. It combines the local literature mapping, interpretability,
+# measurement directness, and the observed quality of the 1,038-icon feature
+# sample. Spearman is applied later only between representatives that would be
+# selected together.
+FEATURE_STRENGTH_PRIORITY = {
+    "complexity": [
+        "canny_edge_density",
+        "connected_components",
+        "quadtree_structural_variability",
+        "holes_count",
+        "perimeter_area_ratio",
+        "corner_count",
+        "contour_count",
+    ],
+    "shape": [
+        "bounding_box_aspect_ratio",
+        "circularity",
+        "rectangularity",
+        "curvature_histogram_sharp",
+        "closed_contour_ratio",
+        "solidity",
+    ],
+    "structure": [
+        "line_orientation_0",
+        "skeleton_junctions",
+        "line_orientation_90",
+        "skeleton_endpoints",
+        "principal_axis_orientation",
+        "line_orientation_45",
+        "line_orientation_135",
+        "arrowhead_count",
+        "arc_count",
+    ],
+    "density_fill": [
+        "foreground_area_ratio",
+        "stroke_width_std",
+        "stroke_width_mean",
+        "bounding_box_occupancy",
+        "filled_vs_outline_proxy",
+    ],
+    "balance_layout": [
+        "horizontal_symmetry",
+        "bbox_width_ratio",
+        "centroid_distance_from_center",
+        "vertical_symmetry",
+        "bbox_height_ratio",
+    ],
+    "color_contrast": [
+        "mean_saturation",
+        "foreground_background_contrast",
+        "color_count",
+        "is_monochrome",
+        "colorfulness",
+    ],
+    "texture": [
+        "texture_entropy",
+        "texture_coarseness",
+    ],
+}
 
 
 def image_feature_sections() -> list[dict[str, object]]:
@@ -959,9 +1026,24 @@ def build_feature_explorer(records: list[dict], feature_by_id: dict[str, dict], 
     rows, source = feature_explorer_source_rows(records, feature_by_id)
     metadata = feature_metadata_by_id()
     family_order = [section["id"] for section in image_feature_sections()]
-    selected_review_rows = select_unique_family_features(
-        feature_review.get("features", []), family_order, per_family=2
+    selected_review_rows = select_strong_family_features(
+        features=feature_review.get("features", []),
+        pairs=feature_review.get("pairs", []),
+        family_order=family_order,
+        strength_priority=FEATURE_STRENGTH_PRIORITY,
+        per_family=2,
+        max_abs_spearman=REPRESENTATIVE_MAX_ABS_SPEARMAN,
     )
+    selected_counts = Counter(row["group"] for row in selected_review_rows)
+    expected_counts = {
+        family_id: min(2, len(FEATURE_STRENGTH_PRIORITY.get(family_id, ())))
+        for family_id in family_order
+    }
+    if any(selected_counts[family_id] != expected for family_id, expected in expected_counts.items()):
+        raise ValueError(
+            "Feature representative selection did not produce the expected family counts: "
+            f"selected={dict(selected_counts)}, expected={expected_counts}"
+        )
     selected_by_id = {row["feature_id"]: row for row in selected_review_rows}
     features = []
     for feature_id in selected_by_id:
@@ -1010,10 +1092,12 @@ def build_feature_explorer(records: list[dict], feature_by_id: dict[str, dict], 
                 },
                 "correlations": partners,
                 "selection": {
-                    "rank_in_family": selection["uniqueness_rank_in_family"],
-                    "strongest_abs_spearman": selection["strongest_abs_correlation"],
-                    "strongest_partner": selection["strongest_partner"],
-                    "strongest_partner_label": selection["strongest_partner_label"],
+                    "rank_in_family": selection["selection_rank_in_family"],
+                    "strength_priority_rank": selection["strength_priority_rank"],
+                    "companion_feature_id": selection["companion_feature_id"],
+                    "companion_feature_label": selection["companion_feature_label"],
+                    "pair_correlation": selection["pair_correlation"],
+                    "pair_abs_correlation": selection["pair_abs_correlation"],
                 },
             }
         )
@@ -1025,7 +1109,9 @@ def build_feature_explorer(records: list[dict], feature_by_id: dict[str, dict], 
             "examples_per_band": 6,
             "feature_count": len(features),
             "features_per_family_limit": 2,
-            "selection_method": "Up to two non-constant features per family with the lowest strongest absolute Spearman correlation; higher standard deviation then label break ties. Texture currently has one active feature.",
+            "selection_method": "Up to two non-constant features per family ranked first by literature support, interpretability, measurement directness, and observed data quality. Direct pairwise absolute Spearman correlation must be below 0.70.",
+            "max_abs_spearman": REPRESENTATIVE_MAX_ABS_SPEARMAN,
+            "strength_priority": FEATURE_STRENGTH_PRIORITY,
             "method": "Low, nearest-mean, and high feature-value examples with Spearman partners",
         },
         "features": features,
@@ -1675,7 +1761,7 @@ def write_index_html() -> None:
   <section id="featureGroupsView" class="view feature-groups">
     <div class="feature-groups-header">
       <h2>Feature Groups</h2>
-      <p>Feature groups organize image measurements into qualitative families based on human icon perception. This view is intentionally concise: it shows the study-level family and the features grouped under it.</p>
+      <p>Each visual family shows only its selected 1st and 2nd representative.</p>
     </div>
     <div class="feature-groups-content" id="featureGroupsContent">
       <span class="muted">Loading feature groups...</span>
@@ -1684,7 +1770,7 @@ def write_index_html() -> None:
   <section id="featureExplorerView" class="view feature-explorer">
     <div class="explorer-header">
       <h2>Feature Values</h2>
-      <p>Browse up to two least-redundant active features from each visual family and compare representative icons with low, medium, and high values. Texture currently has one active feature.</p>
+      <p>Browse the 1st and 2nd strength-ranked complementary representatives from each visual family and compare icons with low, medium, and high values.</p>
     </div>
     <div class="explorer-toolbar">
       <label>Search feature<input id="featureExplorerSearch" type="search" placeholder="Search by name"></label>
@@ -1987,19 +2073,34 @@ def write_index_html() -> None:
         container.innerHTML = '<span class="muted">No feature group metadata is available.</span>';
         return;
       }}
+      const representatives = (dashboard.feature_explorer && dashboard.feature_explorer.features) || [];
+      const representativesByFamily = new Map();
+      representatives.forEach(feature => {{
+        if (!representativesByFamily.has(feature.group)) representativesByFamily.set(feature.group, []);
+        representativesByFamily.get(feature.group).push(feature);
+      }});
       const overview = `
         <section class="feature-family-overview">
-          <h2>Recommended Feature Families For Analysis</h2>
-          <p>For thesis experiments, group the features into interpretable families:</p>
+          <h2>Selected Family Representatives</h2>
+          <p>Strength sets the order; direct pairwise Spearman only screens redundancy.</p>
           <div class="family-overview-table-wrap">
             <table class="family-overview-table">
-              <thead><tr><th>Human category</th><th>Computer feature family</th></tr></thead>
+              <thead><tr><th>Feature family</th><th>1st feature</th><th>2nd feature</th><th>Pair |ρ|</th></tr></thead>
               <tbody>
-                ${{sections.map(section => `
-                  <tr>
-                    <td><b>${{escapeHtml(section.human_category || section.title.replace(" Features", ""))}}</b></td>
-                    <td>${{escapeHtml(section.family_summary || section.features.map(feature => feature.label.toLowerCase()).join(", "))}}</td>
-                  </tr>`).join("")}}
+                ${{sections.map(section => {{
+                  const selected = (representativesByFamily.get(section.id) || [])
+                    .slice()
+                    .sort((a, b) => Number(a.selection.rank_in_family) - Number(b.selection.rank_in_family));
+                  const first = selected.find(feature => Number(feature.selection.rank_in_family) === 1);
+                  const second = selected.find(feature => Number(feature.selection.rank_in_family) === 2);
+                  return `
+                    <tr>
+                      <td><b>${{escapeHtml(section.human_category || section.title.replace(" Features", ""))}}</b></td>
+                      <td>${{first ? escapeHtml(first.label) : "—"}}</td>
+                      <td>${{second ? escapeHtml(second.label) : "—"}}</td>
+                      <td>${{first && first.selection.pair_abs_correlation !== null ? formatNumber(first.selection.pair_abs_correlation) : "—"}}</td>
+                    </tr>`;
+                }}).join("")}}
               </tbody>
             </table>
           </div>
@@ -2176,12 +2277,14 @@ def write_index_html() -> None:
       const explorer = dashboard.feature_explorer;
       const query = explorerState.search.trim().toLowerCase();
       return (explorer.features || [])
-        .filter(feature => !query || `${{feature.label}} ${{feature.feature_id}} ${{feature.group_title}}`.toLowerCase().includes(query))
-        .sort((a, b) => (a.group_title || "").localeCompare(b.group_title || "") || a.label.localeCompare(b.label));
+        .filter(feature => !query || `${{feature.label}} ${{feature.feature_id}} ${{feature.group_title}}`.toLowerCase().includes(query));
     }}
 
     function renderFeatureExplorerControls(features) {{
-      const options = features.map(feature => [feature.feature_id, `${{feature.label}} - ${{feature.group_title || "Image feature"}}`]);
+      const options = features.map(feature => {{
+        const rank = Number(feature.selection.rank_in_family) === 1 ? "1st" : "2nd";
+        return [feature.feature_id, `${{feature.group_title || "Image feature"}} — ${{rank}}: ${{feature.label}}`];
+      }});
       fillSelect("featureExplorerFeature", options, explorerState.selectedFeatureId || "");
     }}
 
@@ -2201,6 +2304,11 @@ def write_index_html() -> None:
         ["Std", feature.std],
         ["Missing", feature.missing_count]
       ].map(([label, value]) => `<div class="explorer-stat"><b>${{label === "Missing" ? escapeHtml(value) : formatNumber(value)}}</b><span>${{escapeHtml(label)}}</span></div>`).join("");
+      const rankNumber = Number(feature.selection.rank_in_family);
+      const rankLabel = rankNumber === 1 ? "1st" : rankNumber === 2 ? "2nd" : `#${{escapeHtml(rankNumber)}}`;
+      const pairSummary = feature.selection.companion_feature_label
+        ? ` · |ρ| with ${{escapeHtml(feature.selection.companion_feature_label)}} ${{formatNumber(feature.selection.pair_abs_correlation)}}`
+        : "";
       container.innerHTML = `
         <div class="explorer-layout">
           <div class="explorer-main">
@@ -2208,7 +2316,7 @@ def write_index_html() -> None:
               <h2>${{escapeHtml(feature.label)}}</h2>
               <span class="pill">${{escapeHtml(feature.group_title || "Image feature")}}</span>
               <p>${{escapeHtml(feature.meaning || "Extracted image feature.")}}</p>
-              <p class="muted">Uniqueness rank #${{escapeHtml(feature.selection.rank_in_family)}} in family · strongest |ρ| ${{formatNumber(feature.selection.strongest_abs_spearman)}}</p>
+              <p class="muted">Selected ${{rankLabel}} in family${{pairSummary}}</p>
             </div>
             <div class="explorer-stats">${{stats}}</div>
             ${{exampleSectionHtml("Low Values", feature.examples.low, "Icons with the smallest raw values for this feature.", "low")}}

@@ -1,0 +1,984 @@
+--- PAGE 1 ---
+460 IEEE TRANSACTIONS ON SYSTEMS. MAN, AND CYBERNETICS, VOL. SMC-8, No. 6 iJNE 1978
+[18] D. E. Morrison and R. E. Henkel, Eds., The Significance Test A comparison to the neoclassical model" [Ph.D. dissertation System
+Controversy. Chicago: Aldine, 1970. Dynamics Group, Alfred P. Sloan School of Management],
+[19] D. W. Peterson and F. C. Schweppe, "Code for a general purpose Cambridge, MA: Massachusetts Institute of Technology. 1978.
+system identifier and evaluator (GPSIE)," IEEE Trans. Automat. [26] A. Sinai, "Introduction to applied economic and financial market
+Contr., vol. AC-19, p. 852, 1974. forecasting" [Lecture Notes, Part 1: Forecasting with Econometric
+[20] E. H. Phelps Brown, "The underdevelopment of economics," Ecotno- Models: Method, Outputs, and Performance], Lexington. MA: Data
+mic J., vol. 82, pp. 1-10, Mar. 1972. Resources. 1975.
+[21] P. A. Samuelson, "Interactions between the multiplier analysis and [27] "Econometric modelbuilding with applications to induistry and
+the principle of acceleration," Rev. Economics and Statistics, vol. 21, fi - n - a - nce" [Lecture Notes, Part IB: Econometric Models: Construc-
+pp. 75-78, May 1939. tion, Validation, and Forecasting], Lexington, MA: Data Resources,
+[22] T. P. Schultz, "An economic model of family planning and fertility," 1976.
+J. Political Economy, vol. 77, pp. 153 180, Apr. 1969. [28] H. Theil, Principles of Econometrics. New York: Wiley, 1971.
+[23] F. C. Schweppe, Uncertain Dynamic Systems. Englewood Cliffs, NJ: [29] G. D. N. Worswick, "Is progress in economic science possible')"
+Prentice-Hall, 1973. Economic J., vol. 82, pp. 73-86, Mar. 1972.
+[24] P. M. Senge, "Statistical estimation of feedback models," Simulation, [30] A. Zellner, "An efficient method of estimating seemingly unrelated
+vol. 28, no. 6, pp. 177-184, June 1977. regressions and tests for aggregation bias," .1 American Stitistical
+[25] __, "The system dynamics national model investment formulation: Association, vol. 57, pp. 348-368, June 1962.
+Textural Features Corresponding to
+Visual Perception
+HIDEYUKI TAMURA, MEMBER, IEEE, SHUNJI MORI, AND TAKASHI YAMAWAKI
+Abstract-Textural features corresponding to human visual per- combinations of local operators if the tone in a region is
+ception are very useful for optimum feature selection and texture almost uniform. Currently, much work is directed towards
+analyzer design. We approximated in computational form six basic the textured regions which have internal structure such as
+textural features, namely, coarseness, contrast, directionality, line- stripes or grids, i.e., regions which are too complicated to be
+likeness, regularity, and roughness. In comparison with psycholog-
+processed by local operators alone.
+ical measurements for human subjects, the computational measures
+gave good correspondences in rank correlation of 16 typical texture Various kinds of textural features for image classification
+patterns. Similarity measurements using these features were at- have been proposed [1]-[6]. It should be noted that all these
+tempted. The discrepancies between human vision and computerized texture measures are defined for a segmented region. In
+techniques that we encountered in this study indicate fundamental order to determine the boundaries of textured regions, in
+problems in digital analysis of textures. Some of them could be
+overcome by analyzing their causes and using more sophisticated other words to find texture edges, further segmentation
+techniques. techniques are required. Unfortunately, since the current
+texture edge detectors [7]J[11] work successfully only be-
+I. INTRODUCTION tween regions with different average gray-levels, it seems
+IN THE STUDY of digital picture recognition, edge that these textural features are not directly usable for the
+detection and region analysis have been considered as region segmentation problem. However, indirectly, it is
+basic approaches to feature extraction and analysis of an possible to use these measurements as the "gray-levels" in
+image. Some success has been attained by appropriate the segmentation process as done by Carlton and Mitchell
+[12]. Thus we believe it to be significant even to develop the
+segmentation of images and to refine measures which reflect
+Manuscript received September 22, 1977; revised February 13, 1978.
+This work was supported by the Pattern Information Processing System specified textural properties as faithfully as possible
+Project of the Agency of Industrial Science and Technology, Ministry of In either classification or segmentation, it is important to
+International Trade and Industry, Japan. select the set of properties to be used for identifying two or
+Res H e . ar T c a h mu C r ou a nc w i a l s o w f it C h an t a h d e a, Div O i t s t i a o w n a, of O E N lec K tr I ic A al O E R n 8 g , in C e a e n r a i d ng a , , N o a n ti l o e n a a v l e more textured regions. Textural properties are defined for a
+from the Pattern Processing Section, Information Sciences Division, region or subimage, not for a point. Pairs of regions are often
+Electrotechnical Laboratory, 2-6-1 Nagata-cho, Chiyoda-ku, Tokyo 100, used in psychological experiments and in fundamental
+Jap S a . n. Mori is with the Information Sciences Division, Electrotechnical studies of computational measurements. In this situation, if
+Laboratory, Tokyo 100, Japan. two adjacent regions differ only in scale, contrast, orienta-
+T. Yamawaki was with the Department of Electronics and Communica- tion, or shape of repetitive elements, we may be able to
+tion, Waseda University, Tokyo 160, Japan. He is now with the Nippon
+Electric Co., Ltd., Tokyo 108, Japan. perceive two different textures and detect the texture boun-
+0018-9472/78/0600-0460$00.75 (© 1978 IEEE
+
+--- PAGE 2 ---
+461
+TAMURA et al.: TEXTURAL FEATURES AND VISUAL PERCEPTION
+dary between these two regions. However, in segmentation II. BASIC TEXTURAL PROPERTIES
+of a large image containing many textured regions, the same
+A. Structure of Texture Patterns
+discriminating criterion is not necessarily used for each pair
+of individual regions. For example, let us consider two A strict definition for visual texture is difficult. However,
+directional regions, one of which is a rotated version of the from an analytical point of view, we may regard texture as
+other and in which all other properties are the same. When what constitutes a macroscopic region. Its structure is
+this pair of regions is juxtaposed, a texture edge detector is simply attributed to the repetitive patterns in which ele-
+required to segment them. On the other hand, if these are ments or primitives are arranged according to a "placement
+crop fields in a remotely sensed image, they should belong to rule" [19]. Hence it can be written as
+the same category on the land-use map even if they are
+f = R(e)
+adjacent. Similar comments can be made for pairs of regions
+in which contrast is different, in which regularity of repeti- where R is denoting a placement rule (or relation) and e is
+tion varies, and so on. denoting an element. We can get texturef if R is a function
+It depends on a given situation and purpose whether we which satisfies notions mentioned above, and we can express
+should treat such regions as the same category or not. In "microtexture" if e is recursively replaced byf On the more
+most problems of digital picture analysis, these conditions sophisticated model, see Zucker [20].
+can be specified by a human being, i.e., an analyst for that Texture is often considered on two levels, statistical and
+problem. Thus it is preferable to decompose textural proper- structural. On the statistical level, texture is observed from
+ties into parameters such as coarseness, contrast, direction- macroscopic view as a functional combination of R and e.
+ality, etc. Especially in the man-aided approach, it is more Thus the difference between textured regions is measured by
+convenient to have a set of features which are appropriate to using the statistics of local properties. On the other hand, the
+human perception of visual textures. structural level requires more information about each of R
+From this point of view, the texture measures so far and e. Texture synthesis [21] at the structural level can be
+proposed are not suitable. Above all, Haralick gave an easily performed to produce various kinds of different patterns by
+computable method [1] which was best evaluated in two varying relatively simple versions of R and/or e. Other types
+comparative studies [13], [14]. However, all of his 14 features of textures, which are generated on a random field such as
+are not obvious visually. Sometimes even random selection time-series model [22], [23] rather than by simple repetition,
+of features may give satisfactory accuracy in a classification can be considered to be on the statistical level.
+problem, especially if they are orthogonal by accidents. Considering a computational analysis of a given texture
+Here, it is important to analyze misassignments and to know pattern, it is fairly difficult to parse its structure generally
+the behavior of each feature. It may be applied to classifier or because both factors R and e influence the texture pattern. It
+analyzer design oriented towards a problem. is relatively easy to describe the structure of a region when R
+Motivated by the above considerations, our challenge is and e are well defined or when either R or e is known. This
+to develop the textural features approximating visual case is called the structural analysis [24], [25]. For the
+perception. Bajscy described some outdoor scenes as "blob- naturally occurring textures, since R and e generally have a
+like," "homogeneous,' or "directional" and tried to combine considerable variation, it seems impossible to approximate
+them with features in Fourier domain [4]. In her study, them separately. In this case, we are obliged to take a
+however, all descriptions were derived only from her subjec- statistical approach where a set of statistics is extracted from
+tive view and did not correspond to the Fourier features local measurements.
+quantitatively. We proceed to generalize her descriptions by It may be true that second-order statistics produce the
+using more representative textural patterns which are per- difference between textures, but we do not have a universal
+ceptually evaluated by many human subjects. method of determining which of R and e cause the total
+With respect to perception of textures, considerable work difference and what kinds of statistics absorb the variation of
+has been performed in the psychological fields. Above all, each. In effect, an infinite set of texture patterns can be easily
+Julesz verified that the discrimination of textures depends generated in addition to natural textures, but the methods
+mostly on the difference in second-order statistics [15]-[18]. that have been developed can discriminate only a part of
+However, as he mentioned himself [16], the work is directed them. For textures which do not differ so much in their
+towards the extreme behavior of the perceptual mechanism elements, the method may work successfully by using the
+for studying the extent to which one can just perceive statistical difference of local properties. However, it is easy
+differences in artificially produced patterns when all familiar to give examples which the method cannot overcome, where
+cues are removed. This standpoint is quite far from ours. For the behavior of R and e collectively cancel the difference in
+our purpose, we consider more general and familiar features their statistics. This is the difficulty in texture analysis.
+of naturally occurring textures in which no illusion can In practical applications, statistics with limited potential
+influence the human subjects. may be powerful enough for a specified problem. This is in
+In this paper, we describe the psychological experiments fact shown in the two comparative studies mentioned
+on basic textural properties as mentioned above and discuss previously. The study by Conners and Harlow [14] theoret-
+the results to assess the corresponding computational meas- ically concluded that Haralick's "gray-level co-occurrence
+ures derived from the psychological specifications. matrices" [1] had the best "innate discriminative ability."
+
+--- PAGE 3 ---
+462 IEEE TRANSACTIONS ON SYSTEMS, MAN, AND CYBERNETICS, VOL. SMC-8, NO. 6, JUNE 1978
+D3 and D34, "ripple-like" for D38, etc., (original descrip-
+tions in Japanese) It may not be impossible to translate each
+description into computational form, and we cannot predict
+how such a feature will behave for other patterns than the
+one from which it was derived. In the extreme case, we may
+D3 D9 Dl5
+need a specific description for each type oftexture. However,
+these sets offeatures would be impotent to a newly occurring
+pattem.
+Here we want to have a set of features by which all input
+patterns are measured and which give well-distributed
+D28 D33 D34 results. For this purpose, it is required to have both extremes
+in the concept of each feature, e.g., coarse versus fine for
+*_ coarseness. We selected the following six specifications
+which seemed to be common to all visual textures.
+1) Coarseness-Coarse versus Fine: The coarseness is the
+most fundamental textural feature and has been much
+D84 investigated since early studies [27], [28]. Sometimes in the
+D67 D68 D69
+narrow sense, the texture means the coarseness. When two
+patterns differ only in scale, the magnified one is coarser. For
+patterns with different structures, the bigger its element size
+and/or the less its elements are repeated, the coarser it is felt
+to be. Instead of fine, in some cases, busy or close is used.
+Dlli 2) Contrast-High Contrast versus Low Contrast: The
+D93 D98 D109
+simplest method of varying picture contrast is stretching or
+Fig. 1. Natural texture patterns [26].
+shrinking of its gray scale; i.e., given a picturef (x, y), we can
+vary its contrast by multiplying it by a positive constant,
+Nevertheless, it is experimentally shown in the sstudy by obtaining cf(x, y) [29]. This model is designed for changing a
+Weszka et al. [13] that their "gray-level difference st atistics," picture quality, not picture structure. The contrast knob on
+which can be derived from Haralick's matrices, are compu- a television set is a practical realization of the above model.
+tationally easier and perform as well as the more com- Thus, based on this idea, when two patterns differ only in
+plicated "co-occurrence statistics" for their problem of gray-level distribution, the difference between their contrast
+terrain classification. This means that some practiccal prob- can be measured. However, more factors are supposed to
+lems can be solved sufficiently by using simpler statistics. influence the contrast difference between two texture pat-
+It is significant to investigate the useful meth(ods in a terns with different structures. We assume the following
+practical situation including limited texture Ipatterns. four factors for contrast:
+iiques
+However, in order to carry the texture analysis techr to
+i) dynamic range of gray-levels,
+the more generalized stage, we should develop textural
+ii) polarization of the distribution of black and white on
+features that can be effective on as many typicalI texture
+it the gray-level histogram or ratio of black and white
+patterns as possible. Here we should remember the all the
+areas,
+features are not at the same level. Some ofthem maty be used
+iii) sharpness of edges,
+after others in multistage or hierarchical decision process.
+iv) period of repeating patterns.
+Human texture-discrimination seems to employ on]ly simple
+feature extractors whose outputs are combined in p.airs [17]. In the narrow sense, contrast stands for picture quality.
+Hence our initial efforts should be directed towards finding Factors i) and ii) are used for television images and photo
+features, each of which reflects one of the simple textural printing. Factor iii) can be seen by comparing two images
+properties. with the same gray-level distribution. The image with sharp
+edges has higher contrast. When we see two checkerboard
+B. Specifications of Basic Textural Features patterns which differ only in scale, we can perceive the
+Before determining what should be selected as basic difference of contrast caused by Factor iv)
+parameters for textural properties and how they slhould be 3) Directionality-Directional versus Nondirectional:
+specified, we looked for the descriptions for textura I proper- This is a global property over the given region. Direction-
+ties in the literature. Then we tried to find general descrip- ality involves both element shape and placement rule. Bajcsy
+tions common over all texture patterns in IBrodatz's [3], [4] divided directionality into two groups, monodirec-
+rely
+photographic album [26], which had been extensi; used tional and bidirectional, but we measure simply the total
+in several fundamental studies. The pictures in Fijg. 1 are a degree of directionality. Here the orientation of the texture
+part of [26]. pattern does not matter; i.e., two patterns which differ only
+Also, these descriptions were given to other investigators in orientation should have the same degree ofdirectionality.
+working in the pattern recognition field. Some of tthe given 4) Line-Likeness-Line-Like versus Blob-Like: This con-
+descriptions were peculiar to the objects, e.g., "net--like" for cept is concerned only with the shape of a texture element.
+
+--- PAGE 4 ---
+TAMURA et al.: TEXTURAL FEATURES AND VISUAL PERCEPTION 463
+Other descriptions of the element may be possible in a TABLE I
+limited situation, but we did not find any other common ORDERING BY AUTHORS OF 16 TYPICAL TEXTURES: {f }
+descriptions. We expect that this feature supplements the f crs f con "dir f lin f reg f rgh
+three major ones just mentioned, especially when patterns
+(ecoarse) (high) (directional) (line-like) (regular) (rough)
+cannot be discriminated by directionality. For example, we D98 D20 D68 D34 D34 D98
+D20 D67 D15 D68 D20 D28
+assume that all of the D28, D67, D109, and D1il are D28 D0 11 D93 D15 D84 D84
+D0 11 D15 D69 D69 D38 D15
+nondirectional and that D109 and Dlll are considerably D69 D84 d38 D109 D9 D20
+more line-like than D28 and D67. D D 6 6 7 8 D D 1 9 0 8 9 D D 8 2 4 0 D1 D 1 3 1 D1 D 1 3 1 D D 3 9
+5) Regularity Regular versus Irregular: This is a D D 1 3 0 4 9 D D 2 3 8 D D 3 3 4 D D 2 3 0 8 D D 6 93 8 D D 1 11 0 1 9
+D3 D9 D98 D93 D33 D67
+property for variations of a placement rule. However, it can D33 D68 D109 D84 D15 D33
+D84 D69 D0 I 1 D98 D67 D93
+be supposed that variation of elements, especially in case of D15 D34 D9 D33 D28 D34
+natural textures, reduces the regularity on the whole. Addi- D D 3 9 8 D D 3 9 3 3 D D 3 2 3 8 D D 2 9 8 D D 1 6 0 9 9 D D6 6 9 8
+tionally, a fine texture tends to be perceived as regular. D93 D38 D67 D67 D98 D38
+(fine) ( I ow) (directional ) (blob-line) (irregular) (smooth)
+6) Roughness Rough versus Smooth: This description
+was originally meant for tactile textures, not for visual
+textures. However, when we observe natural textures such as decisions according to the six specifications, i.e., to choose
+in Fig. 1, we will be able to compare them in terms of rough the coarser, the higher in contrast, the more directional, the
+or smooth. Is this subjective judgement due to the total more line-like, the more regular, and the rougher pattern of
+energy of changes in gray-levels or due to our imaginary each pair.
+tactile sense when we touch it physically? We processed these results by applying "the law of
+We are interested in what other features are correlated comparative judgement" for constructing the psychomet-
+with roughness as judged by human subjects and the extent rics. This law, developed by Thurstone [31], is used to
+to which these features can be approximated mathema- produce a one-dimensional scale for each stimulus (or
+tically. That is the reason why we add this feature to the feature) from the "total matrix of superiorities" collected
+following experiments. through pair comparisons.
+B. Considerations of the Results
+III. PSYCHOLOGICAL EXPERIMENTS
+The experimental results are shown in Fig. 2 as scales on
+A. Experimental Conditions
+one-dimensional distributions. In the following text and
+The purpose of our experiments was to construct psy- tables, we denote the results of these psychological experi-
+chometric prototypes with which the computational meas- ments byfwith subscripts abbreviating the feature name, i.e.,
+ures could be compared. Thus in the psychological fcrs'fcon'fdir9flinfreg' andfrgh, and we let {f } be the set of them.
+experiments, we did not use the real pictures from Brodatz's For comparative purposes, we show in Table I the orderings
+album but rather the digital versions. by the authors for the same 16 objective patterns where the
+This data set of visual textures consists of 16 representa- symbol f' is used instead off The authors were afraid that
+tive patterns shown in Fig. 1. (We believe that this selection they were prone to make biased orderings due to their a
+has sufficient universality.) A part of each of the original priori ideas on computational definitions. Consequently, we
+picture was photographed on a 35 mm negative film and used many human subjects.
+scanned by a drum scanner. The data were digitized into We compare these measurements with the authors' order-
+256 x 256 pixels and quantized into 64 gray-levels, but the ing {tf'} to estimate the dispersion of individual subject's
+quantization was adjusted so that the resultant gray-levels measurements. In order to examine the independence of
+for all pictures cover as wide a range as possible in the 64 each feature, we used rank correlation, since all measure-
+levels. We did not perform any other operation on the ments were based on comparative judgement. The well-
+gray-scale (e.g., histogram flattening or range-width regula- known Spearman's coefficient of rank correlation is given
+tion). The digital pictures were displayed on a CRT monitor as'
+and photographed, and the slides were shown to the human 6 n
+subjects. r= 1- n -n n -* di
+The human subjects consisted of 28 men and 20 women.
+where di is the difference between the ranks assigned to the
+Although a few people out of them were working in the
+ith object in two measurements. This coefficient gives a value
+picture processing field, nobody was concerned with this
+between +1 and -1 as does the popular correlation
+study. In advance of the experiments, a brief explanation of
+coefficient. In Table II we show the resultant rank correla-
+the basic concept of texture and the six specifications
+tions between all two measurements out of either {f} or {f '}
+mentioned above was given to them (in Japanese, except for
+the names of features such as "coarseness-coarse versus fine"
+which were in English). ' Strictly speaking, it should be noticed that the formula above becomes
+more complicated if more than one measurement has the same rank. In
+The method of judgement adopted in our experiments our preliminary report of this study [32], we used Kendall's coefficient r,
+was the pair comparison, well known in the psychometrics as well as r,. It can be shown that the expected value of rk is smaller than
+field [30]. All possible pairs of slides from 16 patterns were that of r,. The fact rk provided the uniformly smaller values than rs in all
+our measurements. Thus in this paper, we use only rs to discuss the degree
+shown to the human subjects. They were obliged to make of correspondences between two measurements.
+
+--- PAGE 5 ---
+464 IEEE TRANSACTIONS ON SYSTEMS, MAN, AND CYBERNETICS, VOL. SMC-8, NO. 6, JUNE 1978
+COARSE HIGH DIRECTIONAL LINE-LIKE REGULAR ROUGH
+0-D98 0-D67 --D6 D6 9 8 0-D68 -D34 T-D 98
+D20
+69
+0--D20
+D15
+D15
+D98
+0D15
+-D20 D3 -D93 0D20. D34 -D 3
+0Dll -D20 -D84 D6
+D38
+D28.D11 D84 D38. D84. D9
+-D67
+0D109 D84 034 0D109 - D69
+D109 D3 _ Dlll _ - D D 1 3 1 8 1 .Dlll
+-D15 6D8. D9 -- D 3 9
+-D330D3
+D28
+- -D D 6 6 8 9 -- D67.D93 -- D6T,r
+-D84 D15 -D68
+-D34 D93 --- 038
+Dill -D9 -D69
+D69
+D34 D98
+-D9 -D98
+-D9 0D109 .--D
+0D
+9
+33
+-D67. D33 D98.ID33
+D33 D67 -0109
+0-D38.D93 D38 0-D28 01--D28 0-D28 3D 4
+FiNE LOW NON DIRECTIONAL BLOB-LIKE IRREGULAR SMOOTH
+fd,r fl/ freg f',
+Fig. 2. Psychological measurements of six basic textural features: {f}f
+TABLE visually perceive high roughness in a texture when it is
+II
+COEFFICIENTS OF RANK CORRELATION BETWEEN coarse, high in contrast, nondirectional, blob-like, and/or
+PSYCHOLOGICAL MEASUREMENTS {f} AND {ff' irregular. Above all coarseness and contrast greatly
+rs frgh freg fl in fdir fcon influence roughness, which can be realized intuitively.
+However, it should be noted that there exists the possibly
+f 0.535 -0.210 -0.372 -0.383 0.658
+crs intrinsic ambiguity between rough and coarse for the un-
+fcon 0.504 0.102 -0.136 -0.074
+trained subjects. In fact,f'crs:f'r8h is not so high asfcrs:irgh. If
+fdir -0.361 0.594 .'323
+we had used smoothness for the feature name instead of
+-0.458 0.596
+roughness, such an ambiguity might have been avoided.
+f -0.421 -0.141 f'.
+reg reg c) The correlation betweenfdir and fi, is extremely high.
+0.179 -0.409
+Most of the directional textures consist of line-like elements
+0.676 0.182 -0.315
+di r and considerable correlation could be expected. However,
+-0.235 -0.159 -0.062 0.662 fI
+con as mentioned in Section II-B, we specified line-likeness as a
+0.506 -0.276 -0.012 -0.329 0.324
+crs property of a texture element such that D34, D109, and
+f con fdir f lin reg f rgh re D111 could have high values compared to D38 or D84. In
+-----i~ fli this was not to be attained, probably because line-
+likeness was interpreted to be a global property by our
+human subjects.
+fcr f 0.824
+crs crs d) In the bottom of Table II, we find a remarkable
+fcon f con 0.920 discrepancy between freg and f e* The biggest difference is
+fdir: f dir 0. 954 caused by D69. Although we specified regularity as a
+flin: f in 0.823 property of a placement rule, the experimental results gave
+freg f reg 0.652 relatively high positions to D67 and D69, for which we can
+frgh f rgh 0 945 describe the texture element easily, whereas the so-called
+Top: Between two measurements from {f}. scramble textures such as D9, D28, and D33, for which it is
+Middle: Between two measurements from {f'}. hard to determine the element, were located in the bottom of
+Bottom: Between corresponding measurements in {f} and {f'}. freg. It can be supposed that our human subject interpreted
+regularity as variance of texture elements.
+and between {f} and {f'} for each feature. In the following, From the observations above, we realized the difficulties
+we denote these correlations as fcrs: frs- = 0.824. in describing and explaining the visual specifications. Unfor-
+Judging from these results, our observations for the tunately, it is nearly impossible to repeat psychological
+psychological experiments are the following. experiments under the same condition when changing only a
+a) There exists considerable correlation betweenfcrs,fcon, part of the experiment. There existed in our prototypes {Jf}
+andfrgh. The high score infcrs:fc. can be understood to be several deficiencies caused by imperfect understanding of
+caused by contrast factor iv). the definitions. However, judging from the bottom of Table
+b) Judging from the correlation coefficients, we seem to II, the correspondences between {f} and {f't except for
+
+--- PAGE 6 ---
+TAMURA et al.: TEXTURAL FEATURES AND VISUAL PERCEPTION 465
+regularity are satisfactory. We cannot expect quite the same
+measurement for all human beings in visual examination. , p . ju po w
+Individual differences must be expected. In this sense {f}: 5best
+{f'} could give some criterion of evaluating the differences. It
+seems too much to expect for the computational techniques
+to give better correspondence than those which exist be-
+tween individuals. Hence we attempt to develop computa-
+tional measures corresponding to {f} which give r, over 0.82. Fig. 3. Output of best size detector for a repetitive pattern (one-
+dimensional case).
+IV. COMPUTATIONAL DEFINITIONS OF
+BASIC TEXTURAL FEATURES
+This section describes a set of computational measures Step 4: Finally, take the average of Sbe1, over the picture
+corresponding to the specifications given in Section II. In the to be a coarseness measure Fcrs:
+preliminary report [32], we presented the first versions of L m n
+four texture measures. Since then we have tried to improve Fcrs mx n Z Z Sbest(', J)
+them and develop measures for regularity and roughness
+which were not contained in [32]. where m and n are the effective width and height of the
+The set of measures given in this paper is the best set that picture, respectively. In effect, it should be noticed that
+we have obtained so far by the criterion of getting the highest boundary strips of a picture within the width of the largest
+r, between the computational and psychological measure- operator size 2L cannot be processed properly.
+ments {f}. We have always been willing to examine all Now we illustrate the behavior of this method. For
+techniques proposed so far, and to modify them if necessary. simplicity, let us consider one-dimensional repetitive spikes.
+In the following, we describe our present definitions of Fig. 3 shows the output or the best size at each point. If we
+each feature and also consider some improvements. As inf denote the width of a spike and its period by d and p,
+andf', we denote each definition or computational result by respectively, then the expected value for the best size is
+F with subscripts. (2d + p)/4. It can be extended to the two-dimensional case.
+Thus it should be realized that this method is not a size
+A. Coarseness
+detector of texture elements, but that the final output Fcrs is
+Rosenfeld and his colleagues have proposed and influenced by both d and p. The element size d can be
+examined a variety of coarseness measures since the early obtained only for a checkerboard pattern. This effect is not
+days [27]. Considering several problems in coarseness such contrary to-our specification of coarseness, and we adopted
+as the undesirable dependence on contrast (in the narrow the Rosenfeld method almost as it was given.
+sense) or the presence of microtexture, they developed a new In the stage ofdetermining the best size, if the maximum of
+method by using various sized operators [28]. The essence of E's appears in more than two operator sizes, the largest size
+this method is to pick a large size as best when coarse texture should be taken. This can be readily understood by consider-
+is present even though microtexture is also present but to ing the two-valued checkerboard. At a point on an edge of a
+pick a small size when only fine texture is present. This square, the value of E stays constant as the averaging size
+procedure can be summarized in the following steps. grows (E is the gray-level difference of alternate squares).
+Step 1: Take averages at every point over neighbor- Just after the averaging size exceeds the size of a square
+hoods whose sizes are powers of two, e.g., 1 x 1, 2 x 2, , element d, there occurs a falloff in the output of E. Con-
+32 x 32. The average over the neighborhood of size 2k x 2' sequently, the best size is determined to be d. This is shown in
+at the point (x, y) is Fig. 4(a). For natural textures as shown in Fig. 1, there are
+x+ 2k -1 y+2k- 1-1 considerable variations in gray-levels, element size, and
+Ak(x,y)= f(i, j)/2 placement rule. In such a situation, differences between
+i=x-2k- 1 j=y-2k- 1 adjacent large neighborhoods tend to be canceled to some
+where f(i, j) is the gray-level at (x, y). extent by averaging in each, even though macrotexture still
+Step 2: For each point, at each point, take differences produces clear differences in a small-size operator. As shown
+between pairs of averages corresponding to pairs of non- in Fig. 4(b), there exists a case where the maximum decision
+overlapping neighborhoods just on opposite sides of the may produce a drastic change in the best size even though
+point in both horizontal and vertical orientations. For the difference between the maximum and the second maxi-
+examples, the difference in the horizontal case is mum values of Ek is extremely small. We should pay
+Ek,h(X, Y) = IAk(X+ 2 y)- Ak(x-2 ,Y) 1. attention to this effect. In texture edge detection [8], it is not
+too serious which size is taken to be the best size, since the
+Step 3: At each point, pick the best size which gives the final output at each point is the value of Ema,x, not the size k.
+highest output value: Due to the considerations above, we modified the
+Sbest(X, y) = 2 procedure of determining the best size as follows. At each
+point, if there exist some k such that k > kmax which gives
+where k maximizes E in either direction, i.e.,
+Emaxand Ek . tE.., we take the largest k for S best where t is a
+Ek =Emax= max (E1, E2, ***, EL)J certain constant less than 1; otherwise we retain the original
+
+--- PAGE 7 ---
+r~~~~~ I\
+466 4EE TRANSACTIONS ON SYSMEMS, MAN, AND CYBERN81ICS, VOL. sMc-8, NO. 6, JUNE 1978
+i
+-m"W
+t Emar
+IbI I I
+k
+0 2 3 4 0 1 2 3 4
+(a) (b)
+Fig. 4. Behaviors of the best size detector. (a) Ideal case. (b) Noisy case.
+procedure. Each value of F... may be sensitive to the
+variation of t to some extent, but in practice, total correspon-
+dence between f1,c: Fc. was very stable around t = 0.9, as
+given later.
+B. Contrast
+a
+The following proposed by Haralick et al. [1] was called ---0F Z
+contrast: ha hit
+U.
+f2
+E n2 PE (( )
+GRAY- LEVEL GRAY - LEVEL
+where p(i,j) is the (i,j)th entry of the n x n gray-level spatial (a) (b)
+dependence matrix. This is the moment of inertia about the Fig. 5. Examples of gray-level distributions. (a) Dlll. (b) D67.
+main diagonal of the matrix. Thus it can also be obtained
+from the histogram of the frequencies of gray-level differ-
+Factor ii) to some extent. However, the resultant value is
+ences as noticed by Weszka et al. [13]. What should be noted
+undesirable for a distribution in which a single peak is highly
+here is that such a matrix or histogram is derived from the
+biased to black or white as shown in Fig. 5(a).
+picture on which a gray-scale "histogram flattening" trans-
+For Factor ii), we want a measure of polarization. The
+formation was performed. This transformation is said to be
+kurtosis a4 is well known for this purpose and can be defined
+used for the purpose of removing the effects of unequal
+overall brightness and contrast in the original images [1], as - A
+[13]. If f2 is calculated after such a transformation, why 4 = - 4
+should it be called contrast? There is evidently a confusion where u4 is the fourth moment about the mean and a2 is the
+in terms that seems to be very crucial to our problem as seen variance. This measure is normalized with respect to the
+in the psychological experiments. range so that it can have the minimum value ofone in case of
+In the sense specified in Section II-B, the contrast that is twin peaks. This is just Factor ii) and is not influenced by
+removed by the histogram flattening is given by Factors i) Factor i}
+and ii), i.e., the narrow sense of contrast. On the other hand, Consequently, we combine a and a4 for the second-step
+the inertia moment of gray-level difference f2 can reflect measure of contrast as follows:
+Factor iii Originally, it was defined to be a measure of the
+M/a4r
+amount of local variation present in an image [1]. However, F.o =
+it should be noted that the measuref2 is a function not only where n is a positive number. In our experiments, we varied n
+of edge magnitude but also ofthe number ofedges. The more from 8, 4, 2, 1, 1/2, 1/4, to 1/8. Experimentally, n = 1/4
+edges an image has, the larger is the value off2, which is yielded the best r, between f01 and F.. This improvement
+contrary to Factor iv) In fact, this featuref2 has been used as could reduce the values of F.o, for distributions with biased
+a measure of the fineness [27]. In this sense, f2 is not peaks while almost preserving those for polarized distribu-
+appropriate to the concept of contrast that we aim at. As a tions as shown in Fig. 5(b)
+matter of fact, it is shown later thatf2 does not correlate with Up to this stage, we approximated only Factors i) and ii);
+the human measurement f.. i.e., we described the contrast in the narfow sense based on
+With respect to contrast, we attempted to approximate the gray-level distribution. The next step is to incorporate
+the four factors step by step. The simplest expression for Factors iii) and iv); i.e., contribution to contrast caused by
+Factor i) is the range ofgray-levels. Next, it can be easily seen pictorial structure. Fortunately or unfortunately, our
+that the variance a2 or standard deviation a about the mean improved measure defined above provided quite successful
+of the gray-levels probablYity distribution is more preferable results for 16 texture pattems in Fig. 1. Although it is not
+as contrast. As is well known, a or a2 can measure the perfect, the improvement of a measure by analyzing its
+dispersion in the distribution. In this sense, it reflects principal deficiencies in the previous stages is not appro-
+
+--- PAGE 8 ---
+TAMURA et al: ThXTURAL FEATURES AND VISUAL PERCEPTION 46t7
+HO Ho
+I . . ... ... l
+4 12 161em 0 4 a 12 16 I E
+(a) (b) f6
+Hih HD
+a i6
+4 12 .- 16 -X 6
+1
+(C) (d)
+Fig 6 Examples of local direction histogram H,. (a) D15. (b) D84. (c) D9. (d) D20.
+priate. Hence we leave approximations of Factors iii) and iv) The resultant 0 is a real number (0 < 0 < a) measured
+to further studies. counterclockwise so that the horizontal direction is zero.
+The desired histogram HD can be obtained by quantizing
+C. Directionality
+0 and counting the points with the magnitude AG over the
+It is well known that the directionality in an original threshold t; i.e.,
+picture can be preserved in its Fourier power spectrum. We
+n-i
+readily find the directionality in the histogram ofthe Fourier HD(k) = No(k)l E Ne(i) k=0, 1, ,n-1
+power along lines through the origin, as shown by Bajcsy [3]. i=O
+However, other textural features in the Fourier domain have where N9(k) is the number of points at which
+not been thoroughly investigated. Currently, it is said that (2k - 1)7r/2n < 0 < (2k + 1)/2n and IAGI > t. Threshold-
+the Fourier features do not behave as well as features in ing AG by t is aimed at preventing counting of unreliable
+spatial domain, since an aperture effect may degrade the directions which cannot be regarded as edge points. In our
+Fourier features [13], [14]. Suppression of aperture effects experiments, we used n = 16 and t = 12. The shape of each
+has been attempted [33], but this method loses the direction- histogram HD was not sensitive to the value of t.
+ality in an original picture. Consequently, it seems uneco- Some examples of HD are shown in Fig. 6. Fig. 6(a) tells
+nomical to compute the time-consuming Fourier transform that D15 is highly directional and slightly inclined to the left;
+only for directionality. Therefore, it is desirable to use a its peak point is located at angle x/16. On the other hand,
+faster procedure in spatial domain. from Fig. 6(b), we can see that D84 has a relatively weak
+Instead of an histogram of Fourier power, we use an directionality, because its peak is not so sharp. The histo-
+histogram of local edge probabilities against their direc- gram of D9 shown in Fig. 6(c) is nearly flat; consequently,
+tional angle. It was shown that this histogram represents D9 has no directionality. It can be said that almost every-
+sufficiently global features of the input picture such as long body accepts these descriptions concerning D15, D84, and
+lines and simple curves [34]. This method utilizes the fact D9. Thus, HD can reflect the directionality very faithfully.
+that gradient is a vector, so it has both magnitude and A way ofmeasuring the directionality quantitatively from
+direction. In the discrete case, the magnitude I AG I and the HD to compute the sharpness of the peaks. The approach
+is
+local edge direction 8 are approximated as follows: which we adopted is to sum the second moments around
+IAGI = (IAHI + IAvI)/2 each peak from valley to valley, if multiple peaks are
+determined to exist. This measure can be defined as follows:
+0 =tan-' (Av/A) +.2
+where AH and Av are the horizontal and vertical differences
+Fai,= rnpI *
+(- r )2 H
+(4)
+measured by following 3 x 3 operators, respectively, p *ewp
+where
+-1 0 1 1 1 1
+np number of peaks,
+-1 0 1
+0 0 0 $p pth peak position of HD,
+-1 0 1 -1 -1 -1. w, range of pth peak between valleys,
+
+--- PAGE 9 ---
+468 IEEE TRANSACTIONS ON SYSTEMS, MAN, AND (CYBERNETICS \iH SM(c8. NO (, -h NF 19-X
+H0q DIRECTIONAL. CODE a
+AIGPI t ,Idd- ~,*q
+>
+80ji
+p
+DIRECTIONAL CODE I
+III Fig. 8. Entry (i, J) of direction co-occurrence matrix P,.
+l- ,
+weighted by + 1 and those in the perpendicular direction by
+0 Of U12 k2 U21 - 1:
+Fig. 7. Definition of symbols for bidirectional case.
+n n n
+Flin = EEP(i, jci os Zi -E | PX(i ,i)
+r normalizing factor related to quantizing levels of 0
+where PD is the n x n local direction co-occurrence matrix
+quantized direction code (cyclically in modulo 1800).
+of points at distance.
+In our experiments we did not consider more than two For calculation of HD and Pw we utilized common
+peaks; i.e., we determined whether or not np is two. The intermediate steps such as differenciating and thresholding.
+procedure is as follows: The distance function d4 (see [35]) was set to four for all
+pictures in our experiments.
+np =2
+if E. Regularity
+It may seem easy to describe the regularity of repetitive
+HD(v12)/HD(42) < 0.5,
+patterns in mathematical form. In fact, we can easily syn-
+HD(V2 1)IHD(02) < 0.5, thesize a pattern from a mathematical expression. However,
+it is not trivial to analyze the regularity of naturally occur-
+and
+ring textures. For highly regular patterns some techniques
+HD(42)/HD(1)> 0.2, may indicate that they are regular. However, for natural
+textures which are difficult to describe mathematically, it is
+otherwise. fairly difficult to measure a degree of irregularity without
+pp] -= 1,
+any information such as element size or shape.
+Where V12 and v21 are the positions of valleys from the first Here we assume that if any feature of a texture varies over
+peak &1 to the second peak k2, and vice versa, respectively the whole image the image is irregular. Hence we take
+(see Fig. 7). partitioned subimages and consider the variation of each
+This procedure was designed specifically so that only feature in each subimage. We have defined four independent
+D20 might be judged to be bidirectional and that np = 1 features up to here. We take the sum of the variation for each
+might be given to nondirectional patterns such as D9. For of these four features as a measure of regularity; i.e.,
+general use, the procedure should be much more
+sophisticated. Freg = I r(o'crs + (Tcon + (dir + 7linl)
+where r is a normalizing factor and each o>- means the
+D. Line-likeness
+standard deviation of Fxrx
+It seems necessary to give a more detailed description of
+line-likeness. We mean by the word line-likeness an element F. Roughness
+of texture that is composed of lines. For this purpose, when We do not have any good ideas for describing the tactile
+the direction and the neighboring (edge's) direction for a sense of roughness. According to the results of our psycho-
+given edge are nearly equal, we regard such a group of edge logical experiments on vision, we emphasize the effects ol
+points as a line. coarseness and contrast. and approximate a measure of
+To be more specific, we construct a direction co- roughness by using these computational measures; i.e.
+occurrence matrix whose element Pad(i, j) is defined as the
+Frgh =Fcrs+ FconF
+relative frequency with which two neighboring cells
+separated by a distance d along the edge direction occur on Our intention lies in examining to what an extent suich a
+the image, one with the direction code i and the other with simple approximation corresponds to human visual
+the direction code j. This is illustrated in Fig. 8. From this perception.
+co-occurrence matrix, one can expect that several important
+V. COMPARISON BETWEEN PSYCHOLOGICAL AND
+textural features are derivable for measuring properties
+COMPUTATIONAL MEASUREMENTS
+about element shape. As in HD, it is preferable to ignore
+directions of trivial edges by using threshold t. The above mentioned features {F' were computed for the
+As a measure of line-likeness, we defined the following 16 texture patterns in Fig. 1 which were also used for the
+measure so that co-occurrences in the same direction are psychological experiments. The results are shown in Fig. 9.
+
+--- PAGE 10 ---
+469
+TAMURA et al.: TEXTURAL FEATURES AND VISUAL PERCEPTION
+COARSE HIGH DIRECTIONAL LINE-LIKE REGULAR ROUGH
+0D98 D20 D-15 -D34 -D9 0 D 9 67 8
+-D68.D38 -D15 -D34 D20
+-D68 D33
+0D84
+- D20
+D67
+03.0Dll
+D34 093
+D93 D38
+-D38
+D15
+-D28
+D98
+D15 D D 6 2 9 0 -D20 028
+-Dlll -D109 Dlll
+D28
+D67 D8
+-D67 D15
+D69
+D3 D93 D109
+D84
+0D109. 084
+___D 1D 3 ll 3 l D D1 2 0 0 9 D D D 6 2 9 8 8 8 - Dl D D 6 l 10 7 l 9 D D D 3 6 9 8
+D D 6 6 9 8 D93 D D2 9 8 8 -D84 -D68 0 D 8 3 4 3
+D69
+D34 D69.D38 D D l 9 ll D D 3 3 . 3 D28 -D69
+D84 D3
+D15 D109 D93
+D3.D38 D33
+-D0 D93 D34 D D 3 6 3 7 D9 D98 D D 3 3 4 8
+FINE LOW NON DIRECTIONAL BL(.OB-LIKE IRREGULAR SMOOTH
+Fcrs Fcon F4,r Ft,lI,, F,eg Fg,h
+Fig. 9. Computational measurements of six basic textural features: {F}.
+TABLE III TABLE IV
+COEFFICIENTS OF RANK CORRELATION BETWEEN CORRESPONDENCES BETWEEN PSYCHOLOGICAL AND
+COMPUTATIONAL MEASUREMENTS {F} COMPUTATIONAL MEASUREMENTS
+r J Frgh Freg Flin Fdir Fcon rs
+fcrs Fcrs 0.831
+F 0.650 -0.424 -0.063 -0.426 0.124
+fcon Fcon 0.904
+con 0.756 -0.024 -0.233 -0.250
+fdir Fdir 0.823
+FFdir -0.341 -0.158 0.782
+flin: Flin 0.713
+F1 in -0.180 -0.313
+f, :F 0.779
+reg reg
+F -0.376
+reg frgh: Frgh 0.652
+For comparison, the scales are adjusted to the psychological
+scales in Fig. 2. TABLE V
+{f} VARLATIONS OF CORRESPONDENCE IN COARSENESS
+The computational measurements were all performed on BY CHANGING THRESHOLD t
+subimages with 128 x 128 pixels. The values of Fwn, Fdir,
+t f F
+and Fli are the average of measurements over these four crs crs
+nonoverlapped regions in the original picture with 0.83 0.794
+256 x 256 pixels. With respect to Fcrs' S bes, in the inter- 0.85 0.811
+mediate step can be computed effectively only for the inner 0.86 0.831
+64 x 64 in a 128 x 128 subimage in case of using the largest 0.87 0.811
+32 x 32 operator. In this situation, five more subimages can 0.89 0.811
+be taken in addition to the above four regions so that all 0.91 0.811
+inner effective areas cannot overlap each other. Thus the 1.00 0.794
+value of Fcrs is the average of these total nine samples. Freg is
+computed from standard deviations of above four features
+over four or nine samples. Finally, Frgh is from the averaged around t = 0.9. The results for t = 0.86 are shown in Fig. 9.
+values of Fcrs and Fcon. The correspondencefcrs: Fcrs = 0.831 is satisfactory. We can
+The rank correlations were calculated among {F} and make the following observations.
+between {tf} and {F}. These are listed in Tables III and IV. a) The main discrepancies betweenfcrs and Fcrs occur for
+Considering these results, we analyze the causes of D3, D20, D34, and DIll. These patterns can be interpreted
+discrepancies in each feature. to consist of basic elements which are placed very close to
+each other and surrounded by lines. It seems that our human
+A. Coarseness
+subjects perceived them in this manner. On the other hand,
+The rank correlations withfcrs by varying the threshold t the computer must regard the lines in these net-like pictures
+are listed in Table V. We can see a very stable behavior as the texture elements according to our definition of Fcrs. If
+
+--- PAGE 11 ---
+470) 4f7A(I SiAhAS WNS N.xSTINMS, \,AN. AX-) (:YBERNEHICS Vol- Sm,( -8X INo, ij.uI 1978
+p > 2d, the gap between the repetitive elements (p - d) is interchanged. It is presumably because the subjects were
+larger than the element size d. However, if p < 2d, the gap forced to select the most directional picture in each pair.
+width is regarded as the element. If p is close to 2d, rno even if the pictures weic very similar.
+problem is encountered. However, if d is much smaller than
+D. Line-likent-c-ss
+p, as in D3, the expected value (2d + p)!4 is close to p/2.
+whereas the width between the lines (p - d), which the The correspondence Jin: F in =0.713 is worse than the
+human being seems to measure, becomes close to p. Further- previous three results. However, taking into consideration
+more, human beings can detect pentagons or hexagons from the fact that the human subjects had difficulty with line
+D111, which the computer cannot doe All these effects likeness, it is a desirable result that D34 and D15 took the
+depend on the human ability of perceiving simple shapes. high ranks in ~lin In fact, the correlation between Fdir and
+Unfortunately, it is quite difficult to embed such an ability F is smaller than that between Jfi, and fi, (ie.l Fdi
+into a computational procedure. ,i 0 7882, 'dii, - 0.923). However, we can observe the
+b) On the other hand, this method is powerful for so lol,lowing deficiencies in the current F,-
+calledi scramble textures in which the basic element is X ague. a) We wised the fixed distance four for all pictures. If by
+TIe sizes of basic element in D98, D28, D33, D84, and D9 accident line crossings exist at this distance, our F,in fails to
+are not clear, but satisfactory results were obtained about detect the continuity of directions This is the case in D3. To
+the order of coarseness. avoid this effect, we should use a distance which is adequate
+to each picture bv using the result of F,rs; otherwise we
+B. Contrast should follow the local direction step by step, but this
+We examinedf2 as well as Fcon. As anticipated,.f2 is heavily method wouild be w?ery time consuming.
+affected by fineness and has no correlation withfcon; in fact b) In our definition of Ft1n an edge was counted as a line,
+jcon On t = he 0.0 o 4 t 4 h , er Fcr h s a : nd, = al -- t 0 h . o 4 u 5 g 6 h . our measure Fcon was s t o ha t n hat iu 167 'i,, and Ir D o 9 a 8 vo h i a d d t t h h e is und ef e f s e i c r t ab w l e e l m ar u g s e t r v u a i l s u e es no i t n F I i n n
+designed only for Factors i) and ii), it yielded quite a good edge-detector but a line-detector. It is not easy to ove rcome
+scoreJR0: F = 0.904. It proves that the narrow sense of these deficiencies. Concerning line-detection, several
+contrast is a strong dominant factor even for texture pat- attempts have so far been performed [36], [37]. However,
+terns with different structures. Texture is said to be essen- properlv chosen sizes and thresholds are essential in these
+tially a tone-invariant and spatial property. In this sense, our methods, and sometimes a priori knowledge is required. In
+current measure Fcon, not containing Factors iii) and iv), is our situation, we have no inforination about the presence of
+not a textural property. The contrast in our feature set is lines and their widths, if any. It is rather difficult to design a
+expected to reflect these two factors in the fuiture. line-detector vx hichi is efficient onr any tinkniowni texture.
+h. Regularit'l
+C. DirectionalitI
+We find considerable lack of correspondence between.treg
+To compare the effectiveness of our method, we computed and F eg. As was considered in Section III-BJeg was not a
+directionalty Ffd using power histograms from Fourier propei measurement for our specification. The authors'
+power spectra. As results, we obtainedfdir: Fdir = 0.823 and ordering Ifg ga~ve bet~t~er c ~ orr ~ es ~ po ~ nde ~ nc ~ e w~ithr F g ,; Le. . I reg
+fdir: Ffd = 0.776. This reveals that our local direction histo- Freg -- 0.24r6,fJog: Freg = 0.779. Hence, it may be reasonable
+gram HD is equivalent or better than the Fourier techniques. to regard Irvg as an unreliable result in ff} while the
+Directionality is well reflected in Fig. 6. Nevertheless, the approximation of regularity by considering variations of the
+correlation of 0.823 is not so excellent as expected. This features over subimages can work well.
+discrepancy may be caused by the following two reasons. Improved scores can be expected if the subimages have
+a) Although the gradual change of direction in D69 sizes suitable to their coarseness and to give the proper
+shows high directionality perceptually this change is weight to each contributing feature. Moreover, in order to
+averaged in HD, resulting in a weak peak. As an extreme describe the regularity more precisely, it is indispensable to
+case, let us consider the pattern which consists of half circles analyze the complexity of the texture elements and their
+centered at the same point. Human beings may perceive it as contribution to the global regularity.
+directional to some extent, but we cannot detect the direc-
+tionality from our histogram HD. This is one of the limits of F. Roughness
+using only local operations. The correlation betweenjrgh and Frgh is 0.652. It seems too
+b) The degree of perceptual coarseness or contrast can be crude to approximate the roughness simply by combining
+measured relatively, i.e., by comparing two or more pictures, Fcrs and Fcon. We tried to combine Frgh as Fcrs + Fcon - Tdir'
+while the presence of directionality may be estimated from but the result was even worse. The principal discrepancies
+one. Suppose we are required to classify each texture can be observed as follows.
+individually into two groups: directional and nondirec- a) D67 is so high in coarseness and contrast that it is
+tional. We may readily assign [D68, D15, D93, D69, D38, ranked as second on Frgh. However, D67 was not perceived
+D84, D20, D34] to the first group and the rest to the other so rough by the human subjects.
+group. From this point of view, bothfdij and Fdir can classify b) On the other hand, D84 was perceived to be very
+them exactly, but within each group, the ranks are highly rough. but it is relatively low in both FcrS and F
+
+--- PAGE 12 ---
+TAMURA et al.: TEXTURAL FEATURES AND VISUAL PERCEPTION 471
+Looking at D67 and D84, we would certainly perceive TABLE VI
+their basic elements as smooth and rough, respectively, even NEAREST CATEGORIES JUDGED BY HUMANS AND COMPUTER
+if their coarseness and contrast were to be changed to some HumanHumsaunbsjuebjcetctss lMaximum likelih C o o o m d puter Euclidean distance
+extent. It seems that human beings emphasize the perceptual
+roughness of texture elements. In this case, one should try D3 D34(5)*,D111(3) D84(7) D9(8), D84
+to analyze and describe texture elements precisely. D9 0 D 3 9 3 3 ( ( 2 3 ) ), ,D D 3 1 8 0 , 9 D ( 8 2 4 ) D3(8), D111 D3(9)
+D1 5 D68(9) D68(9)** D68(9)
+The attained results are shown in Table IV. For the first
+D20 D84(6), D93(9) D67(7), D15(4)
+three features, our improvements achieved successful corre- 034(2)
+spondences with psychological measurements. It follows 028 DD6978,(6)D,l0lD33 D109(5),D68(4) D109(9)
+that the remaining three could be sufficiently improved by
+due considerations of the causes ofdiscrepancies. Here, what D33 D D2 1 8 0 ( 9 3 ( ) 4 , ), D8 D 4 38 D98(9) D109(6) ,D33(3)
+s ro h l o e ul i d n b a e ll n o o t t h e e d r f f ir e s a t tu i r s e t s h . at Th c e o r a e r f s o e r n e e , ss it p i l s ay e s xp a e n ct i e m d po t r h t a a t nt a D34 D D 3 1 ( 1 5 1 ) ( , 2) D20(2) D68(9) D38(7), D68(2)
+better performing coarseness detector will be developed and D38 D93(8), D68 D69(9) D68(6), D93(3)
+other textural features can be extracted by using its output. D67 D D 8 2 4 8 ( ( 2 5) ) , , D D 3 3 3 D D 2 1 0 0 ( 9 2 ( ) 5) , , Dll (2) D111(9)
+Secondly, development of a method that can describe D68 D15(5), D38(4) D98(7), D15(2) D38(7), D34(2)
+texture elements faithfully is the remaining significant D98(5), D84(4),
+problem. D69 D93(6), D38(3) D38(2), D68(2) D38(3), D93(2)
+D84 D20)3), D38(3) D68(4), D28 D3(7),
+VI. TEST OF SIMILARITY MEASUREMENTS 015(2), 028 D3(3), 0109 D69, D93
+D38(5), D84(2)
+D93 D38(9) D69(9)
+We saw that our set of textural features succeeded in D109( 2)
+corresponding to human visual perception in each feature. D98 D28(9) D109(9) D28(9)
+Another interesting problem is to describe similarity of D1009 91D3931,7),D111 D28(9)
+D
+D
+2
+1
+8
+1
+(
+1
+2
+(
+)
+5
+,
+),
+D8
+D
+4
+3
+texture pattern by using a certain combination of these
+features. Here, the problem which we specified to the human D111 D D 3 3 4 ( , 6), D10 D 9 28 D109(9) D109(8), 03
+subjects and the computer is to find the nearest pattern from N 28 59
+15 other ones for each picture in Fig. 1.
+nc (19.A4') (41.0 )
+Nine human subjects (not including the authors) had to * Numerals in bracket after category name mean the number of subjects
+select the closest pattern for each picture, but they did not or samples which answered to that category.
+have to give reciprocal answers; e.g., if D93 was selected as sub * j * ec U ts n . derlined parts coincide with one of the answers by human
+the closest with respect to D69, any pattern may be selected
+as the closest to D93 (except of course D93 itself).
+TABLE VII
+The nearest categories were computed for each of the nine NUMBER OF SAMPLES COINCIDING WITH ONE OF HUMAN ANSWERS BY
+samples in each category by using the first four features USING MINIMUM EUCLIDEAN DISTANCE UNDER SPECIFIED CONDITIONS
+which are independently defined, i.e., Fcrs' Fcon Fdir, Flin. We
+examined two distance criteria for deciding which is nearest. cr F s F con ~~~F dir F lin f O e v a e t r ure 4 s F crs & F dir
+The first one finds for each sample the category having the N 49 21 51 32 46 51
+nc
+maximum likelihood except its own category. In other (34.0%) (14.6%) (35.4°) (22.2 (31.90,.) (35.4%)
+words, this decision is the case of the minimum Mahalanobis
+distance to the means of other categories. The other one is It is worth analyzing the results by humans. We asked the
+the popular Eucidean distance, where all four measurement human subjects the reasons of their decisions. Most of their
+scales are normalized so that all their means and variances explanations indicated that similarity measurement is
+can have the same value. highly dominated by a few strong cues in a restricted
+The results are shown in Table VI. The answers for some situation, while we used four features equivalently in the
+categories vary widely. It may be impossible to request only above experiment. Especially, the "coarseness" and "direc-
+one answer for each category from both human beings and tionality" were said to be very significant cues. For example,
+the computer. We can hardly see the correspondence be- the human subjects answered the similarity in directionality
+tween human and computer results except in the case of for the reason why they did not select not D68 but rather
+D15. It is not trivial to find a good measure for such a D93 for D69, although each of D68 and D69 is a picture of
+correspondence. There exists various answers even among wood grain.
+the human beings. Assuming that all these answers are Predicting that the strongest cue dominates the total
+correct, we count the number of computer answers which similarity, we computed the categories having the minimum
+coincide with any of the human ones. We denote this Eucidean distance for each feature separately in all four
+number by Nn, These values for two criteria are also shown features, and only in Fcrs and Fdir. Only the values for these
+in Table VI. These results, it must be said, are poor. It follows results are shown in Table VII. Although the usefulness of
+that the simple combination of four features, i.e., Fcrs' Fcon, Fcrs and Fdir is proven, we could not approximate all the
+Fdir, and Flin, cannot describe similarity well. similarity cases. It may be partly because we do not have a
+
+--- PAGE 13 ---
+472 IEEE TRANSACTIONS ON SYSTEMS, MAN, AND CYBERNETICS, VOL. SMC-8, NO. 6, JUNE 1978
+sufficient number of features which describe the structure of lengths," Computer Graphics and Image Processing, vol. 4, pp. 172-
+textures. However, more complicated logic seems to be 179, June 1975.
+[3] R. Bajcsy, "Computer description of textured surfaces," in Proc. 3rd
+required for the similarity measurement. Int. Joint Conf. Artificial Intelligence, Aug. 1973, pp. 572-579.
+[4] . "Computer identification of textured visual scenes," A.I. Lab.,
+VII. CONCLUSION Stanford Univ., Palo Alto, CA, Memo. AIM-180, Oct. 1972.
+[5] R. N. Sutton and E. L. Hall, "Texture measurement for automatic
+In this study, we have attempted to develop textural classification of pulmonary disease," IEEE Trans. Comput., vol. C-21,
+features which correspond to human visual perception. Six pp. 667-676, July 1972.
+basic textural properties (i.e., coarseness, contrast, direction- [6] 0. R. Mitchell, C. R. Myer, and W. Boyne,"A max-min measure for
+image texture analysis," IEEE Trans. Comput., vol. C-26, pp.
+ality, line-likeness, regularity, and roughness) have been 408-414, Apr. 1977.
+measured by human subjects. Computational measures [7] A. Rosenfeld and M. Thurston, "Edge and curve detection for visual
+have been developed and improved in order that they may scene analysis," IEEE Trans. Comput., vol. C-20, pp. 562-569, May
+1971.
+correspond to the psychological measurements. [8] A. Rosenfeld, M. Thurston, and Y. H. Lee, "Edge and curve detec-
+With respect to coarseness, contrast, and directionality, tion: Further experiments," IEEE Trans. Comput., vol. C-21, pp. 677
+we have attained very successful results. These three features 715, July 1972.
+[9] W. B. Thompson, "Textural boundary analysis," IEEE Trans.
+are so significant in global descriptions of textures that they Comput., vol. C-26, pp. 272-276, Mar. 1977.
+can be expected to be useful separately in cases where the [10] L. S. Davis, A. Rosenfeld, and J. S. Weszka, "Region extraction by
+texture differs only in one of them or in combinations for averaging and thresholding," IEEE Trans., Syst., Man, Cybern., vol.
+SMC-5, pp. 383-388, May 1975.
+image classification and segmentation problems. Especially, [11] F. Tomita and S. Tsuji, "Extraction of multiple regions by smoothing
+coarseness is a highly essential factor in texture. In order to in selected neighborhoods," IEEE Trans., Syst., Man, Cybern., vol.
+improve the other features, its results should be utilized. SMC-7, pp. 107-109, Feb. 1977.
+[12] S. G. Carlton and 0. R. Mitchell, "Image segmentation using texture
+With respect to line-likeness, regularity, and roughness, and gray level," in Proc. IEEE Conf on Pattern Recognition and
+we have obtained considerable correspondences between Image Processing, June 1977, pp. 387-391.
+computational and psychological measurements, but more [13] J. S. Weszka, C. R. Dyer, and A. Rosenfeld, "A comparative study of
+texture measures for terrain classification," IEEE Trans., Syst., Man,
+effort is required to describe precisely the texture elements Cybern., vol. SMC-6, pp. 269-285, Apr. 1976.
+on which these three features depend. For this purpose, we [14] R. W. Conners and C. A. Harlow, "A theoretical comparison of four
+should have many kinds of techniques which can detect texture algorithms," Image Analysis Lab., Univ., Missouri-
+Columbia, Columbia, Tech. Rep. IAL-4-76, Aug. 1976.
+differences in a variety of second-order statistics. The mean- [15] B. Julesz, "Visual pattern discrimination," IRE Trans., Info. Theory,
+ings of the technique should be clear, because it is nearly vol. IT-8, pp. 84092, Feb. 1962.
+impossible to use all differences in general second-order [16] _, "Texture and visual perception," Scientific American, vol. 212,
+pp. 38-54, Feb. 1965.
+statistics for unknown textures. [17] "Experiments in the visual perception of texture," ibid, vol. 232,
+,
+On the other hand, simple combinations of our features pp. 34-43, Apr. 1975.
+have not simulated the human similarity measurement well. [18] B. Julesz, E. N. Gilbert, L. A. Shepp, and H. L. Frisch, 'Inability of
+humans to discriminate between visual textures that agree in second-
+It is supposedly not because the ability of each feature is order statistics-revisited," Perception, vol. 2, pp. 391-405, 1973.
+insufficient but because more complex mechanisms exist in [19] A. Rosenfeld, "Visual texture analysis: An overview," Compt. Sci.
+Center, Univ. Maryland, College Park, Tech. Rep. TR-406, Aug.
+the human usage of multiple cues. At any rate further studies
+1975.
+are necessary in the psychometrical field to investigate the [20] S. W. Zucker, "Toward a model of texture," Computer Graphics and
+mechanisms. Also, it is important to give well defined Image Processing, vol. 5, pp. 190-202, June 1976.
+specifications to human subjects and analyze the responses [21] s A i . n R g o a s n e d nf P e s l y d ch a o n p d ic B t . or S i . cs L . ip N ki e n w , " Y T o e r x k t : ur A e c s a y d n e t m he i s c i , s, 1 " 9 i 7 n 0. Picture Proces-
+for each specification. Indeed, the concepts of uniformity, [22] B. H. McCormick and S. N. Jayaramamurthy, "Time series model for
+complexity, homogenity, etc., are very interesting. We be- texture synthesis," Int. J. Comp. Inf. Sci., vol. 3, pp. 329-343.
+lieve that we should continue to develop new computational [23] J. T. Tou, D. B. Kao, and Y. S. Chang, "Pictorial texture analysis and
+synthesis," in Proc. 3rd Int. Joint Conf Pattern Recognition, Nov.
+versions of basic textural features and to improve them.
+1976, pp. 590-590.
+[24] F. Tomita, M. Yachida, and S. Tsuji, "Detection of homogeneous
+ACKNOWLEDGMENT regions by structural analysis," in Proc. 3rd Int. Joint Conf. Artificial
+The authors wish to express their thanks to Prof. M. Intelligence, Aug. 1973, pp. 564-571.
+Nagao of Kyoto University for the digitization of the [25] C S. om Ts p u u j t i e a r nd Gr F a . ph T i o c m s it a a n , d " I A ma st g r e uc P t r u o r c a e l s a s n i a ng l , yz v e o r l. for 2, a p c p l . as 2 s 1 o 6 f -2 t 3 ex 1 t , ur D e e s c , . "
+pictures, Dr. K. Mori and his colleagues of the Toshiba 1973.
+Research and Development Center for displaying the pic- [26] P. Brodatz, Textures. New York: Dover 1966.
+tures, and Dr. T. Kasvand of the National Research Council [27] A. Rosenfeld and E. B. Troy, "Visual texture analysis," Compt. Sci.
+Center, Univ. Maryland, College Park, Tech. Rep. TR-1 16, June
+of Canada for making useful suggestions on the improve- 1970.
+ment of some computational definitions and his great help in [28] K. C. Hayes, Jr., A. N. Shah, and A. Rosenfeld, "Texture coarseness:
+preparing this paper while one of the authors was there as a Further experiments," IEEE Trans. Syst. Man., Cybern., vol. SMC-4,
+Visiting Researcher. [29] p A p . . R 4 o 6 s 7 e - n 4 f 7 e 2 l , d S a e n p d t. A. 197 C 4 . . Kak, Digital Picture Processing. New York:
+L_ Academic, 1976, Chap. 10.
+REFERENCES [30] C. H. Coombs, R. M. Dawes, and A. Tversky, Mathematical
+[1] R. M. Haralick, K. Shanmugam, and I. Dinstein, "Textural features Psychology-An Elementary Introduction. Englewood Cliffs, N.J.:
+f S o M r C- i 3 m , ag p e p. c 6 la 1 s 0 s - i 6 fi 2 c 1 a , ti N o o n, v " . I 19 E 7 E 3 E . Trans. Syst., Man, Cybern., vol. [31] L P . ren L. ti T ce h - u H r a s l t l o , ne 1 , 97 " 0. A law of comparative judgement," Psychol. Rev.,
+[2] M. M. Galloway, "Texture classification using gray-level run vol. 34, pp. 273-286, 1927.
+
+--- PAGE 14 ---
+473
+IEEE TRANSACTIONS ON SYSTEMS, MAN, AND CYBERNETICS, VOL. SMC-8, NO. 6, JUNE 1978
+[32] H. Tamura, S. Mori, and T. Yamawaki, "Psychological and compu- 703-705, Oct. 1976.
+tational measurements of basic textural features and their compari- [34] S. Mori, Y. Monden, and T. Mori, "Edge representation in gradient
+son," in Proc. 3rd Int. Joint Conf. Pattern Recognition, Nov. 1976, pp. space," Computer Graphics and Image Processing, vol. 2, pp. 321-325,
+273-277. Dec. 1973.
+[33] C. R. Dyer and A. Rosenfeld, "Fourier texture features: Suppression [351 A. Rosenfeld and J. L. Pfaltz, "Distance function on digital pictures,"
+of aperture effects," IEEE Trans. Syst., Man, Cybern., vol. 6, pp. Pattern Recognition, vol. 1, pp. 33-61, July 1968.
+Quantitative Evaluation of Computer
+Regenerated Images and Their
+Use in Storage Restricted
+-
+Environments
+RAOUF F. H. FARAG, MEMBER, IEEE, AND Y. T. CHIEN, SENIOR MEMBER, IEEE
+Abstract-For a given set of images (or pattern samples), a generative property in the context of regenerating the
+probabilistic grammar may be developed to describe and recognize images from their abstract grammatical representation. In
+these images. Ihis grammar, once obtained, may serve as an abstract
+particular, the question of how the quality of regenerated
+representation for the images in question. Conversely, images may be
+images can be evaluated quantitatively, consistent with the
+regenerated from their grammatical representations. Images regen-
+erated in this manner, however, may contain samples that are not subjective, visual evaluation, will be addressed. The im-
+found in the set of original images from which the grammatical mediate result of regenerating "high quality" images from
+representation was developed. A method for evaluating the quality of their abstract grammatical representation is an alternative
+regenerated images with respect to the set of original images is
+to the storage of large data bases needed in pattern recogni-
+discussed. Let I be the set of original images and 0 be the set of
+tion experiments.
+images regenerated from the abstract representation of I. Set 0
+consists of two mutually exclusive subsets, A and B. A is the set of The handling of images has been of considerable interest
+images found in I, and B is the set of images not found in I. It is shown to researchers in the field of optics and the field of image
+that the clustering behavior of set B determines the quality of the processing. From the optical point of view the interest is
+regenerated images in the mean-square sense. By defining a scatter
+found in noise removal, image enhancement, image restora-
+matrix for B, several factors that influence the image quality with
+tion, and reconstruction [1]-[4]. In image processing con-
+respect to I are derived. Experimental results on the abstract
+represeitation and regeneration of a subset of the Munson data are siderable attention is given to image coding for
+demonstrated. An interesting application of this regeneration model transmission, noise filtering, use of transforms (Fourier,
+to pattern recognition in storage-restricted environments is also Hadamard, and Walsh) for bandwidth reduction and filter-
+presented.
+ing, etc. [5]-[12]. Levi [1] gives a review of the quantitative
+I. INTRODUCTION image assessment measures. He suggests the use of mean-
+square error, correlation, signal to noise ratio, and a mea-
+JN DEALING with a large data base of pictorial informa-
+surement based on the concept of channel capacity in
+tion, it may be necessary to consider the generative
+information theory. In both image processing and optics the
+capacity of probabilistic grammars as a way of storing and
+problem is a single image which has been processed through
+manipulating the massive data. This paper discusses this
+a distorting system. The interest in these fields is in how to
+retrieve the input signal in the "best" way possible. In a
+Manuscript received May 31, 1977; revised February 10, 1978. This purely optical system, for instance, the best image would be
+work was supported in part by the National Science Foundation under the least distorted, while in image processing the best image
+Grant GJ36434. An excerpt of this paper was presented at the IEEE
+would be the image requiring the least bandwidth while still
+International Conference on Cybernetics and Society, Washington, DC,
+November 1-3, 1976. maintaining a certain "quality" in the image.
+R. F. H. Farag is with the Department of Mathematics and Computer The main concern of this paper is different from the above
+Science, St. John's University, Jamaica, NY 11439.
+two areas in the sense that we are not handling a single image
+Y. T. Chien is with the Department of Electrical Engineering and Com-
+puter Science, University of Connecticut, Storrs, CT 06268. at a time but rather a collection of images at the input and a
+0018-9472/78/0600-0473$00.75 (© 1978 IEEE

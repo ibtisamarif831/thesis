@@ -1,8 +1,8 @@
 {
-  "generated_at": "2026-06-29T15:10:46.887318+00:00",
+  "generated_at": "2026-07-15T16:30:29.205864+00:00",
   "papers_dir": "papers",
   "output_dir": "papers/extracted_text",
-  "paper_count": 7,
+  "paper_count": 8,
   "papers": [
     {
       "pdf": "papers/A_Systematic_Review_of_Experimental_Studies_on_Data_Glyphs.pdf",
@@ -73,6 +73,17 @@
         "Subject": "IEEE Computer Graphics and Applications;2017;37;2;10.1109/MCG.2016.66",
         "ModDate": "D:20181210125042-05'00'",
         "CreationDate": "D:20170224160328+05'30'"
+      }
+    },
+    {
+      "pdf": "papers/Tamura-Textural_Features_Corresponding_to_Visual_Perception.pdf",
+      "text": "papers/extracted_text/tamura-textural-features-corresponding-to-visual-perception.txt",
+      "pages": 14,
+      "characters": 72374,
+      "pdf_metadata": {
+        "CreationDate": "D:20070609131319Z",
+        "Producer": "Apex PDFWriter",
+        "ModDate": "D:20070613190000+05'30'"
       }
     },
     {

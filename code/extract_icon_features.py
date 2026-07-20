@@ -281,6 +281,7 @@ class TextureRobustnessFeatures(FeatureExtractor):
     name = "texture_and_robustness"
     columns = (
         "texture_entropy",
+        "texture_coarseness",
         *(f"lbp_histogram_{index:02d}" for index in range(10)),
         "crush_test_stability",
         "text_or_letter_presence",
@@ -1359,6 +1360,7 @@ def rgb_to_lab(rgb_values: np.ndarray) -> np.ndarray:
 def texture_stats(gray: np.ndarray, foreground: np.ndarray) -> dict[str, float]:
     out = {
         "texture_entropy": 0.0,
+        "texture_coarseness": 0.0,
         **{f"lbp_histogram_{index:02d}": 0.0 for index in range(10)},
     }
     if not foreground.any():
@@ -1372,6 +1374,8 @@ def texture_stats(gray: np.ndarray, foreground: np.ndarray) -> dict[str, float]:
         probabilities /= probabilities.sum()
         out["texture_entropy"] = float(-(probabilities * np.log2(probabilities)).sum() / math.log2(32))
 
+    out["texture_coarseness"] = tamura_coarseness(gray, foreground)
+
     lbp_values = local_binary_pattern_uniform(gray, foreground)
     if lbp_values.size:
         lbp_histogram, _ = np.histogram(lbp_values, bins=np.arange(11), range=(0, 10))
@@ -1380,6 +1384,129 @@ def texture_stats(gray: np.ndarray, foreground: np.ndarray) -> dict[str, float]:
             for index, value in enumerate(lbp_histogram):
                 out[f"lbp_histogram_{index:02d}"] = float(value / total)
     return out
+
+
+def tamura_coarseness(
+    gray: np.ndarray,
+    foreground: np.ndarray,
+    analysis_size: int = 128,
+    max_operator_size: int = 32,
+    near_maximum_threshold: float = 0.9,
+) -> float:
+    """Return normalized Tamura coarseness for the glyph's effective picture.
+
+    Tamura, Mori, and Yamawaki (1978) define coarseness as the mean
+    power-of-two neighborhood size producing the strongest opposing-window
+    intensity difference. Their t=0.9 refinement selects the largest scale
+    whose response remains near the maximum. The original experiments use
+    128x128 texture patches and exclude boundary strips that cannot support
+    every operator size.
+
+    For an isolated glyph, exterior canvas whitespace is not texture. We use
+    the foreground bounding box as the effective picture, scale its longest
+    side to 128 pixels without changing aspect ratio, and average only over
+    positions supported by every available scale. Dividing by the largest
+    available operator makes the result comparable across narrow glyph crops.
+
+    Reference: H. Tamura, S. Mori, and T. Yamawaki, "Textural Features
+    Corresponding to Visual Perception," IEEE TSMC 8(6), 1978,
+    DOI 10.1109/TSMC.1978.4309999.
+    """
+
+    if analysis_size < 2:
+        raise ValueError("analysis_size must be at least 2")
+    if max_operator_size < 1:
+        raise ValueError("max_operator_size must be at least 1")
+    if not 0.0 < near_maximum_threshold <= 1.0:
+        raise ValueError("near_maximum_threshold must be in the interval (0, 1]")
+
+    ys, xs = np.nonzero(foreground)
+    if not len(xs):
+        return 0.0
+
+    effective_picture = gray[
+        int(ys.min()) : int(ys.max()) + 1,
+        int(xs.min()) : int(xs.max()) + 1,
+    ]
+    height, width = effective_picture.shape
+    scale = analysis_size / float(max(height, width))
+    resized_width = max(1, round(width * scale))
+    resized_height = max(1, round(height * scale))
+    effective_picture = np.asarray(
+        Image.fromarray(effective_picture.astype(np.float32)).resize(
+            (resized_width, resized_height),
+            Image.Resampling.BILINEAR,
+        ),
+        dtype=np.float32,
+    )
+
+    height, width = effective_picture.shape
+    operator_sizes = []
+    operator_size = 1
+    while operator_size <= max_operator_size:
+        if operator_size <= height and operator_size <= width and (
+            width >= 2 * operator_size or height >= 2 * operator_size
+        ):
+            operator_sizes.append(operator_size)
+        operator_size *= 2
+    if not operator_sizes:
+        return 0.0
+
+    energy_maps = []
+    for operator_size in operator_sizes:
+        averages = _window_sums(effective_picture, operator_size) / float(operator_size**2)
+        energy = np.full((height, width), -np.inf, dtype=np.float32)
+
+        if width >= 2 * operator_size:
+            horizontal = np.abs(averages[:, :-operator_size] - averages[:, operator_size:])
+            y_start = operator_size // 2
+            x_start = operator_size
+            energy[
+                y_start : y_start + horizontal.shape[0],
+                x_start : x_start + horizontal.shape[1],
+            ] = horizontal
+
+        if height >= 2 * operator_size:
+            vertical = np.abs(averages[:-operator_size, :] - averages[operator_size:, :])
+            y_start = operator_size
+            x_start = operator_size // 2
+            target = energy[
+                y_start : y_start + vertical.shape[0],
+                x_start : x_start + vertical.shape[1],
+            ]
+            np.maximum(target, vertical, out=target)
+
+        energy_maps.append(energy)
+
+    energies = np.stack(energy_maps)
+    effective = np.all(np.isfinite(energies), axis=0)
+    if not effective.any():
+        return 0.0
+
+    maximum_energy = np.max(energies, axis=0)
+    near_maximum = np.isfinite(energies) & effective[np.newaxis, :, :] & (
+        energies >= near_maximum_threshold * np.where(effective, maximum_energy, 0.0)
+    )
+    best_size = np.zeros((height, width), dtype=np.float32)
+    for operator_size, qualifies in zip(operator_sizes, near_maximum):
+        best_size[qualifies] = operator_size
+
+    return float(best_size[effective].mean() / operator_sizes[-1])
+
+
+def _window_sums(values: np.ndarray, size: int) -> np.ndarray:
+    """Return all size-by-size window sums using an integral image."""
+
+    integral = np.pad(
+        np.cumsum(np.cumsum(values, axis=0, dtype=np.float64), axis=1, dtype=np.float64),
+        ((1, 0), (1, 0)),
+    )
+    return (
+        integral[size:, size:]
+        - integral[:-size, size:]
+        - integral[size:, :-size]
+        + integral[:-size, :-size]
+    )
 
 
 def local_binary_pattern_uniform(gray: np.ndarray, foreground: np.ndarray) -> np.ndarray:

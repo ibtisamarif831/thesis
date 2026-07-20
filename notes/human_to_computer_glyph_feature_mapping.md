@@ -23,13 +23,13 @@ Active computer-vision families must be visible in the glyph image and computabl
 | Density/fill | Sparse vs filled, thin vs heavy marks | foreground area, bounding-box occupancy, filled/outline proxy, stroke width |
 | Balance/layout | Centering, symmetry, top-heavy/side-heavy layout | centroid offset, horizontal/vertical symmetry, bbox center/size, 4x4 grid occupancy |
 | Color/contrast | Color availability, hue channel, salience, legibility | monochrome flag, color count, saturation, colorfulness, foreground/background contrast, hue histogram, dominant Lab colors |
-| Texture | Internal tonal variation | texture entropy |
+| Texture | Internal tonal variation and fine-versus-coarse spatial scale | texture entropy, Tamura coarseness |
 
 These families are used by the dashboard, feature review, feature explorer, clustering, and similarity outputs.
 
 ## Excluded Raw Channels
 
-The extractor still stores 100 raw numeric image-feature columns for traceability, but the active visual-family set uses 81 columns.
+The extractor still stores 101 raw numeric image-feature columns for traceability, but the active visual-family set uses 82 columns.
 
 Excluded from active mapping:
 

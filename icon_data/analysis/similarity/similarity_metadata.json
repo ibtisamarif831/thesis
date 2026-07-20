@@ -90,6 +90,7 @@
     "dominant_color_3_lab_a",
     "dominant_color_3_lab_b",
     "texture_entropy",
+    "texture_coarseness",
     "lbp_histogram_00",
     "lbp_histogram_01",
     "lbp_histogram_02",
@@ -193,6 +194,7 @@
     "dominant_color_3_lab_a",
     "dominant_color_3_lab_b",
     "texture_entropy",
+    "texture_coarseness",
     "lbp_histogram_00",
     "lbp_histogram_01",
     "lbp_histogram_02",
@@ -288,7 +290,8 @@
     "dominant_color_3_lab_l",
     "dominant_color_3_lab_a",
     "dominant_color_3_lab_b",
-    "texture_entropy"
+    "texture_entropy",
+    "texture_coarseness"
   ],
   "excluded_feature_columns": [
     "crush_test_stability",
@@ -434,7 +437,8 @@
       "dominant_color_3_lab_b"
     ],
     "Texture": [
-      "texture_entropy"
+      "texture_entropy",
+      "texture_coarseness"
     ]
   },
   "extractor_feature_groups": {
@@ -549,6 +553,7 @@
     ],
     "texture_and_robustness": [
       "texture_entropy",
+      "texture_coarseness",
       "lbp_histogram_00",
       "lbp_histogram_01",
       "lbp_histogram_02",

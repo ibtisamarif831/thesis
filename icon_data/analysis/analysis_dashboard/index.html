@@ -261,7 +261,7 @@
   <section id="featureGroupsView" class="view feature-groups">
     <div class="feature-groups-header">
       <h2>Feature Groups</h2>
-      <p>Feature groups organize image measurements into qualitative families based on human icon perception. This view is intentionally concise: it shows the study-level family and the features grouped under it.</p>
+      <p>Each visual family shows only its selected 1st and 2nd representative.</p>
     </div>
     <div class="feature-groups-content" id="featureGroupsContent">
       <span class="muted">Loading feature groups...</span>
@@ -270,7 +270,7 @@
   <section id="featureExplorerView" class="view feature-explorer">
     <div class="explorer-header">
       <h2>Feature Values</h2>
-      <p>Browse up to two least-redundant active features from each visual family and compare representative icons with low, medium, and high values. Texture currently has one active feature.</p>
+      <p>Browse the 1st and 2nd strength-ranked complementary representatives from each visual family and compare icons with low, medium, and high values.</p>
     </div>
     <div class="explorer-toolbar">
       <label>Search feature<input id="featureExplorerSearch" type="search" placeholder="Search by name"></label>
@@ -573,19 +573,34 @@
         container.innerHTML = '<span class="muted">No feature group metadata is available.</span>';
         return;
       }
+      const representatives = (dashboard.feature_explorer && dashboard.feature_explorer.features) || [];
+      const representativesByFamily = new Map();
+      representatives.forEach(feature => {
+        if (!representativesByFamily.has(feature.group)) representativesByFamily.set(feature.group, []);
+        representativesByFamily.get(feature.group).push(feature);
+      });
       const overview = `
         <section class="feature-family-overview">
-          <h2>Recommended Feature Families For Analysis</h2>
-          <p>For thesis experiments, group the features into interpretable families:</p>
+          <h2>Selected Family Representatives</h2>
+          <p>Strength sets the order; direct pairwise Spearman only screens redundancy.</p>
           <div class="family-overview-table-wrap">
             <table class="family-overview-table">
-              <thead><tr><th>Human category</th><th>Computer feature family</th></tr></thead>
+              <thead><tr><th>Feature family</th><th>1st feature</th><th>2nd feature</th><th>Pair |ρ|</th></tr></thead>
               <tbody>
-                ${sections.map(section => `
-                  <tr>
-                    <td><b>${escapeHtml(section.human_category || section.title.replace(" Features", ""))}</b></td>
-                    <td>${escapeHtml(section.family_summary || section.features.map(feature => feature.label.toLowerCase()).join(", "))}</td>
-                  </tr>`).join("")}
+                ${sections.map(section => {
+                  const selected = (representativesByFamily.get(section.id) || [])
+                    .slice()
+                    .sort((a, b) => Number(a.selection.rank_in_family) - Number(b.selection.rank_in_family));
+                  const first = selected.find(feature => Number(feature.selection.rank_in_family) === 1);
+                  const second = selected.find(feature => Number(feature.selection.rank_in_family) === 2);
+                  return `
+                    <tr>
+                      <td><b>${escapeHtml(section.human_category || section.title.replace(" Features", ""))}</b></td>
+                      <td>${first ? escapeHtml(first.label) : "—"}</td>
+                      <td>${second ? escapeHtml(second.label) : "—"}</td>
+                      <td>${first && first.selection.pair_abs_correlation !== null ? formatNumber(first.selection.pair_abs_correlation) : "—"}</td>
+                    </tr>`;
+                }).join("")}
               </tbody>
             </table>
           </div>
@@ -762,12 +777,14 @@
       const explorer = dashboard.feature_explorer;
       const query = explorerState.search.trim().toLowerCase();
       return (explorer.features || [])
-        .filter(feature => !query || `${feature.label} ${feature.feature_id} ${feature.group_title}`.toLowerCase().includes(query))
-        .sort((a, b) => (a.group_title || "").localeCompare(b.group_title || "") || a.label.localeCompare(b.label));
+        .filter(feature => !query || `${feature.label} ${feature.feature_id} ${feature.group_title}`.toLowerCase().includes(query));
     }
 
     function renderFeatureExplorerControls(features) {
-      const options = features.map(feature => [feature.feature_id, `${feature.label} - ${feature.group_title || "Image feature"}`]);
+      const options = features.map(feature => {
+        const rank = Number(feature.selection.rank_in_family) === 1 ? "1st" : "2nd";
+        return [feature.feature_id, `${feature.group_title || "Image feature"} — ${rank}: ${feature.label}`];
+      });
       fillSelect("featureExplorerFeature", options, explorerState.selectedFeatureId || "");
     }
 
@@ -787,6 +804,11 @@
         ["Std", feature.std],
         ["Missing", feature.missing_count]
       ].map(([label, value]) => `<div class="explorer-stat"><b>${label === "Missing" ? escapeHtml(value) : formatNumber(value)}</b><span>${escapeHtml(label)}</span></div>`).join("");
+      const rankNumber = Number(feature.selection.rank_in_family);
+      const rankLabel = rankNumber === 1 ? "1st" : rankNumber === 2 ? "2nd" : `#${escapeHtml(rankNumber)}`;
+      const pairSummary = feature.selection.companion_feature_label
+        ? ` · |ρ| with ${escapeHtml(feature.selection.companion_feature_label)} ${formatNumber(feature.selection.pair_abs_correlation)}`
+        : "";
       container.innerHTML = `
         <div class="explorer-layout">
           <div class="explorer-main">
@@ -794,7 +816,7 @@
               <h2>${escapeHtml(feature.label)}</h2>
               <span class="pill">${escapeHtml(feature.group_title || "Image feature")}</span>
               <p>${escapeHtml(feature.meaning || "Extracted image feature.")}</p>
-              <p class="muted">Uniqueness rank #${escapeHtml(feature.selection.rank_in_family)} in family · strongest |ρ| ${formatNumber(feature.selection.strongest_abs_spearman)}</p>
+              <p class="muted">Selected ${rankLabel} in family${pairSummary}</p>
             </div>
             <div class="explorer-stats">${stats}</div>
             ${exampleSectionHtml("Low Values", feature.examples.low, "Icons with the smallest raw values for this feature.", "low")}

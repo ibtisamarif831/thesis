@@ -43,13 +43,15 @@ Boundary for future work:
 | Source provenance / old source plan | `data/10 icons.md`, `icon_data/MANIFEST.md` | `git show HEAD:source.md` if `source.md` is absent/deleted |
 | Generated output status | `icon_data/analysis/README.md` | specific subfolder READMEs |
 | Extracted paper text / literature evidence | `papers/extracted_text/README.md`, `notes/paper_feature_review.md` | original PDFs in `papers/` |
+| Feature representative pair-selection method | `notes/feature_pair_selection_method.md` | `code/thesis_pipeline/dashboard/feature_selection.py`, `code/build_analysis_dashboard.py` |
+| Tamura coarseness definition and validation | `notes/tamura_coarseness_validation.md` | `papers/Tamura-Textural_Features_Corresponding_to_Visual_Perception.pdf`, `code/extract_icon_features.py` |
 
 ## Current Working State To Know
 
 - The active canonical dataset is `icon_data/analysis/dataset.csv`.
 - Current dataset size: **28,749** canonical rows in `dataset.csv`.
 - Normalized PNGs are generated under `icon_data/normalized_256/`; this directory is large/generated and may be ignored by git.
-- Current visual-feature sample: **1,038** rows in `icon_data/analysis/features.csv`, with **100 raw numeric image-feature columns** plus metadata columns. The active literature-mapped visual family set uses **81** of those raw columns; weak/non-interpretable channels remain only for traceability.
+- Current visual-feature sample: **1,038** rows in `icon_data/analysis/features.csv`, with **101 raw numeric image-feature columns** plus metadata columns. The active literature-mapped visual family set uses **82** of those raw columns; weak/non-interpretable channels remain only for traceability.
 - Current feature extraction failures: `[]` in `icon_data/analysis/feature_failures.json`.
 - The interactive dashboard is generated under `icon_data/analysis/analysis_dashboard/`.
 - Current dashboard sample: **129** rows in `icon_data/analysis/analysis_dashboard/dashboard_data.json`.
@@ -61,10 +63,12 @@ Boundary for future work:
   - coloring by cluster, set, category, style, or numeric image feature;
   - filtering by icon set, category, and style;
   - selected icon details and cluster summaries;
-  - a Feature Values tab restricted to up to two non-constant, lowest-redundancy features per visual family (13 total: two for six families and the single active Texture feature), selected from Feature Review's strongest absolute Spearman correlations, with searchable low/mean-nearest/high examples.
+  - a Feature Values tab restricted to the two strongest complementary representatives per visual family (14 total), labeled 1st and 2nd with searchable low/mean-nearest/high examples.
+- Feature Values selection uses `select_strong_family_features`: `FEATURE_STRENGTH_PRIORITY` in `code/build_analysis_dashboard.py` ranks candidates from local literature support, interpretability, measurement directness, and observed feature-sample quality; direct pairwise `|ρ| < 0.70` then screens redundancy. Spearman does not define strength.
+- Texture uses `texture_entropy` first and normalized Tamura `texture_coarseness` second. Coarseness was activated only after review of Tamura et al. (1978), full-sample validation (`ρ=-0.028712` with entropy; 1,030 distinct rounded values; no missing values), and a low/high visual audit. See `notes/tamura_coarseness_validation.md`. A GLCM-contrast pilot remains rejected because it emphasized antialiased text/edges.
 - Similarity outputs in `icon_data/analysis/similarity/` are based on the 1,038-row feature sample.
 - Similarity and dashboard image-feature clustering use the active visual feature families from `code/build_analysis_dashboard.py`. Excluded raw channels are not used for active visual-family clustering or similarity ranking.
-- The 7 thesis PDFs have extracted page-marked text under `papers/extracted_text/`; regenerate with `code/extract_paper_text.py`.
+- The 8 thesis PDFs have extracted page-marked text under `papers/extracted_text/`; regenerate with `code/extract_paper_text.py`.
 - Static feature visualizations under `icon_data/analysis/visualizations/` are summary-only when `matplotlib` is unavailable in the runtime. The interactive Plotly dashboard is the stronger current visual interface.
 - Treat `THESIS_STATUS.md`, `icon_data/analysis/README.md`, generated metadata JSON files, and current scripts as the source of truth for current state.
 - `source.md` is tracked historically but may be deleted in the working tree. Do not restore it unless explicitly asked; use `git show HEAD:source.md` for its last committed content.
@@ -197,7 +201,7 @@ This is the main canonical analysis area.
 Important files:
 
 - `dataset.csv`: one row per canonical icon selected for analysis.
-- `features.csv`: current balanced pilot visual-feature sample, 1,038 rows and 100 raw numeric image-feature columns.
+- `features.csv`: current balanced pilot visual-feature sample, 1,038 rows and 101 raw numeric image-feature columns.
 - `features_metadata.json`: feature extraction settings and registry.
 - `feature_failures.json`: latest visual-feature extraction failures.
 - `normalization_failures.json`: latest normalization/conversion failures.
@@ -252,7 +256,7 @@ Current dashboard sample:
 
 ## Feature Set
 
-The extractor stores 100 raw numeric image-feature columns for traceability. The active thesis mapping currently uses 81 of those columns, grouped into literature-aligned visual feature families:
+The extractor stores 101 raw numeric image-feature columns for traceability. The active thesis mapping currently uses 82 of those columns, grouped into literature-aligned visual feature families:
 
 - Complexity.
 - Shape/silhouette.

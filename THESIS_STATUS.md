@@ -1,6 +1,6 @@
 # Thesis Status
 
-Updated: 2026-07-08
+Updated: 2026-07-20
 
 ## Thesis Statement
 
@@ -12,11 +12,13 @@ The project has a working computer-side pipeline:
 
 - Local icon/glyph datasets are collected and normalized.
 - Literature papers are stored locally in `papers/` with extracted text in `papers/extracted_text/`.
-- Visual features are extracted for a balanced 1,038-icon sample.
+- Visual features are extracted for all 28,749 canonical icons, with zero failures in the verified full-corpus run.
 - Active visual feature families are defined and used consistently by the dashboard and similarity outputs.
 - Weak/non-interpretable raw channels have been removed from active feature-family analysis.
 - Similarity outputs are rebuilt using the active visual families.
 - Evaluation layers are specified in `code/evaluation/evaluation_layers.md`.
+- Feature Groups exposes one literature-backed representative for each of the seven families, with evidence citations and an independent, randomizable 20-icon pilot sample drawn from the complete corpus; each sample shows its arithmetic mean and is sorted low-to-high, while preserving all 81 active analytical features.
+- Feature schema v2 repairs all seven representatives and foreground masking while retaining legacy measurements. Scalar families use arithmetic means; orientation uses confidence-aware angular ordering and an axial circular mean; Red is pixel-derived. The engineering pipeline is complete, but the pilot remains blocked until the frozen two-rater benchmark passes every release gate.
 - README/guide files now describe the current thesis direction.
 
 ## Active Visual Families
@@ -49,6 +51,7 @@ These are not deleted from raw exports, but they should not drive the thesis cla
 - Dashboard and similarity outputs regenerated.
 - Project documentation aligned with the current thesis direction.
 - Old historical task files removed and replaced with a current next-step tracker.
+- Initial representative-feature selection completed for all seven families; candidate-stimulus review remains open.
 
 ## What Is Not Done Yet
 
@@ -73,6 +76,7 @@ Use `code/evaluation/evaluation_layers.md` as the evaluation-layer reference.
 
 ## Current Source Of Truth
 
+- `wiki/README.md` and its topic pages for organized subsystem documentation
 - `agent.md`
 - `THESIS_CHECKLIST.md`
 - `THESIS_STATUS.md`

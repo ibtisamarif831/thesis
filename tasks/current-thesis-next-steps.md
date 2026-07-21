@@ -1,6 +1,6 @@
 # Current Thesis Next Steps
 
-Updated: 2026-07-13
+Updated: 2026-07-20
 
 ## Current Thesis Direction
 
@@ -28,6 +28,8 @@ Computer-side scores come from active visual feature families. Human-side scores
 - Similarity math now handles circular orientation and hue correctly.
 - Project README/guide files were aligned with the current thesis direction.
 - Evaluation layers were documented in `code/evaluation/evaluation_layers.md`.
+- Feature Groups now has one literature-backed representative per family, with selection rationale and citation; the 81-feature analytical registry remains unchanged.
+- Schema-v2 replacements, strict-red pixel classification, mask diagnostics, confidence-aware orientation, and frozen benchmark tooling are implemented. Human ratings are still required; the all-family pilot gate is blocked until they pass.
 
 ## Immediate Next Tasks
 
@@ -76,6 +78,7 @@ The meeting-note implementation backlog is captured in [`tasks/tickets/`](ticket
 
 ## Files To Treat As Current
 
+- `wiki/README.md`
 - `agent.md`
 - `THESIS_CHECKLIST.md`
 - `icon_data/analysis/README.md`

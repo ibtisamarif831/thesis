@@ -1,6 +1,8 @@
 # Icon Analysis Dataset
 
-Generated: 2026-06-15
+Feature schema v2 adds robust foreground-mask diagnostics and ten versioned measurement channels while retaining all schema-v1 columns. The current engineering shape is 28,749 rows and 133 columns (23 metadata + 110 numeric); the active family registry remains 81. `feature_v2_benchmark.csv` and `feature_v2_release_gate.json` govern human validation, and the pilot remains blocked until two independent raters pass every gate.
+
+Generated: 2026-07-20
 
 ## Thesis Role
 
@@ -19,7 +21,7 @@ Semantic meaning, historical/cultural interpretation, familiarity, metaphor, and
 ## Files
 
 - `dataset.csv`: one row per canonical icon selected for analysis.
-- `features.csv`: extracted visual features for the current balanced pilot sample.
+- `features.csv`: extracted visual features for all 28,749 canonical icons.
 - `features_metadata.json`: feature extraction settings and active feature registry.
 - `feature_failures.json`: feature extraction failures from the latest run.
 - `visualizations/`: generated visual report, plots, contact sheets, and feature summaries.
@@ -57,11 +59,11 @@ python3 code/build_icon_dataset.py --normalize --workers 8
 
 Feature extraction is implemented in:
 
-```bash
-/Users/macbook/.cache/codex-runtimes/codex-primary-runtime/dependencies/python/bin/python3 code/extract_icon_features.py --per-set-limit 100 --workers 4
+```powershell
+python code/extract_icon_features.py --workers 12 --executor process
 ```
 
-The extractor reads normalized 256x256 PNGs from `icon_data/normalized_256/` and writes a balanced pilot sample to `features.csv`. The current run uses up to 100 icons per icon set, producing 1,038 feature rows because some sets contain fewer than 100 canonical icons.
+The extractor reads normalized 256x256 PNGs from `icon_data/normalized_256/` and writes the complete canonical corpus to `features.csv`. The verified 2026-07-20 schema-v2 run contains 28,749 rows, uses no global or per-set limit, records 12 process workers, and reports zero failures. Every row has 23 metadata columns and 110 raw numeric feature columns; all numeric cells are present and finite.
 
 OpenCV is used for Canny/contour helpers when available; the script keeps local NumPy/Pillow fallbacks for portability.
 

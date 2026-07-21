@@ -1,5 +1,6 @@
 {
-  "input": "icon_data/analysis/features.csv",
+  "feature_schema_version": 2,
+  "input": "tmp\\similarity_features_v2_1038.csv",
   "row_count": 1038,
   "feature_columns": [
     "foreground_area_ratio",
@@ -101,7 +102,17 @@
     "lbp_histogram_08",
     "lbp_histogram_09",
     "crush_test_stability",
-    "text_or_letter_presence"
+    "text_or_letter_presence",
+    "quadtree_structural_variability_v2",
+    "enclosure_score_v2",
+    "principal_axis_orientation_v2",
+    "orientation_confidence_v2",
+    "solid_fill_ratio_v2",
+    "horizontal_symmetry_v2",
+    "mean_saturation_v2",
+    "local_texture_variation_v2",
+    "red_pixel_ratio_v2",
+    "strict_red_flag_v2"
   ],
   "similarity_feature_columns": [
     "foreground_area_ratio",
@@ -156,8 +167,7 @@
     "curvature_histogram_straight",
     "curvature_histogram_gentle",
     "curvature_histogram_sharp",
-    "principal_axis_orientation_cos2",
-    "principal_axis_orientation_sin2",
+    "principal_axis_orientation",
     "arrowhead_count",
     "arc_count",
     "hu_moment_1",
@@ -204,12 +214,23 @@
     "lbp_histogram_08",
     "lbp_histogram_09",
     "crush_test_stability",
-    "text_or_letter_presence"
+    "text_or_letter_presence",
+    "quadtree_structural_variability_v2",
+    "enclosure_score_v2",
+    "principal_axis_orientation_v2_cos2",
+    "principal_axis_orientation_v2_sin2",
+    "orientation_confidence_v2",
+    "solid_fill_ratio_v2",
+    "horizontal_symmetry_v2",
+    "mean_saturation_v2",
+    "local_texture_variation_v2",
+    "red_pixel_ratio_v2",
+    "strict_red_flag_v2"
   ],
   "active_similarity_feature_columns": [
     "canny_edge_density",
     "quadtree_leaf_count",
-    "quadtree_structural_variability",
+    "quadtree_structural_variability_v2",
     "quadtree_mean_leaf_size",
     "connected_components",
     "contour_count",
@@ -218,7 +239,7 @@
     "corner_count",
     "bounding_box_aspect_ratio",
     "solidity",
-    "closed_contour_ratio",
+    "enclosure_score_v2",
     "circularity",
     "rectangularity",
     "curvature_histogram_straight",
@@ -228,19 +249,19 @@
     "line_orientation_45",
     "line_orientation_90",
     "line_orientation_135",
-    "principal_axis_orientation_cos2",
-    "principal_axis_orientation_sin2",
+    "principal_axis_orientation_v2_cos2",
+    "principal_axis_orientation_v2_sin2",
     "arrowhead_count",
     "arc_count",
     "skeleton_endpoints",
     "skeleton_junctions",
     "foreground_area_ratio",
     "bounding_box_occupancy",
-    "filled_vs_outline_proxy",
+    "solid_fill_ratio_v2",
     "stroke_width_mean",
     "stroke_width_std",
     "centroid_distance_from_center",
-    "horizontal_symmetry",
+    "horizontal_symmetry_v2",
     "vertical_symmetry",
     "bbox_center_x",
     "bbox_center_y",
@@ -264,7 +285,7 @@
     "grid_foreground_3_3",
     "is_monochrome",
     "color_count",
-    "mean_saturation",
+    "mean_saturation_v2",
     "colorfulness",
     "foreground_background_contrast",
     "hue_histogram_00",
@@ -288,10 +309,13 @@
     "dominant_color_3_lab_l",
     "dominant_color_3_lab_a",
     "dominant_color_3_lab_b",
-    "texture_entropy"
+    "local_texture_variation_v2"
   ],
   "excluded_feature_columns": [
+    "closed_contour_ratio",
     "crush_test_stability",
+    "filled_vs_outline_proxy",
+    "horizontal_symmetry",
     "hu_moment_1",
     "hu_moment_2",
     "hu_moment_3",
@@ -309,7 +333,14 @@
     "lbp_histogram_07",
     "lbp_histogram_08",
     "lbp_histogram_09",
-    "text_or_letter_presence"
+    "mean_saturation",
+    "orientation_confidence_v2",
+    "principal_axis_orientation",
+    "quadtree_structural_variability",
+    "red_pixel_ratio_v2",
+    "strict_red_flag_v2",
+    "text_or_letter_presence",
+    "texture_entropy"
   ],
   "excluded_feature_reasons": {
     "hu_moment_1": "Excluded from active visual-family mapping because Hu moments are useful for machine shape matching but do not map cleanly to an interpretable human perception cue.",
@@ -330,10 +361,21 @@
     "lbp_histogram_08": "Excluded from active visual-family mapping because local binary patterns often capture antialiasing/rendering artifacts in flat vector icons.",
     "lbp_histogram_09": "Excluded from active visual-family mapping because local binary patterns often capture antialiasing/rendering artifacts in flat vector icons.",
     "text_or_letter_presence": "Excluded from active visual-family mapping because the current heuristic is too indirect for reliable glyph-identification claims.",
-    "crush_test_stability": "Excluded from active visual-family mapping because it measures processing robustness rather than a direct visible identification feature."
+    "crush_test_stability": "Excluded from active visual-family mapping because it measures processing robustness rather than a direct visible identification feature.",
+    "quadtree_structural_variability": "Deprecated schema-v1 representative retained only for reproducibility; active analysis uses the versioned v2 replacement.",
+    "closed_contour_ratio": "Deprecated schema-v1 representative retained only for reproducibility; active analysis uses the versioned v2 replacement.",
+    "principal_axis_orientation": "Deprecated schema-v1 representative retained only for reproducibility; active analysis uses the versioned v2 replacement.",
+    "filled_vs_outline_proxy": "Deprecated schema-v1 representative retained only for reproducibility; active analysis uses the versioned v2 replacement.",
+    "horizontal_symmetry": "Deprecated schema-v1 representative retained only for reproducibility; active analysis uses the versioned v2 replacement.",
+    "mean_saturation": "Deprecated schema-v1 representative retained only for reproducibility; active analysis uses the versioned v2 replacement.",
+    "texture_entropy": "Deprecated schema-v1 representative retained only for reproducibility; active analysis uses the versioned v2 replacement.",
+    "orientation_confidence_v2": "Auxiliary confidence channel used to define whether the v2 orientation is meaningful; it is not an independent family feature.",
+    "red_pixel_ratio_v2": "Auxiliary cohort diagnostic used by the strict-red classifier, not an active family feature.",
+    "strict_red_flag_v2": "Auxiliary dashboard cohort flag, not an active family feature."
   },
   "preprocessing": [
-    "principal_axis_orientation is encoded as cos/sin of doubled angle so 0 and 180 degrees compare as the same axis",
+    "principal_axis_orientation_v2 is encoded as cos/sin of doubled angle so 0 and 180 degrees compare as the same axis",
+    "orientation vectors are scaled by orientation_confidence_v2 and set to zero below confidence 0.20",
     "hue histogram bins are circularly smoothed with wraparound before scaling",
     "binary flags are centered without variance expansion",
     "bounded circular vector features keep their native -1..1 scale"
@@ -343,7 +385,7 @@
     "Complexity": [
       "canny_edge_density",
       "quadtree_leaf_count",
-      "quadtree_structural_variability",
+      "quadtree_structural_variability_v2",
       "quadtree_mean_leaf_size",
       "connected_components",
       "contour_count",
@@ -354,7 +396,7 @@
     "Shape/silhouette": [
       "bounding_box_aspect_ratio",
       "solidity",
-      "closed_contour_ratio",
+      "enclosure_score_v2",
       "circularity",
       "rectangularity",
       "curvature_histogram_straight",
@@ -366,8 +408,8 @@
       "line_orientation_45",
       "line_orientation_90",
       "line_orientation_135",
-      "principal_axis_orientation_cos2",
-      "principal_axis_orientation_sin2",
+      "principal_axis_orientation_v2_cos2",
+      "principal_axis_orientation_v2_sin2",
       "arrowhead_count",
       "arc_count",
       "skeleton_endpoints",
@@ -376,13 +418,13 @@
     "Density/fill": [
       "foreground_area_ratio",
       "bounding_box_occupancy",
-      "filled_vs_outline_proxy",
+      "solid_fill_ratio_v2",
       "stroke_width_mean",
       "stroke_width_std"
     ],
     "Balance/layout": [
       "centroid_distance_from_center",
-      "horizontal_symmetry",
+      "horizontal_symmetry_v2",
       "vertical_symmetry",
       "bbox_center_x",
       "bbox_center_y",
@@ -408,7 +450,7 @@
     "Color/contrast": [
       "is_monochrome",
       "color_count",
-      "mean_saturation",
+      "mean_saturation_v2",
       "colorfulness",
       "foreground_background_contrast",
       "hue_histogram_00",
@@ -434,7 +476,7 @@
       "dominant_color_3_lab_b"
     ],
     "Texture": [
-      "texture_entropy"
+      "local_texture_variation_v2"
     ]
   },
   "extractor_feature_groups": {
@@ -561,14 +603,24 @@
       "lbp_histogram_09",
       "crush_test_stability",
       "text_or_letter_presence"
+    ],
+    "representative_features_v2": [
+      "quadtree_structural_variability_v2",
+      "enclosure_score_v2",
+      "principal_axis_orientation_v2",
+      "orientation_confidence_v2",
+      "solid_fill_ratio_v2",
+      "horizontal_symmetry_v2",
+      "mean_saturation_v2",
+      "local_texture_variation_v2",
+      "red_pixel_ratio_v2",
+      "strict_red_flag_v2"
     ]
   },
   "family_reliability_weights": {
     "Texture": 0.75
   },
-  "feature_confidence_weights": {
-    "closed_contour_ratio": 0.75
-  },
+  "feature_confidence_weights": {},
   "distance_metrics": [
     "euclidean",
     "cosine"

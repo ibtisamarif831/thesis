@@ -1,0 +1,7 @@
+{
+  "feature_schema_version": 2,
+  "status": "blocked_pending_two_rater_benchmark",
+  "pilot_enabled": false,
+  "benchmark_rows": 450,
+  "unrated_cells": 900
+}

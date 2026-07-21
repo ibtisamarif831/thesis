@@ -22,10 +22,11 @@ OUTPUT_DIR = ROOT / "icon_data/analysis/similarity"
 
 FEATURE_COLUMNS = list(extract_icon_features.FEATURE_COLUMNS)
 HUE_COLUMNS = [f"hue_histogram_{index:02d}" for index in range(12)]
-ORIENTATION_COLUMN = "principal_axis_orientation"
+ORIENTATION_COLUMN = "principal_axis_orientation_v2"
+ORIENTATION_CONFIDENCE_COLUMN = "orientation_confidence_v2"
 ORIENTATION_DERIVED_COLUMNS = [
-    "principal_axis_orientation_cos2",
-    "principal_axis_orientation_sin2",
+    "principal_axis_orientation_v2_cos2",
+    "principal_axis_orientation_v2_sin2",
 ]
 BINARY_FEATURE_COLUMNS = {"is_monochrome"}
 BOUNDED_VECTOR_FEATURE_COLUMNS = set(ORIENTATION_DERIVED_COLUMNS)
@@ -36,7 +37,6 @@ FAMILY_RELIABILITY_WEIGHTS = {
 }
 
 FEATURE_CONFIDENCE_WEIGHTS = {
-    "closed_contour_ratio": 0.75,
 }
 
 METADATA_COLUMNS = [
@@ -85,8 +85,14 @@ def transformed_similarity_features(frame: pd.DataFrame) -> pd.DataFrame:
     for column in FEATURE_COLUMNS:
         if column == ORIENTATION_COLUMN:
             radians = np.deg2rad(values_by_column[column] * 2.0)
-            transformed[ORIENTATION_DERIVED_COLUMNS[0]] = np.cos(radians)
-            transformed[ORIENTATION_DERIVED_COLUMNS[1]] = np.sin(radians)
+            confidence = np.clip(values_by_column[ORIENTATION_CONFIDENCE_COLUMN], 0.0, 1.0)
+            confidence = np.where(
+                confidence >= extract_icon_features.ORIENTATION_CONFIDENCE_THRESHOLD,
+                confidence,
+                0.0,
+            )
+            transformed[ORIENTATION_DERIVED_COLUMNS[0]] = np.cos(radians) * confidence
+            transformed[ORIENTATION_DERIVED_COLUMNS[1]] = np.sin(radians) * confidence
         else:
             transformed[column] = values_by_column[column]
     return pd.DataFrame(transformed, columns=similarity_feature_columns())
@@ -236,7 +242,7 @@ def write_rows(rows: list[dict], output: Path) -> None:
         output.write_text("", encoding="utf-8")
         return
     with output.open("w", newline="", encoding="utf-8") as file:
-        writer = csv.DictWriter(file, fieldnames=list(rows[0].keys()))
+        writer = csv.DictWriter(file, fieldnames=list(rows[0].keys()), lineterminator="\n")
         writer.writeheader()
         writer.writerows(rows)
 
@@ -303,6 +309,7 @@ def write_metadata(output_dir: Path, frame: pd.DataFrame, neighbors: int, closes
     output = output_dir / "similarity_metadata.json"
     groups = similarity_feature_groups()
     metadata = {
+        "feature_schema_version": extract_icon_features.FEATURE_SCHEMA_VERSION,
         "input": relative_label(FEATURES_CSV),
         "row_count": int(len(frame)),
         "feature_columns": FEATURE_COLUMNS,
@@ -311,7 +318,8 @@ def write_metadata(output_dir: Path, frame: pd.DataFrame, neighbors: int, closes
         "excluded_feature_columns": sorted(build_analysis_dashboard.EXCLUDED_IMAGE_FEATURES),
         "excluded_feature_reasons": build_analysis_dashboard.EXCLUDED_IMAGE_FEATURE_REASONS,
         "preprocessing": [
-            "principal_axis_orientation is encoded as cos/sin of doubled angle so 0 and 180 degrees compare as the same axis",
+            "principal_axis_orientation_v2 is encoded as cos/sin of doubled angle so 0 and 180 degrees compare as the same axis",
+            "orientation vectors are scaled by orientation_confidence_v2 and set to zero below confidence 0.20",
             "hue histogram bins are circularly smoothed with wraparound before scaling",
             "binary flags are centered without variance expansion",
             "bounded circular vector features keep their native -1..1 scale",
@@ -384,6 +392,8 @@ def parse_args() -> argparse.Namespace:
 
 def main() -> None:
     args = parse_args()
+    global FEATURES_CSV
+    FEATURES_CSV = args.features
     args.output_dir.mkdir(parents=True, exist_ok=True)
     frame = load_features(args.features)
     euclidean, cosine = compute_distances(frame)

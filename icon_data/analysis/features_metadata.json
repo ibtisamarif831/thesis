@@ -1,16 +1,36 @@
 {
+  "feature_schema_version": 2,
   "input": "icon_data/analysis/dataset.csv",
   "output": "icon_data/analysis/features.csv",
-  "row_count": 1038,
-  "selected_row_count": 1038,
-  "per_set_limit": 100,
+  "row_count": 28749,
+  "selected_row_count": 28749,
+  "per_set_limit": null,
+  "workers": 12,
+  "executor": "process",
   "dependencies": {
     "opencv_available": true,
-    "opencv_version": "5.0.0",
-    "tesseract_available": true,
-    "tesseract_path": "/opt/homebrew/bin/tesseract",
-    "tesseract_version": "tesseract 5.5.1"
+    "opencv_version": "4.13.0",
+    "tesseract_available": false,
+    "tesseract_path": null,
+    "tesseract_version": null
   },
+  "foreground_mask": {
+    "transparent_alpha_threshold": 0.05,
+    "opaque_background_color_space": "CIELAB",
+    "opaque_background_delta_e76_threshold": 10.0,
+    "opaque_background_rule": "remove only border-connected pixels within threshold of the median border color",
+    "uncertainty_rule": "empty/full masks or opaque masks with nonuniform borders/contact are flagged"
+  },
+  "orientation_confidence_threshold": 0.2,
+  "deprecated_inactive_columns": [
+    "quadtree_structural_variability",
+    "closed_contour_ratio",
+    "principal_axis_orientation",
+    "filled_vs_outline_proxy",
+    "horizontal_symmetry",
+    "mean_saturation",
+    "texture_entropy"
+  ],
   "metadata_columns": [
     "icon_id",
     "set_id",
@@ -29,7 +49,12 @@
     "semantic_arrow_direction",
     "semantic_is_object",
     "semantic_object_label",
-    "semantic_object_category"
+    "semantic_object_category",
+    "mask_mode",
+    "mask_coverage",
+    "mask_border_contact",
+    "mask_confidence",
+    "mask_is_uncertain"
   ],
   "features": [
     {
@@ -190,6 +215,21 @@
         "lbp_histogram_09",
         "crush_test_stability",
         "text_or_letter_presence"
+      ]
+    },
+    {
+      "name": "representative_features_v2",
+      "columns": [
+        "quadtree_structural_variability_v2",
+        "enclosure_score_v2",
+        "principal_axis_orientation_v2",
+        "orientation_confidence_v2",
+        "solid_fill_ratio_v2",
+        "horizontal_symmetry_v2",
+        "mean_saturation_v2",
+        "local_texture_variation_v2",
+        "red_pixel_ratio_v2",
+        "strict_red_flag_v2"
       ]
     }
   ]

@@ -67,6 +67,7 @@
     #hoverPreview td:last-child { color: white; font-variant-numeric: tabular-nums; }
     .detail-img { width: 96px; height: 96px; object-fit: contain; border: 1px solid var(--border); background: white; }
     .muted { color: var(--muted); }
+    .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
     .pill { display: inline-block; padding: 2px 6px; border: 1px solid var(--border); border-radius: 999px; margin: 2px; font-size: 12px; background: var(--panel); }
     .summary-cluster { border: 1px solid var(--border); border-radius: 8px; margin: 8px 0; background: white; overflow: hidden; }
     .summary-cluster summary { cursor: pointer; padding: 8px; list-style-position: inside; }
@@ -103,6 +104,49 @@
     .family-overview-table td { padding: 10px 8px; text-align: left; vertical-align: top; font-size: 13px; line-height: 1.45; }
     .family-overview-table td:last-child { text-align: left; color: #334; }
     .family-overview-table b { color: #18202f; }
+    .family-detail-button { white-space: nowrap; padding: 5px 9px; font-size: 12px; }
+    .family-detail-modal { position: fixed; inset: 0; z-index: 60; display: none; background: white; }
+    .family-detail-modal.open { display: grid; animation: family-backdrop-in .16s ease-out; }
+    .family-detail-dialog { width: 100vw; height: 100vh; height: 100dvh; min-width: 0; overflow: hidden; display: grid; grid-template-rows: auto auto minmax(0, 1fr); border: 0; border-radius: 0; background: white; box-shadow: none; animation: family-dialog-in .2s ease-out; }
+    .family-detail-header { display: flex; align-items: start; justify-content: space-between; gap: 20px; padding: 18px 20px 14px; border-bottom: 1px solid var(--border); }
+    .family-detail-header h2 { margin: 0 0 5px; font-size: 20px; text-transform: none; letter-spacing: 0; color: #18202f; }
+    .family-detail-header p { margin: 0; max-width: 780px; color: #3d4656; font-size: 13px; line-height: 1.45; }
+    .family-detail-close { flex: 0 0 auto; width: 34px; height: 34px; padding: 0; border-radius: 50%; font-size: 20px; line-height: 1; }
+    .family-detail-toolbar { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 11px 20px; border-bottom: 1px solid var(--border); background: #f8fafc; }
+    .family-color-filters { display: flex; gap: 6px; flex-wrap: wrap; }
+    .family-color-filters button { padding: 5px 10px; font-size: 12px; }
+    .family-color-filters button.active { border-color: #18202f; background: #18202f; color: white; }
+    .family-detail-actions { display: flex; align-items: center; justify-content: flex-end; gap: 10px; }
+    .family-randomize { padding: 6px 11px; font-size: 12px; font-weight: 650; }
+    .family-detail-count { color: var(--muted); font-size: 12px; white-space: nowrap; }
+    .family-detail-body { min-height: 0; overflow: auto; padding: 18px 20px 22px; }
+    .family-selected-feature { display: grid; grid-template-columns: minmax(240px, .7fr) minmax(360px, 1.3fr); gap: 18px; margin-bottom: 20px; padding: 16px 18px; border-left: 4px solid #a000a8; background: #faf7fb; }
+    .family-selected-feature h3 { margin: 3px 0 5px; font-size: 19px; color: #18202f; }
+    .family-selected-feature p { margin: 0; color: #3d4656; font-size: 12px; line-height: 1.5; }
+    .family-selected-feature p + p { margin-top: 8px; }
+    .family-selected-kicker { color: #7b287f; font-size: 10px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; }
+    .family-selected-id { display: inline-block; margin-top: 8px; color: var(--muted); font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 11px; }
+    .family-selected-evidence { padding-left: 18px; border-left: 1px solid #ddd3df; }
+    .family-selected-evidence b { color: #18202f; }
+    .family-selected-citation { color: #667085 !important; font-style: italic; }
+    .family-icon-heading h3 { margin: 0; font-size: 14px; color: #18202f; }
+    .family-icon-heading { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; margin-bottom: 10px; }
+    .family-sample-average { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-bottom: 12px; padding: 10px 0; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+    .family-sample-average span, .family-sample-average small { display: block; }
+    .family-sample-average span { color: #18202f; font-size: 12px; font-weight: 650; }
+    .family-sample-average small { margin-top: 2px; color: var(--muted); font-size: 11px; font-weight: 400; }
+    .family-sample-average code { color: #18202f; font-size: 19px; font-weight: 700; font-variant-numeric: tabular-nums; }
+    .family-icon-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(112px, 1fr)); gap: 10px; }
+    .family-icon { min-width: 0; padding: 8px; border: 1px solid var(--border); border-radius: 6px; background: #fbfcfe; }
+    .family-icon img { width: 100%; aspect-ratio: 1; object-fit: contain; display: block; border: 1px solid #e5e9f0; background: white; }
+    .family-icon b, .family-icon span { display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .family-icon b { margin-top: 6px; font-size: 12px; color: #18202f; }
+    .family-icon span { margin-top: 2px; font-size: 10px; color: var(--muted); }
+    .family-icon code { display: block; margin-top: 5px; color: #18202f; font-size: 10px; font-variant-numeric: tabular-nums; overflow-wrap: anywhere; }
+    .mask-warning { display: block; margin-top: 5px; color: #8a4b08; font-size: 10px; font-style: normal; font-weight: 650; }
+    .family-icon-empty { padding: 28px 12px; border: 1px dashed var(--border); text-align: center; color: var(--muted); font-size: 13px; }
+    @keyframes family-backdrop-in { from { opacity: 0; } to { opacity: 1; } }
+    @keyframes family-dialog-in { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
     .feature-group-panel { border: 1px solid var(--border); border-radius: 6px; background: white; padding: 14px; }
     .feature-group-panel h2 { margin: 0; font-size: 16px; text-transform: none; letter-spacing: 0; color: #18202f; }
     .feature-group-panel p { margin: 7px 0 0; color: #3d4656; font-size: 13px; line-height: 1.45; }
@@ -176,6 +220,10 @@
       .review-layout, .explorer-layout { grid-template-columns: 1fr; }
       .review-detail, .correlation-panel { position: static; }
       .feature-reading-grid { grid-template-columns: 1fr; }
+      .family-selected-feature { grid-template-columns: 1fr; }
+      .family-selected-evidence { padding: 12px 0 0; border-top: 1px solid #ddd3df; border-left: 0; }
+      .family-detail-toolbar { align-items: start; flex-direction: column; }
+      .family-detail-actions { width: 100%; justify-content: space-between; }
       .explorer-stats { grid-template-columns: repeat(2, minmax(120px, 1fr)); }
       .example-strip { grid-template-columns: repeat(2, minmax(120px, 1fr)); }
     }
@@ -280,10 +328,33 @@
       <span class="muted">Loading feature examples...</span>
     </div>
   </section>
+  <div id="familyDetailModal" class="family-detail-modal" role="presentation" aria-hidden="true">
+    <section class="family-detail-dialog" role="dialog" aria-modal="true" aria-labelledby="familyDetailTitle">
+      <header class="family-detail-header">
+        <div>
+          <h2 id="familyDetailTitle">Feature family</h2>
+          <p id="familyDetailDescription"></p>
+        </div>
+        <button class="family-detail-close" id="familyDetailClose" type="button" aria-label="Close detail view">&times;</button>
+      </header>
+      <div class="family-detail-toolbar">
+        <div class="family-color-filters" id="familyColorFilters" aria-label="Filter icons by color treatment"></div>
+        <div class="family-detail-actions">
+          <span class="family-detail-count" id="familyDetailCount"></span>
+          <button class="family-randomize" id="familyRandomize" type="button">Randomize icons</button>
+        </div>
+      </div>
+      <div class="family-detail-body" id="familyDetailBody"></div>
+    </section>
+  </div>
   <div id="hoverPreview"></div>
   <script>
     let dashboard = null;
     let selectedIconId = null;
+    let activeFamilyId = null;
+    let familyColorMode = "all";
+    let familyDetailReturnFocus = null;
+    const familySamples = new Map();
     const computedCache = new Map();
 
     const state = {
@@ -326,6 +397,7 @@
       renderFeatureControls();
       initializeFeatureReviewControls();
       initializeFeatureExplorerControls();
+      initializeFamilyDetailControls();
 
       const sets = unique(dashboard.records.map(r => r.set_name)).sort();
       fillSelect("setFilter", sets.map(v => [v, v]), "", true);
@@ -579,18 +651,203 @@
           <p>For thesis experiments, group the features into interpretable families:</p>
           <div class="family-overview-table-wrap">
             <table class="family-overview-table">
-              <thead><tr><th>Human category</th><th>Computer feature family</th></tr></thead>
+              <thead><tr><th>Human category</th><th>Selected representative feature</th><th><span class="sr-only">Details</span></th></tr></thead>
               <tbody>
-                ${sections.map(section => `
-                  <tr>
+                ${sections.map(section => {
+                  const feature = section.representative_feature || section.features[0];
+                  return `<tr>
                     <td><b>${escapeHtml(section.human_category || section.title.replace(" Features", ""))}</b></td>
-                    <td>${escapeHtml(section.family_summary || section.features.map(feature => feature.label.toLowerCase()).join(", "))}</td>
-                  </tr>`).join("")}
+                    <td><b>${escapeHtml(feature.label)}</b><br><span class="feature-id">${escapeHtml(feature.id)}</span></td>
+                    <td><button class="family-detail-button" type="button" data-family-id="${escapeHtml(section.id)}">View details</button></td>
+                  </tr>`;
+                }).join("")}
               </tbody>
             </table>
           </div>
         </section>`;
       container.innerHTML = overview;
+      container.querySelectorAll(".family-detail-button").forEach(button => {
+        button.addEventListener("click", () => openFamilyDetail(button.dataset.familyId, button));
+      });
+    }
+
+    function initializeFamilyDetailControls() {
+      const modal = document.getElementById("familyDetailModal");
+      document.getElementById("familyDetailClose").addEventListener("click", closeFamilyDetail);
+      document.getElementById("familyRandomize").addEventListener("click", () => {
+        if (!activeFamilyId) return;
+        replaceFamilySample(activeFamilyId, familyColorMode);
+        renderFamilyDetail();
+        document.getElementById("familyRandomize").focus();
+      });
+      modal.addEventListener("click", event => {
+        if (event.target === modal) closeFamilyDetail();
+      });
+      document.addEventListener("keydown", event => {
+        if (event.key === "Escape" && modal.classList.contains("open")) closeFamilyDetail();
+      });
+    }
+
+    function iconColorMode(record) {
+      const features = record.image_features || {};
+      if (Number(features.strict_red_flag_v2) >= 0.5) return "red";
+      if (Number(features.is_monochrome) >= 0.5) return "bw";
+      return "colored";
+    }
+
+    function familyPopulation(colorMode) {
+      const records = dashboard.feature_group_records || dashboard.records || [];
+      return records.filter(record => colorMode === "all" || iconColorMode(record) === colorMode);
+    }
+
+    function familySampleKey(familyId, colorMode) {
+      return `${familyId}:${colorMode}`;
+    }
+
+    function randomSample(records, limit) {
+      const shuffled = records.slice();
+      for (let index = 0; index < Math.min(limit, shuffled.length); index += 1) {
+        const swapIndex = index + Math.floor(Math.random() * (shuffled.length - index));
+        [shuffled[index], shuffled[swapIndex]] = [shuffled[swapIndex], shuffled[index]];
+      }
+      return shuffled.slice(0, limit);
+    }
+
+    function replaceFamilySample(familyId, colorMode) {
+      const population = familyPopulation(colorMode);
+      const limit = Number(dashboard.metadata.feature_group_sample_size || 20);
+      const key = familySampleKey(familyId, colorMode);
+      const previousIds = new Set((familySamples.get(key) || []).map(record => record.icon_id));
+      let sample = randomSample(population, limit);
+      if (population.length > limit && sample.every(record => previousIds.has(record.icon_id))) {
+        const alternatives = population.filter(record => !previousIds.has(record.icon_id));
+        if (alternatives.length) sample[sample.length - 1] = alternatives[Math.floor(Math.random() * alternatives.length)];
+      }
+      familySamples.set(key, sample);
+      return sample;
+    }
+
+    function currentFamilySample(familyId, colorMode) {
+      const key = familySampleKey(familyId, colorMode);
+      return familySamples.get(key) || replaceFamilySample(familyId, colorMode);
+    }
+
+    function openFamilyDetail(familyId, trigger) {
+      const section = visibleFeatureSections().find(item => item.id === familyId);
+      if (!section) return;
+      activeFamilyId = familyId;
+      familyDetailReturnFocus = trigger || document.activeElement;
+      const modal = document.getElementById("familyDetailModal");
+      modal.classList.add("open");
+      modal.setAttribute("aria-hidden", "false");
+      document.body.style.overflow = "hidden";
+      renderFamilyDetail();
+      document.getElementById("familyDetailClose").focus();
+    }
+
+    function closeFamilyDetail() {
+      const modal = document.getElementById("familyDetailModal");
+      if (!modal.classList.contains("open")) return;
+      modal.classList.remove("open");
+      modal.setAttribute("aria-hidden", "true");
+      document.body.style.overflow = "";
+      activeFamilyId = null;
+      if (familyDetailReturnFocus) familyDetailReturnFocus.focus();
+    }
+
+    function renderFamilyDetail() {
+      const section = visibleFeatureSections().find(item => item.id === activeFamilyId);
+      if (!section) return;
+      const selectedFeature = section.representative_feature || section.features[0];
+      const allRecords = dashboard.feature_group_records || dashboard.records || [];
+      const counts = {
+        all: allRecords.length,
+        bw: allRecords.filter(record => iconColorMode(record) === "bw").length,
+        red: allRecords.filter(record => iconColorMode(record) === "red").length,
+        colored: allRecords.filter(record => iconColorMode(record) === "colored").length,
+      };
+      const modes = [["all", "All"], ["bw", "B/W"], ["red", "Red"], ["colored", "Colored"]];
+      document.getElementById("familyDetailTitle").textContent = section.title;
+      document.getElementById("familyDetailDescription").textContent = section.perception || section.description || "";
+      document.getElementById("familyColorFilters").innerHTML = modes.map(([id, label]) => `
+        <button type="button" class="${familyColorMode === id ? "active" : ""}" data-color-mode="${id}" aria-pressed="${familyColorMode === id}">${label} · ${counts[id]}</button>`).join("");
+      document.querySelectorAll("#familyColorFilters button").forEach(button => {
+        button.addEventListener("click", () => {
+          familyColorMode = button.dataset.colorMode;
+          renderFamilyDetail();
+          document.querySelector(`#familyColorFilters [data-color-mode="${familyColorMode}"]`).focus();
+        });
+      });
+      const population = familyPopulation(familyColorMode);
+      const isOrientation = selectedFeature.id === "principal_axis_orientation_v2";
+      const orientationThreshold = Number(dashboard.metadata.orientation_confidence_threshold || 0.20);
+      const orientationConfidence = record => Number((record.image_features || {}).orientation_confidence_v2 || 0);
+      const records = currentFamilySample(activeFamilyId, familyColorMode)
+        .slice()
+        .sort((left, right) => {
+          if (isOrientation) {
+            const leftDefined = orientationConfidence(left) >= orientationThreshold;
+            const rightDefined = orientationConfidence(right) >= orientationThreshold;
+            if (leftDefined !== rightDefined) return leftDefined ? -1 : 1;
+          }
+          return Number(left.image_features[selectedFeature.id]) - Number(right.image_features[selectedFeature.id]);
+        });
+      const sampleValues = records
+        .filter(record => !isOrientation || orientationConfidence(record) >= orientationThreshold)
+        .map(record => Number(record.image_features[selectedFeature.id]))
+        .filter(value => Number.isFinite(value));
+      let sampleAverage = null;
+      if (sampleValues.length && isOrientation) {
+        const doubled = sampleValues.map(value => value * 2 * Math.PI / 180);
+        const angle = Math.atan2(
+          doubled.reduce((total, value) => total + Math.sin(value), 0),
+          doubled.reduce((total, value) => total + Math.cos(value), 0)
+        ) / 2 * 180 / Math.PI;
+        sampleAverage = (angle + 180) % 180;
+      } else if (sampleValues.length) {
+        sampleAverage = sampleValues.reduce((total, value) => total + value, 0) / sampleValues.length;
+      }
+      document.getElementById("familyDetailCount").textContent = `${records.length} random of ${population.length} matching`;
+      document.getElementById("familyRandomize").disabled = population.length <= records.length;
+      const icons = records.length ? `<div class="family-icon-grid">${records.map(record => {
+        const confidence = orientationConfidence(record);
+        const orientationUndefined = isOrientation && confidence < orientationThreshold;
+        const valueLabel = orientationUndefined
+          ? `Undefined (confidence ${formatFeatureValue(confidence)})`
+          : `${formatFeatureValue(record.image_features[selectedFeature.id])}${isOrientation ? `Â° (confidence ${formatFeatureValue(confidence)})` : ""}`;
+        const maskWarning = record.mask_is_uncertain
+          ? `<em class="mask-warning" title="Mask mode: ${escapeHtml(record.mask_mode || "unknown")}; confidence ${formatFeatureValue(record.mask_confidence)}">Foreground mask uncertain</em>`
+          : "";
+        return `
+        <article class="family-icon">
+          <img src="${escapeHtml(record.normalized_path)}" alt="${escapeHtml(record.label || "Icon")}" loading="lazy">
+          <b title="${escapeHtml(record.label || record.icon_id)}">${escapeHtml(record.label || record.icon_id)}</b>
+          <span title="${escapeHtml(record.set_name)}">${escapeHtml(record.set_name)}</span>
+          <code title="${escapeHtml(selectedFeature.label)}">Value: ${valueLabel}</code>
+          ${maskWarning}
+        </article>`;
+      }).join("")}</div>` : '<div class="family-icon-empty">No icons match this color treatment.</div>';
+      document.getElementById("familyDetailBody").innerHTML = `
+        <section class="family-selected-feature">
+          <div>
+            <span class="family-selected-kicker">Selected feature Â· schema v${dashboard.metadata.feature_schema_version || 1}</span>
+            <h3>${escapeHtml(selectedFeature.label)}</h3>
+            <p>${escapeHtml(selectedFeature.meaning || "Extracted image feature.")}</p>
+            <span class="family-selected-id">${escapeHtml(selectedFeature.id)}</span>
+          </div>
+          <div class="family-selected-evidence">
+            <p><b>How to read it.</b> ${escapeHtml(section.representative_interpretation || "Higher values indicate more of the measured property.")}</p>
+            <p><b>Why this one.</b> ${escapeHtml(section.representative_rationale || "Selected as the current representative for this visual family.")}</p>
+            <p><b>Evidence.</b> ${escapeHtml(section.representative_evidence || "The literature supports this visual construct; the implementation remains a computational proxy.")}</p>
+            <p class="family-selected-citation">${escapeHtml(section.representative_citation || "")}</p>
+          </div>
+        </section>
+        <div class="family-icon-heading"><h3>20-icon pilot sample</h3><span class="muted">Randomly drawn from the full corpus, then ${isOrientation ? "placed in angular order from 0Â° to 180Â°; undefined orientations appear last" : `ordered by ${escapeHtml(selectedFeature.label.toLowerCase())}`}.</span></div>
+        <div class="family-sample-average">
+          <span>Sample average<small>${isOrientation ? "Axial circular mean of defined orientations" : `Arithmetic mean ${escapeHtml(selectedFeature.label.toLowerCase())}`} across these ${sampleValues.length} icons</small></span>
+          <code id="familySampleAverage">${sampleAverage === null ? "—" : formatFeatureValue(sampleAverage)}</code>
+        </div>
+        ${icons}`;
     }
 
     function setActiveFeatures(featureIds) {

@@ -1,5 +1,9 @@
 # Analysis Dashboard
 
+Feature Groups now consumes feature schema v2. The seven representatives use corrected foreground masks; strict Red is pixel-derived; orientation has confidence-aware angular ordering and an axial mean; uncertain masks are visibly flagged. Legacy representative columns remain only in the raw feature export. The interface is available for engineering review, but pilot deployment remains blocked pending the frozen two-rater release gate.
+
+For the comprehensive agent- and contributor-oriented guides, see [Dashboard UI](../../../wiki/dashboard-ui.md) and [Dashboard implementation](../../../wiki/dashboard-implementation.md).
+
 This folder contains the current interactive Plotly dashboard for exploring literature-mapped icon/glyph visual feature families and the computer-side outputs that will be compared against human identification/perception scores.
 
 The dashboard is a static HTML artifact generated from the thesis icon dataset. It is an analysis view for checking whether the current computer-measured visual families behave plausibly before they are compared with human-study scores.
@@ -54,7 +58,14 @@ Opening `index.html` directly from the filesystem may work in some browsers, but
 
 The dashboard loads `dashboard_data.json` and renders a Plotly scatter plot.
 
-Each point represents one icon. The 2D position is based on PCA coordinates for the selected feature variant. The point color can represent a cluster, icon set, category, style label, or numeric feature value.
+Each point represents one icon and is displayed using the normalized icon image. The 2D position is based on PCA coordinates for the selected feature variant. A Color By selector exists for cluster, icon set, or numeric feature value, but the current image-overlay renderer does not visibly apply that selection; this is a known UI gap.
+
+The header exposes four views:
+
+- **Clustering** for PCA, feature selection, clustering, filtering, and icon inspection.
+- **Feature Groups** for one literature-backed representative per family, with rationale/citation, a fullscreen detail view, All/B/W/Red/Colored filters, and an independent randomizable 20-icon pilot sample per family drawn from all 28,749 feature rows. Each active sample shows its arithmetic mean and orders icons from low to high by the representative feature value.
+- **Feature Values** for low, mean-nearest, and high representative examples.
+- **Feature Review** for feature variance and Spearman redundancy analysis.
 
 The left sidebar controls the analysis view:
 
@@ -63,7 +74,7 @@ The left sidebar controls the analysis view:
 - **Cluster Count** switches between the precomputed values 3, 5, 7, and 10.
 - **Color By** changes how points are colored.
 - **Image Features** lets image features be selected or deselected.
-- **Filters** restrict the view by icon set, category, or style. Selected filters appear as pills below each filter, and each pill can be removed with its `x` button.
+- **Filters** currently restrict the view by icon set. Selected sets appear as pills, and each pill can be removed with its `x` button.
 
 The right sidebar shows:
 
@@ -73,7 +84,7 @@ The right sidebar shows:
 - cluster summaries;
 - representative icons for visible clusters.
 
-The **Feature Values** tab contains up to two low-redundancy features from each active visual family. Selection reuses Feature Review's Spearman analysis: non-constant features are ranked within each family by their strongest absolute correlation with any other active feature, and the two lowest values are retained. Higher standard deviation and then label break ties. This produces 13 features: two from six families and the single active Texture feature, `texture_entropy`; excluded LBP channels are not reintroduced merely to fill a second Texture slot. For the selected feature, the tab shows its family uniqueness rank, strongest absolute Spearman correlation, summary statistics, and representative icons in three value bands:
+The **Feature Values** tab contains up to two low-redundancy features from each active visual family. Selection reuses Feature Review's Spearman analysis: non-constant features are ranked within each family by their strongest absolute correlation with any other active feature, and the two lowest values are retained. Higher standard deviation and then label break ties. This produces 13 features: two from six families and the single active Texture feature, `local_texture_variation_v2`; excluded LBP channels are not reintroduced merely to fill a second Texture slot. For the selected feature, the tab shows its family uniqueness rank, strongest absolute Spearman correlation, summary statistics, and representative icons in three value bands:
 
 - low values (smallest measurements);
 - medium values (measurements nearest the dataset mean);
@@ -133,10 +144,10 @@ AIGA rows are assigned inferred wayfinding categories from their local labels/Wi
 
 ## Regeneration
 
-The dashboard is generated by:
+The dashboard is generated from the repository root by:
 
 ```bash
-/Users/macbook/.cache/codex-runtimes/codex-primary-runtime/dependencies/python/bin/python3 code/build_analysis_dashboard.py
+python code/build_analysis_dashboard.py
 ```
 
 The script writes outputs back into this folder:
@@ -151,5 +162,7 @@ It does not overwrite the older `icon_data/analysis/features.csv` or `icon_data/
 
 - A separate dendrogram image has not been generated yet.
 - Hierarchical clustering currently uses precomputed cluster labels/cuts, not a full interactive tree.
-- The dashboard is currently generated from up to 10 random icons per dataset, not the full 28,749-icon dataset.
+- The Color By selector is not currently applied to the visible icon-image overlays.
+- The current Clustering filter is icon-set-only.
+- Clustering uses up to 10 random icons per dataset (129 total). Feature Groups receives a compact pool covering all 28,749 feature rows and displays 20 random icons independently for each family and color treatment; **Randomize icons** replaces only the active family sample. Feature Review and Feature Values also use the complete feature corpus.
 - Human-study identification/perception scores are not included in this dashboard yet.

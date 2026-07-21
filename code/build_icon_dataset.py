@@ -97,7 +97,7 @@ def load_arasaac_metadata():
     path = ICONSETS_DIR / "07_arasaac_pictograms/metadata/arasaac_all_en.json"
     if not path.exists():
         return {}
-    records = json.loads(path.read_text())
+    records = json.loads(path.read_text(encoding="utf-8"))
     out = {}
     for record in records:
         pictogram_id = str(record.get("_id", ""))
@@ -118,7 +118,7 @@ def load_openmoji_metadata():
     path = ICONSETS_DIR / "10_openmoji/data/openmoji.json"
     if not path.exists():
         return {}
-    records = json.loads(path.read_text())
+    records = json.loads(path.read_text(encoding="utf-8"))
     out = {}
     for record in records:
         hexcode = record.get("hexcode", "")
@@ -136,7 +136,7 @@ def load_mcdougall_metadata():
     path = ICONSETS_DIR / "01_mcdougall_symbol_icon_set/metadata/mcdougall_ratings.csv"
     if not path.exists():
         return {}
-    with path.open(newline="") as file:
+    with path.open(newline="", encoding="utf-8") as file:
         records = csv.DictReader(file)
         return {
             row["appendix_item"]: {
@@ -207,7 +207,7 @@ def is_canonical_icon(path: Path, set_id: str) -> bool:
 
 
 def normalized_output_path(relative_path: Path) -> Path:
-    digest = hashlib.sha1(str(relative_path).encode("utf-8")).hexdigest()[:12]
+    digest = hashlib.sha1(relative_path.as_posix().encode("utf-8")).hexdigest()[:12]
     set_id = relative_path.parts[2]
     stem = slug_to_label(relative_path.name).lower().replace(" ", "_")[:80] or "icon"
     return NORMALIZED_DIR / set_id / f"{stem}__{digest}.png"
@@ -264,17 +264,17 @@ def build_rows():
         normalized = normalized_output_path(relative_path)
         rows.append(
             {
-                "icon_id": hashlib.sha1(str(relative_path).encode("utf-8")).hexdigest()[:16],
+                "icon_id": hashlib.sha1(relative_path.as_posix().encode("utf-8")).hexdigest()[:16],
                 "set_id": set_id,
                 "set_name": info["name"],
-                "relative_path": str(relative_path),
+                "relative_path": relative_path.as_posix(),
                 "filename": path.name,
                 "label": label,
                 "category": category,
                 "format": path.suffix.lower().lstrip("."),
                 "source": info["source"],
                 "source_url": info["source_url"],
-                "normalized_path": str(normalized.relative_to(ROOT)),
+                "normalized_path": normalized.relative_to(ROOT).as_posix(),
                 "notes": notes,
             }
         )
@@ -298,7 +298,7 @@ def write_dataset(rows):
         "normalized_path",
         "notes",
     ]
-    with DATASET_CSV.open("w", newline="") as file:
+    with DATASET_CSV.open("w", newline="", encoding="utf-8") as file:
         writer = csv.DictWriter(file, fieldnames=fieldnames)
         writer.writeheader()
         writer.writerows(rows)
@@ -350,7 +350,7 @@ def normalize(rows, workers, limit=None, force=False):
                 print(f"Normalized/checked {completed}/{len(selected)}")
 
     failure_path = ANALYSIS_DIR / "normalization_failures.json"
-    failure_path.write_text(json.dumps(failures, indent=2))
+    failure_path.write_text(json.dumps(failures, indent=2), encoding="utf-8")
     print(f"Normalization target rows: {len(selected)}")
     print(f"Normalization failures: {len(failures)}")
 

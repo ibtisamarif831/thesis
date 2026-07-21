@@ -1,10 +1,18 @@
 # Thesis Repository Agent Guide
 
-This file is the first-stop orientation map for future agents working in this repository. Use it to route questions to the relevant area before searching broadly.
+This file is the first-stop orientation map for future agents working in this repository. Use it to route questions to the relevant area before searching broadly. The comprehensive organized knowledge base is [`wiki/README.md`](wiki/README.md); use the wiki for subsystem explanations, workflows, data contracts, dashboard behavior, and verification guidance.
 
 ## After Each Task
 
-Before closing any task in this repository, review `agent.md` and improve it with any newly discovered guidance that would help the next agent start faster or avoid repeating investigation. Keep updates concise, factual, and scoped to durable repository knowledge: current generated-output state, routing hints, workflow rules, verification commands, known gaps, or pitfalls encountered during the task. Do not add transient narration or duplicate details already captured elsewhere.
+The root `AGENTS.md` defines a mandatory wiki completion gate. Before closing any repository-changing task:
+
+1. review the wiki pages for the affected subsystem;
+2. update them to match any changed behavior, UI, pipeline, schema, data, feature, command, dependency, output, status, limitation, or verification workflow;
+3. verify affected links and current-state facts;
+4. state which wiki pages were updated in the final handoff;
+5. review `agent.md` and add any concise, durable routing rule or pitfall that would help the next agent.
+
+A task is not complete while its wiki documentation is stale. Do not add filler edits when nothing durable changed; a read-only task may leave the wiki unchanged after confirming it is still accurate.
 
 ## Repository Purpose
 
@@ -26,6 +34,7 @@ Boundary for future work:
 
 | Query type | Start here | Then check |
 |---|---|---|
+| Full repository orientation and workflows | `wiki/README.md` | Relevant topic page, then the linked script/artifact |
 | Thesis framing, research questions, current progress | `THESIS_STATUS.md`, `agent.md`, `THESIS_CHECKLIST.md` | `tasks/current-thesis-next-steps.md`, `papers/` |
 | Which icon sets exist locally | `icon_data/MANIFEST.md` | `icon_data/iconsets/README.md`, `data/10 icons.md` |
 | Canonical icon dataset rows | `icon_data/analysis/dataset.csv` | `code/build_icon_dataset.py` |
@@ -49,20 +58,23 @@ Boundary for future work:
 - The active canonical dataset is `icon_data/analysis/dataset.csv`.
 - Current dataset size: **28,749** canonical rows in `dataset.csv`.
 - Normalized PNGs are generated under `icon_data/normalized_256/`; this directory is large/generated and may be ignored by git.
-- Current visual-feature sample: **1,038** rows in `icon_data/analysis/features.csv`, with **100 raw numeric image-feature columns** plus metadata columns. The active literature-mapped visual family set uses **81** of those raw columns; weak/non-interpretable channels remain only for traceability.
+- Canonical dataset metadata contains non-ASCII labels; keep JSON/CSV reads and writes explicitly UTF-8. Serialize repository-relative paths with POSIX `/` separators before hashing so `icon_id` values remain stable across Windows and macOS/Linux.
+- Current visual-feature corpus: **28,749** rows in `icon_data/analysis/features.csv`, with **110 raw numeric image-feature columns** plus 23 metadata columns under feature schema v2. The active literature-mapped visual family set remains **81** columns: seven legacy representatives are retained but inactive and replaced one-for-one by v2 measurements. The two-rater release gate is still pending, so the pilot is blocked.
 - Current feature extraction failures: `[]` in `icon_data/analysis/feature_failures.json`.
 - The interactive dashboard is generated under `icon_data/analysis/analysis_dashboard/`.
 - Current dashboard sample: **129** rows in `icon_data/analysis/analysis_dashboard/dashboard_data.json`.
 - As of the latest dashboard change, the dashboard sample is **up to 10 random icons from each dataset**, using fixed `RANDOM_SEED = 42` in `code/build_analysis_dashboard.py`.
 - The dashboard currently supports:
+  - four views: Clustering, Feature Groups, Feature Values, and Feature Review;
   - image, metadata, and combined feature variants;
   - k-means and hierarchical clustering;
   - k/cut values 3, 5, 7, and 10;
-  - coloring by cluster, set, category, style, or numeric image feature;
-  - filtering by icon set, category, and style;
+  - a Color By selector for cluster, set, or numeric image feature, although the current image-overlay renderer does not visibly apply the selected color;
+  - filtering by icon set;
   - selected icon details and cluster summaries;
+  - a fullscreen Feature Groups detail workflow with one literature-backed representative per family, per-icon values, current-sample average, and All/B/W/Red/Colored cohorts; each family independently shows 20 random icons drawn from the complete corpus, sorted low-to-high by the representative value, and can be refreshed with **Randomize icons**; this display selection does not reduce the 81-feature analytical registry;
   - a Feature Values tab restricted to up to two non-constant, lowest-redundancy features per visual family (13 total: two for six families and the single active Texture feature), selected from Feature Review's strongest absolute Spearman correlations, with searchable low/mean-nearest/high examples.
-- Similarity outputs in `icon_data/analysis/similarity/` are based on the 1,038-row feature sample.
+- Existing similarity outputs in `icon_data/analysis/similarity/` remain based on the earlier 1,038-row pilot. Do not run the current quadratic pairwise implementation directly on all 28,749 rows without a scalable rewrite.
 - Similarity and dashboard image-feature clustering use the active visual feature families from `code/build_analysis_dashboard.py`. Excluded raw channels are not used for active visual-family clustering or similarity ranking.
 - The 7 thesis PDFs have extracted page-marked text under `papers/extracted_text/`; regenerate with `code/extract_paper_text.py`.
 - Static feature visualizations under `icon_data/analysis/visualizations/` are summary-only when `matplotlib` is unavailable in the runtime. The interactive Plotly dashboard is the stronger current visual interface.
@@ -71,26 +83,22 @@ Boundary for future work:
 
 ## Runtime Notes
 
-Prefer the bundled Python runtime for analysis scripts because the local `.venv` may not have NumPy/Pillow/sklearn installed:
-
-```bash
-/Users/macbook/.cache/codex-runtimes/codex-primary-runtime/dependencies/python/bin/python3
-```
+Run analysis scripts with the configured Python environment. On Windows use `python`; on systems that expose Python 3 as `python3`, substitute that executable. Dependency availability varies, so check the missing package before switching runtimes or installing anything.
 
 Common examples:
 
-```bash
-/Users/macbook/.cache/codex-runtimes/codex-primary-runtime/dependencies/python/bin/python3 code/build_analysis_dashboard.py
-/Users/macbook/.cache/codex-runtimes/codex-primary-runtime/dependencies/python/bin/python3 code/extract_icon_features.py --per-set-limit 100 --workers 4
-/Users/macbook/.cache/codex-runtimes/codex-primary-runtime/dependencies/python/bin/python3 code/compute_icon_similarity.py
+```powershell
+python code/build_analysis_dashboard.py
+python code/extract_icon_features.py --workers 12 --executor process
+python code/compute_icon_similarity.py
 ```
 
-The bundled runtime has NumPy/Pandas/Pillow, but not necessarily `matplotlib` or `sklearn`. Current similarity, dashboard, and PCA helpers do not require `sklearn`. `code/visualize_icon_features.py` writes a summary-only report if `matplotlib` is missing.
+The verified Windows Python has NumPy/Pandas/Pillow and pytest, but currently lacks `pdfplumber`. Matplotlib and OpenCV remain optional for selected workflows. Current similarity, dashboard, and PCA helpers do not require `sklearn`. `code/visualize_icon_features.py` writes a summary-only report if `matplotlib` is missing. See `wiki/commands-and-scripts.md` and `wiki/verification-and-troubleshooting.md` for current commands and dependency notes.
 
 For static dashboard verification:
 
-```bash
-python3 -m http.server 8765 --bind 127.0.0.1
+```powershell
+python -m http.server 8765 --bind 127.0.0.1
 ```
 
 Then open:
@@ -158,6 +166,7 @@ Refactoring guidance:
 | Path | Purpose |
 |---|---|
 | `agent.md` | This routing/orientation guide for agents. |
+| `wiki/` | Comprehensive organized repository knowledge base for humans and AI agents. |
 | `THESIS_CHECKLIST.md` | Thesis roadmap and high-level completion checklist. |
 | `THESIS_STATUS.md` | Current thesis state, completed work, open gaps, and next step. |
 | `data/10 icons.md` | Thesis-aligned icon/glyph source plan and rationale. |
@@ -197,11 +206,11 @@ This is the main canonical analysis area.
 Important files:
 
 - `dataset.csv`: one row per canonical icon selected for analysis.
-- `features.csv`: current balanced pilot visual-feature sample, 1,038 rows and 100 raw numeric image-feature columns.
+- `features.csv`: complete 28,749-row schema-v2 visual-feature corpus with 110 raw numeric image-feature columns and 23 metadata columns.
 - `features_metadata.json`: feature extraction settings and registry.
 - `feature_failures.json`: latest visual-feature extraction failures.
 - `normalization_failures.json`: latest normalization/conversion failures.
-- `clustering_metadata_sample.csv`: metadata-enriched sample from the earlier feature pilot; regenerate if it needs to match the current 1,038-row `features.csv` exactly.
+- `clustering_metadata_sample.csv`: metadata-enriched sample from the earlier 1,038-row feature pilot; it does not currently match the complete `features.csv` corpus.
 - `clustering_metadata_missing_report.json`: metadata coverage report.
 - `similarity/`: pairwise distance matrices, nearest-neighbor CSVs, visual similarity reports using active visual feature families.
 - `analysis_dashboard/`: current interactive dashboard outputs.
@@ -231,6 +240,7 @@ Current dashboard sample:
 - Up to 10 random icons per dataset.
 - Fixed seed: `RANDOM_SEED = 42`.
 - Change the per-dataset sample size in `PER_SET_SAMPLE_SIZE` inside `code/build_analysis_dashboard.py`, then regenerate.
+- This 129-row sample is only for Clustering. Feature Groups uses a separate compact pool spanning all 28,749 feature rows and draws 20 transient random icons independently for each family and color treatment.
 
 ## Script Map
 
@@ -252,7 +262,7 @@ Current dashboard sample:
 
 ## Feature Set
 
-The extractor stores 100 raw numeric image-feature columns for traceability. The active thesis mapping currently uses 81 of those columns, grouped into literature-aligned visual feature families:
+The extractor stores 110 raw numeric image-feature columns for traceability. The active thesis mapping currently uses 81 of those columns, grouped into literature-aligned visual feature families:
 
 - Complexity.
 - Shape/silhouette.
@@ -313,6 +323,8 @@ Current important gaps:
 - ISO 7010 rows preserve code-like IDs more than human-readable warning meanings.
 - McDougall ratings have been extracted locally, but the original standalone stimulus files remain request-only.
 - The dashboard has no dendrogram visualization; hierarchical clustering is exposed as precomputed cuts/labels.
+- The dashboard Color By control is not currently applied to the visible icon-image overlays.
+- The current dashboard filters only by icon set; older documentation that mentions category/style filters is stale.
 - The dashboard is a computational visualization only; it does not include quantitative human-study results yet.
 - `icon_data/iconsets/README.md` is older and incomplete compared with `icon_data/MANIFEST.md`; prefer the manifest.
 - `tasks/current-thesis-next-steps.md` is the current task tracker; old weekly plans were removed because they contradicted the current thesis direction.
@@ -341,36 +353,20 @@ Recommended metadata enrichment order:
 
 Count current generated rows:
 
-```bash
-/Users/macbook/.cache/codex-runtimes/codex-primary-runtime/dependencies/python/bin/python3 - <<'PY'
-import csv, json
-from pathlib import Path
-for path in [
-    'icon_data/analysis/dataset.csv',
-    'icon_data/analysis/features.csv',
-    'icon_data/analysis/analysis_dashboard/features_image.csv',
-    'icon_data/analysis/similarity/nearest_neighbors_euclidean.csv',
-]:
-    with open(path, newline='', encoding='utf-8') as handle:
-        reader = csv.reader(handle)
-        header = next(reader)
-        rows = sum(1 for _ in reader)
-    print(path, rows, len(header))
-dashboard = json.loads(Path('icon_data/analysis/analysis_dashboard/dashboard_data.json').read_text())
-print('dashboard row_count', dashboard['metadata']['row_count'])
-PY
+```powershell
+python -c "import csv,json; d=list(csv.DictReader(open('icon_data/analysis/dataset.csv',encoding='utf-8'))); f=list(csv.DictReader(open('icon_data/analysis/features.csv',encoding='utf-8'))); x=json.load(open('icon_data/analysis/analysis_dashboard/dashboard_data.json',encoding='utf-8')); print('dataset',len(d)); print('features',len(f)); print('dashboard',x['metadata']['row_count'])"
 ```
 
 Check Python generator syntax:
 
-```bash
-/Users/macbook/.cache/codex-runtimes/codex-primary-runtime/dependencies/python/bin/python3 -m py_compile code/extract_icon_features.py code/compute_icon_similarity.py code/build_analysis_dashboard.py code/visualize_icon_features.py
+```powershell
+python -m py_compile code/extract_icon_features.py code/compute_icon_similarity.py code/build_analysis_dashboard.py code/visualize_icon_features.py
 ```
 
 Check feature extraction failures:
 
-```bash
-cat icon_data/analysis/feature_failures.json
+```powershell
+Get-Content icon_data/analysis/feature_failures.json
 ```
 
 Check working tree before editing:

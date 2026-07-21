@@ -115,6 +115,9 @@ __pycache__/
 
 # Local/generated working files
 tmp/
+.playwright-cli/
+.agents/skills/playwright-cli/
+icon_data.zip
 
 # Downloaded icon datasets: keep manifests, metadata, and scripts in git;
 # keep bulk image/font/PDF assets out of git.

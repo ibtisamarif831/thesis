@@ -15,7 +15,7 @@ import shutil
 import subprocess
 import tempfile
 from collections import deque
-from concurrent.futures import ThreadPoolExecutor, as_completed
+from concurrent.futures import ProcessPoolExecutor, ThreadPoolExecutor, as_completed
 from dataclasses import dataclass
 from pathlib import Path
 
@@ -34,6 +34,10 @@ DATASET_CSV = ANALYSIS_DIR / "dataset.csv"
 FEATURES_CSV = ANALYSIS_DIR / "features.csv"
 FEATURE_FAILURES_JSON = ANALYSIS_DIR / "feature_failures.json"
 TESSERACT_PATH = shutil.which("tesseract")
+FEATURE_SCHEMA_VERSION = 2
+ALPHA_FOREGROUND_THRESHOLD = 0.05
+BACKGROUND_DELTA_E_THRESHOLD = 10.0
+ORIENTATION_CONFIDENCE_THRESHOLD = 0.20
 
 METADATA_COLUMNS = [
     "icon_id",
@@ -54,6 +58,11 @@ METADATA_COLUMNS = [
     "semantic_is_object",
     "semantic_object_label",
     "semantic_object_category",
+    "mask_mode",
+    "mask_coverage",
+    "mask_border_contact",
+    "mask_confidence",
+    "mask_is_uncertain",
 ]
 
 TEXT_IDENTITY_PATTERNS = (
@@ -104,6 +113,11 @@ class ImageContext:
     alpha: np.ndarray
     gray: np.ndarray
     foreground: np.ndarray
+    mask_mode: str
+    mask_coverage: float
+    mask_border_contact: float
+    mask_confidence: float
+    mask_is_uncertain: bool
 
 
 class FeatureExtractor:
@@ -294,6 +308,46 @@ class TextureRobustnessFeatures(FeatureExtractor):
         }
 
 
+class Version2RepresentativeFeatures(FeatureExtractor):
+    """Corrected, versioned measurements used by the seven family representatives."""
+
+    name = "representative_features_v2"
+    columns = (
+        "quadtree_structural_variability_v2",
+        "enclosure_score_v2",
+        "principal_axis_orientation_v2",
+        "orientation_confidence_v2",
+        "solid_fill_ratio_v2",
+        "horizontal_symmetry_v2",
+        "mean_saturation_v2",
+        "local_texture_variation_v2",
+        "red_pixel_ratio_v2",
+        "strict_red_flag_v2",
+    )
+
+    def extract(self, context: ImageContext) -> dict[str, float]:
+        orientation, orientation_confidence = principal_axis_orientation_with_confidence(
+            context.foreground
+        )
+        red_ratio, strict_red = strict_red_stats(context.rgb, context.foreground)
+        return {
+            "quadtree_structural_variability_v2": intensity_quadtree_variability(
+                context.gray, context.foreground
+            ),
+            "enclosure_score_v2": enclosure_score(context.foreground),
+            "principal_axis_orientation_v2": orientation,
+            "orientation_confidence_v2": orientation_confidence,
+            "solid_fill_ratio_v2": solid_fill_ratio(context.foreground),
+            "horizontal_symmetry_v2": tolerant_symmetry_score(context.foreground, tolerance=2),
+            "mean_saturation_v2": mean_saturation(context.rgb, context.foreground),
+            "local_texture_variation_v2": local_texture_variation(
+                context.gray, context.foreground
+            ),
+            "red_pixel_ratio_v2": red_ratio,
+            "strict_red_flag_v2": strict_red,
+        }
+
+
 FEATURE_EXTRACTORS: tuple[FeatureExtractor, ...] = (
     ForegroundAreaRatio(),
     CannyEdgeDensity(),
@@ -307,6 +361,7 @@ FEATURE_EXTRACTORS: tuple[FeatureExtractor, ...] = (
     StrokeSkeletonFeatures(),
     ExtendedColorFeatures(),
     TextureRobustnessFeatures(),
+    Version2RepresentativeFeatures(),
 )
 
 FEATURE_COLUMNS: tuple[str, ...] = tuple(column for extractor in FEATURE_EXTRACTORS for column in extractor.columns)
@@ -340,21 +395,89 @@ def load_image(path: Path, foreground_threshold: int) -> ImageContext:
     rgb = data[:, :, :3]
     alpha = data[:, :, 3] / 255.0
 
-    # Use alpha when present, otherwise infer foreground from non-white pixels.
+    rgb_unit = (rgb / 255.0).astype(np.float32)
+    # Transparent assets have an explicit figure-ground signal. Opaque assets use
+    # a border-derived Lab background model and only remove matching pixels that
+    # are connected to the canvas border.
     if np.any(alpha < 0.99):
-        foreground = alpha > (foreground_threshold / 255.0)
+        foreground = alpha > ALPHA_FOREGROUND_THRESHOLD
+        mask_mode = "alpha"
+        border_variation = 0.0
     else:
-        foreground = np.any(rgb < foreground_threshold, axis=2)
+        foreground, border_variation = opaque_foreground_mask(rgb_unit)
+        mask_mode = "opaque_border_lab"
+
+    coverage = float(foreground.mean())
+    border_contact = foreground_border_contact(foreground)
+    if mask_mode == "alpha":
+        confidence = 1.0
+    else:
+        confidence = max(0.0, 1.0 - border_variation / 30.0)
+        confidence *= max(0.0, 1.0 - max(border_contact - 0.05, 0.0))
+    uncertain = bool(
+        coverage <= 0.001
+        or coverage >= 0.95
+        or (mask_mode == "opaque_border_lab" and (border_variation > 10.0 or border_contact > 0.25))
+    )
+    if uncertain:
+        confidence = min(confidence, 0.49)
 
     gray = (0.299 * rgb[:, :, 0] + 0.587 * rgb[:, :, 1] + 0.114 * rgb[:, :, 2]) / 255.0
     gray = np.where(foreground, gray, 1.0)
     return ImageContext(
         path=path,
-        rgb=(rgb / 255.0).astype(np.float32),
+        rgb=rgb_unit,
         alpha=alpha,
         gray=gray.astype(np.float32),
         foreground=foreground,
+        mask_mode=mask_mode,
+        mask_coverage=coverage,
+        mask_border_contact=border_contact,
+        mask_confidence=float(confidence),
+        mask_is_uncertain=uncertain,
     )
+
+
+def opaque_foreground_mask(rgb: np.ndarray) -> tuple[np.ndarray, float]:
+    height, width, _ = rgb.shape
+    border_rgb = np.concatenate((rgb[0], rgb[-1], rgb[1:-1, 0], rgb[1:-1, -1]), axis=0)
+    border_lab = rgb_to_lab(border_rgb)
+    background_lab = np.median(border_lab, axis=0)
+    border_delta = np.linalg.norm(border_lab - background_lab, axis=1)
+    border_variation = float(np.percentile(border_delta, 90)) if border_delta.size else 0.0
+    image_lab = rgb_to_lab(rgb.reshape(-1, 3)).reshape(height, width, 3)
+    candidates = np.linalg.norm(image_lab - background_lab, axis=2) <= BACKGROUND_DELTA_E_THRESHOLD
+    return ~border_connected_mask(candidates), border_variation
+
+
+def border_connected_mask(candidates: np.ndarray) -> np.ndarray:
+    height, width = candidates.shape
+    connected = np.zeros_like(candidates, dtype=bool)
+    queue: deque[tuple[int, int]] = deque()
+    for x in range(width):
+        for y in (0, height - 1):
+            if candidates[y, x] and not connected[y, x]:
+                connected[y, x] = True
+                queue.append((y, x))
+    for y in range(1, height - 1):
+        for x in (0, width - 1):
+            if candidates[y, x] and not connected[y, x]:
+                connected[y, x] = True
+                queue.append((y, x))
+    while queue:
+        y, x = queue.popleft()
+        for yy, xx in ((y - 1, x), (y + 1, x), (y, x - 1), (y, x + 1)):
+            if 0 <= yy < height and 0 <= xx < width and candidates[yy, xx] and not connected[yy, xx]:
+                connected[yy, xx] = True
+                queue.append((yy, xx))
+    return connected
+
+
+def foreground_border_contact(mask: np.ndarray) -> float:
+    if mask.size == 0:
+        return 0.0
+    border = np.concatenate((mask[0], mask[-1], mask[1:-1, 0], mask[1:-1, -1]))
+    return float(border.mean()) if border.size else 0.0
 
 
 def gaussian_blur(image: np.ndarray) -> np.ndarray:
@@ -515,6 +638,15 @@ def quadtree_stats(mask: np.ndarray, variance_threshold: float = 0.02, min_size:
     }
 
 
+def intensity_quadtree_variability(gray: np.ndarray, foreground: np.ndarray) -> float:
+    if not foreground.any():
+        return 0.0
+    ys, xs = np.nonzero(foreground)
+    crop = gray[int(ys.min()) : int(ys.max()) + 1, int(xs.min()) : int(xs.max()) + 1]
+    stats = quadtree_stats(crop.astype(np.float32), variance_threshold=0.0025, min_size=4)
+    return float(stats["structural_variability"])
+
+
 def geometry_stats(mask: np.ndarray) -> dict[str, float]:
     height, width = mask.shape
     ys, xs = np.nonzero(mask)
@@ -585,6 +717,65 @@ def symmetry_score(mask: np.ndarray, axis: str) -> float:
         return 1.0
     overlap = mask & flipped
     return float(overlap.sum() / union.sum())
+
+
+def tolerant_symmetry_score(mask: np.ndarray, tolerance: int = 2) -> float:
+    if not mask.any():
+        return 1.0
+    ys, xs = np.nonzero(mask)
+    crop = mask[int(ys.min()) : int(ys.max()) + 1, int(xs.min()) : int(xs.max()) + 1]
+    flipped = np.fliplr(crop)
+    dilated_flipped = dilate_n(flipped, tolerance)
+    dilated_original = dilate_n(crop, tolerance)
+    matched = float((crop & dilated_flipped).sum() + (flipped & dilated_original).sum())
+    denominator = float(crop.sum() + flipped.sum())
+    return float(matched / denominator) if denominator else 1.0
+
+
+def dilate_n(mask: np.ndarray, iterations: int) -> np.ndarray:
+    result = mask.copy()
+    for _ in range(max(0, iterations)):
+        result = dilate(result)
+    return result
+
+
+def erode_n(mask: np.ndarray, iterations: int) -> np.ndarray:
+    result = mask.copy()
+    for _ in range(max(0, iterations)):
+        padded = np.pad(result, 1, mode="constant", constant_values=False)
+        eroded = np.ones_like(result, dtype=bool)
+        for y in range(3):
+            for x in range(3):
+                eroded &= padded[y : y + result.shape[0], x : x + result.shape[1]]
+        result = eroded
+    return result
+
+
+def solid_fill_ratio(mask: np.ndarray) -> float:
+    if not mask.any():
+        return 0.0
+    ys, xs = np.nonzero(mask)
+    shorter = min(int(ys.max()) - int(ys.min()) + 1, int(xs.max()) - int(xs.min()) + 1)
+    radii = [max(1, int(round(shorter * fraction))) for fraction in (0.01, 0.02, 0.04)]
+    area = float(mask.sum())
+    survivals = [float(erode_n(mask, radius).sum() / area) for radius in radii]
+    return float(sum(survivals) / len(survivals))
+
+
+def enclosure_score(mask: np.ndarray) -> float:
+    if not mask.any():
+        return 0.0
+    ys, xs = np.nonzero(mask)
+    bbox_area = float((int(xs.max()) - int(xs.min()) + 1) * (int(ys.max()) - int(ys.min()) + 1))
+    if bbox_area <= 0:
+        return 0.0
+    if cv2 is None:
+        contours = foreground_contours(mask, mode="external", chain="simple")
+        enclosed = sum(polygon_area([(float(p[0][0]), float(p[0][1])) for p in contour]) for contour in contours)
+    else:
+        contours = foreground_contours(mask, mode="external", chain="simple")
+        enclosed = sum(abs(float(cv2.contourArea(contour))) for contour in contours)
+    return float(np.clip(enclosed / bbox_area, 0.0, 1.0))
 
 
 def contour_stats(mask: np.ndarray) -> dict[str, float]:
@@ -799,6 +990,24 @@ def foreground_principal_axis_orientation(xs: np.ndarray, ys: np.ndarray) -> flo
     principal = vectors[:, int(np.argmax(values))]
     angle = math.degrees(math.atan2(float(principal[1]), float(principal[0]))) % 180.0
     return float(angle)
+
+
+def principal_axis_orientation_with_confidence(mask: np.ndarray) -> tuple[float, float]:
+    ys, xs = np.nonzero(mask)
+    if len(xs) < 2:
+        return 0.0, 0.0
+    points = np.column_stack([xs.astype(np.float64), ys.astype(np.float64)])
+    covariance = np.cov(points - points.mean(axis=0), rowvar=False)
+    if not np.all(np.isfinite(covariance)):
+        return 0.0, 0.0
+    eigenvalues, eigenvectors = np.linalg.eigh(covariance)
+    order = np.argsort(eigenvalues)
+    minor = max(float(eigenvalues[order[-2]]), 0.0)
+    major = max(float(eigenvalues[order[-1]]), 0.0)
+    confidence = (major - minor) / (major + minor) if major + minor > 0 else 0.0
+    principal = eigenvectors[:, order[-1]]
+    angle = math.degrees(math.atan2(float(principal[1]), float(principal[0]))) % 180.0
+    return float(angle), float(np.clip(confidence, 0.0, 1.0))
 
 
 def foreground_contours(mask: np.ndarray, mode: str, chain: str) -> list[np.ndarray]:
@@ -1130,14 +1339,16 @@ def zhang_suen_thinning(mask: np.ndarray) -> np.ndarray:
 
 
 def distance_transform(mask: np.ndarray) -> np.ndarray:
+    padded = np.pad(mask.astype(bool), 1, mode="constant", constant_values=False)
     if cv2 is not None:
-        return cv2.distanceTransform(mask.astype(np.uint8), cv2.DIST_L2, 3).astype(np.float32)
-    height, width = mask.shape
+        distances = cv2.distanceTransform(padded.astype(np.uint8), cv2.DIST_L2, 3).astype(np.float32)
+        return distances[1:-1, 1:-1]
+    height, width = padded.shape
     inf = float(height + width)
-    distances = np.where(mask, inf, 0.0).astype(np.float32)
+    distances = np.where(padded, inf, 0.0).astype(np.float32)
     for y in range(height):
         for x in range(width):
-            if not mask[y, x]:
+            if not padded[y, x]:
                 continue
             best = distances[y, x]
             if y > 0:
@@ -1149,7 +1360,7 @@ def distance_transform(mask: np.ndarray) -> np.ndarray:
             distances[y, x] = best
     for y in range(height - 1, -1, -1):
         for x in range(width - 1, -1, -1):
-            if not mask[y, x]:
+            if not padded[y, x]:
                 continue
             best = distances[y, x]
             if y + 1 < height:
@@ -1159,7 +1370,7 @@ def distance_transform(mask: np.ndarray) -> np.ndarray:
             if y + 1 < height and x + 1 < width:
                 best = min(best, distances[y + 1, x + 1] + 1.414)
             distances[y, x] = best
-    return distances
+    return distances[1:-1, 1:-1]
 
 
 def skeleton_graph_counts(skeleton: np.ndarray) -> tuple[int, int]:
@@ -1330,6 +1541,22 @@ def rgb_to_hsv(rgb_values: np.ndarray) -> tuple[np.ndarray, np.ndarray, np.ndarr
     return hue, saturation, max_channel
 
 
+def mean_saturation(rgb: np.ndarray, foreground: np.ndarray) -> float:
+    if not foreground.any():
+        return 0.0
+    _, saturation, _ = rgb_to_hsv(np.clip(rgb[foreground], 0.0, 1.0))
+    return float(saturation.mean()) if saturation.size else 0.0
+
+
+def strict_red_stats(rgb: np.ndarray, foreground: np.ndarray) -> tuple[float, float]:
+    if not foreground.any():
+        return 0.0, 0.0
+    hue, saturation, value = rgb_to_hsv(np.clip(rgb[foreground], 0.0, 1.0))
+    qualifies = ((hue >= 345.0) | (hue <= 15.0)) & (saturation >= 0.50) & (value >= 0.20)
+    ratio = float(qualifies.mean()) if qualifies.size else 0.0
+    return ratio, float(ratio >= 0.90)
+
+
 def rgb_to_lab(rgb_values: np.ndarray) -> np.ndarray:
     rgb_linear = np.where(
         rgb_values <= 0.04045,
@@ -1379,6 +1606,29 @@ def texture_stats(gray: np.ndarray, foreground: np.ndarray) -> dict[str, float]:
         if total > 0:
             for index, value in enumerate(lbp_histogram):
                 out[f"lbp_histogram_{index:02d}"] = float(value / total)
+    return out
+
+
+def local_texture_variation(gray: np.ndarray, foreground: np.ndarray) -> float:
+    interior = erode_n(foreground, 2)
+    if not interior.any():
+        return 0.0
+    kernel = np.ones((7, 7), dtype=np.float32) / 49.0
+    local_mean = convolve(gray, kernel)
+    local_squared_mean = convolve(gray * gray, kernel)
+    local_std = np.sqrt(np.maximum(local_squared_mean - local_mean * local_mean, 0.0))
+    # Grayscale standard deviation is bounded by 0.5 on [0, 1].
+    return float(np.clip(local_std[interior].mean() / 0.5, 0.0, 1.0))
+
+
+def convolve(image: np.ndarray, kernel: np.ndarray) -> np.ndarray:
+    pad_y = kernel.shape[0] // 2
+    pad_x = kernel.shape[1] // 2
+    padded = np.pad(image, ((pad_y, pad_y), (pad_x, pad_x)), mode="edge")
+    out = np.zeros_like(image, dtype=np.float32)
+    for y in range(kernel.shape[0]):
+        for x in range(kernel.shape[1]):
+            out += kernel[y, x] * padded[y : y + image.shape[0], x : x + image.shape[1]]
     return out
 
 
@@ -1744,6 +1994,11 @@ def extract_row(row: dict[str, str], extractors: tuple[FeatureExtractor, ...], f
         "label": row["label"],
         "category": row["category"],
         "normalized_path": row["normalized_path"],
+        "mask_mode": context.mask_mode,
+        "mask_coverage": context.mask_coverage,
+        "mask_border_contact": context.mask_border_contact,
+        "mask_confidence": context.mask_confidence,
+        "mask_is_uncertain": str(context.mask_is_uncertain).lower(),
     }
     semantic_values = semantic_identity(row)
     feature_values.update(text_identity(row, context))
@@ -1757,7 +2012,7 @@ def write_features(rows: list[dict[str, float | str]], output: Path, extractors:
     output.parent.mkdir(parents=True, exist_ok=True)
     feature_columns = [column for extractor in extractors for column in extractor.columns]
     with output.open("w", newline="", encoding="utf-8") as file:
-        writer = csv.DictWriter(file, fieldnames=METADATA_COLUMNS + feature_columns)
+        writer = csv.DictWriter(file, fieldnames=METADATA_COLUMNS + feature_columns, lineterminator="\n")
         writer.writeheader()
         writer.writerows(rows)
 
@@ -1768,18 +2023,23 @@ def write_feature_metadata(
     row_count: int,
     selected_row_count: int,
     per_set_limit: int | None,
+    workers: int,
+    executor: str,
 ) -> None:
     try:
-        output_label = str(output.relative_to(ROOT))
+        output_label = output.relative_to(ROOT).as_posix()
     except ValueError:
         output_label = str(output)
 
     metadata = {
-        "input": str(DATASET_CSV.relative_to(ROOT)),
+        "feature_schema_version": FEATURE_SCHEMA_VERSION,
+        "input": DATASET_CSV.relative_to(ROOT).as_posix(),
         "output": output_label,
         "row_count": row_count,
         "selected_row_count": selected_row_count,
         "per_set_limit": per_set_limit,
+        "workers": workers,
+        "executor": executor,
         "dependencies": {
             "opencv_available": cv2 is not None,
             "opencv_version": getattr(cv2, "__version__", None) if cv2 is not None else None,
@@ -1787,6 +2047,23 @@ def write_feature_metadata(
             "tesseract_path": TESSERACT_PATH,
             "tesseract_version": tesseract_version(),
         },
+        "foreground_mask": {
+            "transparent_alpha_threshold": ALPHA_FOREGROUND_THRESHOLD,
+            "opaque_background_color_space": "CIELAB",
+            "opaque_background_delta_e76_threshold": BACKGROUND_DELTA_E_THRESHOLD,
+            "opaque_background_rule": "remove only border-connected pixels within threshold of the median border color",
+            "uncertainty_rule": "empty/full masks or opaque masks with nonuniform borders/contact are flagged",
+        },
+        "orientation_confidence_threshold": ORIENTATION_CONFIDENCE_THRESHOLD,
+        "deprecated_inactive_columns": [
+            "quadtree_structural_variability",
+            "closed_contour_ratio",
+            "principal_axis_orientation",
+            "filled_vs_outline_proxy",
+            "horizontal_symmetry",
+            "mean_saturation",
+            "texture_entropy",
+        ],
         "metadata_columns": METADATA_COLUMNS,
         "features": [
             {
@@ -1807,8 +2084,42 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--limit", type=int, default=None)
     parser.add_argument("--per-set-limit", type=int, default=None)
     parser.add_argument("--workers", type=int, default=8)
+    parser.add_argument("--executor", choices=("process", "thread"), default="process")
     parser.add_argument("--foreground-threshold", type=int, default=245)
     return parser.parse_args()
+
+
+def extract_rows(
+    source_rows: list[dict[str, str]],
+    workers: int,
+    foreground_threshold: int,
+    executor: str = "thread",
+) -> tuple[list[dict[str, float | str]], list[dict[str, str]]]:
+    failures = []
+    results = []
+    executor_class = ProcessPoolExecutor if executor == "process" else ThreadPoolExecutor
+    with executor_class(max_workers=workers) as pool:
+        future_rows = {
+            pool.submit(extract_row, row, FEATURE_EXTRACTORS, foreground_threshold): row
+            for row in source_rows
+        }
+        for index, future in enumerate(as_completed(future_rows), start=1):
+            source = future_rows[future]
+            try:
+                row, failure = future.result()
+            except Exception as error:
+                row = None
+                failure = {
+                    "icon_id": source.get("icon_id", ""),
+                    "error": f"{type(error).__name__}: {error}",
+                }
+            if failure:
+                failures.append(failure)
+            elif row is not None:
+                results.append(row)
+            if index % 1000 == 0:
+                print(f"Extracted/checked {index}/{len(source_rows)}", flush=True)
+    return results, failures
 
 
 def main() -> None:
@@ -1817,21 +2128,12 @@ def main() -> None:
     DATASET_CSV = args.dataset
 
     source_rows = load_rows(limit=args.limit, per_set_limit=args.per_set_limit)
-    failures = []
-    results = []
-    with ThreadPoolExecutor(max_workers=args.workers) as pool:
-        futures = [
-            pool.submit(extract_row, row, FEATURE_EXTRACTORS, args.foreground_threshold)
-            for row in source_rows
-        ]
-        for index, future in enumerate(as_completed(futures), start=1):
-            row, failure = future.result()
-            if failure:
-                failures.append(failure)
-            else:
-                results.append(row)
-            if index % 1000 == 0:
-                print(f"Extracted/checked {index}/{len(source_rows)}")
+    results, failures = extract_rows(
+        source_rows,
+        args.workers,
+        args.foreground_threshold,
+        executor=args.executor,
+    )
 
     results.sort(key=lambda item: str(item["icon_id"]))
     write_features(results, args.output, FEATURE_EXTRACTORS)
@@ -1841,6 +2143,8 @@ def main() -> None:
         len(results),
         len(source_rows),
         args.per_set_limit,
+        args.workers,
+        args.executor,
     )
     args.failures.write_text(json.dumps(failures, indent=2) + "\n", encoding="utf-8")
 

@@ -28,6 +28,7 @@ ASSETS_DIR = OUTPUT_DIR / "assets"
 PLOTLY_ASSET = ASSETS_DIR / "plotly.min.js"
 
 PER_SET_SAMPLE_SIZE = 10
+FEATURE_GROUP_SAMPLE_SIZE = 20
 K_VALUES = (3, 5, 7, 10)
 PRIMARY_K = 7
 RANDOM_SEED = 42
@@ -60,6 +61,16 @@ EXCLUDED_IMAGE_FEATURES = {
     *(f"lbp_histogram_{index:02d}" for index in range(10)),
     "text_or_letter_presence",
     "crush_test_stability",
+    "quadtree_structural_variability",
+    "closed_contour_ratio",
+    "principal_axis_orientation",
+    "filled_vs_outline_proxy",
+    "horizontal_symmetry",
+    "mean_saturation",
+    "texture_entropy",
+    "orientation_confidence_v2",
+    "red_pixel_ratio_v2",
+    "strict_red_flag_v2",
 }
 EXCLUDED_IMAGE_FEATURE_REASONS = {
     **{
@@ -72,6 +83,21 @@ EXCLUDED_IMAGE_FEATURE_REASONS = {
     },
     "text_or_letter_presence": "Excluded from active visual-family mapping because the current heuristic is too indirect for reliable glyph-identification claims.",
     "crush_test_stability": "Excluded from active visual-family mapping because it measures processing robustness rather than a direct visible identification feature.",
+    **{
+        column: "Deprecated schema-v1 representative retained only for reproducibility; active analysis uses the versioned v2 replacement."
+        for column in (
+            "quadtree_structural_variability",
+            "closed_contour_ratio",
+            "principal_axis_orientation",
+            "filled_vs_outline_proxy",
+            "horizontal_symmetry",
+            "mean_saturation",
+            "texture_entropy",
+        )
+    },
+    "orientation_confidence_v2": "Auxiliary confidence channel used to define whether the v2 orientation is meaningful; it is not an independent family feature.",
+    "red_pixel_ratio_v2": "Auxiliary cohort diagnostic used by the strict-red classifier, not an active family feature.",
+    "strict_red_flag_v2": "Auxiliary dashboard cohort flag, not an active family feature.",
 }
 
 DASHBOARD_FEATURE_SECTIONS = [
@@ -84,10 +110,15 @@ DASHBOARD_FEATURE_SECTIONS = [
         "perception": "This family approximates how visually busy or effortful a glyph is to parse. Component and contour counts are pixel-level proxies; human grouping can still differ.",
         "low_value": "Lower values usually mean a simpler, cleaner symbol with fewer parts, edges, holes, or sharp details.",
         "high_value": "Higher values usually mean a more intricate symbol that may take more attention to inspect and distinguish.",
+        "representative_feature_id": "quadtree_structural_variability_v2",
+        "representative_interpretation": "Lower values indicate more uniform grayscale intensity; higher values indicate more quadtree subdivision and local intensity structure within the active box.",
+        "representative_rationale": "Selected because intensity-based quadtree subdivision follows the validated complexity approach more closely than the legacy binary-mask implementation.",
+        "representative_evidence": "Forsythe et al. report a Spearman correlation of 0.65 for their quadtree measure against McDougall's subjective complexity ratings. That supports the approach, not this exact v2 implementation, which remains blocked pending the frozen benchmark.",
+        "representative_citation": "Forsythe, Sheehy & Sawey, Measuring Icon Complexity: An Automated Analysis, p. 6.",
         "feature_ids": [
             "canny_edge_density",
             "quadtree_leaf_count",
-            "quadtree_structural_variability",
+            "quadtree_structural_variability_v2",
             "quadtree_mean_leaf_size",
             "connected_components",
             "contour_count",
@@ -105,10 +136,15 @@ DASHBOARD_FEATURE_SECTIONS = [
         "perception": "This family captures the overall visible form of a glyph: roundness, box-like form, elongation, closure, curvature, and global silhouette.",
         "low_value": "Lower values depend on the feature: low circularity means less round, and low closure-proxy values suggest more open or line-like form.",
         "high_value": "Higher values indicate stronger presence of that specific shape property, such as more circular, more rectangular, or more closed by proxy.",
+        "representative_feature_id": "enclosure_score_v2",
+        "representative_interpretation": "Lower values indicate open or line-like construction; higher values mean external contours enclose more of the active bounding box.",
+        "representative_rationale": "Selected because closure changes whether viewers group a glyph as one coherent shape, making it a direct bridge between silhouette structure and human similarity strategy.",
+        "representative_evidence": "Fuchs et al. found a significant effect of contour variation on accuracy and showed that contour containment shifted judgments toward geometric shape similarity. The implemented value remains a computational proxy, not a direct Gestalt-closure score.",
+        "representative_citation": "Fuchs et al., The Influence of Contour on Similarity Perception of Star Glyphs, pp. 5-8.",
         "feature_ids": [
             "bounding_box_aspect_ratio",
             "solidity",
-            "closed_contour_ratio",
+            "enclosure_score_v2",
             "circularity",
             "rectangularity",
             "curvature_histogram_straight",
@@ -125,12 +161,17 @@ DASHBOARD_FEATURE_SECTIONS = [
         "perception": "This family captures internal organization: stroke direction, branching, endpoints, arrows, and arcs. It describes visible structure, not exact text or semantic identity.",
         "low_value": "Lower values usually mean less explicit directionality, fewer skeleton branches/endpoints, or fewer arrows/arcs.",
         "high_value": "Higher values usually mean stronger directional cues, more branching structure, more endpoints/junctions, or clearer arrow components.",
+        "representative_feature_id": "principal_axis_orientation_v2",
+        "representative_interpretation": "The value is an axial angle, not an amount: 0° is horizontal, 90° is vertical, and 180° wraps to horizontal. Confidence below 0.20 means undefined.",
+        "representative_rationale": "Selected as the clearest single summary of global stroke direction and because orientation was one of the more separable human-rated visual channels.",
+        "representative_evidence": "The quasi-Hamming study reports an average human perceptual-distance score of 3.0 for orientation, above connection lines (2.8), texture (2.2), color (2.2), size (2.1), and luminance (1.2).",
+        "representative_citation": "Legg et al., Glyph Visualization: A Fail-Safe Design Scheme Based on Quasi-Hamming Distances, p. 5.",
         "feature_ids": [
             "line_orientation_0",
             "line_orientation_45",
             "line_orientation_90",
             "line_orientation_135",
-            "principal_axis_orientation",
+            "principal_axis_orientation_v2",
             "arrowhead_count",
             "arc_count",
             "skeleton_endpoints",
@@ -146,10 +187,15 @@ DASHBOARD_FEATURE_SECTIONS = [
         "perception": "This family describes whether a glyph reads as sparse line art, a filled silhouette, or a heavy/thick mark.",
         "low_value": "Lower values usually mean a lighter, thinner, more open, or less filled glyph.",
         "high_value": "Higher values usually mean a denser, more filled, more visually heavy glyph with thicker strokes or stronger occupancy.",
+        "representative_feature_id": "solid_fill_ratio_v2",
+        "representative_interpretation": "Lower values lose foreground quickly under 1%, 2%, and 4% erosion and suggest outlines; higher values retain a solid interior.",
+        "representative_rationale": "Selected because filled-versus-outline treatment directly changes figure-ground structure and has experimental evidence of changing similarity-choice behavior.",
+        "representative_evidence": "Fuchs et al. found significant fill-type effects on rotated and scaled similarity choices. They did not find a general accuracy benefit, so this feature should be interpreted as affecting strategy rather than quality.",
+        "representative_citation": "Fuchs et al., The Influence of Contour on Similarity Perception of Star Glyphs, pp. 6-8.",
         "feature_ids": [
             "foreground_area_ratio",
             "bounding_box_occupancy",
-            "filled_vs_outline_proxy",
+            "solid_fill_ratio_v2",
             "stroke_width_mean",
             "stroke_width_std",
         ],
@@ -163,9 +209,14 @@ DASHBOARD_FEATURE_SECTIONS = [
         "perception": "This family captures where visual mass sits and whether the glyph feels centered, balanced, symmetric, top-heavy, side-heavy, compact, or spread out. Grid features should be treated as one layout channel when comparing families.",
         "low_value": "Lower values often mean less offset or less occupancy in a given region; for symmetry scores, lower means less balanced.",
         "high_value": "Higher values often mean stronger occupancy in a region, larger active extent, more offset for distance features, or stronger balance for symmetry scores.",
+        "representative_feature_id": "horizontal_symmetry_v2",
+        "representative_interpretation": "Lower values indicate weaker left-right correspondence; higher values indicate stronger bilateral Dice overlap with a two-pixel tolerance.",
+        "representative_rationale": "Selected because symmetry is a foundational perceptual-grouping cue, horizontal symmetry has a direct implementation, and symmetry-optimized glyph designs have reported performance benefits.",
+        "representative_evidence": "The glyph-foundations review identifies symmetry as a Gestalt organization principle and reports improved user performance for complexity- and symmetry-optimized star-glyph orderings.",
+        "representative_citation": "Borgo et al., Glyph-based Visualization: Foundations, Design Guidelines, Techniques and Applications, pp. 7, 12 and 16.",
         "feature_ids": [
             "centroid_distance_from_center",
-            "horizontal_symmetry",
+            "horizontal_symmetry_v2",
             "vertical_symmetry",
             "bbox_center_x",
             "bbox_center_y",
@@ -183,10 +234,15 @@ DASHBOARD_FEATURE_SECTIONS = [
         "perception": "This family captures color channels humans use for quick grouping, salience, and foreground-background separation.",
         "low_value": "Lower values usually mean less saturation/colorfulness, weaker contrast, or less presence of a given hue bin. For `is_monochrome`, lower means color is present.",
         "high_value": "Higher values usually mean stronger signal for that specific color feature. For `is_monochrome`, higher means grayscale/monochrome rather than more color.",
+        "representative_feature_id": "mean_saturation_v2",
+        "representative_interpretation": "Lower values indicate grayscale or muted corrected foregrounds; higher values indicate more vivid, strongly saturated corrected foreground color.",
+        "representative_rationale": "Selected as a continuous, interpretable color-strength measure that works across the B/W, red, and colored cohorts without privileging one arbitrary hue bin.",
+        "representative_evidence": "The glyph-foundations review describes color as the strongest of the commonly compared pop-out channels. Choosing mean saturation as its operational measure is a project inference; the literature supports the color channel, not this exact formula.",
+        "representative_citation": "Borgo et al., Glyph-based Visualization: Foundations, Design Guidelines, Techniques and Applications, pp. 7-10; Legg et al., Quasi-Hamming Distances, p. 5.",
         "feature_ids": [
             "is_monochrome",
             "color_count",
-            "mean_saturation",
+            "mean_saturation_v2",
             "colorfulness",
             "foreground_background_contrast",
             *(f"hue_histogram_{index:02d}" for index in range(12)),
@@ -210,13 +266,28 @@ DASHBOARD_FEATURE_SECTIONS = [
         "perception": "This family captures internal tonal variation that can affect perceived detail. Artifact-prone local binary pattern bins are excluded from the active visual-family mapping.",
         "low_value": "Lower values usually mean flatter, more uniform foreground regions with little internal texture or local tonal variation.",
         "high_value": "Higher values usually mean more internal tonal variation that can make the glyph feel more textured.",
+        "representative_feature_id": "local_texture_variation_v2",
+        "representative_interpretation": "Lower values indicate flat interiors; higher values indicate stronger normalized 7x7 grayscale variation inside the eroded foreground, excluding the silhouette edge.",
+        "representative_rationale": "Selected because local interior variation excludes the silhouette boundary and reduces the color/global-tonal leakage found in the legacy entropy proxy.",
+        "representative_evidence": "Texture produced an average human quasi-Hamming perceptual-distance score of 2.2, supporting the construct but not this exact local-variation formula. Human validation remains pending.",
+        "representative_citation": "Legg et al., Glyph Visualization: A Fail-Safe Design Scheme Based on Quasi-Hamming Distances, p. 5; Borgo et al., Glyph-based Visualization, p. 8.",
         "feature_ids": [
-            "texture_entropy",
+            "local_texture_variation_v2",
         ],
     },
 ]
 
 FEATURE_LABELS = {
+    "quadtree_structural_variability_v2": "Intensity quadtree variability (v2)",
+    "enclosure_score_v2": "Enclosure score (v2)",
+    "principal_axis_orientation_v2": "Principal-axis orientation (v2)",
+    "orientation_confidence_v2": "Orientation confidence (v2)",
+    "solid_fill_ratio_v2": "Solid fill ratio (v2)",
+    "horizontal_symmetry_v2": "Horizontal symmetry (v2)",
+    "mean_saturation_v2": "Mean saturation (v2)",
+    "local_texture_variation_v2": "Local texture variation (v2)",
+    "red_pixel_ratio_v2": "Strict-red pixel ratio (v2)",
+    "strict_red_flag_v2": "Strict-red flag (v2)",
     "foreground_area_ratio": "Foreground area ratio",
     "canny_edge_density": "Edge density",
     "connected_components": "Connected components",
@@ -246,6 +317,16 @@ FEATURE_LABELS = {
 }
 
 FEATURE_MEANINGS = {
+    "quadtree_structural_variability_v2": "Quadtree subdivision density of grayscale intensity within the active foreground box.",
+    "enclosure_score_v2": "Area enclosed by external foreground contours relative to the active bounding box.",
+    "principal_axis_orientation_v2": "PCA foreground-axis angle over 0-180 degrees; interpret only when orientation confidence is at least 0.20.",
+    "orientation_confidence_v2": "PCA eigenvalue anisotropy; values below 0.20 indicate undefined orientation.",
+    "solid_fill_ratio_v2": "Mean foreground survival after erosion at 1%, 2%, and 4% of active-box width/height.",
+    "horizontal_symmetry_v2": "Left-right Dice-style foreground overlap allowing a two-pixel alignment tolerance.",
+    "mean_saturation_v2": "Mean HSV saturation over corrected foreground pixels.",
+    "local_texture_variation_v2": "Normalized 7x7 local grayscale variation within a two-pixel-eroded foreground interior.",
+    "red_pixel_ratio_v2": "Share of corrected foreground pixels meeting the strict red hue, saturation, and value thresholds.",
+    "strict_red_flag_v2": "One only when at least 90% of all corrected foreground pixels meet the strict-red rule.",
     "foreground_area_ratio": "How much of the canvas is occupied by visible foreground pixels.",
     "canny_edge_density": "How much edge/detail structure appears in the icon.",
     "connected_components": "How many separated foreground parts the icon contains.",
@@ -522,7 +603,35 @@ def image_feature_sections() -> list[dict[str, object]]:
     sections = []
     for section in DASHBOARD_FEATURE_SECTIONS:
         feature_ids = list(section["feature_ids"])
+        representative_feature_id = section.get("representative_feature_id")
+        if representative_feature_id not in feature_ids:
+            raise ValueError(
+                f"Representative feature {representative_feature_id!r} is not in family {section['id']!r}"
+            )
         seen.extend(feature_ids)
+        features = [
+            {
+                "id": feature_id,
+                "label": FEATURE_LABELS.get(feature_id, feature_id.replace("_", " ").title()),
+                "group": section["id"],
+                "group_title": section["title"],
+                "meaning": FEATURE_MEANINGS.get(feature_id, "Extracted visual feature."),
+                "visual_categorizations": FEATURE_VISUAL_CATEGORIZATIONS.get(feature_id, []),
+                "visual_category_labels": [
+                    FEATURE_VISUAL_CATEGORY_LABELS[category]
+                    for category in FEATURE_VISUAL_CATEGORIZATIONS.get(feature_id, [])
+                    if category in FEATURE_VISUAL_CATEGORY_LABELS
+                ],
+                "category_reason": FEATURE_CATEGORY_REASONS.get(
+                    feature_id,
+                    f"It belongs in {section['title']} because it describes that visual channel.",
+                ),
+            }
+            for feature_id in feature_ids
+        ]
+        representative_feature = next(
+            feature for feature in features if feature["id"] == representative_feature_id
+        )
         sections.append(
             {
                 "id": section["id"],
@@ -534,26 +643,13 @@ def image_feature_sections() -> list[dict[str, object]]:
                 "low_value": section.get("low_value", ""),
                 "high_value": section.get("high_value", ""),
                 "visible": section.get("visible", True),
-                "features": [
-                    {
-                        "id": feature_id,
-                        "label": FEATURE_LABELS.get(feature_id, feature_id.replace("_", " ").title()),
-                        "group": section["id"],
-                        "group_title": section["title"],
-                        "meaning": FEATURE_MEANINGS.get(feature_id, "Extracted visual feature."),
-                        "visual_categorizations": FEATURE_VISUAL_CATEGORIZATIONS.get(feature_id, []),
-                        "visual_category_labels": [
-                            FEATURE_VISUAL_CATEGORY_LABELS[category]
-                            for category in FEATURE_VISUAL_CATEGORIZATIONS.get(feature_id, [])
-                            if category in FEATURE_VISUAL_CATEGORY_LABELS
-                        ],
-                        "category_reason": FEATURE_CATEGORY_REASONS.get(
-                            feature_id,
-                            f"It belongs in {section['title']} because it describes that visual channel.",
-                        ),
-                    }
-                    for feature_id in feature_ids
-                ],
+                "features": features,
+                "representative_feature_id": representative_feature_id,
+                "representative_feature": representative_feature,
+                "representative_interpretation": section.get("representative_interpretation", ""),
+                "representative_rationale": section.get("representative_rationale", ""),
+                "representative_evidence": section.get("representative_evidence", ""),
+                "representative_citation": section.get("representative_citation", ""),
             }
         )
 
@@ -788,7 +884,7 @@ def feature_review_source_rows(feature_by_id: dict[str, dict]) -> tuple[list[dic
     if FEATURES_PATH.exists():
         rows = read_csv(FEATURES_PATH)
         if rows and all(column in rows[0] for column in IMAGE_FEATURE_COLUMNS):
-            return rows, str(FEATURES_PATH.relative_to(ROOT))
+            return rows, FEATURES_PATH.relative_to(ROOT).as_posix()
     return list(feature_by_id.values()), "analysis_dashboard_sample"
 
 
@@ -894,7 +990,7 @@ def feature_explorer_source_rows(records: list[dict], feature_by_id: dict[str, d
     if FEATURES_PATH.exists():
         rows = read_csv(FEATURES_PATH)
         if rows and all(column in rows[0] for column in IMAGE_FEATURE_COLUMNS):
-            return rows, str(FEATURES_PATH.relative_to(ROOT))
+            return rows, FEATURES_PATH.relative_to(ROOT).as_posix()
 
     rows = []
     for record in records:
@@ -1352,6 +1448,47 @@ def write_feature_tables(rows: list[dict], feature_by_id: dict[str, dict], matri
     write_rows(OUTPUT_DIR / "features_combined.csv", combined_rows)
 
 
+def build_feature_group_records(feature_rows: list[dict]) -> list[dict]:
+    """Build the compact full-corpus payload used by the Feature Groups pilot gallery."""
+    representative_columns = [
+        section["representative_feature_id"] for section in image_feature_sections()
+    ]
+    value_columns = list(
+        dict.fromkeys(
+            [
+                *representative_columns,
+                "is_monochrome",
+                "orientation_confidence_v2",
+                "red_pixel_ratio_v2",
+                "strict_red_flag_v2",
+            ]
+        )
+    )
+    records = []
+    for row in feature_rows:
+        normalized_path = row.get("normalized_path", "")
+        if not row.get("icon_id") or not normalized_path:
+            continue
+        records.append(
+            {
+                "icon_id": row["icon_id"],
+                "label": row.get("label", ""),
+                "set_id": row.get("set_id", ""),
+                "set_name": row.get("set_name", ""),
+                "normalized_path": relative_to_dashboard(ROOT / normalized_path),
+                "mask_mode": row.get("mask_mode", ""),
+                "mask_coverage": round(to_float(row.get("mask_coverage")), 6),
+                "mask_border_contact": round(to_float(row.get("mask_border_contact")), 6),
+                "mask_confidence": round(to_float(row.get("mask_confidence")), 6),
+                "mask_is_uncertain": str(row.get("mask_is_uncertain", "")).lower() == "true",
+                "image_features": {
+                    column: round(to_float(row.get(column)), 6) for column in value_columns
+                },
+            }
+        )
+    return records
+
+
 def write_dashboard_data(rows: list[dict], feature_by_id: dict[str, dict], matrices: dict[str, dict], clusters: dict) -> None:
     records = []
     for row in rows:
@@ -1376,11 +1513,18 @@ def write_dashboard_data(rows: list[dict], feature_by_id: dict[str, dict], matri
         )
 
     feature_review = build_feature_review(feature_by_id)
+    feature_group_source_rows, feature_group_source = feature_review_source_rows(feature_by_id)
+    feature_group_records = build_feature_group_records(feature_group_source_rows)
     data = {
         "metadata": {
-            "generated_from": str(DATASET_PATH.relative_to(ROOT)),
+            "feature_schema_version": extract_icon_features.FEATURE_SCHEMA_VERSION,
+            "orientation_confidence_threshold": extract_icon_features.ORIENTATION_CONFIDENCE_THRESHOLD,
+            "generated_from": DATASET_PATH.relative_to(ROOT).as_posix(),
             "row_count": len(records),
             "per_set_sample_size": PER_SET_SAMPLE_SIZE,
+            "feature_group_sample_size": FEATURE_GROUP_SAMPLE_SIZE,
+            "feature_group_source": feature_group_source,
+            "feature_group_source_row_count": len(feature_group_records),
             "random_seed": RANDOM_SEED,
             "k_values": list(K_VALUES),
             "primary_k": PRIMARY_K,
@@ -1396,6 +1540,7 @@ def write_dashboard_data(rows: list[dict], feature_by_id: dict[str, dict], matri
             "mcdougall_numeric_columns": MCDOUGALL_NUMERIC_COLUMNS,
         },
         "records": records,
+        "feature_group_records": feature_group_records,
         "feature_columns": {variant: matrices[variant]["columns"] for variant in FEATURE_VARIANTS},
         "clusters": clusters,
         "feature_review": feature_review,
@@ -1408,7 +1553,7 @@ def write_dashboard_data(rows: list[dict], feature_by_id: dict[str, dict], matri
 
 
 def relative_to_dashboard(path: Path) -> str:
-    return os.path.relpath(path, OUTPUT_DIR)
+    return Path(os.path.relpath(path, OUTPUT_DIR)).as_posix()
 
 
 def write_index_html() -> None:
@@ -1481,6 +1626,7 @@ def write_index_html() -> None:
     #hoverPreview td:last-child {{ color: white; font-variant-numeric: tabular-nums; }}
     .detail-img {{ width: 96px; height: 96px; object-fit: contain; border: 1px solid var(--border); background: white; }}
     .muted {{ color: var(--muted); }}
+    .sr-only {{ position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }}
     .pill {{ display: inline-block; padding: 2px 6px; border: 1px solid var(--border); border-radius: 999px; margin: 2px; font-size: 12px; background: var(--panel); }}
     .summary-cluster {{ border: 1px solid var(--border); border-radius: 8px; margin: 8px 0; background: white; overflow: hidden; }}
     .summary-cluster summary {{ cursor: pointer; padding: 8px; list-style-position: inside; }}
@@ -1517,6 +1663,49 @@ def write_index_html() -> None:
     .family-overview-table td {{ padding: 10px 8px; text-align: left; vertical-align: top; font-size: 13px; line-height: 1.45; }}
     .family-overview-table td:last-child {{ text-align: left; color: #334; }}
     .family-overview-table b {{ color: #18202f; }}
+    .family-detail-button {{ white-space: nowrap; padding: 5px 9px; font-size: 12px; }}
+    .family-detail-modal {{ position: fixed; inset: 0; z-index: 60; display: none; background: white; }}
+    .family-detail-modal.open {{ display: grid; animation: family-backdrop-in .16s ease-out; }}
+    .family-detail-dialog {{ width: 100vw; height: 100vh; height: 100dvh; min-width: 0; overflow: hidden; display: grid; grid-template-rows: auto auto minmax(0, 1fr); border: 0; border-radius: 0; background: white; box-shadow: none; animation: family-dialog-in .2s ease-out; }}
+    .family-detail-header {{ display: flex; align-items: start; justify-content: space-between; gap: 20px; padding: 18px 20px 14px; border-bottom: 1px solid var(--border); }}
+    .family-detail-header h2 {{ margin: 0 0 5px; font-size: 20px; text-transform: none; letter-spacing: 0; color: #18202f; }}
+    .family-detail-header p {{ margin: 0; max-width: 780px; color: #3d4656; font-size: 13px; line-height: 1.45; }}
+    .family-detail-close {{ flex: 0 0 auto; width: 34px; height: 34px; padding: 0; border-radius: 50%; font-size: 20px; line-height: 1; }}
+    .family-detail-toolbar {{ display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 11px 20px; border-bottom: 1px solid var(--border); background: #f8fafc; }}
+    .family-color-filters {{ display: flex; gap: 6px; flex-wrap: wrap; }}
+    .family-color-filters button {{ padding: 5px 10px; font-size: 12px; }}
+    .family-color-filters button.active {{ border-color: #18202f; background: #18202f; color: white; }}
+    .family-detail-actions {{ display: flex; align-items: center; justify-content: flex-end; gap: 10px; }}
+    .family-randomize {{ padding: 6px 11px; font-size: 12px; font-weight: 650; }}
+    .family-detail-count {{ color: var(--muted); font-size: 12px; white-space: nowrap; }}
+    .family-detail-body {{ min-height: 0; overflow: auto; padding: 18px 20px 22px; }}
+    .family-selected-feature {{ display: grid; grid-template-columns: minmax(240px, .7fr) minmax(360px, 1.3fr); gap: 18px; margin-bottom: 20px; padding: 16px 18px; border-left: 4px solid #a000a8; background: #faf7fb; }}
+    .family-selected-feature h3 {{ margin: 3px 0 5px; font-size: 19px; color: #18202f; }}
+    .family-selected-feature p {{ margin: 0; color: #3d4656; font-size: 12px; line-height: 1.5; }}
+    .family-selected-feature p + p {{ margin-top: 8px; }}
+    .family-selected-kicker {{ color: #7b287f; font-size: 10px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; }}
+    .family-selected-id {{ display: inline-block; margin-top: 8px; color: var(--muted); font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 11px; }}
+    .family-selected-evidence {{ padding-left: 18px; border-left: 1px solid #ddd3df; }}
+    .family-selected-evidence b {{ color: #18202f; }}
+    .family-selected-citation {{ color: #667085 !important; font-style: italic; }}
+    .family-icon-heading h3 {{ margin: 0; font-size: 14px; color: #18202f; }}
+    .family-icon-heading {{ display: flex; align-items: baseline; justify-content: space-between; gap: 12px; margin-bottom: 10px; }}
+    .family-sample-average {{ display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-bottom: 12px; padding: 10px 0; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }}
+    .family-sample-average span, .family-sample-average small {{ display: block; }}
+    .family-sample-average span {{ color: #18202f; font-size: 12px; font-weight: 650; }}
+    .family-sample-average small {{ margin-top: 2px; color: var(--muted); font-size: 11px; font-weight: 400; }}
+    .family-sample-average code {{ color: #18202f; font-size: 19px; font-weight: 700; font-variant-numeric: tabular-nums; }}
+    .family-icon-grid {{ display: grid; grid-template-columns: repeat(auto-fill, minmax(112px, 1fr)); gap: 10px; }}
+    .family-icon {{ min-width: 0; padding: 8px; border: 1px solid var(--border); border-radius: 6px; background: #fbfcfe; }}
+    .family-icon img {{ width: 100%; aspect-ratio: 1; object-fit: contain; display: block; border: 1px solid #e5e9f0; background: white; }}
+    .family-icon b, .family-icon span {{ display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }}
+    .family-icon b {{ margin-top: 6px; font-size: 12px; color: #18202f; }}
+    .family-icon span {{ margin-top: 2px; font-size: 10px; color: var(--muted); }}
+    .family-icon code {{ display: block; margin-top: 5px; color: #18202f; font-size: 10px; font-variant-numeric: tabular-nums; overflow-wrap: anywhere; }}
+    .mask-warning {{ display: block; margin-top: 5px; color: #8a4b08; font-size: 10px; font-style: normal; font-weight: 650; }}
+    .family-icon-empty {{ padding: 28px 12px; border: 1px dashed var(--border); text-align: center; color: var(--muted); font-size: 13px; }}
+    @keyframes family-backdrop-in {{ from {{ opacity: 0; }} to {{ opacity: 1; }} }}
+    @keyframes family-dialog-in {{ from {{ opacity: 0; transform: translateY(8px); }} to {{ opacity: 1; transform: translateY(0); }} }}
     .feature-group-panel {{ border: 1px solid var(--border); border-radius: 6px; background: white; padding: 14px; }}
     .feature-group-panel h2 {{ margin: 0; font-size: 16px; text-transform: none; letter-spacing: 0; color: #18202f; }}
     .feature-group-panel p {{ margin: 7px 0 0; color: #3d4656; font-size: 13px; line-height: 1.45; }}
@@ -1590,6 +1779,10 @@ def write_index_html() -> None:
       .review-layout, .explorer-layout {{ grid-template-columns: 1fr; }}
       .review-detail, .correlation-panel {{ position: static; }}
       .feature-reading-grid {{ grid-template-columns: 1fr; }}
+      .family-selected-feature {{ grid-template-columns: 1fr; }}
+      .family-selected-evidence {{ padding: 12px 0 0; border-top: 1px solid #ddd3df; border-left: 0; }}
+      .family-detail-toolbar {{ align-items: start; flex-direction: column; }}
+      .family-detail-actions {{ width: 100%; justify-content: space-between; }}
       .explorer-stats {{ grid-template-columns: repeat(2, minmax(120px, 1fr)); }}
       .example-strip {{ grid-template-columns: repeat(2, minmax(120px, 1fr)); }}
     }}
@@ -1694,10 +1887,33 @@ def write_index_html() -> None:
       <span class="muted">Loading feature examples...</span>
     </div>
   </section>
+  <div id="familyDetailModal" class="family-detail-modal" role="presentation" aria-hidden="true">
+    <section class="family-detail-dialog" role="dialog" aria-modal="true" aria-labelledby="familyDetailTitle">
+      <header class="family-detail-header">
+        <div>
+          <h2 id="familyDetailTitle">Feature family</h2>
+          <p id="familyDetailDescription"></p>
+        </div>
+        <button class="family-detail-close" id="familyDetailClose" type="button" aria-label="Close detail view">&times;</button>
+      </header>
+      <div class="family-detail-toolbar">
+        <div class="family-color-filters" id="familyColorFilters" aria-label="Filter icons by color treatment"></div>
+        <div class="family-detail-actions">
+          <span class="family-detail-count" id="familyDetailCount"></span>
+          <button class="family-randomize" id="familyRandomize" type="button">Randomize icons</button>
+        </div>
+      </div>
+      <div class="family-detail-body" id="familyDetailBody"></div>
+    </section>
+  </div>
   <div id="hoverPreview"></div>
   <script>
     let dashboard = null;
     let selectedIconId = null;
+    let activeFamilyId = null;
+    let familyColorMode = "all";
+    let familyDetailReturnFocus = null;
+    const familySamples = new Map();
     const computedCache = new Map();
 
     const state = {{
@@ -1740,6 +1956,7 @@ def write_index_html() -> None:
       renderFeatureControls();
       initializeFeatureReviewControls();
       initializeFeatureExplorerControls();
+      initializeFamilyDetailControls();
 
       const sets = unique(dashboard.records.map(r => r.set_name)).sort();
       fillSelect("setFilter", sets.map(v => [v, v]), "", true);
@@ -1993,18 +2210,203 @@ def write_index_html() -> None:
           <p>For thesis experiments, group the features into interpretable families:</p>
           <div class="family-overview-table-wrap">
             <table class="family-overview-table">
-              <thead><tr><th>Human category</th><th>Computer feature family</th></tr></thead>
+              <thead><tr><th>Human category</th><th>Selected representative feature</th><th><span class="sr-only">Details</span></th></tr></thead>
               <tbody>
-                ${{sections.map(section => `
-                  <tr>
+                ${{sections.map(section => {{
+                  const feature = section.representative_feature || section.features[0];
+                  return `<tr>
                     <td><b>${{escapeHtml(section.human_category || section.title.replace(" Features", ""))}}</b></td>
-                    <td>${{escapeHtml(section.family_summary || section.features.map(feature => feature.label.toLowerCase()).join(", "))}}</td>
-                  </tr>`).join("")}}
+                    <td><b>${{escapeHtml(feature.label)}}</b><br><span class="feature-id">${{escapeHtml(feature.id)}}</span></td>
+                    <td><button class="family-detail-button" type="button" data-family-id="${{escapeHtml(section.id)}}">View details</button></td>
+                  </tr>`;
+                }}).join("")}}
               </tbody>
             </table>
           </div>
         </section>`;
       container.innerHTML = overview;
+      container.querySelectorAll(".family-detail-button").forEach(button => {{
+        button.addEventListener("click", () => openFamilyDetail(button.dataset.familyId, button));
+      }});
+    }}
+
+    function initializeFamilyDetailControls() {{
+      const modal = document.getElementById("familyDetailModal");
+      document.getElementById("familyDetailClose").addEventListener("click", closeFamilyDetail);
+      document.getElementById("familyRandomize").addEventListener("click", () => {{
+        if (!activeFamilyId) return;
+        replaceFamilySample(activeFamilyId, familyColorMode);
+        renderFamilyDetail();
+        document.getElementById("familyRandomize").focus();
+      }});
+      modal.addEventListener("click", event => {{
+        if (event.target === modal) closeFamilyDetail();
+      }});
+      document.addEventListener("keydown", event => {{
+        if (event.key === "Escape" && modal.classList.contains("open")) closeFamilyDetail();
+      }});
+    }}
+
+    function iconColorMode(record) {{
+      const features = record.image_features || {{}};
+      if (Number(features.strict_red_flag_v2) >= 0.5) return "red";
+      if (Number(features.is_monochrome) >= 0.5) return "bw";
+      return "colored";
+    }}
+
+    function familyPopulation(colorMode) {{
+      const records = dashboard.feature_group_records || dashboard.records || [];
+      return records.filter(record => colorMode === "all" || iconColorMode(record) === colorMode);
+    }}
+
+    function familySampleKey(familyId, colorMode) {{
+      return `${{familyId}}:${{colorMode}}`;
+    }}
+
+    function randomSample(records, limit) {{
+      const shuffled = records.slice();
+      for (let index = 0; index < Math.min(limit, shuffled.length); index += 1) {{
+        const swapIndex = index + Math.floor(Math.random() * (shuffled.length - index));
+        [shuffled[index], shuffled[swapIndex]] = [shuffled[swapIndex], shuffled[index]];
+      }}
+      return shuffled.slice(0, limit);
+    }}
+
+    function replaceFamilySample(familyId, colorMode) {{
+      const population = familyPopulation(colorMode);
+      const limit = Number(dashboard.metadata.feature_group_sample_size || 20);
+      const key = familySampleKey(familyId, colorMode);
+      const previousIds = new Set((familySamples.get(key) || []).map(record => record.icon_id));
+      let sample = randomSample(population, limit);
+      if (population.length > limit && sample.every(record => previousIds.has(record.icon_id))) {{
+        const alternatives = population.filter(record => !previousIds.has(record.icon_id));
+        if (alternatives.length) sample[sample.length - 1] = alternatives[Math.floor(Math.random() * alternatives.length)];
+      }}
+      familySamples.set(key, sample);
+      return sample;
+    }}
+
+    function currentFamilySample(familyId, colorMode) {{
+      const key = familySampleKey(familyId, colorMode);
+      return familySamples.get(key) || replaceFamilySample(familyId, colorMode);
+    }}
+
+    function openFamilyDetail(familyId, trigger) {{
+      const section = visibleFeatureSections().find(item => item.id === familyId);
+      if (!section) return;
+      activeFamilyId = familyId;
+      familyDetailReturnFocus = trigger || document.activeElement;
+      const modal = document.getElementById("familyDetailModal");
+      modal.classList.add("open");
+      modal.setAttribute("aria-hidden", "false");
+      document.body.style.overflow = "hidden";
+      renderFamilyDetail();
+      document.getElementById("familyDetailClose").focus();
+    }}
+
+    function closeFamilyDetail() {{
+      const modal = document.getElementById("familyDetailModal");
+      if (!modal.classList.contains("open")) return;
+      modal.classList.remove("open");
+      modal.setAttribute("aria-hidden", "true");
+      document.body.style.overflow = "";
+      activeFamilyId = null;
+      if (familyDetailReturnFocus) familyDetailReturnFocus.focus();
+    }}
+
+    function renderFamilyDetail() {{
+      const section = visibleFeatureSections().find(item => item.id === activeFamilyId);
+      if (!section) return;
+      const selectedFeature = section.representative_feature || section.features[0];
+      const allRecords = dashboard.feature_group_records || dashboard.records || [];
+      const counts = {{
+        all: allRecords.length,
+        bw: allRecords.filter(record => iconColorMode(record) === "bw").length,
+        red: allRecords.filter(record => iconColorMode(record) === "red").length,
+        colored: allRecords.filter(record => iconColorMode(record) === "colored").length,
+      }};
+      const modes = [["all", "All"], ["bw", "B/W"], ["red", "Red"], ["colored", "Colored"]];
+      document.getElementById("familyDetailTitle").textContent = section.title;
+      document.getElementById("familyDetailDescription").textContent = section.perception || section.description || "";
+      document.getElementById("familyColorFilters").innerHTML = modes.map(([id, label]) => `
+        <button type="button" class="${{familyColorMode === id ? "active" : ""}}" data-color-mode="${{id}}" aria-pressed="${{familyColorMode === id}}">${{label}} · ${{counts[id]}}</button>`).join("");
+      document.querySelectorAll("#familyColorFilters button").forEach(button => {{
+        button.addEventListener("click", () => {{
+          familyColorMode = button.dataset.colorMode;
+          renderFamilyDetail();
+          document.querySelector(`#familyColorFilters [data-color-mode="${{familyColorMode}}"]`).focus();
+        }});
+      }});
+      const population = familyPopulation(familyColorMode);
+      const isOrientation = selectedFeature.id === "principal_axis_orientation_v2";
+      const orientationThreshold = Number(dashboard.metadata.orientation_confidence_threshold || 0.20);
+      const orientationConfidence = record => Number((record.image_features || {{}}).orientation_confidence_v2 || 0);
+      const records = currentFamilySample(activeFamilyId, familyColorMode)
+        .slice()
+        .sort((left, right) => {{
+          if (isOrientation) {{
+            const leftDefined = orientationConfidence(left) >= orientationThreshold;
+            const rightDefined = orientationConfidence(right) >= orientationThreshold;
+            if (leftDefined !== rightDefined) return leftDefined ? -1 : 1;
+          }}
+          return Number(left.image_features[selectedFeature.id]) - Number(right.image_features[selectedFeature.id]);
+        }});
+      const sampleValues = records
+        .filter(record => !isOrientation || orientationConfidence(record) >= orientationThreshold)
+        .map(record => Number(record.image_features[selectedFeature.id]))
+        .filter(value => Number.isFinite(value));
+      let sampleAverage = null;
+      if (sampleValues.length && isOrientation) {{
+        const doubled = sampleValues.map(value => value * 2 * Math.PI / 180);
+        const angle = Math.atan2(
+          doubled.reduce((total, value) => total + Math.sin(value), 0),
+          doubled.reduce((total, value) => total + Math.cos(value), 0)
+        ) / 2 * 180 / Math.PI;
+        sampleAverage = (angle + 180) % 180;
+      }} else if (sampleValues.length) {{
+        sampleAverage = sampleValues.reduce((total, value) => total + value, 0) / sampleValues.length;
+      }}
+      document.getElementById("familyDetailCount").textContent = `${{records.length}} random of ${{population.length}} matching`;
+      document.getElementById("familyRandomize").disabled = population.length <= records.length;
+      const icons = records.length ? `<div class="family-icon-grid">${{records.map(record => {{
+        const confidence = orientationConfidence(record);
+        const orientationUndefined = isOrientation && confidence < orientationThreshold;
+        const valueLabel = orientationUndefined
+          ? `Undefined (confidence ${{formatFeatureValue(confidence)}})`
+          : `${{formatFeatureValue(record.image_features[selectedFeature.id])}}${{isOrientation ? `Â° (confidence ${{formatFeatureValue(confidence)}})` : ""}}`;
+        const maskWarning = record.mask_is_uncertain
+          ? `<em class="mask-warning" title="Mask mode: ${{escapeHtml(record.mask_mode || "unknown")}}; confidence ${{formatFeatureValue(record.mask_confidence)}}">Foreground mask uncertain</em>`
+          : "";
+        return `
+        <article class="family-icon">
+          <img src="${{escapeHtml(record.normalized_path)}}" alt="${{escapeHtml(record.label || "Icon")}}" loading="lazy">
+          <b title="${{escapeHtml(record.label || record.icon_id)}}">${{escapeHtml(record.label || record.icon_id)}}</b>
+          <span title="${{escapeHtml(record.set_name)}}">${{escapeHtml(record.set_name)}}</span>
+          <code title="${{escapeHtml(selectedFeature.label)}}">Value: ${{valueLabel}}</code>
+          ${{maskWarning}}
+        </article>`;
+      }}).join("")}}</div>` : '<div class="family-icon-empty">No icons match this color treatment.</div>';
+      document.getElementById("familyDetailBody").innerHTML = `
+        <section class="family-selected-feature">
+          <div>
+            <span class="family-selected-kicker">Selected feature Â· schema v${{dashboard.metadata.feature_schema_version || 1}}</span>
+            <h3>${{escapeHtml(selectedFeature.label)}}</h3>
+            <p>${{escapeHtml(selectedFeature.meaning || "Extracted image feature.")}}</p>
+            <span class="family-selected-id">${{escapeHtml(selectedFeature.id)}}</span>
+          </div>
+          <div class="family-selected-evidence">
+            <p><b>How to read it.</b> ${{escapeHtml(section.representative_interpretation || "Higher values indicate more of the measured property.")}}</p>
+            <p><b>Why this one.</b> ${{escapeHtml(section.representative_rationale || "Selected as the current representative for this visual family.")}}</p>
+            <p><b>Evidence.</b> ${{escapeHtml(section.representative_evidence || "The literature supports this visual construct; the implementation remains a computational proxy.")}}</p>
+            <p class="family-selected-citation">${{escapeHtml(section.representative_citation || "")}}</p>
+          </div>
+        </section>
+        <div class="family-icon-heading"><h3>20-icon pilot sample</h3><span class="muted">Randomly drawn from the full corpus, then ${{isOrientation ? "placed in angular order from 0Â° to 180Â°; undefined orientations appear last" : `ordered by ${{escapeHtml(selectedFeature.label.toLowerCase())}}`}}.</span></div>
+        <div class="family-sample-average">
+          <span>Sample average<small>${{isOrientation ? "Axial circular mean of defined orientations" : `Arithmetic mean ${{escapeHtml(selectedFeature.label.toLowerCase())}}`}} across these ${{sampleValues.length}} icons</small></span>
+          <code id="familySampleAverage">${{sampleAverage === null ? "—" : formatFeatureValue(sampleAverage)}}</code>
+        </div>
+        ${{icons}}`;
     }}
 
     function setActiveFeatures(featureIds) {{

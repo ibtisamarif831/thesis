@@ -24,6 +24,7 @@ The wiki explains the system; it does not replace generated metadata or executab
 | Work safely as an AI agent or contributor | [Agent and contributor guide](agent-and-contributor-guide.md) |
 | Diagnose failures and verify changes | [Verification and troubleshooting](verification-and-troubleshooting.md) |
 | See known gaps and planned work | [Limitations and backlog](limitations-and-backlog.md) |
+| Review the staged feature/dashboard architecture plan | [Review, feature pipeline, and dashboard refactoring plan](../tasks/review-feature-dashboard-refactoring-plan.md) |
 | Decode project terminology | [Glossary](glossary.md) |
 | Maintain this wiki | [Wiki maintenance](wiki-maintenance.md) |
 
@@ -58,11 +59,11 @@ Verified on **2026-07-27** from the current CSV and JSON artifacts:
 | Feature CSV columns | 133 total: 23 metadata + 110 raw numeric features (schema v2) |
 | Active visual features | 81 |
 | Active visual families | 7 |
-| Feature Groups representatives | 7, one per family |
+| Feature Groups representatives | 7 configured defaults, one per family; browser-session overrides synchronize Clustering |
 | Complexity representative | Canny edge density; grayscale quadtree remains an active secondary feature |
-| Feature Values features | The same 7 representatives used by Feature Groups |
+| Feature Values features | The 7 configured Feature Groups representatives |
 | Feature-v2 release gate | Blocked pending completion of the frozen two-rater benchmark |
-| Feature Groups pilot sample | 10 dataset-balanced icons per family from 28,128 certain-mask rows; independently randomizable |
+| Feature Groups pilot sample | Defaults: 10 dataset-balanced icons per family from 28,128 certain-mask rows; exploratory overrides use the 129-row clustering sample |
 | Feature Groups comparison | Exactly 3 selected sample icons; all 7 representative values in a separate fullscreen modal |
 | Dashboard rows | 129 |
 | Dashboard sampling | Up to 10 random icons per set, seed 42 |

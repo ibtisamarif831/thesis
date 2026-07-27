@@ -82,21 +82,26 @@ The front end should access feature definitions through `metadata.image_feature_
 
 ## Front-End State
 
-The generated browser application keeps three state objects:
+The generated browser application keeps these related state objects:
 
 - clustering state: variant, method, count, color choice, selected image features, and set filter;
+- shared representative state: one browser-session representative feature ID per visible family;
 - review state: active view, sort, threshold, and selected feature;
 - explorer state: search and selected feature.
 
 Image projections are cached by method, count, and ordered selected-feature list. Any feature selection change clears the cache. Metadata and combined projections always use precomputed arrays.
 
+Changing a representative in Feature Groups replaces the clustering selection with the current seven representatives, synchronizes the clustering checkboxes, clears the computed projection cache, and immediately recomputes the image PCA and clustering. The representative map is the shared browser-side source of truth for the Feature Groups overview, family detail, three-icon comparison, and this clustering update. It is transient and resets to the configured representatives on reload.
+
 The application fetches only local data and assets. There is no server-side API and no persistence; a page reload resets UI state.
 
 ### Feature-family fullscreen detail
 
-The Feature Groups view derives each family row from `metadata.image_feature_sections`. Its fullscreen detail view renders only the section's single `representative_feature`, together with the section's interpretation, selection rationale, evidence, and citation. The remaining `features` array stays intact for the 81-feature analytical registry; representative selection is a study-review layer, not a clustering change. The dialog uses the full viewport (`100vw` by `100dvh`, with `100vh` fallback); its header and filter toolbar occupy fixed grid rows while only the detail body scrolls.
+The Feature Groups view derives each family row from `metadata.image_feature_sections`. Each row exposes a representative selector containing the active features in that family. The configured `representative_feature` remains the default and retains its documented interpretation, rationale, evidence, and citation; alternate browser-session choices are labeled exploratory and do not inherit the default's evidence claim. The remaining `features` array stays intact for the 81-feature analytical registry. The dialog uses the full viewport (`100vw` by `100dvh`, with `100vh` fallback); its header and filter toolbar occupy fixed grid rows while only the detail body scrolls.
 
 The fullscreen gallery uses `feature_group_records`, a compact pool containing the 28,128 feature rows whose foreground mask is not flagged uncertain. The generator excludes all 621 uncertain-mask rows before writing the payload, so those icons cannot enter the gallery population, samples, displayed averages, or three-icon comparisons. It carries only icon identity, label/set, normalized path, monochrome status, certain-mask diagnostics, and the seven representative values. The browser keeps an independent dataset-balanced 10-icon sample for every family and color-treatment combination. Sampling happens in two stages: it allocates icon slots as evenly as possible among eligible datasets, favoring datasets shown least often during the current page session, and then draws an icon from a shuffled queue within each chosen dataset. When at least 10 datasets are eligible, the sample therefore contains 10 distinct datasets. Cohorts with fewer eligible datasets still show 10 icons when enough matching records exist, distributing extra slots as evenly as dataset capacity permits. **Randomize icons** replaces only the active combination; a reload clears all transient samples and balancing history. Its icon-treatment classification is computed in the browser:
+
+The compact full-corpus payload intentionally contains only the seven configured representatives. If any family uses an exploratory session override, Feature Groups details and comparisons fall back together to the 129-row clustering records, which contain all 81 active feature values. Changing a representative invalidates that family's cached gallery samples so records from the previous source or feature cannot be reused. Returning every family to its configured default restores the certain-mask full-corpus pool.
 
 - B/W: `image_features.is_monochrome >= 0.5`;
 - Red: records with `image_features.strict_red_flag_v2 >= 0.5`;

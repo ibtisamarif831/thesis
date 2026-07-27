@@ -89,6 +89,24 @@ def test_feature_group_html_supports_three_icon_comparison(tmp_path, monkeypatch
     assert 'aria-pressed="${isSelected}"' in index
 
 
+def test_representative_change_updates_clustering_without_reload(tmp_path, monkeypatch) -> None:
+    monkeypatch.setattr(dashboard, "OUTPUT_DIR", tmp_path)
+
+    dashboard.write_index_html()
+
+    index = (tmp_path / "index.html").read_text(encoding="utf-8")
+    assert 'class="family-representative-select"' in index
+    assert 'select.addEventListener("change"' in index
+    assert "representativeFeaturesByFamily.set(familyId, featureId)" in index
+    assert "setActiveFeatures(representativeFeatureIds())" in index
+    assert "computedCache.clear()" in index
+    assert "familySamples.delete(key)" in index
+    assert "const selectedFeature = representativeFeature(section)" in index
+    assert "const compareFeature = representativeFeature(compareSection)" in index
+    assert "return dashboard.records || []" in index
+    assert "this session override is exploratory" in index
+
+
 def test_feature_group_html_uses_dataset_balanced_sampling(tmp_path, monkeypatch) -> None:
     monkeypatch.setattr(dashboard, "OUTPUT_DIR", tmp_path)
 

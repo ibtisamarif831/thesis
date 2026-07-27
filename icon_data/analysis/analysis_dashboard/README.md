@@ -1,6 +1,6 @@
 # Analysis Dashboard
 
-Feature Groups now consumes feature schema v2. The seven representatives use corrected foreground masks; strict Red is pixel-derived; orientation has confidence-aware angular ordering and an axial mean; uncertain masks are visibly flagged. Legacy representative columns remain only in the raw feature export. The interface is available for engineering review, but pilot deployment remains blocked pending the frozen two-rater release gate.
+Feature Groups consumes the current active feature registry and corrected foreground masks. Complexity now uses Canny edge density after the visual audit found raster and antialias inflation in grayscale quadtree variability; quadtree remains available as a secondary Complexity feature. Strict Red is pixel-derived, orientation has confidence-aware angular ordering and an axial mean, and uncertain masks are visibly flagged. The interface is available for engineering review, but pilot deployment remains blocked pending the rebuilt two-rater release gate.
 
 For the comprehensive agent- and contributor-oriented guides, see [Dashboard UI](../../../wiki/dashboard-ui.md) and [Dashboard implementation](../../../wiki/dashboard-implementation.md).
 
@@ -63,7 +63,7 @@ Each point represents one icon and is displayed using the normalized icon image.
 The header exposes four views:
 
 - **Clustering** for PCA, feature selection, clustering, filtering, and icon inspection.
-- **Feature Groups** for one literature-backed representative per family, with rationale/citation, a fullscreen detail view, All/B/W/Red/Colored filters, and an independent randomizable 20-icon pilot sample per family drawn from all 28,749 feature rows. Each active sample shows its arithmetic mean and orders icons from low to high by the representative feature value.
+- **Feature Groups** for one literature-backed representative per family, with rationale/citation, a fullscreen detail view, All/B/W/Red/Colored filters, and an independent randomizable dataset-balanced 10-icon pilot sample per family drawn from the 28,128 rows with a certain foreground mask. The 621 uncertain-mask rows are excluded before display. Icon slots are spread as evenly as possible across eligible datasets before icons are drawn within those datasets. Each active sample shows the average of its visible scores, orders icons from low to high by the representative feature value, and allows exactly three icons to be compared across all seven representative features in a separate fullscreen modal.
 - **Feature Values** for low, mean-nearest, and high representative examples.
 - **Feature Review** for feature variance and Spearman redundancy analysis.
 
@@ -84,7 +84,7 @@ The right sidebar shows:
 - cluster summaries;
 - representative icons for visible clusters.
 
-The **Feature Values** tab contains up to two low-redundancy features from each active visual family. Selection reuses Feature Review's Spearman analysis: non-constant features are ranked within each family by their strongest absolute correlation with any other active feature, and the two lowest values are retained. Higher standard deviation and then label break ties. This produces 13 features: two from six families and the single active Texture feature, `local_texture_variation_v2`; excluded LBP channels are not reintroduced merely to fill a second Texture slot. For the selected feature, the tab shows its family uniqueness rank, strongest absolute Spearman correlation, summary statistics, and representative icons in three value bands:
+The **Feature Values** tab contains exactly the same seven representative features used by Feature Groups, one from each active visual family. Feature Review's Spearman analysis still supplies correlation context for those representatives, but it no longer determines which features appear in Feature Values. For the selected representative, the tab shows its family, strongest absolute Spearman correlation, summary statistics, and representative icons in three value bands:
 
 - low values (smallest measurements);
 - medium values (measurements nearest the dataset mean);
@@ -164,5 +164,5 @@ It does not overwrite the older `icon_data/analysis/features.csv` or `icon_data/
 - Hierarchical clustering currently uses precomputed cluster labels/cuts, not a full interactive tree.
 - The Color By selector is not currently applied to the visible icon-image overlays.
 - The current Clustering filter is icon-set-only.
-- Clustering uses up to 10 random icons per dataset (129 total). Feature Groups receives a compact pool covering all 28,749 feature rows and displays 20 random icons independently for each family and color treatment; **Randomize icons** replaces only the active family sample. Feature Review and Feature Values also use the complete feature corpus.
+- Clustering uses up to 10 random icons per dataset (129 total). Feature Groups receives a compact pool covering the 28,128 certain-mask feature rows and displays 10 dataset-balanced icons independently for each family and color treatment; **Randomize icons** replaces only the active family sample, and comparison selection is limited to three icons in that sample. Feature Review and Feature Values still use the complete feature corpus.
 - Human-study identification/perception scores are not included in this dashboard yet.

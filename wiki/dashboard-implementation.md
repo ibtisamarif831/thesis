@@ -2,7 +2,7 @@
 
 ## Schema-v2 payload contract
 
-`dashboard_data.json.metadata` includes `feature_schema_version` and `orientation_confidence_threshold`. Each compact `feature_group_records` item carries the seven v2 representative values, `orientation_confidence_v2`, `red_pixel_ratio_v2`, `strict_red_flag_v2`, and mask mode/coverage/contact/confidence/uncertainty. Legacy representatives remain in the full raw feature export but are excluded from the active 81-feature registry and from Feature Groups.
+`dashboard_data.json.metadata` includes `feature_schema_version`, `orientation_confidence_threshold`, and `feature_group_excludes_uncertain_masks`. Each compact `feature_group_records` item carries the seven v2 representative values, `orientation_confidence_v2`, `red_pixel_ratio_v2`, `strict_red_flag_v2`, and certain-mask diagnostics. Rows with `mask_is_uncertain == true` are omitted while the complete feature corpus remains unchanged. Legacy representatives remain in the full raw feature export but are excluded from the active 81-feature registry and from Feature Groups.
 
 Client behavior derives Red solely from `strict_red_flag_v2`, computes scalar arithmetic means, computes orientation with a doubled-angle axial mean, and sorts undefined orientations after defined angles. The generator remains authoritative; regenerate `index.html` and `dashboard_data.json` after changes.
 
@@ -36,7 +36,7 @@ The builder:
 | Dashboard component | Source | Current rows |
 |---|---|---:|
 | Clustering records and projections | Random per-set sample from `dataset.csv` | 129 |
-| Feature Groups random pool | Compact identity/path/color/representative-feature payload from `features.csv` | 28,749 |
+| Feature Groups sampling pool | Certain-mask identity/path/color/representative-feature payload from `features.csv` | 28,128 |
 | Feature Review correlations | Complete `features.csv` corpus | 28,749 |
 | Feature Values examples/statistics | Complete `features.csv` corpus | 28,749 |
 
@@ -50,10 +50,10 @@ Top-level keys:
 |---|---|
 | `metadata` | Row/sample configuration, variants, cluster values, raw/active/excluded features, family definitions, McDougall columns. |
 | `records` | One dashboard-sample record per icon. |
-| `feature_group_records` | Compact full-corpus pool used to draw independent 20-icon Feature Groups samples. |
+| `feature_group_records` | Compact full-corpus pool used to draw independent 10-icon Feature Groups samples and populate three-icon comparisons. |
 | `clusters` | PCA coordinates and method/count labels for each variant. |
 | `feature_review` | Metadata, summary, per-feature redundancy statistics, and all pair correlations. |
-| `feature_explorer` | Selection metadata and low/mean-nearest/high examples for 13 features. |
+| `feature_explorer` | Selection metadata and low/mean-nearest/high examples for the seven Feature Groups representatives. |
 
 Each `records` item contains:
 
@@ -96,13 +96,15 @@ The application fetches only local data and assets. There is no server-side API 
 
 The Feature Groups view derives each family row from `metadata.image_feature_sections`. Its fullscreen detail view renders only the section's single `representative_feature`, together with the section's interpretation, selection rationale, evidence, and citation. The remaining `features` array stays intact for the 81-feature analytical registry; representative selection is a study-review layer, not a clustering change. The dialog uses the full viewport (`100vw` by `100dvh`, with `100vh` fallback); its header and filter toolbar occupy fixed grid rows while only the detail body scrolls.
 
-The fullscreen gallery uses `feature_group_records`, a compact pool spanning all 28,749 feature rows. It carries only icon identity, label/set, normalized path, monochrome status, and the seven representative values. The browser keeps an independent random 20-icon sample for every family and color-treatment combination. **Randomize icons** replaces only the active combination; a reload clears all transient samples. Its icon-treatment classification is computed in the browser:
+The fullscreen gallery uses `feature_group_records`, a compact pool containing the 28,128 feature rows whose foreground mask is not flagged uncertain. The generator excludes all 621 uncertain-mask rows before writing the payload, so those icons cannot enter the gallery population, samples, displayed averages, or three-icon comparisons. It carries only icon identity, label/set, normalized path, monochrome status, certain-mask diagnostics, and the seven representative values. The browser keeps an independent dataset-balanced 10-icon sample for every family and color-treatment combination. Sampling happens in two stages: it allocates icon slots as evenly as possible among eligible datasets, favoring datasets shown least often during the current page session, and then draws an icon from a shuffled queue within each chosen dataset. When at least 10 datasets are eligible, the sample therefore contains 10 distinct datasets. Cohorts with fewer eligible datasets still show 10 icons when enough matching records exist, distributing extra slots as evenly as dataset capacity permits. **Randomize icons** replaces only the active combination; a reload clears all transient samples and balancing history. Its icon-treatment classification is computed in the browser:
 
 - B/W: `image_features.is_monochrome >= 0.5`;
 - Red: records with `image_features.strict_red_flag_v2 >= 0.5`;
 - Colored: all other non-monochrome records.
 
-The Red rule is derived from foreground pixels, not dataset names or labels. The browser computes the arithmetic mean of scalar representative values across the current sample and uses an axial circular mean for orientation. It displays the result as **Sample average**, sorts scalar cards numerically from low to high, and sorts defined orientations angularly before low-confidence **Undefined** cards. Each card displays its raw value; orientation cards also display confidence, and uncertain masks display a warning. The selected family and color mode are transient UI state. Color mode persists across family openings during the page session, while each family receives its own sample from that cohort. Clicking All changes the cohort and reloading the page resets the state. Closing restores focus to the button that opened the detail.
+The Red rule is derived from foreground pixels, not dataset names or labels. The browser computes the arithmetic mean of scalar representative values across the currently shown icons and uses an axial circular mean for defined orientations. It displays the result as **Average of shown icons**, sorts scalar cards numerically from low to high, and sorts defined orientations angularly before low-confidence **Undefined** cards. This is the mean of the visible scores, not a corpus-wide or dataset-size-weighted statistic. Each card displays its raw value; orientation cards also display confidence.
+
+The browser also keeps a transient set of up to three selected card IDs. The third selection opens a separate fullscreen modal (`100vw` by `100dvh`, with `100vh` fallback) containing the chosen images and a seven-row comparison table using the representative feature from every family; the active family row is highlighted and low-confidence orientation is shown as undefined. The Feature Groups detail remains underneath and is temporarily hidden from assistive technology. Closing the comparison with its close button or **Escape** restores the detail modal and returns focus to the selection control; a visible action can reopen the comparison while all three remain selected. Selection is cleared when the user opens another family, changes color treatment, or randomizes the sample. The selected family and color mode are transient UI state. Color mode persists across family openings during the page session, while each family receives its own sample from that cohort. Clicking All changes the cohort and reloading the page resets the state. Closing the family detail restores focus to the button that opened it.
 
 ## PCA and Browser Clustering
 
@@ -118,7 +120,7 @@ The browser image-view computation is intended for interactive diagnostics. The 
 
 ## Feature Review Data
 
-The generator computes summary variance/missingness and Spearman correlations for all active feature pairs. Bands separate high, moderate, and low redundancy. The shared helper `code/thesis_pipeline/dashboard/feature_selection.py` selects low-redundancy representatives for Feature Values and has focused tests under `code/tests/`.
+The generator computes summary variance/missingness and Spearman correlations for all active feature pairs. Bands separate high, moderate, and low redundancy. Feature Values takes its seven feature IDs directly from the Feature Groups representatives and adds correlation context from Feature Review; low-redundancy ranking no longer controls the Feature Values selection.
 
 ## Asset and Path Rules
 

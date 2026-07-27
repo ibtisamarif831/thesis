@@ -1,6 +1,6 @@
 # Thesis Status
 
-Updated: 2026-07-20
+Updated: 2026-07-27
 
 ## Thesis Statement
 
@@ -17,8 +17,9 @@ The project has a working computer-side pipeline:
 - Weak/non-interpretable raw channels have been removed from active feature-family analysis.
 - Similarity outputs are rebuilt using the active visual families.
 - Evaluation layers are specified in `code/evaluation/evaluation_layers.md`.
-- Feature Groups exposes one literature-backed representative for each of the seven families, with evidence citations and an independent, randomizable 20-icon pilot sample drawn from the complete corpus; each sample shows its arithmetic mean and is sorted low-to-high, while preserving all 81 active analytical features.
-- Feature schema v2 repairs all seven representatives and foreground masking while retaining legacy measurements. Scalar families use arithmetic means; orientation uses confidence-aware angular ordering and an axial circular mean; Red is pixel-derived. The engineering pipeline is complete, but the pilot remains blocked until the frozen two-rater benchmark passes every release gate.
+- Feature Groups exposes one literature-backed representative for each of the seven families, with evidence citations and an independent, randomizable 10-icon pilot sample drawn from the complete corpus; each sample shows its arithmetic mean, is sorted low-to-high, and supports exact-three icon comparison across all seven representatives while preserving all 81 active analytical features.
+- Feature Values uses the same seven representatives as Feature Groups and shows full-corpus low, mean-nearest, and high examples with correlation context.
+- Feature schema v2 repairs foreground masking and six current representative measurements while retaining legacy measurements. Complexity now uses Canny edge density after the visual audit found source-rendering inflation in grayscale quadtree variability; quadtree remains active as a secondary analytical feature. Scalar families use arithmetic means; orientation uses confidence-aware angular ordering and an axial circular mean; Red is pixel-derived. The engineering pipeline is complete, but the pilot remains blocked until the rebuilt two-rater benchmark passes every release gate.
 - README/guide files now describe the current thesis direction.
 
 ## Active Visual Families

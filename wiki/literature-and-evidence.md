@@ -41,7 +41,7 @@ The one-feature-per-family selection in Feature Groups applies the following evi
 
 Key decisions:
 
-- Forsythe et al. page 6 supports `quadtree_structural_variability` with Spearman ρ = .65 against human-rated complexity.
+- Forsythe et al. pages 5-6 describe Canny's connected dual-threshold edge detection as suppressing shading/noise and report Spearman ρ = .49 against McDougall human-rated complexity. The current project selects `canny_edge_density` after its visual audit exposed raster and antialias inflation in grayscale quadtree variability; quadtree remains an active secondary complexity feature.
 - Fuchs et al. pages 5-8 support closure and fill as influential similarity-strategy factors, while warning that contour can reduce task accuracy in some conditions.
 - Legg et al. page 5 reports human quasi-Hamming averages of 3.0 for orientation and 2.2 for texture; these support the constructs represented by `principal_axis_orientation_v2` and `local_texture_variation_v2`, not the exact formulas.
 - Borgo et al. pages 7, 12, and 16 support symmetry as perceptual organization and performance-relevant glyph structure.

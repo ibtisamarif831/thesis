@@ -31,7 +31,7 @@
 | `code/compute_icon_similarity.py` | Transform active features, robust-scale, weight families, compute distances and neighbors. | `analysis/similarity/` |
 | `code/visualize_icon_features.py` | Create static feature distributions, correlations, PCA, and contact sheets where dependencies permit. | `analysis/visualizations/` |
 | `code/build_analysis_dashboard.py` | Sample icons, compute feature variants/clusters/review data, and generate static UI. | `analysis/analysis_dashboard/` |
-| `code/thesis_pipeline/dashboard/feature_selection.py` | Shared low-redundancy feature selection used by dashboard views. | Imported helper; covered by focused tests |
+| `code/thesis_pipeline/dashboard/feature_selection.py` | Optional low-redundancy feature-selection utility; current Feature Values uses Feature Groups representatives instead. | Importable helper; covered by focused tests |
 | `code/extract_paper_text.py` | Extract page-marked text from local PDFs. | `papers/extracted_text/` |
 | `code/extract_mcdougall_icons.py` | Crop individual stimuli from appendix page renderings. | McDougall extracted PNG folder |
 | `code/extract_mcdougall_metadata.py` | OCR and validate McDougall appendix ratings. | McDougall ratings and review CSVs |

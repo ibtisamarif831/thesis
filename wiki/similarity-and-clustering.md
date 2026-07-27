@@ -77,7 +77,7 @@ The view uses absolute correlation to rank redundancy while retaining the sign f
 
 ## Feature Values Selection
 
-Feature Values shows up to two non-constant features per family with the smallest strongest absolute Spearman correlation. Higher standard deviation and then label order break ties. Texture has only one active feature, producing 13 displayed features in total.
+Feature Values shows exactly the same seven representatives used by Feature Groups, one per family. Feature Review correlations remain visible as context, but redundancy ranking no longer determines which features appear in this tab.
 
 For each selected feature, examples come from the full 28,749-row feature corpus:
 

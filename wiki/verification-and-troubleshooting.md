@@ -29,7 +29,7 @@ python -c "import csv; r=list(csv.DictReader(open('icon_data/analysis/features.c
 python -c "import json; x=json.load(open('icon_data/analysis/analysis_dashboard/dashboard_data.json',encoding='utf-8')); m=x['metadata']; print('rows',m['row_count'],'active',len(m['image_feature_columns']),'families',len(m['image_feature_sections'])); print('review',x['feature_review']['summary']); print('explorer',x['feature_explorer']['metadata'])"
 ```
 
-Expected for the 2026-07-20 schema-v2 snapshot: 28,749 canonical rows, 13 sets, 28,749 feature rows, 133 feature-table columns, 129 dashboard rows, 81 active features, seven families, and 13 explorer features.
+Expected for the current schema-v2 snapshot: 28,749 canonical rows, 13 sets, 28,749 feature rows, 133 feature-table columns, 129 dashboard rows, 81 active features, seven families, and seven Feature Values explorer features matching the Feature Groups representatives.
 
 For schema v2, expect 28,749 feature rows, 133 columns (23 metadata + 110 numeric), `feature_schema_version == 2`, ten finite `_v2` columns, and zero feature failures. Also verify mask modes/flags, `strict_red_flag_v2` is binary, orientation confidence lies in 0–1, and the active registry remains exactly 81.
 
@@ -71,7 +71,7 @@ Verify:
 - normalized icon requests return HTTP 200;
 - no JavaScript errors appear;
 - the interaction walkthrough in [Dashboard UI](dashboard-ui.md) succeeds;
-- all seven v2 families, four cohorts, independent Randomize state, strict-red contents, orientation ordering/mean/undefined state, and uncertain-mask warnings behave correctly;
+- all seven v2 families, four cohorts, independent 10-icon Randomize state, strict-red contents, orientation ordering/mean/undefined state, uncertain-mask warnings, and the separate fullscreen exact-three icon comparison modal behave correctly;
 - the Color By control is recorded as a known gap until rendering actually uses it.
 
 Opening `index.html` with a filesystem URL can trigger fetch/CORS/path failures and is not sufficient verification.
@@ -124,7 +124,7 @@ This is a current implementation gap: visible icons are layout images and the se
 
 ### Counts Differ Between Views
 
-Clustering uses 129 randomly sampled icons. Feature Groups draws 20 icons per family from a compact pool spanning all 28,749 feature rows, and Feature Review/Values use the complete corpus directly. This distinction is intentional and should remain explicit in labels and verification.
+Clustering uses 129 randomly sampled icons. Feature Groups draws 10 dataset-balanced icons per family from a compact pool containing the 28,128 rows whose foreground mask is not flagged uncertain; verify `feature_group_excludes_uncertain_masks == true` and that no `feature_group_records` item has `mask_is_uncertain == true`. Feature Review/Values use the complete corpus directly. This distinction is intentional and should remain explicit in labels and verification.
 
 ### Similarity Results Look Implausible
 

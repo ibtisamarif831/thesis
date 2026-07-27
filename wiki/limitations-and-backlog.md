@@ -47,7 +47,7 @@ These are essential to the thesis objective. The existing computer pipeline and 
 ## Dashboard Limitations
 
 - Clustering sample is 129 rows, not the full dataset or full feature sample.
-- Feature Review/Values use the complete 28,749-row corpus. Feature Groups draws random 20-icon family samples from a compact full-corpus pool, while clustering remains limited to 129 rows.
+- Feature Review/Values use the complete 28,749-row corpus. Feature Groups excludes 621 uncertain-mask rows, then draws dataset-balanced 10-icon family samples from the remaining 28,128-row compact pool and supports three-icon representative comparisons, while clustering remains limited to 129 rows.
 - Color By is present but not applied to the visible icon overlays.
 - Current filtering is by icon set only; category/style filters described in older docs are absent.
 - UI state is not shareable by URL and resets on reload.

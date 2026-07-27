@@ -2,9 +2,9 @@
 
 ## Feature Groups under schema v2
 
-Feature Groups displays schema v2 and uses the seven corrected representatives. Scalar samples are sorted numerically and use arithmetic means. Orientation is explicitly shown as angular order from 0° to 180°, uses an axial circular mean, and places confidence-below-0.20 values last as **Undefined** with confidence shown. An uncertain foreground mask adds a visible warning to the icon card.
+Feature Groups displays schema v2 and uses the seven corrected representatives. Scalar samples are sorted numerically and use arithmetic means. Orientation is explicitly shown as angular order from 0° to 180°, uses an axial circular mean, and places confidence-below-0.20 values last as **Undefined** with confidence shown. Icons whose foreground mask is flagged uncertain are excluded from the Feature Groups population, so they cannot appear in samples, averages, or comparisons.
 
-The Red cohort is pixel-derived only: `strict_red_flag_v2 == 1`. Dataset names and labels no longer classify icons as red. All/B/W/Red/Colored selection still persists across families; each family retains an independent random 20-icon draw.
+The Red cohort is pixel-derived only: `strict_red_flag_v2 == 1`. Dataset names and labels no longer classify icons as red. All/B/W/Red/Colored selection still persists across families; each family retains an independent dataset-balanced 10-icon draw.
 
 [Wiki home](README.md) · [Dashboard implementation](dashboard-implementation.md) · [Verification](verification-and-troubleshooting.md)
 
@@ -30,7 +30,7 @@ The header contains four views:
 
 1. **Clustering** — interactive PCA layout, feature selection, clustering, filtering, icon inspection, and cluster summaries.
 2. **Feature Groups** — concise mapping from human-facing categories to computer feature families.
-3. **Feature Values** — representative low/medium/high examples for selected low-redundancy features.
+3. **Feature Values** — low/medium/high examples for the same seven representatives used by Feature Groups.
 4. **Feature Review** — feature variance and Spearman redundancy analysis.
 
 ## Clustering View
@@ -93,15 +93,18 @@ The main view stays concise. It presents the seven human-facing categories and e
 
 - the one selected feature and its feature ID;
 - how to interpret it, why it was selected, the supporting evidence, and a page-level literature citation;
-- 20 random icons drawn independently for that family from the complete 28,749-icon feature corpus;
+- 10 dataset-balanced icons drawn independently for that family from the 28,128 icons with a certain foreground mask;
 - **All**, **B/W**, **Red**, and **Colored** icon-treatment filters with live counts.
-- a **Randomize icons** action that replaces the active family's 20-icon sample.
+- a **Randomize icons** action that replaces the active family's 10-icon sample;
+- a three-icon comparison: select exactly three cards to open a separate fullscreen modal containing their representative measurements across all seven feature families.
 
-Each family/color-treatment combination keeps its own transient random sample. The 20 selected icons are sorted from low to high by the selected feature, and every icon card shows its raw value. The selected representatives are intensity quadtree variability v2, enclosure score v2, principal-axis orientation v2, solid-fill ratio v2, horizontal symmetry v2, foreground mean saturation v2, and local texture variation v2. This one-feature presentation does not shrink the full 81-feature registry used elsewhere in the dashboard.
+Each family/color-treatment combination keeps its own transient random sample. Icon slots are allocated as evenly as possible across the eligible datasets before an icon is drawn within each selected dataset. When at least 10 datasets match, all 10 shown icons come from different datasets. When fewer datasets match, the sampler distributes additional slots as evenly as dataset capacity permits. Session-level draw counts rotate exposure across repeated randomizations, while per-dataset shuffled icon queues reduce immediate icon repetition. The 10 selected icons are then sorted from low to high by the selected feature, and every icon card shows its raw value. The selected representatives are Canny edge density, enclosure score v2, principal-axis orientation v2, solid-fill ratio v2, horizontal symmetry v2, foreground mean saturation v2, and local texture variation v2. This one-feature presentation does not shrink the full 81-feature registry used elsewhere in the dashboard.
 
-Immediately above the ordered icons, **Sample average** reports the arithmetic mean of scalar representative-feature values for the currently visible 20 icons. Orientation uses an axial circular mean over defined values instead. It is a sample statistic, not the mean of the full 28,749-icon population, and recalculates after Randomize or a color-treatment change.
+Immediately above the ordered icons, **Average of shown icons** reports the arithmetic mean of scalar representative-feature values for the currently visible icons. Orientation uses an axial circular mean over defined values instead. It is not the mean of either the full 28,749-icon corpus or the 28,128-icon certain-mask population, and recalculates after Randomize or a color-treatment change.
 
-The B/W filter uses the extractor's `is_monochrome` value. Red uses only the pixel-derived `strict_red_flag_v2`; dataset names and labels do not classify an icon as red. The current full-corpus pool contains 10 strict-red records. Colored contains the remaining non-monochrome icons. Color treatment is an icon-level viewing filter and does not change which measurements belong to the selected feature family. The selected treatment persists while moving among the seven family details, so choosing **Red** constrains every subsequently opened family to that cohort while still giving each family its own draw of up to 20 icons.
+The B/W filter uses the extractor's `is_monochrome` value. Red uses only the pixel-derived `strict_red_flag_v2`; dataset names and labels do not classify an icon as red. The current full-corpus pool contains 10 strict-red records. Colored contains the remaining non-monochrome icons. Color treatment is an icon-level viewing filter and does not change which measurements belong to the selected feature family. The selected treatment persists while moving among the seven family details, so choosing **Red** constrains every subsequently opened family to that cohort while still giving each family its own draw of up to 10 icons.
+
+Comparison selection is limited to the current sample. The fourth selection is disabled until one of the three selected icons is deselected. Selecting the third icon opens a new fullscreen comparison modal with the three images and all seven representative-feature values; undefined low-confidence orientations are labeled **Undefined**. Close that modal with its close button or **Escape** to return to the still-selected cards, then use **View fullscreen comparison** to reopen it. Changing the family, color treatment, or random sample clears the selection so stale or hidden icons are never compared.
 
 The detail workspace fills the browser viewport on desktop and mobile. Its header and filter bar remain visible while the icon content area scrolls. Close it with its close button or with **Escape**. Keyboard focus returns to the family button that opened it.
 
@@ -115,18 +118,18 @@ Controls:
 
 - search by label, feature ID, or family;
 - select from the matching feature list;
-- click a correlation partner to jump to that feature when it is one of the included explorer features.
+- click a correlation partner to jump to it when that partner is also one of the seven representatives.
 
 For the selected feature the page shows:
 
 - family and meaning;
-- uniqueness rank within the family;
+- confirmation that it is the Feature Groups representative;
 - strongest absolute Spearman correlation;
 - min, mean, max, variance, standard deviation, and missing count;
 - six low-value, six mean-nearest, and six high-value examples;
 - strongest positive and negative correlation partners.
 
-The current selection includes up to two low-redundancy features from each family, 13 total. Medium means nearest to the overall mean, not the middle quantile.
+The current selection contains exactly seven features: the one representative used by Feature Groups for each family. Medium means nearest to the overall mean, not the middle quantile.
 
 ## Feature Review View
 
@@ -154,11 +157,12 @@ For a basic browser verification:
 5. Hover and click an icon; confirm preview and details include a valid image.
 6. Open Feature Groups and confirm seven representative-feature mappings and seven **View details** buttons appear.
 7. Open every family and confirm exactly one selected-feature panel, an evidence citation, and per-icon values appear; confirm the feature matches the representative table in [Feature system](feature-system.md#current-one-feature-representatives).
-8. Confirm the gallery shows 20 icons ordered from low to high, and independently calculate their arithmetic mean to confirm **Sample average**. Click **Randomize icons** and confirm a different 20-icon set and updated average replace them.
-9. Switch among B/W, Red, and Colored, and confirm the population count and gallery change. Leave Red selected, close with **Escape**, and open another family; confirm Red remains selected but the family has its own 20-icon draw. Confirm focus returns to the originating button after each close.
-10. Open Feature Values, search for “edge,” select Edge density, and confirm low/medium/high cards load.
-11. Open Feature Review, change sort and threshold, select a feature, and confirm details update.
-12. Record the Color By limitation if testing current behavior; do not mark visible recoloring as verified.
+8. With All selected, confirm the gallery shows 10 icons from 10 distinct datasets, ordered from low to high, and that none has `mask_is_uncertain == true`. Independently calculate their arithmetic mean to confirm **Average of shown icons**. Click **Randomize icons** and confirm a different dataset-balanced set and updated average replace them.
+9. Select three icons and confirm a separate fullscreen comparison modal opens with three images and seven representative-feature rows. Close it with **Escape**, confirm focus returns to the selected card, and reopen it with **View fullscreen comparison**. Confirm a fourth icon cannot be selected; deselect one and confirm another becomes selectable.
+10. Switch among B/W, Red, and Colored, and confirm the population count, gallery, and comparison selection reset. Leave Red selected, close with **Escape**, and open another family; confirm Red remains selected but the family has its own 10-icon draw. Confirm focus returns to the originating button after each close.
+11. Open Feature Values and confirm the selector contains exactly the seven Feature Groups representatives. Search for “saturation,” select Mean saturation, and confirm low/medium/high cards load.
+12. Open Feature Review, change sort and threshold, select a feature, and confirm details update.
+13. Record the Color By limitation if testing current behavior; do not mark visible recoloring as verified.
 
 For automated browser work, use the repository's Playwright skill and keep the server running in a separate terminal session.
 

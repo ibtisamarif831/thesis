@@ -138,11 +138,40 @@
     .family-sample-average code { color: #18202f; font-size: 19px; font-weight: 700; font-variant-numeric: tabular-nums; }
     .family-icon-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(112px, 1fr)); gap: 10px; }
     .family-icon { min-width: 0; padding: 8px; border: 1px solid var(--border); border-radius: 6px; background: #fbfcfe; }
+    .family-icon.selected { border-color: #a000a8; box-shadow: 0 0 0 2px rgba(160,0,168,.12); background: #fffaff; }
     .family-icon img { width: 100%; aspect-ratio: 1; object-fit: contain; display: block; border: 1px solid #e5e9f0; background: white; }
     .family-icon b, .family-icon span { display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
     .family-icon b { margin-top: 6px; font-size: 12px; color: #18202f; }
     .family-icon span { margin-top: 2px; font-size: 10px; color: var(--muted); }
     .family-icon code { display: block; margin-top: 5px; color: #18202f; font-size: 10px; font-variant-numeric: tabular-nums; overflow-wrap: anywhere; }
+    .family-icon-select { width: 100%; margin-top: 7px; padding: 5px 7px; font-size: 11px; font-weight: 650; }
+    .family-icon-select[aria-pressed="true"] { border-color: #a000a8; background: #a000a8; color: white; }
+    .family-compare-status { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin: 0 0 12px; padding: 9px 11px; border: 1px solid #e2d5e4; border-radius: 6px; background: #fffaff; color: #5c2960; font-size: 12px; }
+    .family-compare-status div { display: flex; align-items: baseline; gap: 8px; flex-wrap: wrap; }
+    .family-compare-status b { color: #18202f; }
+    .family-compare-open { flex: 0 0 auto; border-color: #a000a8; background: #a000a8; color: white; font-weight: 650; }
+    .comparison-modal { position: fixed; inset: 0; z-index: 70; display: none; background: white; }
+    .comparison-modal.open { display: grid; animation: family-backdrop-in .16s ease-out; }
+    .comparison-dialog { width: 100vw; height: 100vh; height: 100dvh; min-width: 0; overflow: hidden; display: grid; grid-template-rows: auto minmax(0, 1fr); background: white; animation: family-dialog-in .2s ease-out; }
+    .comparison-header { display: flex; align-items: start; justify-content: space-between; gap: 20px; padding: 18px 20px 14px; border-bottom: 1px solid var(--border); }
+    .comparison-header h2 { margin: 0 0 5px; color: #18202f; font-size: 20px; }
+    .comparison-header p { margin: 0; color: #667085; font-size: 12px; }
+    .comparison-close { flex: 0 0 auto; width: 34px; height: 34px; padding: 0; border-radius: 50%; font-size: 20px; line-height: 1; }
+    .comparison-body { min-height: 0; overflow: auto; padding: 20px; background: #fffaff; }
+    .family-comparison { min-height: 100%; }
+    .family-comparison-icons { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; margin-bottom: 12px; }
+    .family-comparison-icon { min-width: 0; padding: 8px; border: 1px solid #e2d5e4; border-radius: 6px; background: white; text-align: center; }
+    .family-comparison-icon img { width: min(100%, 150px); aspect-ratio: 1; object-fit: contain; border: 1px solid #e5e9f0; background: white; }
+    .family-comparison-icon b, .family-comparison-icon span { display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .family-comparison-icon b { margin-top: 5px; color: #18202f; font-size: 12px; }
+    .family-comparison-icon span { margin-top: 2px; color: var(--muted); font-size: 10px; }
+    .family-comparison-table-wrap { overflow-x: auto; border: 1px solid #e2d5e4; border-radius: 6px; background: white; }
+    .family-comparison-table { min-width: 620px; }
+    .family-comparison-table th, .family-comparison-table td { padding: 8px 9px; border-bottom: 1px solid #eee7ef; text-align: right; font-size: 11px; font-variant-numeric: tabular-nums; }
+    .family-comparison-table th:first-child, .family-comparison-table td:first-child { text-align: left; }
+    .family-comparison-table thead th { color: #3d4656; background: #faf7fb; }
+    .family-comparison-table tr.current-family td { background: #fff2ff; font-weight: 700; }
+    .family-comparison-table tbody tr:last-child td { border-bottom: 0; }
     .mask-warning { display: block; margin-top: 5px; color: #8a4b08; font-size: 10px; font-style: normal; font-weight: 650; }
     .family-icon-empty { padding: 28px 12px; border: 1px dashed var(--border); text-align: center; color: var(--muted); font-size: 13px; }
     @keyframes family-backdrop-in { from { opacity: 0; } to { opacity: 1; } }
@@ -318,7 +347,7 @@
   <section id="featureExplorerView" class="view feature-explorer">
     <div class="explorer-header">
       <h2>Feature Values</h2>
-      <p>Browse up to two least-redundant active features from each visual family and compare representative icons with low, medium, and high values. Texture currently has one active feature.</p>
+      <p>Browse the same seven representative features used by Feature Groups and compare icons with low, medium, and high values.</p>
     </div>
     <div class="explorer-toolbar">
       <label>Search feature<input id="featureExplorerSearch" type="search" placeholder="Search by name"></label>
@@ -347,6 +376,18 @@
       <div class="family-detail-body" id="familyDetailBody"></div>
     </section>
   </div>
+  <div id="comparisonModal" class="comparison-modal" role="presentation" aria-hidden="true">
+    <section class="comparison-dialog" role="dialog" aria-modal="true" aria-labelledby="comparisonTitle">
+      <header class="comparison-header">
+        <div>
+          <h2 id="comparisonTitle">Compare 3 icons</h2>
+          <p id="comparisonDescription">Representative values across all seven feature families.</p>
+        </div>
+        <button class="comparison-close" id="comparisonClose" type="button" aria-label="Close comparison">&times;</button>
+      </header>
+      <div class="comparison-body" id="comparisonBody"></div>
+    </section>
+  </div>
   <div id="hoverPreview"></div>
   <script>
     let dashboard = null;
@@ -354,7 +395,10 @@
     let activeFamilyId = null;
     let familyColorMode = "all";
     let familyDetailReturnFocus = null;
+    let familyComparisonReturnFocus = null;
+    let familyComparisonIds = new Set();
     const familySamples = new Map();
+    const familySamplingStates = new Map();
     const computedCache = new Map();
 
     const state = {
@@ -674,8 +718,10 @@
     function initializeFamilyDetailControls() {
       const modal = document.getElementById("familyDetailModal");
       document.getElementById("familyDetailClose").addEventListener("click", closeFamilyDetail);
+      document.getElementById("comparisonClose").addEventListener("click", closeFamilyComparison);
       document.getElementById("familyRandomize").addEventListener("click", () => {
         if (!activeFamilyId) return;
+        familyComparisonIds.clear();
         replaceFamilySample(activeFamilyId, familyColorMode);
         renderFamilyDetail();
         document.getElementById("familyRandomize").focus();
@@ -684,7 +730,9 @@
         if (event.target === modal) closeFamilyDetail();
       });
       document.addEventListener("keydown", event => {
-        if (event.key === "Escape" && modal.classList.contains("open")) closeFamilyDetail();
+        if (event.key !== "Escape") return;
+        if (document.getElementById("comparisonModal").classList.contains("open")) closeFamilyComparison();
+        else if (modal.classList.contains("open")) closeFamilyDetail();
       });
     }
 
@@ -713,16 +761,64 @@
       return shuffled.slice(0, limit);
     }
 
+    function familySamplingState(key) {
+      if (!familySamplingStates.has(key)) {
+        familySamplingStates.set(key, {
+          datasetDrawCounts: new Map(),
+          iconQueues: new Map(),
+        });
+      }
+      return familySamplingStates.get(key);
+    }
+
+    function drawDatasetBalancedSample(population, limit, key) {
+      const recordsByDataset = new Map();
+      population.forEach(record => {
+        const dataset = record.set_name || "Unknown dataset";
+        if (!recordsByDataset.has(dataset)) recordsByDataset.set(dataset, []);
+        recordsByDataset.get(dataset).push(record);
+      });
+      const state = familySamplingState(key);
+      const sampleDatasetCounts = new Map();
+      const sample = [];
+      const targetSize = Math.min(limit, population.length);
+
+      while (sample.length < targetSize) {
+        const availableDatasets = Array.from(recordsByDataset)
+          .filter(([dataset, records]) => (sampleDatasetCounts.get(dataset) || 0) < records.length)
+          .map(([dataset]) => dataset);
+        if (!availableDatasets.length) break;
+
+        const minimumSampleCount = Math.min(
+          ...availableDatasets.map(dataset => sampleDatasetCounts.get(dataset) || 0)
+        );
+        const leastUsedInSample = availableDatasets.filter(
+          dataset => (sampleDatasetCounts.get(dataset) || 0) === minimumSampleCount
+        );
+        const minimumSessionCount = Math.min(
+          ...leastUsedInSample.map(dataset => state.datasetDrawCounts.get(dataset) || 0)
+        );
+        const balancedCandidates = leastUsedInSample.filter(
+          dataset => (state.datasetDrawCounts.get(dataset) || 0) === minimumSessionCount
+        );
+        const dataset = balancedCandidates[Math.floor(Math.random() * balancedCandidates.length)];
+        const datasetRecords = recordsByDataset.get(dataset);
+        let iconQueue = state.iconQueues.get(dataset) || [];
+        if (!iconQueue.length) iconQueue = randomSample(datasetRecords, datasetRecords.length);
+        const record = iconQueue.shift();
+        state.iconQueues.set(dataset, iconQueue);
+        sample.push(record);
+        sampleDatasetCounts.set(dataset, (sampleDatasetCounts.get(dataset) || 0) + 1);
+        state.datasetDrawCounts.set(dataset, (state.datasetDrawCounts.get(dataset) || 0) + 1);
+      }
+      return sample;
+    }
+
     function replaceFamilySample(familyId, colorMode) {
       const population = familyPopulation(colorMode);
-      const limit = Number(dashboard.metadata.feature_group_sample_size || 20);
+      const limit = Number(dashboard.metadata.feature_group_sample_size || 10);
       const key = familySampleKey(familyId, colorMode);
-      const previousIds = new Set((familySamples.get(key) || []).map(record => record.icon_id));
-      let sample = randomSample(population, limit);
-      if (population.length > limit && sample.every(record => previousIds.has(record.icon_id))) {
-        const alternatives = population.filter(record => !previousIds.has(record.icon_id));
-        if (alternatives.length) sample[sample.length - 1] = alternatives[Math.floor(Math.random() * alternatives.length)];
-      }
+      const sample = drawDatasetBalancedSample(population, limit, key);
       familySamples.set(key, sample);
       return sample;
     }
@@ -736,6 +832,7 @@
       const section = visibleFeatureSections().find(item => item.id === familyId);
       if (!section) return;
       activeFamilyId = familyId;
+      familyComparisonIds.clear();
       familyDetailReturnFocus = trigger || document.activeElement;
       const modal = document.getElementById("familyDetailModal");
       modal.classList.add("open");
@@ -748,11 +845,79 @@
     function closeFamilyDetail() {
       const modal = document.getElementById("familyDetailModal");
       if (!modal.classList.contains("open")) return;
+      closeFamilyComparison(false);
       modal.classList.remove("open");
       modal.setAttribute("aria-hidden", "true");
       document.body.style.overflow = "";
       activeFamilyId = null;
       if (familyDetailReturnFocus) familyDetailReturnFocus.focus();
+    }
+
+    function openFamilyComparison(trigger) {
+      if (familyComparisonIds.size !== 3) return;
+      familyComparisonReturnFocus = trigger || document.activeElement;
+      renderFamilyComparison();
+      const modal = document.getElementById("comparisonModal");
+      document.getElementById("familyDetailModal").setAttribute("aria-hidden", "true");
+      modal.classList.add("open");
+      modal.setAttribute("aria-hidden", "false");
+      document.getElementById("comparisonClose").focus();
+    }
+
+    function closeFamilyComparison(restoreFocus = true) {
+      const modal = document.getElementById("comparisonModal");
+      if (!modal.classList.contains("open")) return;
+      modal.classList.remove("open");
+      modal.setAttribute("aria-hidden", "true");
+      const familyModal = document.getElementById("familyDetailModal");
+      if (familyModal.classList.contains("open")) familyModal.setAttribute("aria-hidden", "false");
+      if (restoreFocus && familyComparisonReturnFocus) familyComparisonReturnFocus.focus();
+    }
+
+    function renderFamilyComparison() {
+      const section = visibleFeatureSections().find(item => item.id === activeFamilyId);
+      if (!section) return;
+      const sample = currentFamilySample(activeFamilyId, familyColorMode);
+      const recordsById = new Map(sample.map(record => [record.icon_id, record]));
+      const selectedRecords = Array.from(familyComparisonIds)
+        .map(iconId => recordsById.get(iconId))
+        .filter(Boolean);
+      const orientationThreshold = Number(dashboard.metadata.orientation_confidence_threshold || 0.20);
+      const orientationConfidence = record => Number((record.image_features || {}).orientation_confidence_v2 || 0);
+      const comparisonSections = visibleFeatureSections();
+      document.getElementById("comparisonTitle").textContent = `Compare 3 icons · ${section.title}`;
+      document.getElementById("comparisonDescription").textContent =
+        "Representative values across all seven feature families. The active family is highlighted.";
+      document.getElementById("comparisonBody").innerHTML = `
+        <section class="family-comparison">
+          <div class="family-comparison-icons">
+            ${selectedRecords.map(record => `
+              <div class="family-comparison-icon">
+                <img src="${escapeHtml(record.normalized_path)}" alt="" loading="lazy">
+                <b title="${escapeHtml(record.label || record.icon_id)}">${escapeHtml(record.label || record.icon_id)}</b>
+                <span title="${escapeHtml(record.set_name)}">${escapeHtml(record.set_name)}</span>
+              </div>`).join("")}
+          </div>
+          <div class="family-comparison-table-wrap">
+            <table class="family-comparison-table">
+              <thead><tr><th>Feature family</th>${selectedRecords.map(record => `<th>${escapeHtml(record.label || record.icon_id)}</th>`).join("")}</tr></thead>
+              <tbody>
+                ${comparisonSections.map(compareSection => {
+                  const compareFeature = compareSection.representative_feature || compareSection.features[0];
+                  const compareIsOrientation = compareFeature.id === "principal_axis_orientation_v2";
+                  return `<tr class="${compareSection.id === activeFamilyId ? "current-family" : ""}">
+                    <td>${escapeHtml(compareSection.human_category || compareSection.title)}<br><span class="feature-id">${escapeHtml(compareFeature.label)}</span></td>
+                    ${selectedRecords.map(record => {
+                      const value = Number((record.image_features || {})[compareFeature.id]);
+                      if (compareIsOrientation && orientationConfidence(record) < orientationThreshold) return "<td>Undefined</td>";
+                      return `<td>${Number.isFinite(value) ? formatFeatureValue(value) : "—"}${compareIsOrientation && Number.isFinite(value) ? "°" : ""}</td>`;
+                    }).join("")}
+                  </tr>`;
+                }).join("")}
+              </tbody>
+            </table>
+          </div>
+        </section>`;
     }
 
     function renderFamilyDetail() {
@@ -774,6 +939,7 @@
       document.querySelectorAll("#familyColorFilters button").forEach(button => {
         button.addEventListener("click", () => {
           familyColorMode = button.dataset.colorMode;
+          familyComparisonIds.clear();
           renderFamilyDetail();
           document.querySelector(`#familyColorFilters [data-color-mode="${familyColorMode}"]`).focus();
         });
@@ -807,11 +973,16 @@
       } else if (sampleValues.length) {
         sampleAverage = sampleValues.reduce((total, value) => total + value, 0) / sampleValues.length;
       }
-      document.getElementById("familyDetailCount").textContent = `${records.length} random of ${population.length} matching`;
+      const representedDatasets = new Set(records.map(record => record.set_name || "Unknown dataset")).size;
+      document.getElementById("familyDetailCount").textContent =
+        `${records.length} dataset-balanced icons from ${population.length} matching · ${representedDatasets} datasets`;
       document.getElementById("familyRandomize").disabled = population.length <= records.length;
+      const comparisonReady = familyComparisonIds.size === 3;
       const icons = records.length ? `<div class="family-icon-grid">${records.map(record => {
         const confidence = orientationConfidence(record);
         const orientationUndefined = isOrientation && confidence < orientationThreshold;
+        const isSelected = familyComparisonIds.has(record.icon_id);
+        const selectionDisabled = !isSelected && familyComparisonIds.size >= 3;
         const valueLabel = orientationUndefined
           ? `Undefined (confidence ${formatFeatureValue(confidence)})`
           : `${formatFeatureValue(record.image_features[selectedFeature.id])}${isOrientation ? `Â° (confidence ${formatFeatureValue(confidence)})` : ""}`;
@@ -819,18 +990,19 @@
           ? `<em class="mask-warning" title="Mask mode: ${escapeHtml(record.mask_mode || "unknown")}; confidence ${formatFeatureValue(record.mask_confidence)}">Foreground mask uncertain</em>`
           : "";
         return `
-        <article class="family-icon">
+        <article class="family-icon${isSelected ? " selected" : ""}">
           <img src="${escapeHtml(record.normalized_path)}" alt="${escapeHtml(record.label || "Icon")}" loading="lazy">
           <b title="${escapeHtml(record.label || record.icon_id)}">${escapeHtml(record.label || record.icon_id)}</b>
           <span title="${escapeHtml(record.set_name)}">${escapeHtml(record.set_name)}</span>
           <code title="${escapeHtml(selectedFeature.label)}">Value: ${valueLabel}</code>
           ${maskWarning}
+          <button class="family-icon-select" type="button" data-compare-icon="${escapeHtml(record.icon_id)}" aria-pressed="${isSelected}" ${selectionDisabled ? "disabled" : ""}>${isSelected ? "Selected" : "Select to compare"}</button>
         </article>`;
       }).join("")}</div>` : '<div class="family-icon-empty">No icons match this color treatment.</div>';
       document.getElementById("familyDetailBody").innerHTML = `
         <section class="family-selected-feature">
           <div>
-            <span class="family-selected-kicker">Selected feature Â· schema v${dashboard.metadata.feature_schema_version || 1}</span>
+            <span class="family-selected-kicker">Selected feature Â· active registry</span>
             <h3>${escapeHtml(selectedFeature.label)}</h3>
             <p>${escapeHtml(selectedFeature.meaning || "Extracted image feature.")}</p>
             <span class="family-selected-id">${escapeHtml(selectedFeature.id)}</span>
@@ -842,12 +1014,29 @@
             <p class="family-selected-citation">${escapeHtml(section.representative_citation || "")}</p>
           </div>
         </section>
-        <div class="family-icon-heading"><h3>20-icon pilot sample</h3><span class="muted">Randomly drawn from the full corpus, then ${isOrientation ? "placed in angular order from 0Â° to 180Â°; undefined orientations appear last" : `ordered by ${escapeHtml(selectedFeature.label.toLowerCase())}`}.</span></div>
+        <div class="family-icon-heading"><h3>${records.length}-icon pilot sample</h3><span class="muted">Balanced across eligible datasets, then ${isOrientation ? "placed in angular order from 0Â° to 180Â°; undefined orientations appear last" : `ordered by ${escapeHtml(selectedFeature.label.toLowerCase())}`}.</span></div>
         <div class="family-sample-average">
-          <span>Sample average<small>${isOrientation ? "Axial circular mean of defined orientations" : `Arithmetic mean ${escapeHtml(selectedFeature.label.toLowerCase())}`} across these ${sampleValues.length} icons</small></span>
+          <span>Average of shown icons<small>${isOrientation ? `Axial circular mean of ${sampleValues.length} defined orientations from these ${records.length} icons` : `Arithmetic mean ${escapeHtml(selectedFeature.label.toLowerCase())} across these ${sampleValues.length} icons`}</small></span>
           <code id="familySampleAverage">${sampleAverage === null ? "—" : formatFeatureValue(sampleAverage)}</code>
         </div>
+        <div class="family-compare-status" aria-live="polite">
+          <div><b>Pick 3 icons to compare</b><span>${familyComparisonIds.size} of 3 selected</span></div>
+          ${comparisonReady ? '<button class="family-compare-open" id="familyOpenComparison" type="button">View fullscreen comparison</button>' : ""}
+        </div>
         ${icons}`;
+      const openComparisonButton = document.getElementById("familyOpenComparison");
+      if (openComparisonButton) openComparisonButton.addEventListener("click", () => openFamilyComparison(openComparisonButton));
+      document.querySelectorAll("[data-compare-icon]").forEach(button => {
+        button.addEventListener("click", () => {
+          const iconId = button.dataset.compareIcon;
+          if (familyComparisonIds.has(iconId)) familyComparisonIds.delete(iconId);
+          else if (familyComparisonIds.size < 3) familyComparisonIds.add(iconId);
+          renderFamilyDetail();
+          const nextButton = document.querySelector(`[data-compare-icon="${CSS.escape(iconId)}"]`);
+          if (familyComparisonIds.size === 3) openFamilyComparison(nextButton);
+          else if (nextButton) nextButton.focus();
+        });
+      });
     }
 
     function setActiveFeatures(featureIds) {
@@ -1051,7 +1240,7 @@
               <h2>${escapeHtml(feature.label)}</h2>
               <span class="pill">${escapeHtml(feature.group_title || "Image feature")}</span>
               <p>${escapeHtml(feature.meaning || "Extracted image feature.")}</p>
-              <p class="muted">Uniqueness rank #${escapeHtml(feature.selection.rank_in_family)} in family · strongest |ρ| ${formatNumber(feature.selection.strongest_abs_spearman)}</p>
+              <p class="muted">${escapeHtml(feature.selection.basis || "Feature Groups representative")} · strongest |ρ| ${formatNumber(feature.selection.strongest_abs_spearman)}</p>
             </div>
             <div class="explorer-stats">${stats}</div>
             ${exampleSectionHtml("Low Values", feature.examples.low, "Icons with the smallest raw values for this feature.", "low")}
@@ -1091,9 +1280,14 @@
       if (!partner) {
         return `<div class="correlation-item"><span>${escapeHtml(label)}</span><p class="muted">No partner available.</p></div>`;
       }
+      const isExplorerFeature = (dashboard.feature_explorer.features || [])
+        .some(feature => feature.feature_id === partner.feature_id);
+      const partnerControl = isExplorerFeature
+        ? `<button type="button" data-explorer-partner="${escapeHtml(partner.feature_id)}">${escapeHtml(partner.label)}</button>`
+        : `<b>${escapeHtml(partner.label)}</b>`;
       return `<div class="correlation-item">
         <span>${escapeHtml(label)}</span>
-        <button type="button" data-explorer-partner="${escapeHtml(partner.feature_id)}">${escapeHtml(partner.label)}</button>
+        ${partnerControl}
         <b>rho ${formatSigned(partner.correlation)} · ${escapeHtml(bandLabel(partner.band))}</b>
         <p class="muted">${escapeHtml(partner.group_title || "Image feature")} · N=${escapeHtml(partner.pair_count)}</p>
       </div>`;

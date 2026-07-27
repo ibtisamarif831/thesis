@@ -1,10 +1,10 @@
 # Feature System
 
-## Schema v2 representative repair (2026-07-20)
+## Schema v2 extraction repair (2026-07-20)
 
-`features.csv` now uses `feature_schema_version: 2` and retains every schema-v1 measurement for reproducibility. Seven legacy representatives are deprecated and inactive; the active 81-feature registry replaces them one-for-one with:
+`features.csv` now uses `feature_schema_version: 2` and retains every schema-v1 measurement for reproducibility. Seven legacy columns are deprecated and inactive; the active 81-feature registry replaces them one-for-one with:
 
-| Family | Active v2 representative | Definition |
+| Family | Schema-v2 replacement column | Definition |
 |---|---|---|
 | Complexity | `quadtree_structural_variability_v2` | Quadtree subdivision density of grayscale intensity inside the active foreground box. |
 | Shape/silhouette | `enclosure_score_v2` | External-contour area divided by active bounding-box area. |
@@ -56,11 +56,11 @@ The active raw total is 81. In pairwise similarity, `principal_axis_orientation_
 
 ## Current One-Feature Representatives
 
-Feature Groups currently exposes one literature-backed representative per family for stimulus review. This is a display and study-selection layer; it does not reduce the 81-feature analytical registry used by clustering, similarity, Feature Review, or Feature Values.
+Feature Groups currently exposes one literature-backed representative per family for stimulus review. Feature Values intentionally reuses exactly these seven representatives for low/mean-nearest/high examples. This display and study-selection layer does not reduce the 81-feature analytical registry used by clustering, similarity, or Feature Review.
 
 | Family | Current representative | Selection basis |
 |---|---|---|
-| Complexity | `quadtree_structural_variability_v2` | Intensity-based replacement for the binary-mask quadtree proxy. |
+| Complexity | `canny_edge_density` | Smoothed Canny edge density; selected after the visual audit exposed raster and antialias inflation in grayscale quadtree variability. |
 | Shape/silhouette | `enclosure_score_v2` | External-contour enclosure within the active box. |
 | Stroke/structure | `principal_axis_orientation_v2` | PCA axis with explicit anisotropy confidence and undefined handling. |
 | Density/fill | `solid_fill_ratio_v2` | Multi-scale erosion survival separating solid interiors from outlines. |
@@ -68,7 +68,7 @@ Feature Groups currently exposes one literature-backed representative per family
 | Color/contrast | `mean_saturation_v2` | Saturation over the corrected foreground. |
 | Texture | `local_texture_variation_v2` | Local interior variation rather than global tonal entropy. |
 
-These are the most defensible current representatives, not universal causal rankings. The papers study different tasks and do not compare every implemented feature in one experiment. Each selection, rationale, evidence statement, and citation is stored in `metadata.image_feature_sections` within `dashboard_data.json`.
+These are the most defensible current representatives, not universal causal rankings. Complexity is the first family to move away from its schema-v2 replacement after full-corpus visual review; `quadtree_structural_variability_v2` remains active for analysis but is no longer the one-feature representative. The papers study different tasks and do not compare every implemented feature in one experiment. Each selection, rationale, evidence statement, and citation is stored in `metadata.image_feature_sections` within `dashboard_data.json`.
 
 ## Complete Active Feature Reference
 

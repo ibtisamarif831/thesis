@@ -85,7 +85,7 @@ Do not infer missing metadata from visual appearance without a documented rule. 
 
 ## Feature-Corpus Coverage
 
-The current `features.csv` covers all 28,749 canonical rows across all 13 sets. The verified run used neither `--limit` nor `--per-set-limit`, and `feature_failures.json` is empty. Dashboard clustering uses a separate deterministic 129-row sample; Feature Groups uses a compact full-corpus pool for transient 20-icon family samples, as described in [Dashboard implementation](dashboard-implementation.md).
+The current `features.csv` covers all 28,749 canonical rows across all 13 sets. The verified run used neither `--limit` nor `--per-set-limit`, and `feature_failures.json` is empty. Dashboard clustering uses a separate deterministic 129-row sample; Feature Groups filters the corpus to the 28,128 certain-mask rows before building its compact pool for transient 10-icon family samples and three-icon comparisons, as described in [Dashboard implementation](dashboard-implementation.md).
 
 ## Provenance and Legal Caveats
 

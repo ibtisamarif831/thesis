@@ -3,5 +3,26 @@
   "status": "blocked_pending_two_rater_benchmark",
   "pilot_enabled": false,
   "benchmark_rows": 450,
-  "unrated_cells": 900
+  "family_rows": {
+    "complexity": 50,
+    "closure": 50,
+    "orientation": 50,
+    "fill": 50,
+    "symmetry": 50,
+    "saturation": 50,
+    "texture": 50,
+    "strict_red": 100
+  },
+  "required_gates": {
+    "weighted_inter_rater_kappa": 0.6,
+    "held_out_scalar_spearman": 0.6,
+    "orientation_median_axial_error_degrees_max": 15,
+    "orientation_p90_axial_error_degrees_max": 30,
+    "orientation_undefined_f1": 0.8,
+    "strict_red_precision": 1.0,
+    "strict_red_recall": 0.8,
+    "acceptable_masks": 0.95,
+    "gross_background_inversions": 0
+  },
+  "note": "Engineering outputs are available for review, but no release gate can pass until two independent raters complete the frozen benchmark."
 }

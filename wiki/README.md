@@ -13,6 +13,7 @@ The wiki explains the system; it does not replace generated metadata or executab
 | Understand the 13 icon collections and canonical CSV | [Datasets and provenance](datasets-and-provenance.md) |
 | Follow data from source icons to analysis artifacts | [End-to-end pipeline](pipeline.md) |
 | Understand extraction and all active visual families | [Feature system](feature-system.md) |
+| Review the visual audit of all seven representatives across B/W, Red, and Colored icons | [Feature-family visual audit](../audit%20families.md) |
 | Understand distance, nearest neighbors, PCA, and clustering | [Similarity and clustering](similarity-and-clustering.md) |
 | Use or test every dashboard view | [Dashboard UI](dashboard-ui.md) |
 | Change dashboard generation or its JSON/CSV contract | [Dashboard implementation](dashboard-implementation.md) |
@@ -46,7 +47,7 @@ flowchart LR
 
 ## Current Snapshot
 
-Verified on **2026-07-20** from the current CSV and JSON artifacts:
+Verified on **2026-07-27** from the current CSV and JSON artifacts:
 
 | Item | Current value |
 |---|---:|
@@ -58,8 +59,11 @@ Verified on **2026-07-20** from the current CSV and JSON artifacts:
 | Active visual features | 81 |
 | Active visual families | 7 |
 | Feature Groups representatives | 7, one per family |
+| Complexity representative | Canny edge density; grayscale quadtree remains an active secondary feature |
+| Feature Values features | The same 7 representatives used by Feature Groups |
 | Feature-v2 release gate | Blocked pending completion of the frozen two-rater benchmark |
-| Feature Groups pilot sample | 20 random icons per family from all 28,749 rows; independently randomizable |
+| Feature Groups pilot sample | 10 dataset-balanced icons per family from 28,128 certain-mask rows; independently randomizable |
+| Feature Groups comparison | Exactly 3 selected sample icons; all 7 representative values in a separate fullscreen modal |
 | Dashboard rows | 129 |
 | Dashboard sampling | Up to 10 random icons per set, seed 42 |
 | Dashboard variants | Image, metadata, combined |

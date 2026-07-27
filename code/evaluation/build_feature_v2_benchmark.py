@@ -26,7 +26,7 @@ STATUS = ROOT / "icon_data/analysis/feature_v2_release_gate.json"
 OVERLAY_DIR = ROOT / "icon_data/analysis/feature_v2_mask_overlays"
 
 FAMILIES = {
-    "complexity": "quadtree_structural_variability_v2",
+    "complexity": "canny_edge_density",
     "closure": "enclosure_score_v2",
     "orientation": "principal_axis_orientation_v2",
     "fill": "solid_fill_ratio_v2",

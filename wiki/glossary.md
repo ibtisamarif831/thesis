@@ -18,7 +18,7 @@
 | Feature extractor | Registered code component that computes one or more numeric columns from a normalized image. |
 | Feature corpus | Complete 28,749-row `features.csv` population covering every canonical icon. |
 | Feature Review | Dashboard view using Spearman correlation, variance, and missingness to inspect redundancy among active features. |
-| Feature Values | Dashboard view showing low, mean-nearest, and high examples for up to two low-redundancy features per family. |
+| Feature Values | Dashboard view showing low, mean-nearest, and high examples for the same seven representatives used by Feature Groups. |
 | Glyph/icon | A compact visual symbol used as a study stimulus. The project uses both terms because the literature and datasets span iconography, pictograms, signs, emoji, and data glyphs. |
 | Human-side score | Participant outcome such as identification accuracy, confidence, similarity, confusability, or response time. Not implemented yet. |
 | Metadata feature | Encoded source/category/style/token/rating context used in exploratory dashboard variants; not an image-derived visual family. |

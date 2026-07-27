@@ -112,7 +112,7 @@ python code/build_analysis_dashboard.py
 
 The dashboard builder performs its own deterministic random sampling from `dataset.csv`, extracts current features for those rows, creates image/metadata/combined matrices, computes clustering variants, prepares full-sample feature-review/explorer data from `features.csv`, and regenerates HTML/JSON/CSV outputs.
 
-The dashboard clustering sample is independent from the complete feature corpus: Clustering uses 129 rows, while Feature Groups receives a compact 28,749-row pool and draws independent 20-icon pilot samples in the browser. Feature Values examples and Feature Review statistics also use all 28,749 rows from `features.csv`.
+The dashboard clustering sample is independent from the complete feature corpus: Clustering uses 129 rows, while Feature Groups excludes uncertain foreground masks and receives a compact 28,128-row pool from which it draws independent 10-icon pilot samples in the browser, with comparison limited to three current-sample icons. Feature Values examples and Feature Review statistics still use all 28,749 rows from `features.csv`.
 
 ## Stage 8: Serve and Inspect
 

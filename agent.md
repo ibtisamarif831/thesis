@@ -61,6 +61,7 @@ Boundary for future work:
 - Canonical dataset metadata contains non-ASCII labels; keep JSON/CSV reads and writes explicitly UTF-8. Serialize repository-relative paths with POSIX `/` separators before hashing so `icon_id` values remain stable across Windows and macOS/Linux.
 - Current visual-feature corpus: **28,749** rows in `icon_data/analysis/features.csv`, with **110 raw numeric image-feature columns** plus 23 metadata columns under feature schema v2. The active literature-mapped visual family set remains **81** columns: seven legacy representatives are retained but inactive and replaced one-for-one by v2 measurements. The two-rater release gate is still pending, so the pilot is blocked.
 - Current feature extraction failures: `[]` in `icon_data/analysis/feature_failures.json`.
+- Current Feature Groups Complexity representative: `canny_edge_density`. Grayscale quadtree variability remains active for broader analysis but is not the one-feature representative after cross-source visual-audit failures.
 - The interactive dashboard is generated under `icon_data/analysis/analysis_dashboard/`.
 - Current dashboard sample: **129** rows in `icon_data/analysis/analysis_dashboard/dashboard_data.json`.
 - As of the latest dashboard change, the dashboard sample is **up to 10 random icons from each dataset**, using fixed `RANDOM_SEED = 42` in `code/build_analysis_dashboard.py`.
@@ -72,8 +73,8 @@ Boundary for future work:
   - a Color By selector for cluster, set, or numeric image feature, although the current image-overlay renderer does not visibly apply the selected color;
   - filtering by icon set;
   - selected icon details and cluster summaries;
-  - a fullscreen Feature Groups detail workflow with one literature-backed representative per family, per-icon values, current-sample average, and All/B/W/Red/Colored cohorts; each family independently shows 20 random icons drawn from the complete corpus, sorted low-to-high by the representative value, and can be refreshed with **Randomize icons**; this display selection does not reduce the 81-feature analytical registry;
-  - a Feature Values tab restricted to up to two non-constant, lowest-redundancy features per visual family (13 total: two for six families and the single active Texture feature), selected from Feature Review's strongest absolute Spearman correlations, with searchable low/mean-nearest/high examples.
+  - a fullscreen Feature Groups detail workflow with one literature-backed representative per family, per-icon values, the average of the shown scores, and All/B/W/Red/Colored cohorts; each family independently shows 10 dataset-balanced icons drawn from the complete corpus, sorted low-to-high by the representative value, and can be refreshed with **Randomize icons**; selecting exactly three current-sample icons opens a separate fullscreen comparison modal across all seven representatives; this display selection does not reduce the 81-feature analytical registry;
+  - a Feature Values tab restricted to the same seven representative features used by Feature Groups, one per visual family, with searchable low/mean-nearest/high examples and correlation context.
 - Existing similarity outputs in `icon_data/analysis/similarity/` remain based on the earlier 1,038-row pilot. Do not run the current quadratic pairwise implementation directly on all 28,749 rows without a scalable rewrite.
 - Similarity and dashboard image-feature clustering use the active visual feature families from `code/build_analysis_dashboard.py`. Excluded raw channels are not used for active visual-family clustering or similarity ranking.
 - The 7 thesis PDFs have extracted page-marked text under `papers/extracted_text/`; regenerate with `code/extract_paper_text.py`.
@@ -240,7 +241,7 @@ Current dashboard sample:
 - Up to 10 random icons per dataset.
 - Fixed seed: `RANDOM_SEED = 42`.
 - Change the per-dataset sample size in `PER_SET_SAMPLE_SIZE` inside `code/build_analysis_dashboard.py`, then regenerate.
-- This 129-row sample is only for Clustering. Feature Groups uses a separate compact pool spanning all 28,749 feature rows and draws 20 transient random icons independently for each family and color treatment.
+- This 129-row sample is only for Clustering. Feature Groups uses a separate compact pool containing only rows with a certain foreground mask (currently 28,128 of 28,749) and draws 10 transient dataset-balanced icons independently for each family and color treatment. Uncertain-mask icons are excluded from its samples, averages, and comparisons.
 
 ## Script Map
 

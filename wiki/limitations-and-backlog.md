@@ -80,7 +80,7 @@ Supporting work should include:
 - reconcile dashboard README with current controls;
 - add category/style filters only if still useful and specified;
 - add a dendrogram if hierarchical structure needs explanation;
-- extract dashboard templates/logic into maintainable modules;
+- follow the staged [review, feature pipeline, and dashboard refactoring plan](../tasks/review-feature-dashboard-refactoring-plan.md), beginning with registry characterization and a shared typed feature authority;
 - add end-to-end browser regression checks;
 - enrich high-priority metadata sources;
 - visually audit feature examples before study selection.

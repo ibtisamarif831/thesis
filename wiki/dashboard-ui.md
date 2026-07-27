@@ -89,16 +89,18 @@ The cluster-summary panel lists visible clusters, current filtered counts, domin
 
 ## Feature Groups View
 
-The main view stays concise. It presents the seven human-facing categories and exactly one current representative feature for each family. Each family row has a **View details** button that opens a full-viewport detail workspace containing:
+The main view stays concise. It presents the seven human-facing categories and one representative selector for each family. The configured choices remain the documented study defaults. Choosing another active feature in a family is a browser-session exploratory override: the Clustering view immediately selects the current seven representatives, clears its cached projection, and recomputes PCA and K-means or hierarchical clustering without a page refresh. Reloading restores the configured defaults. Each family row also has a **View details** button that opens a full-viewport detail workspace containing:
 
 - the one selected feature and its feature ID;
-- how to interpret it, why it was selected, the supporting evidence, and a page-level literature citation;
+- how to interpret it and why it is active; configured defaults also show their supporting evidence and page-level literature citation;
 - up to 20 dataset-balanced icons drawn independently for that family from the 28,128 icons with a certain foreground mask;
 - **All**, **B/W**, **Red**, and **Colored** icon-treatment filters with live counts.
 - a **Randomize icons** action that replaces the active family's sample;
 - a three-icon comparison: select exactly three cards to open a separate fullscreen modal containing their representative measurements across all seven feature families.
 
 Each family/color-treatment combination keeps its own transient random sample. Icon slots are allocated as evenly as possible across the eligible datasets before an icon is drawn within each selected dataset. With 13 eligible datasets and a 20-icon target, every dataset receives one slot before seven datasets receive a second slot. Cohorts with fewer eligible datasets distribute additional slots as evenly as dataset capacity permits. Session-level draw counts rotate exposure across repeated randomizations, while per-dataset shuffled icon queues reduce immediate icon repetition. The selected icons are then sorted from low to high by the selected feature, and every icon card shows its raw value. The selected representatives are Canny edge density, enclosure score v2, principal-axis orientation v2, solid-fill ratio v2, horizontal symmetry v2, foreground mean saturation v2, and local texture variation v2. This one-feature presentation does not shrink the full 81-feature registry used elsewhere in the dashboard.
+
+The 28,128-row Feature Groups payload remains compact and carries the seven configured representative values. If any representative is overridden, family galleries and the three-icon comparison temporarily use the 129-row clustering sample because it contains values for all 81 selectable features. Returning all selectors to their configured defaults restores the full certain-mask population. Alternate choices are explicitly presented as exploratory; the literature rationale and citation remain attached only to each configured default.
 
 Immediately above the ordered icons, **Average of shown icons** reports the arithmetic mean of scalar representative-feature values for the currently visible icons. Orientation uses an axial circular mean over defined values instead. It is not the mean of either the full 28,749-icon corpus or the 28,128-icon certain-mask population, and recalculates after Randomize or a color-treatment change.
 
@@ -157,12 +159,14 @@ For a basic browser verification:
 5. Hover and click an icon; confirm preview and details include a valid image.
 6. Open Feature Groups and confirm seven representative-feature mappings and seven **View details** buttons appear.
 7. Open every family and confirm exactly one selected-feature panel, an evidence citation, and per-icon values appear; confirm the feature matches the representative table in [Feature system](feature-system.md#current-one-feature-representatives).
-8. With All selected, confirm the gallery shows 20 icons spanning all 13 datasets, ordered from low to high, and that none has `mask_is_uncertain == true`. Independently calculate their arithmetic mean to confirm **Average of shown icons**. Click **Randomize icons** and confirm a different dataset-balanced set and updated average replace them.
-9. Select three icons and confirm a separate fullscreen comparison modal opens with three images and seven representative-feature rows. Close it with **Escape**, confirm focus returns to the selected card, and reopen it with **View fullscreen comparison**. Confirm a fourth icon cannot be selected; deselect one and confirm another becomes selectable.
-10. Switch among B/W, Red, and Colored, and confirm the population count, gallery, and comparison selection reset. Red currently shows all 10 eligible strict-red icons because that cohort is smaller than the 20-icon target. Leave Red selected, close with **Escape**, and open another family; confirm Red remains selected but the family has its own draw. Confirm focus returns to the originating button after each close.
-11. Open Feature Values and confirm the selector contains exactly the seven Feature Groups representatives. Search for “saturation,” select Mean saturation, and confirm low/medium/high cards load.
-12. Open Feature Review, change sort and threshold, select a feature, and confirm details update.
-13. Record the Color By limitation if testing current behavior; do not mark visible recoloring as verified.
+8. Change Complexity from Edge density to Quadtree leaf count. Return to Clustering and confirm exactly seven feature checkboxes are selected, Quadtree leaf count is selected instead of Edge density, and the K-means plot and summaries render without reloading.
+9. Return to Feature Groups, open Complexity details, and confirm the override is described as exploratory and uses the 129-row clustering population. Restore Edge density and confirm the full certain-mask population returns.
+10. With All selected, confirm the default gallery shows 20 icons spanning all 13 datasets, ordered from low to high, and that none has `mask_is_uncertain == true`. Independently calculate their arithmetic mean to confirm **Average of shown icons**. Click **Randomize icons** and confirm a different dataset-balanced set and updated average replace them.
+11. Select three icons and confirm a separate fullscreen comparison modal opens with three images and seven representative-feature rows. Close it with **Escape**, confirm focus returns to the selected card, and reopen it with **View fullscreen comparison**. Confirm a fourth icon cannot be selected; deselect one and confirm another becomes selectable.
+12. Switch among B/W, Red, and Colored, and confirm the population count, gallery, and comparison selection reset. Red currently shows all 10 eligible strict-red icons because that cohort is smaller than the 20-icon target. Leave Red selected, close with **Escape**, and open another family; confirm Red remains selected but the family has its own draw. Confirm focus returns to the originating button after each close.
+13. Open Feature Values and confirm the selector contains exactly the seven configured Feature Groups representatives. Search for “saturation,” select Mean saturation, and confirm low/medium/high cards load.
+14. Open Feature Review, change sort and threshold, select a feature, and confirm details update.
+15. Record the Color By limitation if testing current behavior; do not mark visible recoloring as verified.
 
 For automated browser work, use the repository's Playwright skill and keep the server running in a separate terminal session.
 

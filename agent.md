@@ -73,8 +73,9 @@ Boundary for future work:
   - a Color By selector for cluster, set, or numeric image feature, although the current image-overlay renderer does not visibly apply the selected color;
   - filtering by icon set;
   - selected icon details and cluster summaries;
-  - a fullscreen Feature Groups detail workflow with one literature-backed representative per family, per-icon values, the average of the shown scores, and All/B/W/Red/Colored cohorts; each family independently shows up to 20 dataset-balanced icons drawn from the certain-mask pool, sorted low-to-high by the representative value, and can be refreshed with **Randomize icons**; selecting exactly three current-sample icons opens a separate fullscreen comparison modal across all seven representatives; this display selection does not reduce the 81-feature analytical registry;
-  - a Feature Values tab restricted to the same seven representative features used by Feature Groups, one per visual family, with searchable low/mean-nearest/high examples and correlation context.
+  - a fullscreen Feature Groups detail workflow with one configured literature-backed representative per family, per-icon values, the average of the shown scores, and All/B/W/Red/Colored cohorts; configured defaults independently show up to 20 dataset-balanced icons drawn from the complete certain-mask corpus, sorted low-to-high by the representative value, and can be refreshed with **Randomize icons**; selecting exactly three current-sample icons opens a separate fullscreen comparison modal across all seven representatives; this display selection does not reduce the 81-feature analytical registry;
+  - a Feature Values tab restricted to the seven configured Feature Groups representative features, one per visual family, with searchable low/mean-nearest/high examples and correlation context.
+  - browser-session representative selectors in Feature Groups; changing one synchronizes the Clustering view to the current seven representatives and recomputes it without reload. Exploratory overrides use the 129-row clustering sample for family details because the compact full-corpus payload carries only the configured seven representatives.
 - Existing similarity outputs in `icon_data/analysis/similarity/` remain based on the earlier 1,038-row pilot. Do not run the current quadratic pairwise implementation directly on all 28,749 rows without a scalable rewrite.
 - Similarity and dashboard image-feature clustering use the active visual feature families from `code/build_analysis_dashboard.py`. Excluded raw channels are not used for active visual-family clustering or similarity ranking.
 - The 7 thesis PDFs have extracted page-marked text under `papers/extracted_text/`; regenerate with `code/extract_paper_text.py`.
@@ -241,7 +242,7 @@ Current dashboard sample:
 - Up to 10 random icons per dataset.
 - Fixed seed: `RANDOM_SEED = 42`.
 - Change the per-dataset sample size in `PER_SET_SAMPLE_SIZE` inside `code/build_analysis_dashboard.py`, then regenerate.
-- This 129-row sample is only for Clustering. Feature Groups uses a separate compact pool containing only rows with a certain foreground mask (currently 28,128 of 28,749) and draws up to 20 transient dataset-balanced icons independently for each family and color treatment. Uncertain-mask icons are excluded from its samples, averages, and comparisons.
+- This 129-row sample is primarily for Clustering. With configured representatives, Feature Groups uses a separate compact pool containing only rows with a certain foreground mask (currently 28,128 of 28,749) and draws up to 20 transient dataset-balanced icons independently for each family and color treatment. If a browser-session representative override is active, Feature Groups temporarily falls back to the 129-row clustering sample because it contains all selectable feature values.
 
 ## Script Map
 

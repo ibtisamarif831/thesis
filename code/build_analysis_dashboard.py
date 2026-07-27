@@ -1975,6 +1975,7 @@ def write_index_html() -> None:
     let familyComparisonIds = new Set();
     const familySamples = new Map();
     const familySamplingStates = new Map();
+    const representativeFeaturesByFamily = new Map();
     const computedCache = new Map();
 
     const state = {{
@@ -2000,6 +2001,7 @@ def write_index_html() -> None:
 
     fetch("dashboard_data.json").then(r => r.json()).then(data => {{
       dashboard = data;
+      initializeRepresentativeFeatures();
       initializeControls();
       render();
     }});
@@ -2133,6 +2135,41 @@ def write_index_html() -> None:
         if (feature) return feature;
       }}
       return {{id: featureId, label: title(featureId), group: "", group_title: "", meaning: ""}};
+    }}
+
+    function initializeRepresentativeFeatures() {{
+      featureSections().forEach(section => {{
+        const configured = section.representative_feature || section.features[0];
+        if (configured) representativeFeaturesByFamily.set(section.id, configured.id);
+      }});
+    }}
+
+    function representativeFeature(section) {{
+      const selectedId = representativeFeaturesByFamily.get(section.id);
+      return section.features.find(feature => feature.id === selectedId)
+        || section.representative_feature
+        || section.features[0];
+    }}
+
+    function representativeFeatureIds() {{
+      return visibleFeatureSections()
+        .map(section => representativeFeature(section))
+        .filter(Boolean)
+        .map(feature => feature.id);
+    }}
+
+    function updateRepresentativeFeature(familyId, featureId) {{
+      const section = sectionById(familyId);
+      if (!section || !section.features.some(feature => feature.id === featureId)) return;
+      representativeFeaturesByFamily.set(familyId, featureId);
+      Array.from(familySamples.keys())
+        .filter(key => key.startsWith(`${{familyId}}:`))
+        .forEach(key => familySamples.delete(key));
+      familyComparisonIds.clear();
+      computedCache.clear();
+      setActiveFeatures(representativeFeatureIds());
+      renderFeatureGroups();
+      if (activeFamilyId === familyId) renderFamilyDetail();
     }}
 
     function renderFeatureControls() {{
@@ -2274,10 +2311,15 @@ def write_index_html() -> None:
               <thead><tr><th>Human category</th><th>Selected representative feature</th><th><span class="sr-only">Details</span></th></tr></thead>
               <tbody>
                 ${{sections.map(section => {{
-                  const feature = section.representative_feature || section.features[0];
+                  const feature = representativeFeature(section);
                   return `<tr>
                     <td><b>${{escapeHtml(section.human_category || section.title.replace(" Features", ""))}}</b></td>
-                    <td><b>${{escapeHtml(feature.label)}}</b><br><span class="feature-id">${{escapeHtml(feature.id)}}</span></td>
+                    <td>
+                      <label class="sr-only" for="familyRepresentative-${{escapeHtml(section.id)}}">Representative feature for ${{escapeHtml(section.title)}}</label>
+                      <select class="family-representative-select" id="familyRepresentative-${{escapeHtml(section.id)}}" data-family-id="${{escapeHtml(section.id)}}">
+                        ${{section.features.map(option => `<option value="${{escapeHtml(option.id)}}" ${{option.id === feature.id ? "selected" : ""}}>${{escapeHtml(option.label)}} · ${{escapeHtml(option.id)}}</option>`).join("")}}
+                      </select>
+                    </td>
                     <td><button class="family-detail-button" type="button" data-family-id="${{escapeHtml(section.id)}}">View details</button></td>
                   </tr>`;
                 }}).join("")}}
@@ -2288,6 +2330,14 @@ def write_index_html() -> None:
       container.innerHTML = overview;
       container.querySelectorAll(".family-detail-button").forEach(button => {{
         button.addEventListener("click", () => openFamilyDetail(button.dataset.familyId, button));
+      }});
+      container.querySelectorAll(".family-representative-select").forEach(select => {{
+        select.addEventListener("change", () => {{
+          const familyId = select.dataset.familyId;
+          updateRepresentativeFeature(familyId, select.value);
+          const refreshed = document.querySelector(`.family-representative-select[data-family-id="${{CSS.escape(familyId)}}"]`);
+          if (refreshed) refreshed.focus();
+        }});
       }});
     }}
 
@@ -2319,8 +2369,19 @@ def write_index_html() -> None:
       return "colored";
     }}
 
-    function familyPopulation(colorMode) {{
-      const records = dashboard.feature_group_records || dashboard.records || [];
+    function familySourceRecords(familyId) {{
+      const fullCorpusRecords = dashboard.feature_group_records || [];
+      const firstFullCorpusRecord = fullCorpusRecords[0];
+      const supportsCurrentRepresentatives = firstFullCorpusRecord
+        && representativeFeatureIds().every(featureId =>
+          Object.hasOwn(firstFullCorpusRecord.image_features || {{}}, featureId)
+        );
+      if (supportsCurrentRepresentatives) return fullCorpusRecords;
+      return dashboard.records || [];
+    }}
+
+    function familyPopulation(familyId, colorMode) {{
+      const records = familySourceRecords(familyId);
       return records.filter(record => colorMode === "all" || iconColorMode(record) === colorMode);
     }}
 
@@ -2391,7 +2452,7 @@ def write_index_html() -> None:
     }}
 
     function replaceFamilySample(familyId, colorMode) {{
-      const population = familyPopulation(colorMode);
+      const population = familyPopulation(familyId, colorMode);
       const limit = Number(dashboard.metadata.feature_group_sample_size || 20);
       const key = familySampleKey(familyId, colorMode);
       const sample = drawDatasetBalancedSample(population, limit, key);
@@ -2479,7 +2540,7 @@ def write_index_html() -> None:
               <thead><tr><th>Feature family</th>${{selectedRecords.map(record => `<th>${{escapeHtml(record.label || record.icon_id)}}</th>`).join("")}}</tr></thead>
               <tbody>
                 ${{comparisonSections.map(compareSection => {{
-                  const compareFeature = compareSection.representative_feature || compareSection.features[0];
+                  const compareFeature = representativeFeature(compareSection);
                   const compareIsOrientation = compareFeature.id === "principal_axis_orientation_v2";
                   return `<tr class="${{compareSection.id === activeFamilyId ? "current-family" : ""}}">
                     <td>${{escapeHtml(compareSection.human_category || compareSection.title)}}<br><span class="feature-id">${{escapeHtml(compareFeature.label)}}</span></td>
@@ -2499,8 +2560,10 @@ def write_index_html() -> None:
     function renderFamilyDetail() {{
       const section = visibleFeatureSections().find(item => item.id === activeFamilyId);
       if (!section) return;
-      const selectedFeature = section.representative_feature || section.features[0];
-      const allRecords = dashboard.feature_group_records || dashboard.records || [];
+      const selectedFeature = representativeFeature(section);
+      const configuredFeature = section.representative_feature || section.features[0];
+      const usesConfiguredRepresentative = selectedFeature.id === configuredFeature.id;
+      const allRecords = familySourceRecords(activeFamilyId);
       const counts = {{
         all: allRecords.length,
         bw: allRecords.filter(record => iconColorMode(record) === "bw").length,
@@ -2520,7 +2583,7 @@ def write_index_html() -> None:
           document.querySelector(`#familyColorFilters [data-color-mode="${{familyColorMode}}"]`).focus();
         }});
       }});
-      const population = familyPopulation(familyColorMode);
+      const population = familyPopulation(activeFamilyId, familyColorMode);
       const isOrientation = selectedFeature.id === "principal_axis_orientation_v2";
       const orientationThreshold = Number(dashboard.metadata.orientation_confidence_threshold || 0.20);
       const orientationConfidence = record => Number((record.image_features || {{}}).orientation_confidence_v2 || 0);
@@ -2584,10 +2647,16 @@ def write_index_html() -> None:
             <span class="family-selected-id">${{escapeHtml(selectedFeature.id)}}</span>
           </div>
           <div class="family-selected-evidence">
-            <p><b>How to read it.</b> ${{escapeHtml(section.representative_interpretation || "Higher values indicate more of the measured property.")}}</p>
-            <p><b>Why this one.</b> ${{escapeHtml(section.representative_rationale || "Selected as the current representative for this visual family.")}}</p>
-            <p><b>Evidence.</b> ${{escapeHtml(section.representative_evidence || "The literature supports this visual construct; the implementation remains a computational proxy.")}}</p>
-            <p class="family-selected-citation">${{escapeHtml(section.representative_citation || "")}}</p>
+            <p><b>How to read it.</b> ${{escapeHtml(usesConfiguredRepresentative
+              ? (section.representative_interpretation || selectedFeature.meaning)
+              : selectedFeature.meaning)}}</p>
+            <p><b>Why this one.</b> ${{escapeHtml(usesConfiguredRepresentative
+              ? (section.representative_rationale || "Selected as the configured representative for this visual family.")
+              : "Selected for this browser session to explore how this family measurement changes the clustering.")}}</p>
+            <p><b>Evidence.</b> ${{escapeHtml(usesConfiguredRepresentative
+              ? (section.representative_evidence || "The literature supports this visual construct; the implementation remains a computational proxy.")
+              : "The configured representative remains the documented study default; this session override is exploratory.")}}</p>
+            ${{usesConfiguredRepresentative ? `<p class="family-selected-citation">${{escapeHtml(section.representative_citation || "")}}</p>` : ""}}
           </div>
         </section>
         <div class="family-icon-heading"><h3>${{records.length}}-icon pilot sample</h3><span class="muted">Balanced across eligible datasets, then ${{isOrientation ? "placed in angular order from 0Â° to 180Â°; undefined orientations appear last" : `ordered by ${{escapeHtml(selectedFeature.label.toLowerCase())}}`}}.</span></div>

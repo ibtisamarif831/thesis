@@ -13,8 +13,8 @@ Use Feature Groups to choose one interpretable feature from each of the seven ac
 ## Acceptance criteria
 
 - One representative feature can be selected for each family.
-- The view shows icon image, feature value, and the current 10-icon sample average; distance from that average remains open.
-- Exactly 10 dataset-balanced candidates can be reviewed for each selected feature and refreshed independently.
+- The view shows icon image, feature value, and the current up-to-20-icon sample average; distance from that average remains open.
+- Up to 20 dataset-balanced candidates can be reviewed for each selected feature and refreshed independently.
 - Low, medium/mean-nearest, and high examples remain available.
 - Candidate selection uses the full feature sample where possible, not only the 129-row dashboard sample.
 
@@ -30,4 +30,4 @@ The schema-v2 representative implementation is complete but human validation rem
 - Color/contrast: `mean_saturation_v2`
 - Texture: `local_texture_variation_v2`
 
-Feature Groups displays the selected feature, rationale, evidence, citation, and an independent 10-icon dataset-balanced sample per family. Scalar values use arithmetic means and numeric ordering. Orientation uses an axial mean, angular ordering, and undefined-confidence handling. Candidate draws exclude the 621 uncertain-mask rows and cover the remaining 28,128 rows; **Randomize icons** and cohort persistence remain. The pilot cannot be released until the rebuilt two-rater benchmark passes; distance from average and the low/medium/high candidate workflow remain open.
+Feature Groups displays the selected feature, rationale, evidence, citation, and an independent dataset-balanced sample of up to 20 icons per family. Scalar values use arithmetic means and numeric ordering. Orientation uses an axial mean, angular ordering, and undefined-confidence handling. Candidate draws exclude the 621 uncertain-mask rows and cover the remaining 28,128 rows; **Randomize icons** and cohort persistence remain. The pilot cannot be released until the rebuilt two-rater benchmark passes; distance from average and the low/medium/high candidate workflow remain open.

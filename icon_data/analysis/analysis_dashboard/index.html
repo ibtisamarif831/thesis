@@ -816,7 +816,7 @@
 
     function replaceFamilySample(familyId, colorMode) {
       const population = familyPopulation(colorMode);
-      const limit = Number(dashboard.metadata.feature_group_sample_size || 10);
+      const limit = Number(dashboard.metadata.feature_group_sample_size || 20);
       const key = familySampleKey(familyId, colorMode);
       const sample = drawDatasetBalancedSample(population, limit, key);
       familySamples.set(key, sample);

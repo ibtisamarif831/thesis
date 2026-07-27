@@ -63,7 +63,7 @@ Each point represents one icon and is displayed using the normalized icon image.
 The header exposes four views:
 
 - **Clustering** for PCA, feature selection, clustering, filtering, and icon inspection.
-- **Feature Groups** for one literature-backed representative per family, with rationale/citation, a fullscreen detail view, All/B/W/Red/Colored filters, and an independent randomizable dataset-balanced 10-icon pilot sample per family drawn from the 28,128 rows with a certain foreground mask. The 621 uncertain-mask rows are excluded before display. Icon slots are spread as evenly as possible across eligible datasets before icons are drawn within those datasets. Each active sample shows the average of its visible scores, orders icons from low to high by the representative feature value, and allows exactly three icons to be compared across all seven representative features in a separate fullscreen modal.
+- **Feature Groups** for one literature-backed representative per family, with rationale/citation, a fullscreen detail view, All/B/W/Red/Colored filters, and an independent randomizable dataset-balanced pilot sample of up to 20 icons per family drawn from the 28,128 rows with a certain foreground mask. The 621 uncertain-mask rows are excluded before display. Icon slots are spread as evenly as possible across eligible datasets before icons are drawn within those datasets. Each active sample shows the average of its visible scores, orders icons from low to high by the representative feature value, and allows exactly three icons to be compared across all seven representative features in a separate fullscreen modal.
 - **Feature Values** for low, mean-nearest, and high representative examples.
 - **Feature Review** for feature variance and Spearman redundancy analysis.
 
@@ -164,5 +164,5 @@ It does not overwrite the older `icon_data/analysis/features.csv` or `icon_data/
 - Hierarchical clustering currently uses precomputed cluster labels/cuts, not a full interactive tree.
 - The Color By selector is not currently applied to the visible icon-image overlays.
 - The current Clustering filter is icon-set-only.
-- Clustering uses up to 10 random icons per dataset (129 total). Feature Groups receives a compact pool covering the 28,128 certain-mask feature rows and displays 10 dataset-balanced icons independently for each family and color treatment; **Randomize icons** replaces only the active family sample, and comparison selection is limited to three icons in that sample. Feature Review and Feature Values still use the complete feature corpus.
+- Clustering uses up to 10 random icons per dataset (129 total). Feature Groups receives a compact pool covering the 28,128 certain-mask feature rows and displays up to 20 dataset-balanced icons independently for each family and color treatment; **Randomize icons** replaces only the active family sample, and comparison selection is limited to three icons in that sample. Feature Review and Feature Values still use the complete feature corpus.
 - Human-study identification/perception scores are not included in this dashboard yet.

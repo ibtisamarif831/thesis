@@ -71,7 +71,7 @@ Verify:
 - normalized icon requests return HTTP 200;
 - no JavaScript errors appear;
 - the interaction walkthrough in [Dashboard UI](dashboard-ui.md) succeeds;
-- all seven v2 families, four cohorts, independent 10-icon Randomize state, strict-red contents, orientation ordering/mean/undefined state, uncertain-mask warnings, and the separate fullscreen exact-three icon comparison modal behave correctly;
+- all seven v2 families, four cohorts, independent up-to-20-icon Randomize state, strict-red contents, orientation ordering/mean/undefined state, uncertain-mask exclusion, and the separate fullscreen exact-three icon comparison modal behave correctly;
 - the Color By control is recorded as a known gap until rendering actually uses it.
 
 Opening `index.html` with a filesystem URL can trigger fetch/CORS/path failures and is not sufficient verification.
@@ -124,7 +124,7 @@ This is a current implementation gap: visible icons are layout images and the se
 
 ### Counts Differ Between Views
 
-Clustering uses 129 randomly sampled icons. Feature Groups draws 10 dataset-balanced icons per family from a compact pool containing the 28,128 rows whose foreground mask is not flagged uncertain; verify `feature_group_excludes_uncertain_masks == true` and that no `feature_group_records` item has `mask_is_uncertain == true`. Feature Review/Values use the complete corpus directly. This distinction is intentional and should remain explicit in labels and verification.
+Clustering uses 129 randomly sampled icons. Feature Groups draws up to 20 dataset-balanced icons per family from a compact pool containing the 28,128 rows whose foreground mask is not flagged uncertain; verify `feature_group_excludes_uncertain_masks == true` and that no `feature_group_records` item has `mask_is_uncertain == true`. Feature Review/Values use the complete corpus directly. This distinction is intentional and should remain explicit in labels and verification.
 
 ### Similarity Results Look Implausible
 

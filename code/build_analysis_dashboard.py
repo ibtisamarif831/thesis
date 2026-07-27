@@ -27,7 +27,7 @@ ASSETS_DIR = OUTPUT_DIR / "assets"
 PLOTLY_ASSET = ASSETS_DIR / "plotly.min.js"
 
 PER_SET_SAMPLE_SIZE = 10
-FEATURE_GROUP_SAMPLE_SIZE = 10
+FEATURE_GROUP_SAMPLE_SIZE = 20
 FEATURE_GROUP_COMPARISON_SIZE = 3
 K_VALUES = (3, 5, 7, 10)
 PRIMARY_K = 7
@@ -2392,7 +2392,7 @@ def write_index_html() -> None:
 
     function replaceFamilySample(familyId, colorMode) {{
       const population = familyPopulation(colorMode);
-      const limit = Number(dashboard.metadata.feature_group_sample_size || 10);
+      const limit = Number(dashboard.metadata.feature_group_sample_size || 20);
       const key = familySampleKey(familyId, colorMode);
       const sample = drawDatasetBalancedSample(population, limit, key);
       familySamples.set(key, sample);

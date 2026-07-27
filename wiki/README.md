@@ -62,7 +62,7 @@ Verified on **2026-07-27** from the current CSV and JSON artifacts:
 | Complexity representative | Canny edge density; grayscale quadtree remains an active secondary feature |
 | Feature Values features | The same 7 representatives used by Feature Groups |
 | Feature-v2 release gate | Blocked pending completion of the frozen two-rater benchmark |
-| Feature Groups pilot sample | 10 dataset-balanced icons per family from 28,128 certain-mask rows; independently randomizable |
+| Feature Groups pilot sample | Up to 20 dataset-balanced icons per family from 28,128 certain-mask rows; independently randomizable |
 | Feature Groups comparison | Exactly 3 selected sample icons; all 7 representative values in a separate fullscreen modal |
 | Dashboard rows | 129 |
 | Dashboard sampling | Up to 10 random icons per set, seed 42 |

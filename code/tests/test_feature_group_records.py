@@ -64,8 +64,8 @@ def test_feature_group_payload_excludes_uncertain_masks() -> None:
     assert records[0]["mask_is_uncertain"] is False
 
 
-def test_feature_group_pilot_size_is_ten() -> None:
-    assert dashboard.FEATURE_GROUP_SAMPLE_SIZE == 10
+def test_feature_group_pilot_size_is_twenty() -> None:
+    assert dashboard.FEATURE_GROUP_SAMPLE_SIZE == 20
 
 
 def test_feature_group_comparison_size_is_three() -> None:
@@ -84,7 +84,7 @@ def test_feature_group_html_supports_three_icon_comparison(tmp_path, monkeypatch
     assert ".comparison-dialog { width: 100vw; height: 100vh; height: 100dvh;" in index
     assert "View fullscreen comparison" in index
     assert "openFamilyComparison(nextButton)" in index
-    assert "feature_group_sample_size || 10" in index
+    assert "feature_group_sample_size || 20" in index
     assert "familyComparisonIds.size < 3" in index
     assert 'aria-pressed="${isSelected}"' in index
 

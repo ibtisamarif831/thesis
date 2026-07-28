@@ -118,3 +118,19 @@ def test_feature_group_html_uses_dataset_balanced_sampling(tmp_path, monkeypatch
     assert 'const dataset = record.set_name || "Unknown dataset"' in index
     assert "dataset-balanced icons from" in index
     assert "Average of shown icons" in index
+
+
+def test_orientation_gallery_excludes_undefined_records_before_sampling(
+    tmp_path, monkeypatch
+) -> None:
+    monkeypatch.setattr(dashboard, "OUTPUT_DIR", tmp_path)
+
+    dashboard.write_index_html()
+
+    index = (tmp_path / "index.html").read_text(encoding="utf-8")
+    assert "function hasDefinedOrientation(record)" in index
+    assert 'selectedFeature.id !== "principal_axis_orientation_v2"' in index
+    assert "representativeRecordIsEligible(familyId, record)" in index
+    assert "const population = familyPopulation(familyId, colorMode);" in index
+    assert "only confidence-defined orientations are shown" in index
+    assert "undefined orientations appear last" not in index

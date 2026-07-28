@@ -2369,6 +2369,23 @@ def write_index_html() -> None:
       return "colored";
     }}
 
+    function orientationConfidence(record) {{
+      const confidence = Number((record.image_features || {{}}).orientation_confidence_v2);
+      return Number.isFinite(confidence) ? confidence : 0;
+    }}
+
+    function hasDefinedOrientation(record) {{
+      const threshold = Number(dashboard.metadata.orientation_confidence_threshold || 0.20);
+      return orientationConfidence(record) >= threshold;
+    }}
+
+    function representativeRecordIsEligible(familyId, record) {{
+      const section = visibleFeatureSections().find(item => item.id === familyId);
+      if (!section) return false;
+      const selectedFeature = representativeFeature(section);
+      return selectedFeature.id !== "principal_axis_orientation_v2" || hasDefinedOrientation(record);
+    }}
+
     function familySourceRecords(familyId) {{
       const fullCorpusRecords = dashboard.feature_group_records || [];
       const firstFullCorpusRecord = fullCorpusRecords[0];
@@ -2382,7 +2399,10 @@ def write_index_html() -> None:
 
     function familyPopulation(familyId, colorMode) {{
       const records = familySourceRecords(familyId);
-      return records.filter(record => colorMode === "all" || iconColorMode(record) === colorMode);
+      return records.filter(record =>
+        representativeRecordIsEligible(familyId, record)
+        && (colorMode === "all" || iconColorMode(record) === colorMode)
+      );
     }}
 
     function familySampleKey(familyId, colorMode) {{
@@ -2520,7 +2540,6 @@ def write_index_html() -> None:
         .map(iconId => recordsById.get(iconId))
         .filter(Boolean);
       const orientationThreshold = Number(dashboard.metadata.orientation_confidence_threshold || 0.20);
-      const orientationConfidence = record => Number((record.image_features || {{}}).orientation_confidence_v2 || 0);
       const comparisonSections = visibleFeatureSections();
       document.getElementById("comparisonTitle").textContent = `Compare 3 icons · ${{section.title}}`;
       document.getElementById("comparisonDescription").textContent =
@@ -2563,7 +2582,8 @@ def write_index_html() -> None:
       const selectedFeature = representativeFeature(section);
       const configuredFeature = section.representative_feature || section.features[0];
       const usesConfiguredRepresentative = selectedFeature.id === configuredFeature.id;
-      const allRecords = familySourceRecords(activeFamilyId);
+      const allRecords = familySourceRecords(activeFamilyId)
+        .filter(record => representativeRecordIsEligible(activeFamilyId, record));
       const counts = {{
         all: allRecords.length,
         bw: allRecords.filter(record => iconColorMode(record) === "bw").length,
@@ -2586,7 +2606,6 @@ def write_index_html() -> None:
       const population = familyPopulation(activeFamilyId, familyColorMode);
       const isOrientation = selectedFeature.id === "principal_axis_orientation_v2";
       const orientationThreshold = Number(dashboard.metadata.orientation_confidence_threshold || 0.20);
-      const orientationConfidence = record => Number((record.image_features || {{}}).orientation_confidence_v2 || 0);
       const records = currentFamilySample(activeFamilyId, familyColorMode)
         .slice()
         .sort((left, right) => {{
@@ -2659,7 +2678,7 @@ def write_index_html() -> None:
             ${{usesConfiguredRepresentative ? `<p class="family-selected-citation">${{escapeHtml(section.representative_citation || "")}}</p>` : ""}}
           </div>
         </section>
-        <div class="family-icon-heading"><h3>${{records.length}}-icon pilot sample</h3><span class="muted">Balanced across eligible datasets, then ${{isOrientation ? "placed in angular order from 0Â° to 180Â°; undefined orientations appear last" : `ordered by ${{escapeHtml(selectedFeature.label.toLowerCase())}}`}}.</span></div>
+        <div class="family-icon-heading"><h3>${{records.length}}-icon pilot sample</h3><span class="muted">Balanced across eligible datasets, then ${{isOrientation ? "placed in angular order from 0Â° to 180Â°; only confidence-defined orientations are shown" : `ordered by ${{escapeHtml(selectedFeature.label.toLowerCase())}}`}}.</span></div>
         <div class="family-sample-average">
           <span>Average of shown icons<small>${{isOrientation ? `Axial circular mean of ${{sampleValues.length}} defined orientations from these ${{records.length}} icons` : `Arithmetic mean ${{escapeHtml(selectedFeature.label.toLowerCase())}} across these ${{sampleValues.length}} icons`}}</small></span>
           <code id="familySampleAverage">${{sampleAverage === null ? "—" : formatFeatureValue(sampleAverage)}}</code>

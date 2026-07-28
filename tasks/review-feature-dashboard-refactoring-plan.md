@@ -1,6 +1,6 @@
 # Review, Feature Pipeline, and Dashboard Refactoring Plan
 
-Status: proposed
+Status: in progress — first shared-registry slice completed; remaining Stage 0/1 work and Stages 2–4 pending
 
 Audit date: 2026-07-28
 
@@ -16,6 +16,29 @@ Make the feature-review pipeline and dashboard easier to change without broad ri
 - versioned, stable artifact contracts.
 
 This plan preserves current thesis behavior before changing architecture. It does not propose a wholesale UI rewrite or changes to the scientific interpretation of existing features.
+
+## Implementation Progress
+
+Completed in the first behavior-preserving slice:
+
+- added the immutable typed registry in `code/thesis_pipeline/features/registry.py`;
+- moved schema version, ordered raw/active/non-active feature contracts, family metadata, representatives, citations, aliases, and the orientation-confidence threshold into that authority;
+- migrated extraction, dashboard generation, similarity, benchmark generation, and evaluation threshold use to the registry;
+- removed the similarity-to-dashboard dependency;
+- added a frozen schema-v2 snapshot and consumer contract tests;
+- regenerated the dashboard with no artifact drift and verified the current representative-to-clustering behavior in a served browser.
+
+Follow-on configuration change:
+
+- added the registry-owned, code-only `ANALYSIS_FEATURE_PRESET` switch;
+- selected the seven configured representatives by default for dashboard clustering, Feature Review,
+  and similarity while preserving the 81-feature active registry and the 110-column raw export;
+- retained `full_registry` as the validated one-line fallback and added no UI profile control.
+- restricted the Clustering sidebar, initial checked state, family/all actions, Color-by feature options,
+  and browser-side PCA/clustering inputs to the resolved preset columns;
+- separated exploratory Feature Groups representative changes from Clustering selection.
+
+The immediate browser rule is now enforced: session representative changes do not overwrite the code-selected Clustering allow-list or its manual subset. A fuller unified browser-state/action architecture remains Stage 3 work. Explicit populations/profiles, pure analysis services, modular UI assets, and transactional orchestration remain pending.
 
 ## Current Architecture
 
@@ -38,13 +61,13 @@ features.csv
   -> feature_v2_release_gate.json
 ```
 
-The pipeline works, but important definitions and transformations are owned by multiple consumers.
+The shared registry now resolves feature-definition ownership. Transformations, populations, browser state, and several artifact contracts remain distributed across consumers.
 
 ## Prioritized Findings
 
-### P1: Feature definitions have multiple authorities
+### P1: Feature definitions had multiple authorities — resolved in the first slice
 
-Evidence:
+Pre-refactor evidence:
 
 - `code/extract_icon_features.py` owns extractor columns and measurement thresholds.
 - `code/build_analysis_dashboard.py` owns active families, exclusions, labels, meanings, configured representatives, and citations.
@@ -57,9 +80,9 @@ Impact:
 - dependency direction is inverted when a general similarity pipeline imports a UI generator;
 - family identifiers can drift between analytical and evaluation code.
 
-Target:
+Implemented:
 
-Create `code/thesis_pipeline/features/registry.py` containing typed `FeatureSpec` and `FamilySpec` definitions. It should own:
+`code/thesis_pipeline/features/registry.py` now contains typed `FeatureSpec` and `FamilySpec` definitions and owns:
 
 - feature IDs and display metadata;
 - family membership and ordering;
@@ -68,7 +91,7 @@ Create `code/thesis_pipeline/features/registry.py` containing typed `FeatureSpec
 - interpretation and evidence metadata;
 - shared measurement thresholds that are part of the feature contract.
 
-Extraction, similarity, evaluation, dashboard generation, and tests should depend on this registry rather than on each other.
+Extraction, similarity, evaluation, dashboard generation, and tests now depend on this registry rather than on each other. The remaining refactoring findings below are still open.
 
 ### P1: `build_analysis_dashboard.py` is the main change hotspot
 
@@ -181,15 +204,14 @@ Target:
 Evidence:
 
 - clustering, review, explorer, family selection, comparison selection, samples, sampling queues, and projection caches live in separate mutable objects and globals;
-- changing a representative mutates representative state, family samples, comparison state, clustering features, projection cache, and multiple renderers;
-- session representatives affect clustering and Feature Groups, while Feature Values and evaluation remain tied to configured representatives.
+- changing a representative still mutates representative state, family samples, comparison state, and multiple renderers;
+- session representatives affect Feature Groups, while Clustering, Feature Values, and evaluation remain tied to configured code selections.
 
 Impact:
 
 - state transitions have broad side effects;
 - cache invalidation depends on callers remembering every affected cache;
-- configured and exploratory representative concepts can be confused;
-- a representative change currently replaces manual clustering selections with the seven current representatives.
+- configured and exploratory representative concepts can still be confused outside the now-independent Clustering selection.
 
 Target:
 
@@ -213,7 +235,9 @@ Pure selectors should derive:
 - cache keys;
 - visible family records.
 
-Before implementation, decide the product rule for how representative changes affect manual clustering selections: replace, merge, or activate a dedicated representatives preset.
+The current product rule is explicit: Clustering uses the registry-selected code preset as its
+allow-list, manual browser selection may choose a subset of that allow-list, and exploratory Feature
+Groups representative changes do not alter either.
 
 ### P2: Evaluation configuration and result schemas are duplicated
 
@@ -331,7 +355,7 @@ Exit criteria:
 - rebuilds fail before writing when required inputs are missing;
 - downstream artifacts record the exact feature registry and analysis profile used.
 
-## Recommended First Implementation Slice
+## Recommended First Implementation Slice — completed 2026-07-28
 
 The first refactoring task should be deliberately small:
 

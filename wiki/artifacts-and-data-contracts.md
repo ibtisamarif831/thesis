@@ -1,5 +1,9 @@
 # Artifacts and Data Contracts
 
+## Feature Registry Contract
+
+`code/thesis_pipeline/features/registry.py` is the executable authority for the ordered 110 raw feature IDs, 81 active registry features, 29 non-active features, seven families, representatives, code-only analysis presets, exclusions, aliases, schema version, and orientation-confidence threshold. `code/tests/fixtures/feature_registry_v2.json` freezes that schema-v2 contract so consumer refactors cannot silently reorder or reclassify features.
+
 ## Feature schema v2 artifacts
 
 - `features.csv`: 23 metadata columns plus 110 numeric feature columns. Mask diagnostics are metadata; ten `_v2` numeric channels are finite. Schema-v1 measurements remain present.
@@ -36,13 +40,14 @@ Breaking changes include altering canonical source selection, moving source file
 
 `features_metadata.json` records the last extraction configuration and extractor registry. `feature_failures.json` must exist even when it contains `[]`.
 
-Active-family membership is a separate contract: 81 raw feature columns are active, while 29 are retained but excluded. Never infer “active” merely from presence in the CSV.
+Active-family membership is a separate contract: 81 raw feature columns are active, while 29 are retained but excluded. The current analysis preset is narrower: seven representatives. Never infer either membership or analysis selection merely from presence in the CSV.
 
 ## Similarity Contract
 
 `icon_data/analysis/similarity/similarity_metadata.json` is the reproducibility manifest. It declares:
 
 - source row count and raw columns;
+- selected analysis preset;
 - transformed and active columns;
 - exclusions and reasons;
 - circular preprocessing;
@@ -54,7 +59,7 @@ Distance-matrix row and column order must match the source feature-frame order. 
 
 ## Dashboard Contract
 
-`dashboard_data.json` is the runtime API for the static UI. Its top-level `metadata`, `records`, `clusters`, `feature_review`, and `feature_explorer` keys are documented in [Dashboard implementation](dashboard-implementation.md).
+`dashboard_data.json` is the runtime API for the static UI. Its top-level `metadata`, `records`, `clusters`, `feature_review`, and `feature_explorer` keys are documented in [Dashboard implementation](dashboard-implementation.md). `metadata.analysis_feature_preset` records the code-selected profile, while `metadata.image_feature_columns` records its resolved columns. Feature definitions under `metadata.image_feature_sections` include registry-owned `evidence_scope`, `evidence`, and `citation` fields for every active registry feature.
 
 The dashboard folder also contains the exact CSV inputs/outputs used to audit the generated view. Do not assume all sections use the same sample size.
 

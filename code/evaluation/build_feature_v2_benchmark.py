@@ -17,6 +17,7 @@ CODE_DIR = Path(__file__).resolve().parents[1]
 if str(CODE_DIR) not in sys.path:
     sys.path.insert(0, str(CODE_DIR))
 import extract_icon_features
+from thesis_pipeline.features import registry as feature_registry
 
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -25,15 +26,7 @@ OUTPUT = ROOT / "icon_data/analysis/feature_v2_benchmark.csv"
 STATUS = ROOT / "icon_data/analysis/feature_v2_release_gate.json"
 OVERLAY_DIR = ROOT / "icon_data/analysis/feature_v2_mask_overlays"
 
-FAMILIES = {
-    "complexity": "canny_edge_density",
-    "closure": "enclosure_score_v2",
-    "orientation": "principal_axis_orientation_v2",
-    "fill": "solid_fill_ratio_v2",
-    "symmetry": "horizontal_symmetry_v2",
-    "saturation": "mean_saturation_v2",
-    "texture": "local_texture_variation_v2",
-}
+FAMILIES = dict(feature_registry.benchmark_family_features())
 RATING_COLUMNS = [
     "rater_1_judgment",
     "rater_2_judgment",
@@ -219,7 +212,7 @@ def main() -> None:
         writer.writeheader()
         writer.writerows(benchmark)
     status = {
-        "feature_schema_version": 2,
+        "feature_schema_version": feature_registry.FEATURE_SCHEMA_VERSION,
         "status": "blocked_pending_two_rater_benchmark",
         "pilot_enabled": False,
         "benchmark_rows": len(benchmark),

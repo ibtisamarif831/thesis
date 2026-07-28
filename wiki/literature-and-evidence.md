@@ -30,6 +30,29 @@ Seven core PDFs are stored under `papers/`. Page-marked extracted text is stored
 
 No single paper validates every implemented metric. The mapping is a reasoned operationalization: literature supports a human-relevant visual construct, and the code implements measurable proxies. Each proxy still requires visual and human validation.
 
+## Feature-Level Evidence Registry
+
+The 2026-07-28 literature pass records evidence on every active `FeatureSpec` in
+`code/thesis_pipeline/features/registry.py`. Each of the 81 active features has:
+
+- `evidence_scope`: `direct`, `construct`, or `cautionary`;
+- `evidence`: a claim-disciplined summary of what the source supports and what remains a project
+  inference;
+- `citation`: the paper title and verified page range.
+
+The current distribution is one direct entry, 77 construct-level entries, and three cautionary
+entries. `canny_edge_density` is the direct entry. `foreground_area_ratio`,
+`connected_components`, and `holes_count` are cautionary because the source itself reports important
+limitations. Auxiliary, deprecated, and excluded raw columns use `none`.
+
+Registry validation requires complete evidence metadata for the active set. The dashboard serializes
+the same fields into each feature object under `metadata.image_feature_sections`, so consumers do not
+need a separate evidence table. The frozen registry fixture records the scope assignment and a digest
+of the evidence/citation content.
+
+See `notes/feature_literature_evidence_pass_2026-07-28.md` for the feature-group matrix, exact source
+pages, and safe interpretation boundaries.
+
 ## Evidence Used For The Current Representatives
 
 The one-feature-per-family selection in Feature Groups applies the following evidence hierarchy:
@@ -72,6 +95,8 @@ Particularly careful cases:
 The main human-authored syntheses are:
 
 - `notes/human_to_computer_glyph_feature_mapping.md` — current conceptual boundary.
+- `notes/feature_literature_evidence_pass_2026-07-28.md` — feature-level evidence scope, page mapping,
+  and registry coverage.
 - `notes/literature_mapping_deep_pass_2026-07-08.md` — latest local-literature audit and safe claim.
 - `notes/paper_feature_review.md` — paper-by-paper feature and distinguishability review.
 - `notes/feature_visual_categorization_tables.md` — visual categorization mappings.

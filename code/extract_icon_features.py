@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
 """Extract visual features from normalized icon images.
 
-The feature registry is intentionally small and explicit: add a new feature by
-subclassing FeatureExtractor and adding it to FEATURE_EXTRACTORS.
+Extractor implementations stay explicit here. The shared schema, ordering,
+statuses, family membership, and representative metadata live in
+``thesis_pipeline.features.registry``.
 """
 
 import argparse
@@ -22,6 +23,8 @@ from pathlib import Path
 import numpy as np
 from PIL import Image
 
+from thesis_pipeline.features import registry as feature_registry
+
 try:
     import cv2
 except ImportError:
@@ -34,10 +37,14 @@ DATASET_CSV = ANALYSIS_DIR / "dataset.csv"
 FEATURES_CSV = ANALYSIS_DIR / "features.csv"
 FEATURE_FAILURES_JSON = ANALYSIS_DIR / "feature_failures.json"
 TESSERACT_PATH = shutil.which("tesseract")
-FEATURE_SCHEMA_VERSION = 2
+FEATURE_SCHEMA_VERSION = feature_registry.FEATURE_SCHEMA_VERSION
 ALPHA_FOREGROUND_THRESHOLD = 0.05
 BACKGROUND_DELTA_E_THRESHOLD = 10.0
-ORIENTATION_CONFIDENCE_THRESHOLD = 0.20
+ALPHA_RECTANGULAR_OCCUPANCY_THRESHOLD = 0.98
+WHITE_PANEL_MIN_CHANNEL = 0.90
+WHITE_PANEL_MAX_CHROMA = 0.08
+WHITE_PANEL_MIN_BACKGROUND_FRACTION = 0.05
+ORIENTATION_CONFIDENCE_THRESHOLD = feature_registry.ORIENTATION_CONFIDENCE_THRESHOLD
 
 METADATA_COLUMNS = [
     "icon_id",
@@ -364,7 +371,11 @@ FEATURE_EXTRACTORS: tuple[FeatureExtractor, ...] = (
     Version2RepresentativeFeatures(),
 )
 
-FEATURE_COLUMNS: tuple[str, ...] = tuple(column for extractor in FEATURE_EXTRACTORS for column in extractor.columns)
+_EXTRACTOR_FEATURE_COLUMNS = tuple(
+    column for extractor in FEATURE_EXTRACTORS for column in extractor.columns
+)
+feature_registry.validate_registry(_EXTRACTOR_FEATURE_COLUMNS)
+FEATURE_COLUMNS: tuple[str, ...] = feature_registry.raw_feature_ids()
 FEATURE_GROUPS: tuple[tuple[str, ...], ...] = tuple(extractor.columns for extractor in FEATURE_EXTRACTORS)
 
 
@@ -396,12 +407,16 @@ def load_image(path: Path, foreground_threshold: int) -> ImageContext:
     alpha = data[:, :, 3] / 255.0
 
     rgb_unit = (rgb / 255.0).astype(np.float32)
-    # Transparent assets have an explicit figure-ground signal. Opaque assets use
-    # a border-derived Lab background model and only remove matching pixels that
-    # are connected to the canvas border.
+    # Transparent assets usually have an explicit figure-ground signal. Some
+    # source PNGs instead place the glyph on an opaque white panel inside a
+    # transparent canvas, so remove that panel before treating alpha as the
+    # foreground. Opaque assets use a border-derived Lab background model.
     if np.any(alpha < 0.99):
-        foreground = alpha > ALPHA_FOREGROUND_THRESHOLD
-        mask_mode = "alpha"
+        alpha_foreground = alpha > ALPHA_FOREGROUND_THRESHOLD
+        foreground, removed_white_panel = correct_rectangular_alpha_white_panel(
+            rgb_unit, alpha_foreground
+        )
+        mask_mode = "alpha_white_panel" if removed_white_panel else "alpha"
         border_variation = 0.0
     else:
         foreground, border_variation = opaque_foreground_mask(rgb_unit)
@@ -411,6 +426,8 @@ def load_image(path: Path, foreground_threshold: int) -> ImageContext:
     border_contact = foreground_border_contact(foreground)
     if mask_mode == "alpha":
         confidence = 1.0
+    elif mask_mode == "alpha_white_panel":
+        confidence = 0.9
     else:
         confidence = max(0.0, 1.0 - border_variation / 30.0)
         confidence *= max(0.0, 1.0 - max(border_contact - 0.05, 0.0))
@@ -436,6 +453,51 @@ def load_image(path: Path, foreground_threshold: int) -> ImageContext:
         mask_confidence=float(confidence),
         mask_is_uncertain=uncertain,
     )
+
+
+def mask_bounding_box_occupancy(mask: np.ndarray) -> float:
+    if not mask.any():
+        return 0.0
+    ys, xs = np.nonzero(mask)
+    crop = mask[int(ys.min()) : int(ys.max()) + 1, int(xs.min()) : int(xs.max()) + 1]
+    return float(crop.mean()) if crop.size else 0.0
+
+
+def correct_rectangular_alpha_white_panel(
+    rgb: np.ndarray, alpha_foreground: np.ndarray
+) -> tuple[np.ndarray, bool]:
+    """Remove a border-connected white panel mistakenly encoded as foreground."""
+    if (
+        not alpha_foreground.any()
+        or mask_bounding_box_occupancy(alpha_foreground)
+        < ALPHA_RECTANGULAR_OCCUPANCY_THRESHOLD
+    ):
+        return alpha_foreground, False
+
+    ys, xs = np.nonzero(alpha_foreground)
+    y0, y1 = int(ys.min()), int(ys.max()) + 1
+    x0, x1 = int(xs.min()), int(xs.max()) + 1
+    support = alpha_foreground[y0:y1, x0:x1]
+    crop_rgb = rgb[y0:y1, x0:x1]
+    channel_min = crop_rgb.min(axis=2)
+    chroma = crop_rgb.max(axis=2) - channel_min
+    near_white = (
+        support
+        & (channel_min >= WHITE_PANEL_MIN_CHANNEL)
+        & (chroma <= WHITE_PANEL_MAX_CHROMA)
+    )
+    connected_white = border_connected_mask(near_white)
+    background_fraction = float(connected_white.sum() / max(int(support.sum()), 1))
+    corrected_crop = support & ~connected_white
+    if (
+        background_fraction < WHITE_PANEL_MIN_BACKGROUND_FRACTION
+        or not corrected_crop.any()
+    ):
+        return alpha_foreground, False
+
+    corrected = np.zeros_like(alpha_foreground, dtype=bool)
+    corrected[y0:y1, x0:x1] = corrected_crop
+    return corrected, True
 
 
 def opaque_foreground_mask(rgb: np.ndarray) -> tuple[np.ndarray, float]:
@@ -2049,21 +2111,22 @@ def write_feature_metadata(
         },
         "foreground_mask": {
             "transparent_alpha_threshold": ALPHA_FOREGROUND_THRESHOLD,
+            "transparent_white_panel_rule": (
+                "when alpha forms a nearly solid rectangle, remove border-connected "
+                "near-white low-chroma pixels before feature extraction"
+            ),
+            "transparent_rectangular_occupancy_threshold": (
+                ALPHA_RECTANGULAR_OCCUPANCY_THRESHOLD
+            ),
+            "transparent_white_panel_min_channel": WHITE_PANEL_MIN_CHANNEL,
+            "transparent_white_panel_max_chroma": WHITE_PANEL_MAX_CHROMA,
             "opaque_background_color_space": "CIELAB",
             "opaque_background_delta_e76_threshold": BACKGROUND_DELTA_E_THRESHOLD,
             "opaque_background_rule": "remove only border-connected pixels within threshold of the median border color",
             "uncertainty_rule": "empty/full masks or opaque masks with nonuniform borders/contact are flagged",
         },
         "orientation_confidence_threshold": ORIENTATION_CONFIDENCE_THRESHOLD,
-        "deprecated_inactive_columns": [
-            "quadtree_structural_variability",
-            "closed_contour_ratio",
-            "principal_axis_orientation",
-            "filled_vs_outline_proxy",
-            "horizontal_symmetry",
-            "mean_saturation",
-            "texture_entropy",
-        ],
+        "deprecated_inactive_columns": list(feature_registry.deprecated_feature_ids()),
         "metadata_columns": METADATA_COLUMNS,
         "features": [
             {

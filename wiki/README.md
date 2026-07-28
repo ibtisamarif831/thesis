@@ -48,7 +48,7 @@ flowchart LR
 
 ## Current Snapshot
 
-Verified on **2026-07-27** from the current CSV and JSON artifacts:
+Verified on **2026-07-28** from the current CSV and JSON artifacts:
 
 | Item | Current value |
 |---|---:|
@@ -63,7 +63,7 @@ Verified on **2026-07-27** from the current CSV and JSON artifacts:
 | Complexity representative | Canny edge density; grayscale quadtree remains an active secondary feature |
 | Feature Values features | The 7 configured Feature Groups representatives |
 | Feature-v2 release gate | Blocked pending completion of the frozen two-rater benchmark |
-| Feature Groups pilot sample | Defaults: up to 20 dataset-balanced icons per family from 28,128 certain-mask rows; exploratory overrides use the 129-row clustering sample |
+| Feature Groups pilot sample | Defaults: up to 20 dataset-balanced icons per family from 28,260 certain-mask rows; exploratory overrides use the 129-row clustering sample |
 | Feature Groups comparison | Exactly 3 selected sample icons; all 7 representative values in a separate fullscreen modal |
 | Dashboard rows | 129 |
 | Dashboard sampling | Up to 10 random icons per set, seed 42 |

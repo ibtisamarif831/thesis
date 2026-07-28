@@ -425,6 +425,7 @@
 
     fetch("dashboard_data.json").then(r => r.json()).then(data => {
       dashboard = data;
+      state.activeFeatures = new Set(configuredAnalysisFeatureIds());
       initializeRepresentativeFeatures();
       initializeControls();
       render();
@@ -544,8 +545,27 @@
       return visibleFeatureSections().flatMap(section => section.features.map(feature => feature.id));
     }
 
+    function configuredAnalysisFeatureIds() {
+      const configured = dashboard.metadata.image_feature_columns || [];
+      return configured.length ? configured : visibleFeatureIds();
+    }
+
+    function clusteringFeatureSections() {
+      const allowed = new Set(configuredAnalysisFeatureIds());
+      return visibleFeatureSections()
+        .map(section => ({
+          ...section,
+          features: section.features.filter(feature => allowed.has(feature.id))
+        }))
+        .filter(section => section.features.length);
+    }
+
+    function clusteringSectionById(sectionId) {
+      return clusteringFeatureSections().find(section => section.id === sectionId);
+    }
+
     function selectedFeatureIds() {
-      const ordered = visibleFeatureIds().filter(feature => state.activeFeatures.has(feature));
+      const ordered = configuredAnalysisFeatureIds().filter(feature => state.activeFeatures.has(feature));
       return ordered;
     }
 
@@ -591,7 +611,6 @@
         .forEach(key => familySamples.delete(key));
       familyComparisonIds.clear();
       computedCache.clear();
-      setActiveFeatures(representativeFeatureIds());
       renderFeatureGroups();
       if (activeFamilyId === familyId) renderFamilyDetail();
     }
@@ -599,11 +618,12 @@
     function renderFeatureControls() {
       const presets = document.getElementById("featurePresets");
       const checks = document.getElementById("featureChecks");
+      const clusteringSections = clusteringFeatureSections();
       presets.innerHTML = [
         '<button type="button" data-feature-preset="all">All</button>',
-        ...visibleFeatureSections().map(section => `<button type="button" data-feature-preset="${section.id}">${escapeHtml(section.title.replace(" Features", ""))}</button>`)
+        ...clusteringSections.map(section => `<button type="button" data-feature-preset="${section.id}">${escapeHtml(section.title.replace(" Features", ""))}</button>`)
       ].join("");
-      checks.innerHTML = visibleFeatureSections().map(section => `
+      checks.innerHTML = clusteringSections.map(section => `
         <div class="feature-section" data-section-id="${escapeHtml(section.id)}">
           <div class="feature-head">
             <b>${escapeHtml(section.title)}</b>
@@ -631,14 +651,14 @@
         const button = event.target.closest("button[data-feature-preset]");
         if (!button) return;
         const preset = button.dataset.featurePreset;
-        const section = sectionById(preset);
-        setActiveFeatures(preset === "all" ? visibleFeatureIds() : section.features.map(feature => feature.id));
+        const section = clusteringSectionById(preset);
+        setActiveFeatures(preset === "all" ? configuredAnalysisFeatureIds() : section.features.map(feature => feature.id));
       });
 
       checks.addEventListener("click", event => {
         const button = event.target.closest("button[data-feature-action]");
         if (!button) return;
-        const section = sectionById(button.dataset.sectionId);
+        const section = clusteringSectionById(button.dataset.sectionId);
         if (!section) return;
         const next = new Set(state.activeFeatures);
         section.features.forEach(feature => {
@@ -1128,7 +1148,8 @@
     }
 
     function setActiveFeatures(featureIds) {
-      state.activeFeatures = new Set(featureIds);
+      const allowed = new Set(configuredAnalysisFeatureIds());
+      state.activeFeatures = new Set(featureIds.filter(featureId => allowed.has(featureId)));
       syncFeatureCheckboxes();
       computedCache.clear();
       render();
@@ -1778,7 +1799,7 @@
       select.innerHTML = "";
       appendOption(select, "cluster", "Cluster", selected);
       appendOption(select, "set_name", "Icon set", selected);
-      visibleFeatureSections().forEach(section => {
+      clusteringFeatureSections().forEach(section => {
         const group = document.createElement("optgroup");
         group.label = section.title;
         section.features.forEach(feature => appendOption(group, feature.id, feature.label, selected));

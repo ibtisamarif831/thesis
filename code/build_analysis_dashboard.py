@@ -16,6 +16,7 @@ import numpy as np
 
 import build_clustering_metadata_sample as metadata_helpers
 import extract_icon_features
+from thesis_pipeline.features import registry as feature_registry
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -53,534 +54,37 @@ METADATA_COLUMNS = [
     "normalized_path_exists",
 ]
 
-IMAGE_FEATURE_COLUMNS = list(extract_icon_features.FEATURE_COLUMNS)
-
+IMAGE_FEATURE_COLUMNS = list(feature_registry.raw_feature_ids())
 GRID_FEATURE_COLUMNS = [f"grid_foreground_{row}_{col}" for row in range(4) for col in range(4)]
-EXCLUDED_IMAGE_FEATURES = {
-    *(f"hu_moment_{index}" for index in range(1, 8)),
-    *(f"lbp_histogram_{index:02d}" for index in range(10)),
-    "text_or_letter_presence",
-    "crush_test_stability",
-    "quadtree_structural_variability",
-    "closed_contour_ratio",
-    "principal_axis_orientation",
-    "filled_vs_outline_proxy",
-    "horizontal_symmetry",
-    "mean_saturation",
-    "texture_entropy",
-    "orientation_confidence_v2",
-    "red_pixel_ratio_v2",
-    "strict_red_flag_v2",
-}
-EXCLUDED_IMAGE_FEATURE_REASONS = {
-    **{
-        f"hu_moment_{index}": "Excluded from active visual-family mapping because Hu moments are useful for machine shape matching but do not map cleanly to an interpretable human perception cue."
-        for index in range(1, 8)
-    },
-    **{
-        f"lbp_histogram_{index:02d}": "Excluded from active visual-family mapping because local binary patterns often capture antialiasing/rendering artifacts in flat vector icons."
-        for index in range(10)
-    },
-    "text_or_letter_presence": "Excluded from active visual-family mapping because the current heuristic is too indirect for reliable glyph-identification claims.",
-    "crush_test_stability": "Excluded from active visual-family mapping because it measures processing robustness rather than a direct visible identification feature.",
-    **{
-        column: "Deprecated schema-v1 representative retained only for reproducibility; active analysis uses the versioned v2 replacement."
-        for column in (
-            "quadtree_structural_variability",
-            "closed_contour_ratio",
-            "principal_axis_orientation",
-            "filled_vs_outline_proxy",
-            "horizontal_symmetry",
-            "mean_saturation",
-            "texture_entropy",
-        )
-    },
-    "orientation_confidence_v2": "Auxiliary confidence channel used to define whether the v2 orientation is meaningful; it is not an independent family feature.",
-    "red_pixel_ratio_v2": "Auxiliary cohort diagnostic used by the strict-red classifier, not an active family feature.",
-    "strict_red_flag_v2": "Auxiliary dashboard cohort flag, not an active family feature.",
-}
-
+EXCLUDED_IMAGE_FEATURES = set(feature_registry.excluded_feature_ids())
+EXCLUDED_IMAGE_FEATURE_REASONS = dict(feature_registry.excluded_feature_reasons())
 DASHBOARD_FEATURE_SECTIONS = [
     {
-        "id": "complexity",
-        "title": "Complexity",
-        "description": "Detail load, structural subdivision, component count, contour count, holes, perimeter load, and angular point count.",
-        "human_category": "Complexity",
-        "family_summary": "edge density, perimeter/area, quadtree variability, components, contours, holes",
-        "perception": "This family approximates how visually busy or effortful a glyph is to parse. Component and contour counts are pixel-level proxies; human grouping can still differ.",
-        "low_value": "Lower values usually mean a simpler, cleaner symbol with fewer parts, edges, holes, or sharp details.",
-        "high_value": "Higher values usually mean a more intricate symbol that may take more attention to inspect and distinguish.",
-        "representative_feature_id": "canny_edge_density",
-        "representative_interpretation": "Lower values indicate fewer detected edges across the canvas; higher values indicate more connected edge and detail structure.",
-        "representative_rationale": "Selected after the visual audit found that grayscale quadtree variability can reward antialiasing and raster transitions in otherwise simple icons. The current Canny implementation smooths before edge detection and aligns better with the extracted McDougall complexity ratings.",
-        "representative_evidence": "Forsythe et al. describe Canny's dual thresholds as retaining weak edges connected to strong edges while suppressing shading and noise, and report a Spearman correlation of 0.49 with McDougall's subjective complexity ratings.",
-        "representative_citation": "Forsythe, Sheehy & Sawey, Measuring Icon Complexity: An Automated Analysis, pp. 5-6.",
-        "feature_ids": [
-            "canny_edge_density",
-            "quadtree_leaf_count",
-            "quadtree_structural_variability_v2",
-            "quadtree_mean_leaf_size",
-            "connected_components",
-            "contour_count",
-            "holes_count",
-            "perimeter_area_ratio",
-            "corner_count",
-        ],
-    },
-    {
-        "id": "shape",
-        "title": "Shape/silhouette",
-        "description": "Silhouette, closure, roundness, rectangularity, and curvature.",
-        "human_category": "Shape/silhouette",
-        "family_summary": "aspect ratio, solidity, closure proxy, circularity/rectangularity, curvature",
-        "perception": "This family captures the overall visible form of a glyph: roundness, box-like form, elongation, closure, curvature, and global silhouette.",
-        "low_value": "Lower values depend on the feature: low circularity means less round, and low closure-proxy values suggest more open or line-like form.",
-        "high_value": "Higher values indicate stronger presence of that specific shape property, such as more circular, more rectangular, or more closed by proxy.",
-        "representative_feature_id": "enclosure_score_v2",
-        "representative_interpretation": "Lower values indicate open or line-like construction; higher values mean external contours enclose more of the active bounding box.",
-        "representative_rationale": "Selected because closure changes whether viewers group a glyph as one coherent shape, making it a direct bridge between silhouette structure and human similarity strategy.",
-        "representative_evidence": "Fuchs et al. found a significant effect of contour variation on accuracy and showed that contour containment shifted judgments toward geometric shape similarity. The implemented value remains a computational proxy, not a direct Gestalt-closure score.",
-        "representative_citation": "Fuchs et al., The Influence of Contour on Similarity Perception of Star Glyphs, pp. 5-8.",
-        "feature_ids": [
-            "bounding_box_aspect_ratio",
-            "solidity",
-            "enclosure_score_v2",
-            "circularity",
-            "rectangularity",
-            "curvature_histogram_straight",
-            "curvature_histogram_gentle",
-            "curvature_histogram_sharp",
-        ],
-    },
-    {
-        "id": "structure",
-        "title": "Stroke/structure",
-        "description": "Directional strokes, principal orientation, arrows, arcs, and skeleton graph structure.",
-        "human_category": "Stroke/structure",
-        "family_summary": "line orientation, principal axis, arrows, arcs, skeleton graph",
-        "perception": "This family captures internal organization: stroke direction, branching, endpoints, arrows, and arcs. It describes visible structure, not exact text or semantic identity.",
-        "low_value": "Lower values usually mean less explicit directionality, fewer skeleton branches/endpoints, or fewer arrows/arcs.",
-        "high_value": "Higher values usually mean stronger directional cues, more branching structure, more endpoints/junctions, or clearer arrow components.",
-        "representative_feature_id": "principal_axis_orientation_v2",
-        "representative_interpretation": "The value is an axial angle, not an amount: 0° is horizontal, 90° is vertical, and 180° wraps to horizontal. Confidence below 0.20 means undefined.",
-        "representative_rationale": "Selected as the clearest single summary of global stroke direction and because orientation was one of the more separable human-rated visual channels.",
-        "representative_evidence": "The quasi-Hamming study reports an average human perceptual-distance score of 3.0 for orientation, above connection lines (2.8), texture (2.2), color (2.2), size (2.1), and luminance (1.2).",
-        "representative_citation": "Legg et al., Glyph Visualization: A Fail-Safe Design Scheme Based on Quasi-Hamming Distances, p. 5.",
-        "feature_ids": [
-            "line_orientation_0",
-            "line_orientation_45",
-            "line_orientation_90",
-            "line_orientation_135",
-            "principal_axis_orientation_v2",
-            "arrowhead_count",
-            "arc_count",
-            "skeleton_endpoints",
-            "skeleton_junctions",
-        ],
-    },
-    {
-        "id": "density_fill",
-        "title": "Density/fill",
-        "description": "Foreground amount, bounding-box fill, outline-vs-fill behavior, and stroke thickness.",
-        "human_category": "Density/fill",
-        "family_summary": "foreground amount, bounding-box occupancy, filled/outline proxy, stroke width",
-        "perception": "This family describes whether a glyph reads as sparse line art, a filled silhouette, or a heavy/thick mark.",
-        "low_value": "Lower values usually mean a lighter, thinner, more open, or less filled glyph.",
-        "high_value": "Higher values usually mean a denser, more filled, more visually heavy glyph with thicker strokes or stronger occupancy.",
-        "representative_feature_id": "solid_fill_ratio_v2",
-        "representative_interpretation": "Lower values lose foreground quickly under 1%, 2%, and 4% erosion and suggest outlines; higher values retain a solid interior.",
-        "representative_rationale": "Selected because filled-versus-outline treatment directly changes figure-ground structure and has experimental evidence of changing similarity-choice behavior.",
-        "representative_evidence": "Fuchs et al. found significant fill-type effects on rotated and scaled similarity choices. They did not find a general accuracy benefit, so this feature should be interpreted as affecting strategy rather than quality.",
-        "representative_citation": "Fuchs et al., The Influence of Contour on Similarity Perception of Star Glyphs, pp. 6-8.",
-        "feature_ids": [
-            "foreground_area_ratio",
-            "bounding_box_occupancy",
-            "solid_fill_ratio_v2",
-            "stroke_width_mean",
-            "stroke_width_std",
-        ],
-    },
-    {
-        "id": "balance_layout",
-        "title": "Balance/layout",
-        "description": "Centering, symmetry, active bounding-box position/size, and 4x4 foreground grid layout.",
-        "human_category": "Balance/layout",
-        "family_summary": "symmetry, centroid, bounding-box position/size, 4x4 grid occupancy",
-        "perception": "This family captures where visual mass sits and whether the glyph feels centered, balanced, symmetric, top-heavy, side-heavy, compact, or spread out. Grid features should be treated as one layout channel when comparing families.",
-        "low_value": "Lower values often mean less offset or less occupancy in a given region; for symmetry scores, lower means less balanced.",
-        "high_value": "Higher values often mean stronger occupancy in a region, larger active extent, more offset for distance features, or stronger balance for symmetry scores.",
-        "representative_feature_id": "horizontal_symmetry_v2",
-        "representative_interpretation": "Lower values indicate weaker left-right correspondence; higher values indicate stronger bilateral Dice overlap with a two-pixel tolerance.",
-        "representative_rationale": "Selected because symmetry is a foundational perceptual-grouping cue, horizontal symmetry has a direct implementation, and symmetry-optimized glyph designs have reported performance benefits.",
-        "representative_evidence": "The glyph-foundations review identifies symmetry as a Gestalt organization principle and reports improved user performance for complexity- and symmetry-optimized star-glyph orderings.",
-        "representative_citation": "Borgo et al., Glyph-based Visualization: Foundations, Design Guidelines, Techniques and Applications, pp. 7, 12 and 16.",
-        "feature_ids": [
-            "centroid_distance_from_center",
-            "horizontal_symmetry_v2",
-            "vertical_symmetry",
-            "bbox_center_x",
-            "bbox_center_y",
-            "bbox_width_ratio",
-            "bbox_height_ratio",
-            *GRID_FEATURE_COLUMNS,
-        ],
-    },
-    {
-        "id": "color_contrast",
-        "title": "Color/contrast",
-        "description": "Color presence, saturation, colorfulness, foreground-background contrast, hue distribution, and dominant Lab colors.",
-        "human_category": "Color/contrast",
-        "family_summary": "monochrome flag, color count, saturation, colorfulness, foreground-background contrast, hue histogram, dominant Lab colors",
-        "perception": "This family captures color channels humans use for quick grouping, salience, and foreground-background separation.",
-        "low_value": "Lower values usually mean less saturation/colorfulness, weaker contrast, or less presence of a given hue bin. For `is_monochrome`, lower means color is present.",
-        "high_value": "Higher values usually mean stronger signal for that specific color feature. For `is_monochrome`, higher means grayscale/monochrome rather than more color.",
-        "representative_feature_id": "mean_saturation_v2",
-        "representative_interpretation": "Lower values indicate grayscale or muted corrected foregrounds; higher values indicate more vivid, strongly saturated corrected foreground color.",
-        "representative_rationale": "Selected as a continuous, interpretable color-strength measure that works across the B/W, red, and colored cohorts without privileging one arbitrary hue bin.",
-        "representative_evidence": "The glyph-foundations review describes color as the strongest of the commonly compared pop-out channels. Choosing mean saturation as its operational measure is a project inference; the literature supports the color channel, not this exact formula.",
-        "representative_citation": "Borgo et al., Glyph-based Visualization: Foundations, Design Guidelines, Techniques and Applications, pp. 7-10; Legg et al., Quasi-Hamming Distances, p. 5.",
-        "feature_ids": [
-            "is_monochrome",
-            "color_count",
-            "mean_saturation_v2",
-            "colorfulness",
-            "foreground_background_contrast",
-            *(f"hue_histogram_{index:02d}" for index in range(12)),
-            "dominant_color_1_lab_l",
-            "dominant_color_1_lab_a",
-            "dominant_color_1_lab_b",
-            "dominant_color_2_lab_l",
-            "dominant_color_2_lab_a",
-            "dominant_color_2_lab_b",
-            "dominant_color_3_lab_l",
-            "dominant_color_3_lab_a",
-            "dominant_color_3_lab_b",
-        ],
-    },
-    {
-        "id": "texture",
-        "title": "Texture",
-        "description": "Foreground tonal entropy.",
-        "human_category": "Texture",
-        "family_summary": "foreground tonal entropy",
-        "perception": "This family captures internal tonal variation that can affect perceived detail. Artifact-prone local binary pattern bins are excluded from the active visual-family mapping.",
-        "low_value": "Lower values usually mean flatter, more uniform foreground regions with little internal texture or local tonal variation.",
-        "high_value": "Higher values usually mean more internal tonal variation that can make the glyph feel more textured.",
-        "representative_feature_id": "local_texture_variation_v2",
-        "representative_interpretation": "Lower values indicate flat interiors; higher values indicate stronger normalized 7x7 grayscale variation inside the eroded foreground, excluding the silhouette edge.",
-        "representative_rationale": "Selected because local interior variation excludes the silhouette boundary and reduces the color/global-tonal leakage found in the legacy entropy proxy.",
-        "representative_evidence": "Texture produced an average human quasi-Hamming perceptual-distance score of 2.2, supporting the construct but not this exact local-variation formula. Human validation remains pending.",
-        "representative_citation": "Legg et al., Glyph Visualization: A Fail-Safe Design Scheme Based on Quasi-Hamming Distances, p. 5; Borgo et al., Glyph-based Visualization, p. 8.",
-        "feature_ids": [
-            "local_texture_variation_v2",
-        ],
-    },
+        "id": family.id,
+        "title": family.title,
+        "description": family.description,
+        "human_category": family.human_category,
+        "family_summary": family.family_summary,
+        "perception": family.perception,
+        "low_value": family.low_value,
+        "high_value": family.high_value,
+        "representative_feature_id": family.representative_feature_id,
+        "representative_interpretation": family.representative_interpretation,
+        "representative_rationale": family.representative_rationale,
+        "representative_evidence": family.representative_evidence,
+        "representative_citation": family.representative_citation,
+        "feature_ids": list(family.feature_ids),
+        "visible": family.visible,
+    }
+    for family in feature_registry.family_specs()
 ]
-
-FEATURE_LABELS = {
-    "quadtree_structural_variability_v2": "Intensity quadtree variability (v2)",
-    "enclosure_score_v2": "Enclosure score (v2)",
-    "principal_axis_orientation_v2": "Principal-axis orientation (v2)",
-    "orientation_confidence_v2": "Orientation confidence (v2)",
-    "solid_fill_ratio_v2": "Solid fill ratio (v2)",
-    "horizontal_symmetry_v2": "Horizontal symmetry (v2)",
-    "mean_saturation_v2": "Mean saturation (v2)",
-    "local_texture_variation_v2": "Local texture variation (v2)",
-    "red_pixel_ratio_v2": "Strict-red pixel ratio (v2)",
-    "strict_red_flag_v2": "Strict-red flag (v2)",
-    "foreground_area_ratio": "Foreground area ratio",
-    "canny_edge_density": "Edge density",
-    "connected_components": "Connected components",
-    "quadtree_leaf_count": "Quadtree leaf count",
-    "quadtree_structural_variability": "Quadtree structural variability",
-    "quadtree_mean_leaf_size": "Quadtree mean leaf size",
-    "bounding_box_occupancy": "Bounding-box occupancy",
-    "bounding_box_aspect_ratio": "Bounding-box aspect ratio",
-    "solidity": "Solidity",
-    "centroid_distance_from_center": "Center offset",
-    "horizontal_symmetry": "Horizontal symmetry",
-    "vertical_symmetry": "Vertical symmetry",
-    "perimeter_area_ratio": "Perimeter-area ratio",
-    "filled_vs_outline_proxy": "Filled-vs-outline proxy",
-    "contour_count": "Contour count",
-    "holes_count": "Holes count",
-    "closed_contour_ratio": "Closure proxy",
-    "line_orientation_0": "Horizontal line orientation",
-    "line_orientation_45": "Diagonal 45 degree orientation",
-    "line_orientation_90": "Vertical line orientation",
-    "line_orientation_135": "Diagonal 135 degree orientation",
-    "is_monochrome": "Monochrome flag",
-    "color_count": "Color count",
-    "mean_saturation": "Mean saturation",
-    "colorfulness": "Colorfulness",
-    "foreground_background_contrast": "Foreground-background contrast",
-}
-
-FEATURE_MEANINGS = {
-    "quadtree_structural_variability_v2": "Quadtree subdivision density of grayscale intensity within the active foreground box.",
-    "enclosure_score_v2": "Area enclosed by external foreground contours relative to the active bounding box.",
-    "principal_axis_orientation_v2": "PCA foreground-axis angle over 0-180 degrees; interpret only when orientation confidence is at least 0.20.",
-    "orientation_confidence_v2": "PCA eigenvalue anisotropy; values below 0.20 indicate undefined orientation.",
-    "solid_fill_ratio_v2": "Mean foreground survival after erosion at 1%, 2%, and 4% of active-box width/height.",
-    "horizontal_symmetry_v2": "Left-right Dice-style foreground overlap allowing a two-pixel alignment tolerance.",
-    "mean_saturation_v2": "Mean HSV saturation over corrected foreground pixels.",
-    "local_texture_variation_v2": "Normalized 7x7 local grayscale variation within a two-pixel-eroded foreground interior.",
-    "red_pixel_ratio_v2": "Share of corrected foreground pixels meeting the strict red hue, saturation, and value thresholds.",
-    "strict_red_flag_v2": "One only when at least 90% of all corrected foreground pixels meet the strict-red rule.",
-    "foreground_area_ratio": "How much of the canvas is occupied by visible foreground pixels.",
-    "canny_edge_density": "How much edge/detail structure appears in the icon.",
-    "connected_components": "How many separated foreground parts the icon contains.",
-    "quadtree_leaf_count": "How many spatial subdivisions are needed to describe the foreground pattern.",
-    "quadtree_structural_variability": "How unevenly structure is distributed across the icon.",
-    "quadtree_mean_leaf_size": "Average quadtree region size; smaller values imply more localized detail.",
-    "bounding_box_occupancy": "How densely the icon fills its active bounding box.",
-    "bounding_box_aspect_ratio": "Whether the active icon shape is tall, wide, or square-like.",
-    "solidity": "How compactly the foreground fills its outer convex envelope.",
-    "centroid_distance_from_center": "How far the icon's visual mass is from the canvas center.",
-    "horizontal_symmetry": "How balanced the icon is across the left-right axis.",
-    "vertical_symmetry": "How balanced the icon is across the top-bottom axis.",
-    "perimeter_area_ratio": "How much boundary length exists relative to filled area.",
-    "filled_vs_outline_proxy": "Whether the icon behaves more like a filled mark or an outline/line drawing.",
-    "contour_count": "How many contour boundaries are present.",
-    "holes_count": "How many enclosed empty spaces appear inside foreground shapes.",
-    "closed_contour_ratio": "Proxy for closed-shape behavior from contours, holes, and compactness; not a direct human closure judgment.",
-    "line_orientation_0": "Share of detected line structure that is mostly horizontal.",
-    "line_orientation_45": "Share of detected line structure that follows a 45 degree diagonal.",
-    "line_orientation_90": "Share of detected line structure that is mostly vertical.",
-    "line_orientation_135": "Share of detected line structure that follows a 135 degree diagonal.",
-    "is_monochrome": "Whether the icon is effectively black-and-white or grayscale.",
-    "color_count": "Approximate number of distinct foreground colors.",
-    "mean_saturation": "Average foreground color saturation.",
-    "colorfulness": "Overall richness and variation of foreground colors.",
-    "foreground_background_contrast": "How strongly the foreground separates from its background.",
-}
-
-FEATURE_CATEGORY_REASONS = {
-    "foreground_area_ratio": "It belongs in Density/fill because it measures how much visible material occupies the canvas.",
-    "connected_components": "It belongs in Complexity because separated foreground parts add visual structure, while remaining a pixel-level grouping proxy.",
-    "quadtree_leaf_count": "It belongs in Complexity because more spatial subdivisions indicate more local structural variation.",
-    "quadtree_structural_variability": "It belongs in Complexity because uneven spatial structure changes perceived visual detail.",
-    "quadtree_mean_leaf_size": "It belongs in Complexity because smaller regions indicate finer localized detail.",
-    "bounding_box_occupancy": "It belongs in Density/fill because it measures how tightly the visible form fills its active area.",
-    "bounding_box_aspect_ratio": "It belongs in Shape/silhouette because it captures whether the active form is tall, wide, or square.",
-    "solidity": "It belongs in Shape/silhouette because compactness versus gaps changes the perceived silhouette.",
-    "contour_count": "It belongs in Complexity because multiple boundaries add visual detail and potential parts.",
-    "holes_count": "It belongs in Complexity because enclosed empty regions add internal detail.",
-    "closed_contour_ratio": "It belongs in Shape/silhouette because it approximates whether the glyph behaves like an enclosed form.",
-    "is_monochrome": "It belongs in Color/contrast because it marks whether color is unavailable as a visual channel; 1 means monochrome.",
-    "color_count": "It belongs in Color because it measures how many distinct colors help distinguish the icon.",
-    "mean_saturation": "It belongs in Color because saturation describes how vivid or muted the icon colors are.",
-    "colorfulness": "It belongs in Color because it summarizes overall color richness and variation.",
-    "foreground_background_contrast": "It belongs in Color because contrast describes foreground-background separation and legibility.",
-    "canny_edge_density": "It belongs in Complexity because edge load reflects visual detail and local structure.",
-    "perimeter_area_ratio": "It belongs in Complexity because boundary-heavy icons often contain more contour detail relative to area.",
-    "filled_vs_outline_proxy": "It belongs in Density/fill because it separates filled marks from outline-like rendering.",
-    "horizontal_symmetry": "It belongs in Balance/layout because left-right symmetry affects visual balance.",
-    "vertical_symmetry": "It belongs in Balance/layout because top-bottom symmetry affects visual balance.",
-    "line_orientation_0": "It belongs in Stroke/structure because dominant horizontal strokes describe internal direction.",
-    "line_orientation_45": "It belongs in Stroke/structure because diagonal strokes describe internal direction.",
-    "line_orientation_90": "It belongs in Stroke/structure because vertical strokes describe internal direction.",
-    "line_orientation_135": "It belongs in Stroke/structure because diagonal strokes describe internal direction.",
-    "centroid_distance_from_center": "It belongs in Balance/layout because it measures where visual mass sits on the canvas.",
-}
-
+FEATURE_LABELS = dict(feature_registry.feature_labels())
+FEATURE_MEANINGS = dict(feature_registry.feature_meanings())
+FEATURE_CATEGORY_REASONS = dict(feature_registry.feature_category_reasons())
 FEATURE_VISUAL_CATEGORIZATIONS = {
-    "foreground_area_ratio": ["Sparse vs dense"],
-    "canny_edge_density": ["Simple vs complex"],
-    "connected_components": ["Single-object vs multi-part"],
-    "quadtree_leaf_count": ["Simple vs complex"],
-    "quadtree_structural_variability": ["Simple vs complex"],
-    "quadtree_mean_leaf_size": ["Simple vs complex"],
-    "bounding_box_occupancy": ["Sparse vs dense"],
-    "bounding_box_aspect_ratio": ["Compact vs spread-out"],
-    "solidity": ["Compact vs spread-out"],
-    "centroid_distance_from_center": ["Centered vs off-center"],
-    "horizontal_symmetry": ["Balanced vs unbalanced"],
-    "vertical_symmetry": ["Balanced vs unbalanced"],
-    "perimeter_area_ratio": ["Filled vs outline"],
-    "filled_vs_outline_proxy": ["Filled vs outline"],
-    "contour_count": ["Single-object vs multi-part"],
-    "holes_count": ["Open vs closed shape"],
-    "closed_contour_ratio": ["Open vs closed shape"],
-    "line_orientation_0": ["Directional/geometric structure"],
-    "line_orientation_45": ["Directional/geometric structure"],
-    "line_orientation_90": ["Directional/geometric structure"],
-    "line_orientation_135": ["Directional/geometric structure"],
-    "is_monochrome": ["Black-and-white vs colored"],
-    "color_count": ["Black-and-white vs colored"],
-    "mean_saturation": ["Color intensity/style"],
-    "colorfulness": ["Color intensity/style"],
-    "foreground_background_contrast": ["High contrast vs low contrast"],
+    key: list(value) for key, value in feature_registry.feature_visual_categorizations().items()
 }
-
-FEATURE_VISUAL_CATEGORY_LABELS = {
-    "Sparse vs dense": "sparse icon, dense icon",
-    "Simple vs complex": "simple icon, complex icon",
-    "Single-object vs multi-part": "single-object symbol, multi-component symbol",
-    "Compact vs spread-out": "compact icon, tall icon, wide icon, fragmented icon",
-    "Round vs rectangular": "round icon, rectangular icon, box-like icon",
-    "Curved vs angular": "curved icon, angular icon, sharp-cornered icon",
-    "Centered vs off-center": "centered icon, off-center icon",
-    "Balanced vs unbalanced": "symmetric icon, asymmetric icon",
-    "Filled vs outline": "filled pictogram, outline icon, line icon",
-    "Open vs closed shape": "closed-shape icon, open-line icon",
-    "Directional/geometric structure": "horizontal icon, vertical icon, diagonal/action icon",
-    "Arrow/directional symbol": "arrow icon, pointer icon, directional symbol",
-    "Black-and-white vs colored": "monochrome icon, colored icon",
-    "Hue/color family": "red icon, green icon, blue icon, multicolor icon",
-    "Color intensity/style": "muted icon, vivid icon, emoji-like icon",
-    "High contrast vs low contrast": "high-contrast icon, low-contrast icon",
-    "Thin vs thick strokes": "thin-line icon, thick-stroke icon",
-    "Skeleton graph complexity": "simple line graph, branching line graph",
-    "Texture/pattern": "flat icon, textured icon, hatched icon",
-    "Resolution robustness": "small-size robust icon, fragile detailed icon",
-    "Text-like mark": "letter icon, text-like symbol",
-    "Spatial layout similarity": "top-heavy icon, left-heavy icon, central icon",
-    "Global silhouette descriptor": "global-shape descriptor, advanced silhouette profile",
-}
-
-FEATURE_LABELS.update(
-    {
-        "bbox_center_x": "Bounding-box center x",
-        "bbox_center_y": "Bounding-box center y",
-        "bbox_width_ratio": "Bounding-box width ratio",
-        "bbox_height_ratio": "Bounding-box height ratio",
-        "circularity": "Circularity",
-        "rectangularity": "Rectangularity",
-        "corner_count": "Corner count",
-        "curvature_histogram_straight": "Straight-contour share",
-        "curvature_histogram_gentle": "Gentle-curvature share",
-        "curvature_histogram_sharp": "Sharp-curvature share",
-        "principal_axis_orientation": "Principal-axis orientation",
-        "arrowhead_count": "Arrowhead count",
-        "arc_count": "Arc count",
-        "stroke_width_mean": "Mean stroke width",
-        "stroke_width_std": "Stroke-width variation",
-        "skeleton_endpoints": "Skeleton endpoints",
-        "skeleton_junctions": "Skeleton junctions",
-        "texture_entropy": "Texture entropy",
-        "crush_test_stability": "Crush-test stability",
-        "text_or_letter_presence": "Text/letter presence proxy",
-    }
-)
-
-FEATURE_MEANINGS.update(
-    {
-        "bbox_center_x": "Horizontal center of the active bounding box in canvas coordinates.",
-        "bbox_center_y": "Vertical center of the active bounding box in canvas coordinates.",
-        "bbox_width_ratio": "Share of canvas width covered by the active bounding box.",
-        "bbox_height_ratio": "Share of canvas height covered by the active bounding box.",
-        "circularity": "How close the foreground silhouette is to a compact circle.",
-        "rectangularity": "How densely foreground fills its minimum enclosing rectangle.",
-        "corner_count": "Approximate number of polygon corners across external contours.",
-        "curvature_histogram_straight": "Share of contour samples that behave like straight segments.",
-        "curvature_histogram_gentle": "Share of contour samples with gradual curve behavior.",
-        "curvature_histogram_sharp": "Share of contour samples with sharp turns or angular corners.",
-        "principal_axis_orientation": "Dominant orientation of foreground pixels from a PCA axis; pairwise comparison should treat it as circular over 180 degrees.",
-        "arrowhead_count": "Approximate count of triangular or sharp directional tips.",
-        "arc_count": "Approximate count of curved arc-like contour runs.",
-        "stroke_width_mean": "Average normalized stroke width estimated from the foreground skeleton.",
-        "stroke_width_std": "Variation in normalized stroke width across the skeleton.",
-        "skeleton_endpoints": "Number of terminal points in the foreground skeleton graph.",
-        "skeleton_junctions": "Number of branching points in the foreground skeleton graph.",
-        "texture_entropy": "Normalized grayscale entropy within foreground pixels.",
-        "crush_test_stability": "How well foreground shape survives one downsampling and re-expansion crush test.",
-        "text_or_letter_presence": "Heuristic score for letter-like or text-like visual structure.",
-    }
-)
-
-FEATURE_CATEGORY_REASONS.update(
-    {
-        "bbox_center_x": "It belongs in Balance/layout because it records where the active shape sits horizontally.",
-        "bbox_center_y": "It belongs in Balance/layout because it records where the active shape sits vertically.",
-        "bbox_width_ratio": "It belongs in Balance/layout because it measures how much horizontal canvas span the icon uses.",
-        "bbox_height_ratio": "It belongs in Balance/layout because it measures how much vertical canvas span the icon uses.",
-        "circularity": "It belongs in Shape/silhouette because roundness changes the perceived silhouette.",
-        "rectangularity": "It belongs in Shape/silhouette because box-like forms are a distinct shape family.",
-        "corner_count": "It belongs in Complexity because corners and polygon vertices add angular detail.",
-        "curvature_histogram_straight": "It belongs in Shape/silhouette because straight contour segments affect perceived geometry.",
-        "curvature_histogram_gentle": "It belongs in Shape/silhouette because arcs and gentle curves affect perceived geometry.",
-        "curvature_histogram_sharp": "It belongs in Shape/silhouette because sharp turns mark angular geometry.",
-        "principal_axis_orientation": "It belongs in Stroke/structure because it captures the icon's dominant visual direction.",
-        "arrowhead_count": "It belongs in Stroke/structure because arrowheads are visible direction cues.",
-        "arc_count": "It belongs in Stroke/structure because arcs distinguish curved line construction.",
-        "stroke_width_mean": "It belongs in Density/fill because line thickness changes visual weight.",
-        "stroke_width_std": "It belongs in Density/fill because stroke-width variation changes visual weight and fill behavior.",
-        "skeleton_endpoints": "It belongs in Stroke/structure because endpoints describe line-graph structure.",
-        "skeleton_junctions": "It belongs in Stroke/structure because junctions describe branching line-graph structure.",
-        "texture_entropy": "It belongs in Texture because entropy measures internal tonal variation.",
-        "crush_test_stability": EXCLUDED_IMAGE_FEATURE_REASONS["crush_test_stability"],
-        "text_or_letter_presence": EXCLUDED_IMAGE_FEATURE_REASONS["text_or_letter_presence"],
-    }
-)
-
-FEATURE_VISUAL_CATEGORIZATIONS.update(
-    {
-        "bbox_center_x": ["Spatial layout similarity"],
-        "bbox_center_y": ["Spatial layout similarity"],
-        "bbox_width_ratio": ["Spatial layout similarity"],
-        "bbox_height_ratio": ["Spatial layout similarity"],
-        "circularity": ["Round vs rectangular"],
-        "rectangularity": ["Round vs rectangular"],
-        "corner_count": ["Curved vs angular"],
-        "curvature_histogram_straight": ["Curved vs angular"],
-        "curvature_histogram_gentle": ["Curved vs angular"],
-        "curvature_histogram_sharp": ["Curved vs angular"],
-        "principal_axis_orientation": ["Directional/geometric structure"],
-        "arrowhead_count": ["Arrow/directional symbol"],
-        "arc_count": ["Curved vs angular"],
-        "stroke_width_mean": ["Thin vs thick strokes"],
-        "stroke_width_std": ["Thin vs thick strokes"],
-        "skeleton_endpoints": ["Skeleton graph complexity"],
-        "skeleton_junctions": ["Skeleton graph complexity"],
-        "texture_entropy": ["Texture/pattern"],
-        "crush_test_stability": [],
-        "text_or_letter_presence": [],
-    }
-)
-
-for index in range(1, 8):
-    feature_id = f"hu_moment_{index}"
-    FEATURE_LABELS[feature_id] = f"Hu moment {index}"
-    FEATURE_MEANINGS[feature_id] = "Advanced global silhouette descriptor; useful for shape matching but not directly human-readable on its own."
-    FEATURE_CATEGORY_REASONS[feature_id] = EXCLUDED_IMAGE_FEATURE_REASONS[feature_id]
-    FEATURE_VISUAL_CATEGORIZATIONS[feature_id] = []
-
-for index in range(12):
-    feature_id = f"hue_histogram_{index:02d}"
-    start = index * 30
-    end = start + 30
-    FEATURE_LABELS[feature_id] = f"Hue {start}-{end} deg"
-    FEATURE_MEANINGS[feature_id] = f"Share of saturated foreground pixels with hue between {start} and {end} degrees; hue is circular, so neighboring bins wrap around at red."
-    FEATURE_CATEGORY_REASONS[feature_id] = "It belongs in Color because hue bins represent color-family channels."
-    FEATURE_VISUAL_CATEGORIZATIONS[feature_id] = ["Hue/color family"]
-
-for rank in range(1, 4):
-    for channel, label in [("l", "L"), ("a", "a"), ("b", "b")]:
-        feature_id = f"dominant_color_{rank}_lab_{channel}"
-        FEATURE_LABELS[feature_id] = f"Dominant color {rank} Lab {label}"
-        FEATURE_MEANINGS[feature_id] = f"Lab {label} channel for dominant foreground color {rank}."
-        FEATURE_CATEGORY_REASONS[feature_id] = "It belongs in Color because dominant Lab values encode foreground color appearance."
-        FEATURE_VISUAL_CATEGORIZATIONS[feature_id] = ["Hue/color family"]
-
-for index in range(10):
-    feature_id = f"lbp_histogram_{index:02d}"
-    FEATURE_LABELS[feature_id] = f"LBP texture bin {index}"
-    FEATURE_MEANINGS[feature_id] = "Uniform local binary pattern texture share; bin 9 stores non-uniform patterns."
-    FEATURE_CATEGORY_REASONS[feature_id] = EXCLUDED_IMAGE_FEATURE_REASONS[feature_id]
-    FEATURE_VISUAL_CATEGORIZATIONS[feature_id] = []
-
-for row in range(4):
-    for col in range(4):
-        feature_id = f"grid_foreground_{row}_{col}"
-        FEATURE_LABELS[feature_id] = f"Grid foreground r{row + 1} c{col + 1}"
-        FEATURE_MEANINGS[feature_id] = (
-            f"Foreground share in the 4x4 layout grid at row {row + 1}, column {col + 1}."
-        )
-        FEATURE_CATEGORY_REASONS[feature_id] = (
-            "It belongs in Balance/layout because it records where foreground mass appears in the icon grid."
-        )
-        FEATURE_VISUAL_CATEGORIZATIONS[feature_id] = ["Spatial layout similarity"]
+FEATURE_VISUAL_CATEGORY_LABELS = dict(feature_registry.feature_visual_category_labels())
 
 MCDOUGALL_NUMERIC_COLUMNS = [
     "mcdougall_concreteness",
@@ -598,81 +102,17 @@ REDUNDANCY_MODERATE_THRESHOLD = 0.70
 
 
 def image_feature_sections() -> list[dict[str, object]]:
-    expected = set(IMAGE_FEATURE_COLUMNS) - EXCLUDED_IMAGE_FEATURES
-    seen = []
-    sections = []
-    for section in DASHBOARD_FEATURE_SECTIONS:
-        feature_ids = list(section["feature_ids"])
-        representative_feature_id = section.get("representative_feature_id")
-        if representative_feature_id not in feature_ids:
-            raise ValueError(
-                f"Representative feature {representative_feature_id!r} is not in family {section['id']!r}"
-            )
-        seen.extend(feature_ids)
-        features = [
-            {
-                "id": feature_id,
-                "label": FEATURE_LABELS.get(feature_id, feature_id.replace("_", " ").title()),
-                "group": section["id"],
-                "group_title": section["title"],
-                "meaning": FEATURE_MEANINGS.get(feature_id, "Extracted visual feature."),
-                "visual_categorizations": FEATURE_VISUAL_CATEGORIZATIONS.get(feature_id, []),
-                "visual_category_labels": [
-                    FEATURE_VISUAL_CATEGORY_LABELS[category]
-                    for category in FEATURE_VISUAL_CATEGORIZATIONS.get(feature_id, [])
-                    if category in FEATURE_VISUAL_CATEGORY_LABELS
-                ],
-                "category_reason": FEATURE_CATEGORY_REASONS.get(
-                    feature_id,
-                    f"It belongs in {section['title']} because it describes that visual channel.",
-                ),
-            }
-            for feature_id in feature_ids
-        ]
-        representative_feature = next(
-            feature for feature in features if feature["id"] == representative_feature_id
-        )
-        sections.append(
-            {
-                "id": section["id"],
-                "title": section["title"],
-                "description": section["description"],
-                "human_category": section.get("human_category", section["title"].replace(" Features", "")),
-                "family_summary": section.get("family_summary", ""),
-                "perception": section.get("perception", ""),
-                "low_value": section.get("low_value", ""),
-                "high_value": section.get("high_value", ""),
-                "visible": section.get("visible", True),
-                "features": features,
-                "representative_feature_id": representative_feature_id,
-                "representative_feature": representative_feature,
-                "representative_interpretation": section.get("representative_interpretation", ""),
-                "representative_rationale": section.get("representative_rationale", ""),
-                "representative_evidence": section.get("representative_evidence", ""),
-                "representative_citation": section.get("representative_citation", ""),
-            }
-        )
+    """Return the legacy dashboard serialization of the shared feature registry."""
 
-    duplicate_features = sorted({feature_id for feature_id in seen if seen.count(feature_id) > 1})
-    missing_features = sorted(expected - set(seen))
-    unknown_features = sorted(set(seen) - expected)
-    if duplicate_features or missing_features or unknown_features:
-        raise ValueError(
-            "Invalid dashboard feature sections: "
-            f"duplicates={duplicate_features}, missing={missing_features}, unknown={unknown_features}"
-        )
-    return sections
+    return feature_registry.dashboard_sections()
 
 
 def active_image_feature_columns() -> list[str]:
-    feature_ids = []
-    for section in image_feature_sections():
-        feature_ids.extend(feature["id"] for feature in section["features"])
-    return feature_ids
+    return list(feature_registry.analysis_feature_ids())
 
 
 def active_image_feature_groups() -> list[list[str]]:
-    return [[feature["id"] for feature in section["features"]] for section in image_feature_sections()]
+    return [list(group) for group in feature_registry.analysis_feature_groups()]
 
 
 def read_csv(path: Path) -> list[dict[str, str]]:
@@ -1532,8 +972,9 @@ def write_dashboard_data(rows: list[dict], feature_by_id: dict[str, dict], matri
     feature_group_records = build_feature_group_records(feature_group_source_rows)
     data = {
         "metadata": {
-            "feature_schema_version": extract_icon_features.FEATURE_SCHEMA_VERSION,
-            "orientation_confidence_threshold": extract_icon_features.ORIENTATION_CONFIDENCE_THRESHOLD,
+            "feature_schema_version": feature_registry.FEATURE_SCHEMA_VERSION,
+            "analysis_feature_preset": feature_registry.ANALYSIS_FEATURE_PRESET,
+            "orientation_confidence_threshold": feature_registry.ORIENTATION_CONFIDENCE_THRESHOLD,
             "generated_from": DATASET_PATH.relative_to(ROOT).as_posix(),
             "row_count": len(records),
             "per_set_sample_size": PER_SET_SAMPLE_SIZE,
@@ -2001,6 +1442,7 @@ def write_index_html() -> None:
 
     fetch("dashboard_data.json").then(r => r.json()).then(data => {{
       dashboard = data;
+      state.activeFeatures = new Set(configuredAnalysisFeatureIds());
       initializeRepresentativeFeatures();
       initializeControls();
       render();
@@ -2120,8 +1562,27 @@ def write_index_html() -> None:
       return visibleFeatureSections().flatMap(section => section.features.map(feature => feature.id));
     }}
 
+    function configuredAnalysisFeatureIds() {{
+      const configured = dashboard.metadata.image_feature_columns || [];
+      return configured.length ? configured : visibleFeatureIds();
+    }}
+
+    function clusteringFeatureSections() {{
+      const allowed = new Set(configuredAnalysisFeatureIds());
+      return visibleFeatureSections()
+        .map(section => ({{
+          ...section,
+          features: section.features.filter(feature => allowed.has(feature.id))
+        }}))
+        .filter(section => section.features.length);
+    }}
+
+    function clusteringSectionById(sectionId) {{
+      return clusteringFeatureSections().find(section => section.id === sectionId);
+    }}
+
     function selectedFeatureIds() {{
-      const ordered = visibleFeatureIds().filter(feature => state.activeFeatures.has(feature));
+      const ordered = configuredAnalysisFeatureIds().filter(feature => state.activeFeatures.has(feature));
       return ordered;
     }}
 
@@ -2167,7 +1628,6 @@ def write_index_html() -> None:
         .forEach(key => familySamples.delete(key));
       familyComparisonIds.clear();
       computedCache.clear();
-      setActiveFeatures(representativeFeatureIds());
       renderFeatureGroups();
       if (activeFamilyId === familyId) renderFamilyDetail();
     }}
@@ -2175,11 +1635,12 @@ def write_index_html() -> None:
     function renderFeatureControls() {{
       const presets = document.getElementById("featurePresets");
       const checks = document.getElementById("featureChecks");
+      const clusteringSections = clusteringFeatureSections();
       presets.innerHTML = [
         '<button type="button" data-feature-preset="all">All</button>',
-        ...visibleFeatureSections().map(section => `<button type="button" data-feature-preset="${{section.id}}">${{escapeHtml(section.title.replace(" Features", ""))}}</button>`)
+        ...clusteringSections.map(section => `<button type="button" data-feature-preset="${{section.id}}">${{escapeHtml(section.title.replace(" Features", ""))}}</button>`)
       ].join("");
-      checks.innerHTML = visibleFeatureSections().map(section => `
+      checks.innerHTML = clusteringSections.map(section => `
         <div class="feature-section" data-section-id="${{escapeHtml(section.id)}}">
           <div class="feature-head">
             <b>${{escapeHtml(section.title)}}</b>
@@ -2207,14 +1668,14 @@ def write_index_html() -> None:
         const button = event.target.closest("button[data-feature-preset]");
         if (!button) return;
         const preset = button.dataset.featurePreset;
-        const section = sectionById(preset);
-        setActiveFeatures(preset === "all" ? visibleFeatureIds() : section.features.map(feature => feature.id));
+        const section = clusteringSectionById(preset);
+        setActiveFeatures(preset === "all" ? configuredAnalysisFeatureIds() : section.features.map(feature => feature.id));
       }});
 
       checks.addEventListener("click", event => {{
         const button = event.target.closest("button[data-feature-action]");
         if (!button) return;
-        const section = sectionById(button.dataset.sectionId);
+        const section = clusteringSectionById(button.dataset.sectionId);
         if (!section) return;
         const next = new Set(state.activeFeatures);
         section.features.forEach(feature => {{
@@ -2704,7 +2165,8 @@ def write_index_html() -> None:
     }}
 
     function setActiveFeatures(featureIds) {{
-      state.activeFeatures = new Set(featureIds);
+      const allowed = new Set(configuredAnalysisFeatureIds());
+      state.activeFeatures = new Set(featureIds.filter(featureId => allowed.has(featureId)));
       syncFeatureCheckboxes();
       computedCache.clear();
       render();
@@ -3354,7 +2816,7 @@ def write_index_html() -> None:
       select.innerHTML = "";
       appendOption(select, "cluster", "Cluster", selected);
       appendOption(select, "set_name", "Icon set", selected);
-      visibleFeatureSections().forEach(section => {{
+      clusteringFeatureSections().forEach(section => {{
         const group = document.createElement("optgroup");
         group.label = section.title;
         section.features.forEach(feature => appendOption(group, feature.id, feature.label, selected));

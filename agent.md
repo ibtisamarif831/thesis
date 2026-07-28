@@ -39,6 +39,7 @@ Boundary for future work:
 | Which icon sets exist locally | `icon_data/MANIFEST.md` | `icon_data/iconsets/README.md`, `data/10 icons.md` |
 | Canonical icon dataset rows | `icon_data/analysis/dataset.csv` | `code/build_icon_dataset.py` |
 | Normalized image generation | `code/build_icon_dataset.py` | `icon_data/analysis/README.md`, `icon_data/normalized_256/` |
+| Visual feature/family definitions | `code/thesis_pipeline/features/registry.py` | `wiki/feature-system.md`, then the consuming script |
 | Visual feature extraction | `code/extract_icon_features.py` | `icon_data/analysis/features.csv`, `features_metadata.json`, `feature_failures.json` |
 | Similarity / nearest-neighbor analysis | `code/compute_icon_similarity.py` | `icon_data/analysis/similarity/` |
 | Thesis evaluation layers | `code/evaluation/evaluation_layers.md` | `tasks/current-thesis-next-steps.md`, `THESIS_STATUS.md` |
@@ -73,11 +74,11 @@ Boundary for future work:
   - a Color By selector for cluster, set, or numeric image feature, although the current image-overlay renderer does not visibly apply the selected color;
   - filtering by icon set;
   - selected icon details and cluster summaries;
-  - a fullscreen Feature Groups detail workflow with one configured literature-backed representative per family, per-icon values, the average of the shown scores, and All/B/W/Red/Colored cohorts; configured defaults independently show up to 20 dataset-balanced icons drawn from the complete certain-mask corpus, sorted low-to-high by the representative value, and can be refreshed with **Randomize icons**; selecting exactly three current-sample icons opens a separate fullscreen comparison modal across all seven representatives; this display selection does not reduce the 81-feature analytical registry;
+  - a fullscreen Feature Groups detail workflow with one configured literature-backed representative per family, per-icon values, the average of the shown scores, and All/B/W/Red/Colored cohorts; configured defaults independently show up to 20 dataset-balanced icons drawn from the complete certain-mask corpus, sorted low-to-high by the representative value, and can be refreshed with **Randomize icons**; selecting exactly three current-sample icons opens a separate fullscreen comparison modal across all seven representatives; the 81-feature registry remains available, while the default code-only analysis preset uses these seven representatives;
   - a Feature Values tab restricted to the seven configured Feature Groups representative features, one per visual family, with searchable low/mean-nearest/high examples and correlation context.
-  - browser-session representative selectors in Feature Groups; changing one synchronizes the Clustering view to the current seven representatives and recomputes it without reload. Exploratory overrides use the 129-row clustering sample for family details because the compact full-corpus payload carries only the configured seven representatives.
+  - browser-session representative selectors in Feature Groups; exploratory overrides affect Feature Groups only and use the 129-row clustering sample for family details because the compact full-corpus payload carries only the configured seven representatives. The Clustering sidebar and Color-by feature choices are independently restricted to the seven code-selected analysis features.
 - Existing similarity outputs in `icon_data/analysis/similarity/` remain based on the earlier 1,038-row pilot. Do not run the current quadratic pairwise implementation directly on all 28,749 rows without a scalable rewrite.
-- Similarity and dashboard image-feature clustering use the active visual feature families from `code/build_analysis_dashboard.py`. Excluded raw channels are not used for active visual-family clustering or similarity ranking.
+- Extraction, similarity, evaluation benchmark generation, and dashboard image-feature clustering share the typed authority in `code/thesis_pipeline/features/registry.py`. `ANALYSIS_FEATURE_PRESET = "representatives"` is the code-only switch that currently selects the seven family representatives for dashboard analysis and similarity; changing it to `"full_registry"` restores all 81 active family features. Excluded raw channels are never used.
 - The 7 thesis PDFs have extracted page-marked text under `papers/extracted_text/`; regenerate with `code/extract_paper_text.py`.
 - Static feature visualizations under `icon_data/analysis/visualizations/` are summary-only when `matplotlib` is unavailable in the runtime. The interactive Plotly dashboard is the stronger current visual interface.
 - Treat `THESIS_STATUS.md`, `icon_data/analysis/README.md`, generated metadata JSON files, and current scripts as the source of truth for current state.
@@ -242,7 +243,7 @@ Current dashboard sample:
 - Up to 10 random icons per dataset.
 - Fixed seed: `RANDOM_SEED = 42`.
 - Change the per-dataset sample size in `PER_SET_SAMPLE_SIZE` inside `code/build_analysis_dashboard.py`, then regenerate.
-- This 129-row sample is primarily for Clustering. With configured representatives, Feature Groups uses a separate compact pool containing only rows with a certain foreground mask (currently 28,128 of 28,749) and draws up to 20 transient dataset-balanced icons independently for each family and color treatment. If a browser-session representative override is active, Feature Groups temporarily falls back to the 129-row clustering sample because it contains all selectable feature values.
+- This 129-row sample is primarily for Clustering. With configured representatives, Feature Groups uses a separate compact pool containing only rows with a certain foreground mask (currently 28,260 of 28,749) and draws up to 20 transient dataset-balanced icons independently for each family and color treatment. If a browser-session representative override is active, Feature Groups temporarily falls back to the 129-row clustering sample because it contains all selectable feature values.
 
 ## Script Map
 
@@ -348,6 +349,7 @@ Recommended metadata enrichment order:
 - Do not restore or revert deleted/modified files unless explicitly asked.
 - `icon_data/normalized_256/` is generated and large. Avoid committing or manually editing normalized images unless the task requires it.
 - For dashboard changes, update both `code/build_analysis_dashboard.py` and regenerated files under `icon_data/analysis/analysis_dashboard/`.
+- For feature IDs, ordering, status, family membership, labels, exclusions, representatives, the code-only analysis preset, feature-level evidence scopes/citations, schema version, or orientation-confidence threshold, edit `code/thesis_pipeline/features/registry.py`; consumer scripts expose compatibility adapters but are not separate authorities.
 - Verify dashboard changes with a local HTTP server because `index.html` loads JSON, Plotly, and image assets.
 - For claims about current state, prefer generated metadata reports and current README files over older task notes.
 
@@ -362,7 +364,7 @@ python -c "import csv,json; d=list(csv.DictReader(open('icon_data/analysis/datas
 Check Python generator syntax:
 
 ```powershell
-python -m py_compile code/extract_icon_features.py code/compute_icon_similarity.py code/build_analysis_dashboard.py code/visualize_icon_features.py
+python -m py_compile code/thesis_pipeline/features/registry.py code/extract_icon_features.py code/compute_icon_similarity.py code/build_analysis_dashboard.py code/visualize_icon_features.py
 ```
 
 Check feature extraction failures:

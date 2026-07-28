@@ -1,5 +1,11 @@
 # Feature System
 
+## Authoritative Registry
+
+`code/thesis_pipeline/features/registry.py` is the typed authority for schema-v2 feature ordering, statuses, family membership, display metadata, exclusions, configured representatives, benchmark aliases, feature-level evidence and citations, and the orientation-confidence threshold. It exposes frozen `FeatureSpec` and `FamilySpec` values plus immutable query results.
+
+`extract_icon_features.py` remains authoritative for measurement implementations, but validates its extractor-column order against the registry at import time. The dashboard, similarity pipeline, and feature-v2 benchmark builder consume the registry directly instead of redefining families or importing one another. The frozen characterization fixture is `code/tests/fixtures/feature_registry_v2.json`.
+
 ## Schema v2 extraction repair (2026-07-20)
 
 `features.csv` now uses `feature_schema_version: 2` and retains every schema-v1 measurement for reproducibility. Seven legacy columns are deprecated and inactive; the active 81-feature registry replaces them one-for-one with:
@@ -24,17 +30,33 @@ The frozen benchmark is `icon_data/analysis/feature_v2_benchmark.csv`: 50 exampl
 
 ## Feature Layers
 
-The repository distinguishes three different things:
+The repository distinguishes four different things:
 
 1. **Extractor output:** 110 raw numeric image-feature columns retained for traceability.
 2. **Active visual mapping:** 81 interpretable features organized into seven literature-mapped families.
-3. **Metadata/identity fields:** 23 columns used for labels, joining, filtering, OCR/semantic context, and mask diagnostics; these are not visual-distance features.
+3. **Code-selected analysis layer:** a named preset chooses features for dashboard clustering, Feature Review, and similarity. The current preset contains seven features.
+4. **Metadata/identity fields:** 23 columns used for labels, joining, filtering, OCR/semantic context, and mask diagnostics; these are not visual-distance features.
 
-Do not use “feature” without making the layer clear. In thesis claims, “active features” means the 81 image-derived features in the seven visual families.
+Do not use “feature” without making the layer clear. In thesis claims, “active registry features” means the 81 image-derived features in the seven visual families; “analysis features” means the code-selected preset, which contains seven features by default.
+
+## Code-Only Analysis Preset
+
+`ANALYSIS_FEATURE_PRESET` in `code/thesis_pipeline/features/registry.py` is the single switch for the
+default computational selection:
+
+- `"representatives"` — the seven configured family representatives; current default;
+- `"full_registry"` — all 81 active registry features.
+
+`analysis_feature_ids()` and `analysis_feature_groups()` validate and expose the selected preset.
+Dashboard clustering, combined clustering, Feature Review, and pairwise similarity consume these
+queries. Raw extraction still writes all 110 columns, the active registry still contains 81 features,
+and feature metadata remains available for inspection. To add a different manual seven-feature set,
+add a named immutable tuple to `_ANALYSIS_FEATURE_PRESETS`, then change the one preset constant. No UI
+profile switch is provided.
 
 ## Image Loading and Foreground Detection
 
-`code/extract_icon_features.py` loads each normalized image as RGBA. Transparent images use alpha greater than 0.05. Opaque images use the border-connected CIELAB rule documented above. Grayscale uses standard RGB luminance weights and sets detected background pixels to white.
+`code/extract_icon_features.py` loads each normalized image as RGBA. Transparent images normally use alpha greater than 0.05. If that alpha mask forms a nearly solid rectangle, the extractor checks for a border-connected, near-white, low-chroma panel inside it and removes that panel before computing features. This prevents white page backgrounds in transparent PNGs from becoming false filled silhouettes. Genuine solid dark alpha shapes remain unchanged. Opaque images use the border-connected CIELAB rule documented above. Grayscale uses standard RGB luminance weights and sets detected background pixels to white.
 
 OpenCV is optional. When present, it is used for selected operations such as Canny edges; NumPy/Pillow fallbacks preserve operation when OpenCV is unavailable. Tesseract is optional and only supports gated exact-text annotation, not the active visual-family computation.
 
@@ -56,19 +78,27 @@ The active raw total is 81. In pairwise similarity, `principal_axis_orientation_
 
 ## Current One-Feature Representatives
 
-Feature Groups currently exposes one literature-backed representative per family for stimulus review. Feature Values intentionally reuses exactly these seven representatives for low/mean-nearest/high examples. This display and study-selection layer does not reduce the 81-feature analytical registry used by clustering, similarity, or Feature Review.
+Feature Groups currently exposes one literature-backed representative per family for stimulus review. Feature Values intentionally reuses exactly these seven representatives for low/mean-nearest/high examples. The 81-feature active registry remains intact, while the current code-only analysis preset deliberately uses these same seven features for clustering, similarity, and Feature Review.
 
 | Family | Current representative | Selection basis |
 |---|---|---|
 | Complexity | `canny_edge_density` | Smoothed Canny edge density; selected after the visual audit exposed raster and antialias inflation in grayscale quadtree variability. |
-| Shape/silhouette | `enclosure_score_v2` | External-contour enclosure within the active box. |
+| Shape/silhouette | `enclosure_score_v2` | UI interpretation: lower usually means thin, open, or spread out; higher usually means large, compact, or closed. Technically, the score is external-contour enclosure within the active box. |
 | Stroke/structure | `principal_axis_orientation_v2` | PCA axis with explicit anisotropy confidence and undefined handling. |
 | Density/fill | `solid_fill_ratio_v2` | Multi-scale erosion survival separating solid interiors from outlines. |
 | Balance/layout | `horizontal_symmetry_v2` | Tolerant left-right Dice overlap. |
 | Color/contrast | `mean_saturation_v2` | Saturation over the corrected foreground. |
 | Texture | `local_texture_variation_v2` | Local interior variation rather than global tonal entropy. |
 
-These are the most defensible current representatives, not universal causal rankings. Complexity is the first family to move away from its schema-v2 replacement after full-corpus visual review; `quadtree_structural_variability_v2` remains active for analysis but is no longer the one-feature representative. The papers study different tasks and do not compare every implemented feature in one experiment. Each selection, rationale, evidence statement, and citation is stored in `metadata.image_feature_sections` within `dashboard_data.json`.
+These are the most defensible current representatives, not universal causal rankings. Complexity is the first family to move away from its schema-v2 replacement after full-corpus visual review; `quadtree_structural_variability_v2` remains active for analysis but is no longer the one-feature representative. The papers study different tasks and do not compare every implemented feature in one experiment. Each selection, rationale, evidence statement, and citation is defined in the shared registry and serialized into `metadata.image_feature_sections` within `dashboard_data.json`.
+
+The registry also carries evidence for every active feature, not only the seven representatives.
+`FeatureSpec.evidence_scope` separates close measure-level evidence (`direct`) from support for the
+visual construct while the formula remains a project inference (`construct`) and source findings that
+constrain interpretation (`cautionary`). The 2026-07-28 pass yielded 1 direct, 77 construct, and 3
+cautionary entries. Each dashboard feature object includes `evidence_scope`, `evidence`, and
+`citation`. See [Literature and evidence](literature-and-evidence.md#feature-level-evidence-registry)
+and `notes/feature_literature_evidence_pass_2026-07-28.md`.
 
 ## Complete Active Feature Reference
 
@@ -180,14 +210,15 @@ They cannot be used as evidence that pixels alone produced semantic understandin
 
 ## Feature Metadata Artifact
 
-`icon_data/analysis/features_metadata.json` records the last extraction run: input/output paths, row count, per-set limit, dependency availability, metadata columns, and extractor registry. `dashboard_data.json` adds the current active-family definitions and human-facing descriptions.
+`icon_data/analysis/features_metadata.json` records the last extraction run: input/output paths, row count, per-set limit, dependency availability, metadata columns, and extractor grouping. `dashboard_data.json` serializes the registry's current active-family definitions and human-facing descriptions.
 
 Use both artifacts together:
 
 - extractor registry and runtime state: `features_metadata.json`;
-- active thesis mapping and descriptions: `dashboard_data.json`;
+- authoritative feature/family mapping and descriptions: `code/thesis_pipeline/features/registry.py`;
+- generated dashboard serialization: `dashboard_data.json`;
 - executable formulas: `extract_icon_features.py`;
-- exclusion/membership rules: `build_analysis_dashboard.py`.
+- frozen schema-v2 characterization: `code/tests/fixtures/feature_registry_v2.json`.
 
 ## Adding or Changing a Feature
 

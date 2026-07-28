@@ -9,13 +9,17 @@
   "executor": "process",
   "dependencies": {
     "opencv_available": true,
-    "opencv_version": "4.13.0",
-    "tesseract_available": false,
-    "tesseract_path": null,
-    "tesseract_version": null
+    "opencv_version": "5.0.0",
+    "tesseract_available": true,
+    "tesseract_path": "/opt/homebrew/bin/tesseract",
+    "tesseract_version": "tesseract 5.5.1"
   },
   "foreground_mask": {
     "transparent_alpha_threshold": 0.05,
+    "transparent_white_panel_rule": "when alpha forms a nearly solid rectangle, remove border-connected near-white low-chroma pixels before feature extraction",
+    "transparent_rectangular_occupancy_threshold": 0.98,
+    "transparent_white_panel_min_channel": 0.9,
+    "transparent_white_panel_max_chroma": 0.08,
     "opaque_background_color_space": "CIELAB",
     "opaque_background_delta_e76_threshold": 10.0,
     "opaque_background_rule": "remove only border-connected pixels within threshold of the median border color",
@@ -24,11 +28,11 @@
   "orientation_confidence_threshold": 0.2,
   "deprecated_inactive_columns": [
     "quadtree_structural_variability",
-    "closed_contour_ratio",
-    "principal_axis_orientation",
-    "filled_vs_outline_proxy",
     "horizontal_symmetry",
+    "filled_vs_outline_proxy",
+    "closed_contour_ratio",
     "mean_saturation",
+    "principal_axis_orientation",
     "texture_entropy"
   ],
   "metadata_columns": [

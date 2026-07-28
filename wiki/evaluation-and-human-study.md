@@ -4,6 +4,8 @@
 
 Before these seven representatives can be used in the pilot, two independent raters must complete the frozen `feature_v2_benchmark.csv`. Each scalar family uses five-point judgments; orientation uses an angle or `undefined`; strict-red rows use `red` or `not_red`; both raters inspect the saved mask overlay and record acceptability and gross inversion.
 
+The benchmark builder obtains the seven family-to-representative mappings and legacy benchmark aliases from `code/thesis_pipeline/features/registry.py`. The evaluator shares the registry's schema version and orientation-confidence threshold. Gate thresholds and result-shape normalization remain a later refactoring stage.
+
 Release requires weighted κ ≥ 0.60 for ordinal judgments, held-out Spearman ≥ 0.60 per scalar, orientation median axial error ≤ 15°, p90 ≤ 30°, undefined F1 ≥ 0.80, strict-red precision 1.00 and recall ≥ 0.80, at least 95% acceptable masks, and zero gross background inversions. Any family failure blocks all seven. The generated gate currently remains pending until ratings exist; do not describe engineering completion as human validation.
 
 [Wiki home](README.md) · [Thesis overview](thesis-overview.md) · [Limitations](limitations-and-backlog.md)

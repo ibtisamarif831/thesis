@@ -47,7 +47,7 @@ These are essential to the thesis objective. The existing computer pipeline and 
 ## Dashboard Limitations
 
 - Clustering sample is 129 rows, not the full dataset or full feature sample.
-- Feature Review/Values use the complete 28,749-row corpus. Feature Groups excludes 621 uncertain-mask rows, then draws dataset-balanced family samples of up to 20 icons from the remaining 28,128-row compact pool and supports three-icon representative comparisons, while clustering remains limited to 129 rows.
+- Feature Review/Values use the complete 28,749-row corpus. Feature Groups excludes 489 uncertain-mask rows, then draws dataset-balanced family samples of up to 20 icons from the remaining 28,260-row compact pool and supports three-icon representative comparisons, while clustering remains limited to 129 rows.
 - Color By is present but not applied to the visible icon overlays.
 - Current filtering is by icon set only; category/style filters described in older docs are absent.
 - UI state is not shareable by URL and resets on reload.
@@ -80,7 +80,7 @@ Supporting work should include:
 - reconcile dashboard README with current controls;
 - add category/style filters only if still useful and specified;
 - add a dendrogram if hierarchical structure needs explanation;
-- follow the staged [review, feature pipeline, and dashboard refactoring plan](../tasks/review-feature-dashboard-refactoring-plan.md), beginning with registry characterization and a shared typed feature authority;
+- continue the staged [review, feature pipeline, and dashboard refactoring plan](../tasks/review-feature-dashboard-refactoring-plan.md); the characterized shared registry slice is complete, while explicit populations/profiles, pure services, modular browser state/UI, and transactional orchestration remain;
 - add end-to-end browser regression checks;
 - enrich high-priority metadata sources;
 - visually audit feature examples before study selection.

@@ -12,15 +12,15 @@ import numpy as np
 import pandas as pd
 from PIL import Image, ImageDraw, ImageFont
 
-import build_analysis_dashboard
 import extract_icon_features
+from thesis_pipeline.features import registry as feature_registry
 
 
 ROOT = Path(__file__).resolve().parents[1]
 FEATURES_CSV = ROOT / "icon_data/analysis/features.csv"
 OUTPUT_DIR = ROOT / "icon_data/analysis/similarity"
 
-FEATURE_COLUMNS = list(extract_icon_features.FEATURE_COLUMNS)
+FEATURE_COLUMNS = list(feature_registry.raw_feature_ids())
 HUE_COLUMNS = [f"hue_histogram_{index:02d}" for index in range(12)]
 ORIENTATION_COLUMN = "principal_axis_orientation_v2"
 ORIENTATION_CONFIDENCE_COLUMN = "orientation_confidence_v2"
@@ -87,7 +87,7 @@ def transformed_similarity_features(frame: pd.DataFrame) -> pd.DataFrame:
             radians = np.deg2rad(values_by_column[column] * 2.0)
             confidence = np.clip(values_by_column[ORIENTATION_CONFIDENCE_COLUMN], 0.0, 1.0)
             confidence = np.where(
-                confidence >= extract_icon_features.ORIENTATION_CONFIDENCE_THRESHOLD,
+                confidence >= feature_registry.ORIENTATION_CONFIDENCE_THRESHOLD,
                 confidence,
                 0.0,
             )
@@ -121,15 +121,18 @@ def active_similarity_feature_columns() -> list[str]:
 
 def similarity_feature_groups() -> dict[str, list[str]]:
     groups = {}
-    for section in build_analysis_dashboard.image_feature_sections():
+    selected_features = frozenset(feature_registry.analysis_feature_ids())
+    for family in feature_registry.family_specs():
         group_columns = []
-        for feature in section["features"]:
-            feature_id = feature["id"]
+        for feature_id in family.feature_ids:
+            if feature_id not in selected_features:
+                continue
             if feature_id == ORIENTATION_COLUMN:
                 group_columns.extend(ORIENTATION_DERIVED_COLUMNS)
             else:
                 group_columns.append(feature_id)
-        groups[section["title"]] = group_columns
+        if group_columns:
+            groups[family.title] = group_columns
     return groups
 
 
@@ -309,14 +312,15 @@ def write_metadata(output_dir: Path, frame: pd.DataFrame, neighbors: int, closes
     output = output_dir / "similarity_metadata.json"
     groups = similarity_feature_groups()
     metadata = {
-        "feature_schema_version": extract_icon_features.FEATURE_SCHEMA_VERSION,
+        "feature_schema_version": feature_registry.FEATURE_SCHEMA_VERSION,
+        "analysis_feature_preset": feature_registry.ANALYSIS_FEATURE_PRESET,
         "input": relative_label(FEATURES_CSV),
         "row_count": int(len(frame)),
         "feature_columns": FEATURE_COLUMNS,
         "similarity_feature_columns": similarity_feature_columns(),
         "active_similarity_feature_columns": active_similarity_feature_columns(),
-        "excluded_feature_columns": sorted(build_analysis_dashboard.EXCLUDED_IMAGE_FEATURES),
-        "excluded_feature_reasons": build_analysis_dashboard.EXCLUDED_IMAGE_FEATURE_REASONS,
+        "excluded_feature_columns": sorted(feature_registry.excluded_feature_ids()),
+        "excluded_feature_reasons": dict(feature_registry.excluded_feature_reasons()),
         "preprocessing": [
             "principal_axis_orientation_v2 is encoded as cos/sin of doubled angle so 0 and 180 degrees compare as the same axis",
             "orientation vectors are scaled by orientation_confidence_v2 and set to zero below confidence 0.20",

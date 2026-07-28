@@ -39,8 +39,17 @@ def test_each_family_has_one_documented_representative_feature() -> None:
         assert section["representative_citation"]
 
 
-def test_representative_selection_does_not_shrink_active_feature_registry() -> None:
-    assert len(dashboard.active_image_feature_columns()) == 81
+def test_shape_representative_uses_plain_language_interpretation() -> None:
+    shape = next(section for section in dashboard.image_feature_sections() if section["id"] == "shape")
+
+    assert shape["representative_interpretation"] == (
+        "Lower values usually mean a thin, open, or spread-out shape. "
+        "Higher values usually mean a large, compact, or closed shape."
+    )
+
+
+def test_representative_preset_is_the_default_analysis_selection() -> None:
+    assert dashboard.active_image_feature_columns() == list(EXPECTED_REPRESENTATIVES.values())
 
 
 def test_feature_values_uses_exactly_the_feature_groups_representatives() -> None:
@@ -61,3 +70,18 @@ def test_feature_group_detail_uses_registry_label(tmp_path, monkeypatch) -> None
     index = (tmp_path / "index.html").read_text(encoding="utf-8")
     assert "Selected feature Â· active registry" in index
     assert "Selected feature Â· schema v" not in index
+
+
+def test_clustering_ui_is_restricted_to_the_code_selected_preset(
+    tmp_path, monkeypatch
+) -> None:
+    monkeypatch.setattr(dashboard, "OUTPUT_DIR", tmp_path)
+
+    dashboard.write_index_html()
+
+    index = (tmp_path / "index.html").read_text(encoding="utf-8")
+    assert "state.activeFeatures = new Set(configuredAnalysisFeatureIds());" in index
+    assert "features: section.features.filter(feature => allowed.has(feature.id))" in index
+    assert "state.activeFeatures = new Set(featureIds.filter(featureId => allowed.has(featureId)));" in index
+    assert "clusteringFeatureSections().forEach(section =>" in index
+    assert "setActiveFeatures(representativeFeatureIds());" not in index

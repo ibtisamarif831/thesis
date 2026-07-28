@@ -7,12 +7,19 @@ import argparse
 import csv
 import json
 import math
+import sys
 from pathlib import Path
 
 import numpy as np
 
 
 ROOT = Path(__file__).resolve().parents[2]
+CODE_DIR = ROOT / "code"
+if str(CODE_DIR) not in sys.path:
+    sys.path.insert(0, str(CODE_DIR))
+
+from thesis_pipeline.features import registry as feature_registry
+
 BENCHMARK = ROOT / "icon_data/analysis/feature_v2_benchmark.csv"
 OUTPUT = ROOT / "icon_data/analysis/feature_v2_release_gate.json"
 ORDINAL_FAMILIES = {"complexity", "closure", "fill", "symmetry", "saturation", "texture"}
@@ -76,7 +83,7 @@ def main() -> None:
     required = ("rater_1_judgment", "rater_2_judgment")
     if any(not row[column].strip() for row in rows for column in required):
         pending = {
-            "feature_schema_version": 2,
+            "feature_schema_version": feature_registry.FEATURE_SCHEMA_VERSION,
             "status": "blocked_pending_two_rater_benchmark",
             "pilot_enabled": False,
             "benchmark_rows": len(rows),
@@ -107,7 +114,10 @@ def main() -> None:
     for row in orientation:
         ratings = [row["rater_1_judgment"].strip().lower(), row["rater_2_judgment"].strip().lower()]
         human_undefined = all(value == "undefined" for value in ratings)
-        machine_undefined = float(row.get("orientation_confidence_v2") or 0.0) < 0.20
+        machine_undefined = (
+            float(row.get("orientation_confidence_v2") or 0.0)
+            < feature_registry.ORIENTATION_CONFIDENCE_THRESHOLD
+        )
         expected_undefined.append(human_undefined)
         predicted_undefined.append(machine_undefined)
         if not human_undefined and all(value != "undefined" for value in ratings):
@@ -152,7 +162,12 @@ def main() -> None:
     passes.append(len(mask_rows) == len(rows) and mask_acceptance >= 0.95 and gross_inversions == 0)
 
     status = "passed" if all(passes) else "failed"
-    result = {"feature_schema_version": 2, "status": status, "pilot_enabled": status == "passed", "metrics": metrics}
+    result = {
+        "feature_schema_version": feature_registry.FEATURE_SCHEMA_VERSION,
+        "status": status,
+        "pilot_enabled": status == "passed",
+        "metrics": metrics,
+    }
     args.output.write_text(json.dumps(result, indent=2) + "\n", encoding="utf-8")
     print(f"Feature-v2 release gate: {status}")
 

@@ -29,6 +29,22 @@ def test_foreground_masks_transparent_white_black_and_nonuniform(tmp_path: Path)
     transparent_context = features.load_image(transparent, 245)
     assert transparent_context.mask_mode == "alpha"
     assert transparent_context.foreground.sum() == 16 * 16
+    assert features.enclosure_score(transparent_context.foreground) > 0.85
+
+    panel_rgb = np.zeros((32, 32, 3), dtype=np.uint8)
+    panel_alpha = np.zeros((32, 32), dtype=np.uint8)
+    panel_rgb[4:28, 4:28] = 255
+    panel_alpha[4:28, 4:28] = 255
+    panel_rgb[9:12, 10:20] = 0
+    panel_rgb[9:22, 18:21] = 0
+    panel_rgb[19:22, 13:21] = 0
+    panel = tmp_path / "transparent_white_panel.png"
+    save_rgba(panel, panel_rgb, panel_alpha)
+    panel_context = features.load_image(panel, 245)
+    assert panel_context.mask_mode == "alpha_white_panel"
+    assert panel_context.foreground.sum() < 100
+    assert not panel_context.mask_is_uncertain
+    assert features.enclosure_score(panel_context.foreground) < 0.5
 
     for name, background, foreground_color in (
         ("white", 255, 0),

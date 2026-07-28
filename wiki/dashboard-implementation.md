@@ -2,15 +2,15 @@
 
 ## Schema-v2 payload contract
 
-`dashboard_data.json.metadata` includes `feature_schema_version`, `orientation_confidence_threshold`, and `feature_group_excludes_uncertain_masks`. Each compact `feature_group_records` item carries the seven v2 representative values, `orientation_confidence_v2`, `red_pixel_ratio_v2`, `strict_red_flag_v2`, and certain-mask diagnostics. Rows with `mask_is_uncertain == true` are omitted while the complete feature corpus remains unchanged. Legacy representatives remain in the full raw feature export but are excluded from the active 81-feature registry and from Feature Groups.
+`dashboard_data.json.metadata` includes `feature_schema_version`, `analysis_feature_preset`, `orientation_confidence_threshold`, and `feature_group_excludes_uncertain_masks`. The current code-only `representatives` preset selects seven features for generated image/combined clustering and Feature Review; switching the registry constant to `full_registry` restores all 81 active registry features. Each compact `feature_group_records` item carries the seven v2 representative values, `orientation_confidence_v2`, `red_pixel_ratio_v2`, `strict_red_flag_v2`, and certain-mask diagnostics. Rows with `mask_is_uncertain == true` are omitted while the complete feature corpus remains unchanged. Legacy representatives remain in the full raw feature export but are excluded from the active 81-feature registry and from Feature Groups.
 
-Client behavior derives Red solely from `strict_red_flag_v2`, computes scalar arithmetic means, computes orientation with a doubled-angle axial mean, and excludes confidence-undefined records before building an orientation-family sample. The generator remains authoritative; regenerate `index.html` and `dashboard_data.json` after changes.
+Client behavior derives Red solely from `strict_red_flag_v2`, computes scalar arithmetic means, computes orientation with a doubled-angle axial mean, and excludes confidence-undefined records before building an orientation-family sample. The shared feature registry is authoritative for feature/family definitions; the generator remains authoritative for dashboard assembly. Regenerate `index.html` and `dashboard_data.json` after changes.
 
 [Wiki home](README.md) · [Dashboard UI](dashboard-ui.md) · [Artifacts](artifacts-and-data-contracts.md)
 
 ## Generator and Output
 
-`code/build_analysis_dashboard.py` is the source of truth for dashboard computation, HTML, CSS, and JavaScript. It writes generated artifacts to `icon_data/analysis/analysis_dashboard/`.
+`code/build_analysis_dashboard.py` is the source of truth for dashboard computation, HTML, CSS, and JavaScript. It adapts feature definitions from `code/thesis_pipeline/features/registry.py` and writes generated artifacts to `icon_data/analysis/analysis_dashboard/`.
 
 Do not edit the generated `index.html` alone. Change the generator, run it, and commit both source and intended generated outputs.
 
@@ -36,7 +36,7 @@ The builder:
 | Dashboard component | Source | Current rows |
 |---|---|---:|
 | Clustering records and projections | Random per-set sample from `dataset.csv` | 129 |
-| Feature Groups sampling pool | Certain-mask identity/path/color/representative-feature payload from `features.csv` | 28,128 |
+| Feature Groups sampling pool | Certain-mask identity/path/color/representative-feature payload from `features.csv` | 28,260 |
 | Feature Review correlations | Complete `features.csv` corpus | 28,749 |
 | Feature Values examples/statistics | Complete `features.csv` corpus | 28,749 |
 
@@ -63,7 +63,7 @@ Each `records` item contains:
 - `image_features` mapping;
 - `mcdougall` rating mapping when applicable.
 
-The front end should access feature definitions through `metadata.image_feature_sections` so label, family, meaning, interpretation, and feature ID remain aligned. Each section also carries `representative_feature_id`, the resolved `representative_feature` object, `representative_interpretation`, `representative_rationale`, `representative_evidence`, and `representative_citation`.
+The front end should access feature definitions through `metadata.image_feature_sections` so label, family, meaning, interpretation, evidence, and feature ID remain aligned. Every feature object carries `evidence_scope`, `evidence`, and `citation` from the typed registry. Each section also carries `representative_feature_id`, the resolved `representative_feature` object, `representative_interpretation`, `representative_rationale`, `representative_evidence`, and `representative_citation`.
 
 ## CSV Contracts
 
@@ -91,15 +91,17 @@ The generated browser application keeps these related state objects:
 
 Image projections are cached by method, count, and ordered selected-feature list. Any feature selection change clears the cache. Metadata and combined projections always use precomputed arrays.
 
-Changing a representative in Feature Groups replaces the clustering selection with the current seven representatives, synchronizes the clustering checkboxes, clears the computed projection cache, and immediately recomputes the image PCA and clustering. The representative map is the shared browser-side source of truth for the Feature Groups overview, family detail, three-icon comparison, and this clustering update. It is transient and resets to the configured representatives on reload.
+Clustering derives an allow-list from `metadata.image_feature_columns`, initializes all seven entries as checked, and filters presets, family actions, individual checkbox changes, color choices, and programmatic selection updates through that list. Feature Groups keeps a separate transient representative map for its overview, family detail, and three-icon comparison. Changing an exploratory representative does not modify the Clustering allow-list or selection.
+
+The code-only registry preset is therefore the sole authority for which features may participate in Clustering. No UI profile switch is exposed.
 
 The application fetches only local data and assets. There is no server-side API and no persistence; a page reload resets UI state.
 
 ### Feature-family fullscreen detail
 
-The Feature Groups view derives each family row from `metadata.image_feature_sections`. Each row exposes a representative selector containing the active features in that family. The configured `representative_feature` remains the default and retains its documented interpretation, rationale, evidence, and citation; alternate browser-session choices are labeled exploratory and do not inherit the default's evidence claim. The remaining `features` array stays intact for the 81-feature analytical registry. The dialog uses the full viewport (`100vw` by `100dvh`, with `100vh` fallback); its header and filter toolbar occupy fixed grid rows while only the detail body scrolls.
+The Feature Groups view derives each family row from `metadata.image_feature_sections`. Each row exposes a representative selector containing the active registry features in that family. The configured `representative_feature` remains the default and retains its documented interpretation, rationale, evidence, and citation; alternate browser-session choices are labeled exploratory and do not inherit the default's evidence claim. The remaining `features` array stays intact for the 81-feature registry even though the default analysis preset contains seven. The dialog uses the full viewport (`100vw` by `100dvh`, with `100vh` fallback); its header and filter toolbar occupy fixed grid rows while only the detail body scrolls.
 
-The fullscreen gallery uses `feature_group_records`, a compact pool containing the 28,128 feature rows whose foreground mask is not flagged uncertain. The generator excludes all 621 uncertain-mask rows before writing the payload, so those icons cannot enter the gallery population, samples, displayed averages, or three-icon comparisons. It carries only icon identity, label/set, normalized path, monochrome status, certain-mask diagnostics, and the seven representative values. The browser keeps an independent dataset-balanced sample of up to 20 icons for every family and color-treatment combination. Sampling happens in two stages: it allocates icon slots as evenly as possible among eligible datasets, favoring datasets shown least often during the current page session, and then draws an icon from a shuffled queue within each chosen dataset. Each eligible dataset receives one slot before any receives a second; with all 13 datasets eligible, a 20-icon sample therefore spans all 13 datasets and gives seven of them a second icon. Smaller cohorts distribute slots as evenly as dataset capacity permits; the 10-record Red cohort displays all 10 available icons. **Randomize icons** replaces only the active combination; a reload clears all transient samples and balancing history. Its icon-treatment classification is computed in the browser:
+The fullscreen gallery uses `feature_group_records`, a compact pool containing the 28,260 feature rows whose foreground mask is not flagged uncertain. The generator excludes all 489 uncertain-mask rows before writing the payload, so those icons cannot enter the gallery population, samples, displayed averages, or three-icon comparisons. It carries only icon identity, label/set, normalized path, monochrome status, certain-mask diagnostics, and the seven representative values. The browser keeps an independent dataset-balanced sample of up to 20 icons for every family and color-treatment combination. Sampling happens in two stages: it allocates icon slots as evenly as possible among eligible datasets, favoring datasets shown least often during the current page session, and then draws an icon from a shuffled queue within each chosen dataset. Each eligible dataset receives one slot before any receives a second; with all 13 datasets eligible, a 20-icon sample therefore spans all 13 datasets and gives seven of them a second icon. Smaller cohorts distribute slots as evenly as dataset capacity permits; the 10-record Red cohort displays all 10 available icons. **Randomize icons** replaces only the active combination; a reload clears all transient samples and balancing history. Its icon-treatment classification is computed in the browser:
 
 The compact full-corpus payload intentionally contains only the seven configured representatives. If any family uses an exploratory session override, Feature Groups details and comparisons fall back together to the 129-row clustering records, which contain all 81 active feature values. Changing a representative invalidates that family's cached gallery samples so records from the previous source or feature cannot be reused. Returning every family to its configured default restores the certain-mask full-corpus pool.
 
@@ -125,7 +127,7 @@ The browser image-view computation is intended for interactive diagnostics. The 
 
 ## Feature Review Data
 
-The generator computes summary variance/missingness and Spearman correlations for all active feature pairs. Bands separate high, moderate, and low redundancy. Feature Values takes its seven feature IDs directly from the Feature Groups representatives and adds correlation context from Feature Review; low-redundancy ranking no longer controls the Feature Values selection.
+The generator computes summary variance/missingness and Spearman correlations for the code-selected analysis preset. With the current seven-feature preset this produces 21 pairs; `full_registry` produces the earlier 3,240-pair review. Bands separate high, moderate, and low redundancy. Feature Values takes its seven feature IDs directly from the Feature Groups representatives and adds correlation context from Feature Review; low-redundancy ranking no longer controls the Feature Values selection.
 
 ## Asset and Path Rules
 
@@ -146,7 +148,7 @@ The generator computes summary variance/missingness and Spearman correlations fo
 
 ## Safe Change Workflow
 
-1. Read the relevant computation and UI function in `build_analysis_dashboard.py`.
+1. Read the shared feature registry first for definition changes, then the relevant computation or UI function in `build_analysis_dashboard.py`.
 2. Check `dashboard_data.json` before assuming a field exists.
 3. Change reusable logic in `code/thesis_pipeline/` where appropriate.
 4. Add or update focused tests.

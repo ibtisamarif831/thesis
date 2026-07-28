@@ -28,7 +28,7 @@
 | `code/build_icon_dataset.py` | Select canonical source media, create stable rows, optionally normalize images. | `dataset.csv`, `normalized_256/`, normalization failure report |
 | `code/extract_icon_features.py` | Extract 110 raw numeric image measurements plus identity/context/mask metadata. | `features.csv`, `features_metadata.json`, feature failure report |
 | `code/build_clustering_metadata_sample.py` | Add style, token, category, and McDougall context to feature rows. | `clustering_metadata_sample.csv`, missing report |
-| `code/compute_icon_similarity.py` | Transform active features, robust-scale, weight families, compute distances and neighbors. | `analysis/similarity/` |
+| `code/compute_icon_similarity.py` | Transform the registry-selected analysis preset, robust-scale, weight families, compute distances and neighbors. | `analysis/similarity/` |
 | `code/visualize_icon_features.py` | Create static feature distributions, correlations, PCA, and contact sheets where dependencies permit. | `analysis/visualizations/` |
 | `code/build_analysis_dashboard.py` | Sample icons, compute feature variants/clusters/review data, and generate static UI. | `analysis/analysis_dashboard/` |
 | `code/thesis_pipeline/dashboard/feature_selection.py` | Optional low-redundancy feature-selection utility; current Feature Values uses Feature Groups representatives instead. | Importable helper; covered by focused tests |

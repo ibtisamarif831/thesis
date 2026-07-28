@@ -89,7 +89,9 @@ def test_feature_group_html_supports_three_icon_comparison(tmp_path, monkeypatch
     assert 'aria-pressed="${isSelected}"' in index
 
 
-def test_representative_change_updates_clustering_without_reload(tmp_path, monkeypatch) -> None:
+def test_representative_change_does_not_override_clustering_preset(
+    tmp_path, monkeypatch
+) -> None:
     monkeypatch.setattr(dashboard, "OUTPUT_DIR", tmp_path)
 
     dashboard.write_index_html()
@@ -98,7 +100,8 @@ def test_representative_change_updates_clustering_without_reload(tmp_path, monke
     assert 'class="family-representative-select"' in index
     assert 'select.addEventListener("change"' in index
     assert "representativeFeaturesByFamily.set(familyId, featureId)" in index
-    assert "setActiveFeatures(representativeFeatureIds())" in index
+    assert "setActiveFeatures(representativeFeatureIds())" not in index
+    assert "state.activeFeatures = new Set(configuredAnalysisFeatureIds());" in index
     assert "computedCache.clear()" in index
     assert "familySamples.delete(key)" in index
     assert "const selectedFeature = representativeFeature(section)" in index

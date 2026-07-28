@@ -63,7 +63,7 @@ Feature extraction is implemented in:
 python code/extract_icon_features.py --workers 12 --executor process
 ```
 
-The extractor reads normalized 256x256 PNGs from `icon_data/normalized_256/` and writes the complete canonical corpus to `features.csv`. The verified 2026-07-20 schema-v2 run contains 28,749 rows, uses no global or per-set limit, records 12 process workers, and reports zero failures. Every row has 23 metadata columns and 110 raw numeric feature columns; all numeric cells are present and finite.
+The extractor reads normalized 256x256 PNGs from `icon_data/normalized_256/` and writes the complete canonical corpus to `features.csv`. The verified 2026-07-28 schema-v2 run contains 28,749 rows, uses no global or per-set limit, records 12 process workers, and reports zero failures. Every row has 23 metadata columns and 110 raw numeric feature columns; all numeric cells are present and finite. For transparent PNGs whose alpha channel forms a nearly solid rectangle, the extractor removes a border-connected near-white panel before measuring the glyph; corrected rows record `mask_mode=alpha_white_panel`.
 
 OpenCV is used for Canny/contour helpers when available; the script keeps local NumPy/Pillow fallbacks for portability.
 

@@ -122,6 +122,10 @@ The script uses the active visual feature families from the dashboard metadata. 
 
 The script avoids duplicate/helper assets where possible. For example, it uses extracted McDougall icons rather than full appendix pages, ARASAAC 300px PNGs, OpenMoji color SVGs, and non-original ISO 7010 warning SVGs.
 
+## AI Clustering Experiments
+
+`ai_clustering/ai_clustering.sqlite3` stores the schema-versioned OpenRouter image-embedding cache and feature-versus-AI run history. It is intentionally tracked, contains no credentials or image payloads, uses rollback-journal mode, and should have only one writer across team branches. Run `code/serve_analysis_dashboard.py` to use its local API and dashboard view.
+
 ## Metadata Coverage Review
 
 Reviewed: 2026-06-22

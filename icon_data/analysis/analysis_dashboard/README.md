@@ -43,13 +43,13 @@ The image-feature variant is the primary thesis view. Metadata and combined vari
 From the repository root, start a local server:
 
 ```bash
-python3 -m http.server 8765 --bind 127.0.0.1
+python3 code/serve_analysis_dashboard.py --port 8765
 ```
 
 Then open:
 
 ```text
-http://127.0.0.1:8765/icon_data/analysis/analysis_dashboard/index.html
+http://127.0.0.1:8765/
 ```
 
 Opening `index.html` directly from the filesystem may work in some browsers, but using a local server is more reliable because the dashboard loads `dashboard_data.json`, `plotly.min.js`, and normalized icon images.
@@ -60,12 +60,13 @@ The dashboard loads `dashboard_data.json` and renders a Plotly scatter plot.
 
 Each point represents one icon and is displayed using the normalized icon image. The 2D position is based on PCA coordinates for the selected feature variant. A Color By selector exists for cluster, icon set, or numeric feature value, but the current image-overlay renderer does not visibly apply that selection; this is a known UI gap.
 
-The header exposes four views:
+The header exposes five views:
 
 - **Clustering** for PCA, feature selection, clustering, filtering, and icon inspection.
-- **Feature Groups** for one literature-backed representative per family, with rationale/citation, a fullscreen detail view, All/B/W/Red/Colored filters, and an independent randomizable dataset-balanced pilot sample of up to 20 icons per family drawn from the 28,128 rows with a certain foreground mask. The 621 uncertain-mask rows are excluded before display. Icon slots are spread as evenly as possible across eligible datasets before icons are drawn within those datasets. Each active sample shows the average of its visible scores, orders icons from low to high by the representative feature value, and allows exactly three icons to be compared across all seven representative features in a separate fullscreen modal.
+- **Feature Groups** for one literature-backed representative per family, with rationale/citation, a fullscreen detail view, All/B/W/Red/Colored filters, and an independent randomizable stratified sample drawn from the 28,260 rows with a certain foreground mask. The 489 uncertain-mask rows are excluded before display. For each family/cohort, the eligible feature range is divided into 10 equal-width bins and up to two icons are selected randomly from each bin; empty or undersized bins are not backfilled, so the sample can contain fewer than 20 icons. Genuine zeros remain valid. Cohorts with too little robust variation receive a visible low-information warning. Each active sample shows the average of its visible scores, orders icons from low to high by the representative feature value, and allows exactly three icons to be compared across all seven representative features in a separate fullscreen modal. Representative dropdown changes also replace the corresponding Clustering checkbox and Color-by choice and recompute the Image variant during the current browser session.
 - **Feature Values** for low, mean-nearest, and high representative examples.
 - **Feature Review** for feature variance and Spearman redundancy analysis.
+- **AI Clustering** for explicit OpenRouter image embeddings, paired plots, agreement metrics, and saved run loading.
 
 The left sidebar controls the analysis view:
 
@@ -158,11 +159,15 @@ icon_data/analysis/analysis_dashboard/
 
 It does not overwrite the older `icon_data/analysis/features.csv` or `icon_data/analysis/similarity/` outputs.
 
+## AI Clustering
+
+The fifth tab uses `code/serve_analysis_dashboard.py` and the exact shared Feature Groups sample. Install `requirements-ai-clustering.txt`, put `OPENROUTER_API_KEY=...` in the ignored repository-root `.env` file (or export it), optionally set `OPENROUTER_AI_CLUSTERING_MODEL`, then open `http://127.0.0.1:8765/`. The server also accepts the older nested dashboard URL and serves its `/icon_data/normalized_256/` image paths. The official OpenRouter Python SDK sends normalized pixels only, compares feature and embedding clusterings side by side, and stores cache/history in `../ai_clustering/ai_clustering.sqlite3`. Checked Clustering features affect only the feature-based half of the next explicit comparison run; the AI half continues to use full image embeddings. ARI, NMI, and provider usage are stored but currently hidden in the UI. Agreement metrics do not establish that either result is objectively better.
+
 ## Current Limitations
 
 - A separate dendrogram image has not been generated yet.
 - Hierarchical clustering currently uses precomputed cluster labels/cuts, not a full interactive tree.
 - The Color By selector is not currently applied to the visible icon-image overlays.
 - The current Clustering filter is icon-set-only.
-- Clustering uses up to 10 random icons per dataset (129 total). Feature Groups receives a compact pool covering the 28,128 certain-mask feature rows and displays up to 20 dataset-balanced icons independently for each family and color treatment; **Randomize icons** replaces only the active family sample, and comparison selection is limited to three icons in that sample. Feature Review and Feature Values still use the complete feature corpus.
+- Image and AI Clustering use a unique seven-family composite: up to 20 equal-width-stratified icons from each family, verified as 140 icons for the default All cohort. Feature Groups receives a compact pool covering the 28,260 certain-mask feature rows, makes 10 equal-width bins across each family range, and randomly selects up to two icons per bin; **Randomize icons** replaces only the active family's contribution. Metadata/Combined keep the generated 129-row projections, comparison selection is limited to three active-family icons, and Feature Review/Values use the complete feature corpus.
 - Human-study identification/perception scores are not included in this dashboard yet.

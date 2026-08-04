@@ -112,23 +112,27 @@ python code/build_analysis_dashboard.py
 
 The dashboard builder performs its own deterministic random sampling from `dataset.csv`, extracts current features for those rows, creates image/metadata/combined matrices, computes clustering variants, prepares full-sample feature-review/explorer data from `features.csv`, and regenerates HTML/JSON/CSV outputs.
 
-The dashboard clustering sample is independent from the complete feature corpus: Clustering uses 129 rows, while Feature Groups excludes uncertain foreground masks and receives a compact 28,260-row pool from which it draws independent pilot samples of up to 20 icons in the browser, with comparison limited to three current-sample icons. Feature Values examples and Feature Review statistics still use all 28,749 rows from `features.csv`.
+The dashboard's generated 129-row sample supplies Metadata/Combined projections and exploratory-representative fallback records. Feature Groups excludes uncertain foreground masks and receives a compact 28,260-row pool. In the browser, each family/cohort range is divided into 10 equal-width bins and up to two icons are randomly selected per bin. Image and AI Clustering concatenate all seven cached family draws and exclude cross-family duplicates, producing 140 unique icons for the default All cohort. Cohort changes select the corresponding seven draws, while Randomize replaces only the active family's contribution. Comparison remains limited to three icons from the active family sample. Feature Values examples and Feature Review statistics still use all 28,749 rows from `features.csv`.
 
 ## Stage 8: Serve and Inspect
 
 From the repository root:
 
 ```powershell
-python -m http.server 8765 --bind 127.0.0.1
+python code/serve_analysis_dashboard.py --port 8765
 ```
 
 Open:
 
 ```text
-http://127.0.0.1:8765/icon_data/analysis/analysis_dashboard/index.html
+http://127.0.0.1:8765/
 ```
 
 A local HTTP server is required for reliable JSON, JavaScript, and image loading. See [Dashboard UI](dashboard-ui.md) for expected interactions and [Verification and troubleshooting](verification-and-troubleshooting.md) for browser checks.
+
+## Optional Local AI Clustering Experiment
+
+After dashboard generation, `code/serve_analysis_dashboard.py` can run the fifth dashboard view. An explicit browser request passes only validated shared-sample IDs and the existing feature result to the local service. The server resolves and hashes normalized images, reuses matching model/icon/hash embeddings, sends only missing PNG pixels to OpenRouter, L2-normalizes returned vectors, applies the current k-means or single-linkage hierarchical family, computes label-independent agreement, and stores the run. This is an exploratory comparison layer rather than human validation or ground truth.
 
 ## Planned Evaluation Stages
 

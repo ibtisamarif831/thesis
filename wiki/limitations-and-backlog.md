@@ -46,8 +46,8 @@ These are essential to the thesis objective. The existing computer pipeline and 
 
 ## Dashboard Limitations
 
-- Clustering sample is 129 rows, not the full dataset or full feature sample.
-- Feature Review/Values use the complete 28,749-row corpus. Feature Groups excludes 489 uncertain-mask rows, then draws dataset-balanced family samples of up to 20 icons from the remaining 28,260-row compact pool and supports three-icon representative comparisons, while clustering remains limited to 129 rows.
+- Image and AI Clustering use the seven-family stratified composite, up to 20 unique icons per family and normally 140 for All; sparse color cohorts or exploratory-representative fallback can produce fewer. Metadata/Combined remain limited to the generated 129-row sample.
+- Feature Review/Values use the complete 28,749-row corpus. Feature Groups excludes 489 uncertain-mask rows, then divides each eligible family/cohort feature range into 10 equal-width bins and randomly draws up to two icons per bin from the remaining 28,260-row compact pool. Empty or undersized bins are not backfilled, so individual family samples can contain fewer than 20 icons. It supports three-icon representative comparisons; Image and AI Clustering combine all seven family samples and exclude cross-family duplicates.
 - Color By is present but not applied to the visible icon overlays.
 - Current filtering is by icon set only; category/style filters described in older docs are absent.
 - UI state is not shareable by URL and resets on reload.
@@ -55,6 +55,10 @@ These are essential to the thesis objective. The existing computer pipeline and 
 - No participant-response or human-computer comparison view exists.
 
 ## Engineering Limitations
+
+- AI Clustering is local-only and depends on OpenRouter availability, provider pricing, and user-supplied credits.
+- Its label-independent metrics describe agreement with feature clustering, not correctness, semantic quality, or superiority.
+- The deliberately tracked SQLite cache/history is a single-writer artifact and can create binary merge conflicts across branches.
 
 - Several large scripts combine multiple responsibilities.
 - Dense pairwise similarity and hierarchical clustering are quadratic and are not safe to run over all 28,749 icons without a scalable redesign.

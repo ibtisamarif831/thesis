@@ -93,10 +93,10 @@ The builder currently has no command-line options. Sample size, seed, cluster co
 Serve it with:
 
 ```powershell
-python -m http.server 8765 --bind 127.0.0.1
+python code/serve_analysis_dashboard.py --port 8765
 ```
 
-Open `http://127.0.0.1:8765/icon_data/analysis/analysis_dashboard/index.html`.
+Install the focused dependencies once with `python -m pip install -r requirements-ai-clustering.txt`. Open `http://127.0.0.1:8765/`. Put `OPENROUTER_API_KEY=...` in the repository-root `.env` file (which is ignored by Git) or export it in the server environment to enable Run AI Clustering. `OPENROUTER_AI_CLUSTERING_MODEL` optionally overrides the default `voyageai/voyage-multimodal-3.5`; `OPENROUTER_EMBEDDINGS_URL` is reserved for mock/test endpoints. The local service loads `.env` without replacing variables already exported by the shell.
 
 ## Literature and McDougall Utilities
 

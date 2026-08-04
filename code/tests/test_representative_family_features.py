@@ -72,16 +72,15 @@ def test_feature_group_detail_uses_registry_label(tmp_path, monkeypatch) -> None
     assert "Selected feature Â· schema v" not in index
 
 
-def test_clustering_ui_is_restricted_to_the_code_selected_preset(
-    tmp_path, monkeypatch
-) -> None:
+def test_clustering_ui_tracks_current_family_representatives(tmp_path, monkeypatch) -> None:
     monkeypatch.setattr(dashboard, "OUTPUT_DIR", tmp_path)
 
     dashboard.write_index_html()
 
     index = (tmp_path / "index.html").read_text(encoding="utf-8")
-    assert "state.activeFeatures = new Set(configuredAnalysisFeatureIds());" in index
-    assert "features: section.features.filter(feature => allowed.has(feature.id))" in index
+    assert "state.activeFeatures = new Set(representativeFeatureIds());" in index
+    assert "features: representativeFeature(section) ? [representativeFeature(section)] : []" in index
+    assert "const ordered = representativeFeatureIds().filter" in index
+    assert "const allowed = new Set(representativeFeatureIds());" in index
     assert "state.activeFeatures = new Set(featureIds.filter(featureId => allowed.has(featureId)));" in index
     assert "clusteringFeatureSections().forEach(section =>" in index
-    assert "setActiveFeatures(representativeFeatureIds());" not in index

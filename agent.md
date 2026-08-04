@@ -46,6 +46,7 @@ Boundary for future work:
 | Feature visual reports | `code/visualize_icon_features.py` | `icon_data/analysis/visualizations/` if present |
 | Metadata enrichment for clustering | `code/build_clustering_metadata_sample.py` | `icon_data/analysis/clustering_metadata_sample.csv`, `clustering_metadata_missing_report.json` |
 | Interactive analytics dashboard | `code/build_analysis_dashboard.py` | `icon_data/analysis/analysis_dashboard/README.md`, `index.html`, `dashboard_data.json` |
+| Local AI clustering experiment | `code/serve_analysis_dashboard.py`, `code/thesis_pipeline/ai_clustering/` | `icon_data/analysis/ai_clustering/ai_clustering.sqlite3` |
 | McDougall extracted ratings | `icon_data/iconsets/01_mcdougall_symbol_icon_set/metadata/mcdougall_ratings.csv` | `code/extract_mcdougall_metadata.py` |
 | McDougall extracted icons | `icon_data/iconsets/01_mcdougall_symbol_icon_set/extracted_icons_png/` | `code/extract_mcdougall_icons.py` |
 | ARASAAC download issues | `code/download_arasaac.py` | `icon_data/iconsets/07_arasaac_pictograms/metadata/download_failures.json` |
@@ -67,21 +68,23 @@ Boundary for future work:
 - Current dashboard sample: **129** rows in `icon_data/analysis/analysis_dashboard/dashboard_data.json`.
 - As of the latest dashboard change, the dashboard sample is **up to 10 random icons from each dataset**, using fixed `RANDOM_SEED = 42` in `code/build_analysis_dashboard.py`.
 - The dashboard currently supports:
-  - four views: Clustering, Feature Groups, Feature Values, and Feature Review;
+  - five views: Clustering, Feature Groups, Feature Values, Feature Review, and AI Clustering;
   - image, metadata, and combined feature variants;
   - k-means and hierarchical clustering;
   - k/cut values 3, 5, 7, and 10;
   - a Color By selector for cluster, set, or numeric image feature, although the current image-overlay renderer does not visibly apply the selected color;
   - filtering by icon set;
   - selected icon details and cluster summaries;
-  - a fullscreen Feature Groups detail workflow with one configured literature-backed representative per family, per-icon values, the average of the shown scores, and All/B/W/Red/Colored cohorts; configured defaults independently show up to 20 dataset-balanced icons drawn from the complete certain-mask corpus, sorted low-to-high by the representative value, and can be refreshed with **Randomize icons**; selecting exactly three current-sample icons opens a separate fullscreen comparison modal across all seven representatives; the 81-feature registry remains available, while the default code-only analysis preset uses these seven representatives;
+  - a fullscreen Feature Groups detail workflow with one configured literature-backed representative per family, per-icon values, the average of the shown scores, and All/B/W/Red/Colored cohorts; configured defaults divide each eligible representative-value range into 10 equal-width bins and randomly draw up to two icons per bin from the complete certain-mask corpus, preserve genuine zeros, flag low-information cohorts, sort low-to-high by the representative value, and can be refreshed with **Randomize icons**; Image and AI Clustering use the unique composite of all seven family samples, normally 140 icons for All, and Randomize replaces only the active family's contribution; selecting exactly three current-sample icons opens a separate fullscreen comparison modal across all seven representatives; the 81-feature registry remains available, while the default code-only analysis preset uses these seven representatives;
   - a Feature Values tab restricted to the seven configured Feature Groups representative features, one per visual family, with searchable low/mean-nearest/high examples and correlation context.
-  - browser-session representative selectors in Feature Groups; exploratory overrides affect Feature Groups only and use the 129-row clustering sample for family details because the compact full-corpus payload carries only the configured seven representatives. The Clustering sidebar and Color-by feature choices are independently restricted to the seven code-selected analysis features.
+  - browser-session representative selectors in Feature Groups; exploratory overrides live-synchronize the corresponding feature in the Clustering sidebar, Color-by choices, and browser-recomputed Image clustering while preserving that family's checked/unchecked state. Overrides use the 129-row clustering sample for family details because the compact full-corpus payload carries only the configured seven representatives; reload restores the seven code-selected defaults.
+  - explicit OpenRouter image-embedding clustering for the exact shared family/cohort sample, with side-by-side plots, agreement metrics, hash-keyed embedding cache, and saved run history. The server-only default model is `voyageai/voyage-multimodal-3.5`.
 - Existing similarity outputs in `icon_data/analysis/similarity/` remain based on the earlier 1,038-row pilot. Do not run the current quadratic pairwise implementation directly on all 28,749 rows without a scalable rewrite.
 - Extraction, similarity, evaluation benchmark generation, and dashboard image-feature clustering share the typed authority in `code/thesis_pipeline/features/registry.py`. `ANALYSIS_FEATURE_PRESET = "representatives"` is the code-only switch that currently selects the seven family representatives for dashboard analysis and similarity; changing it to `"full_registry"` restores all 81 active family features. Excluded raw channels are never used.
 - The 7 thesis PDFs have extracted page-marked text under `papers/extracted_text/`; regenerate with `code/extract_paper_text.py`.
 - Static feature visualizations under `icon_data/analysis/visualizations/` are summary-only when `matplotlib` is unavailable in the runtime. The interactive Plotly dashboard is the stronger current visual interface.
 - Treat `THESIS_STATUS.md`, `icon_data/analysis/README.md`, generated metadata JSON files, and current scripts as the source of truth for current state.
+- AI Clustering uses the official OpenRouter Python SDK; install `requirements-ai-clustering.txt` and place the key in the ignored repository-root `.env` file or the server environment.
 - `source.md` is tracked historically but may be deleted in the working tree. Do not restore it unless explicitly asked; use `git show HEAD:source.md` for its last committed content.
 
 ## Runtime Notes
@@ -98,16 +101,16 @@ python code/compute_icon_similarity.py
 
 The verified Windows Python has NumPy/Pandas/Pillow and pytest, but currently lacks `pdfplumber`. Matplotlib and OpenCV remain optional for selected workflows. Current similarity, dashboard, and PCA helpers do not require `sklearn`. `code/visualize_icon_features.py` writes a summary-only report if `matplotlib` is missing. See `wiki/commands-and-scripts.md` and `wiki/verification-and-troubleshooting.md` for current commands and dependency notes.
 
-For static dashboard verification:
+For full dashboard verification, including the local API:
 
 ```powershell
-python -m http.server 8765 --bind 127.0.0.1
+python code/serve_analysis_dashboard.py --port 8765
 ```
 
 Then open:
 
 ```text
-http://127.0.0.1:8765/icon_data/analysis/analysis_dashboard/index.html
+http://127.0.0.1:8765/
 ```
 
 ## Python Code Organization Rules
@@ -243,7 +246,7 @@ Current dashboard sample:
 - Up to 10 random icons per dataset.
 - Fixed seed: `RANDOM_SEED = 42`.
 - Change the per-dataset sample size in `PER_SET_SAMPLE_SIZE` inside `code/build_analysis_dashboard.py`, then regenerate.
-- This 129-row sample is primarily for Clustering. With configured representatives, Feature Groups uses a separate compact pool containing only rows with a certain foreground mask (currently 28,260 of 28,749) and draws up to 20 transient dataset-balanced icons independently for each family and color treatment. If a browser-session representative override is active, Feature Groups temporarily falls back to the 129-row clustering sample because it contains all selectable feature values.
+- The generated 129-row sample supplies Metadata/Combined projections and the fallback for exploratory representative overrides. Default Image Clustering uses a seven-family composite: up to 20 unique equal-width-stratified icons per family, normally 140 for All. A family's draw excludes icons already assigned to the other cached family draws. Cohort changes rebuild the composite for that cohort, and **Randomize icons** replaces only the active family's contribution. Valid zeros remain eligible; missing/non-finite values do not become zeros, and low-information cohorts are labeled in the UI.
 
 ## Script Map
 

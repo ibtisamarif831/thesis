@@ -48,7 +48,7 @@ flowchart LR
 
 ## Current Snapshot
 
-Verified on **2026-07-28** from the current CSV and JSON artifacts:
+Verified on **2026-08-03** from the current CSV and JSON artifacts:
 
 | Item | Current value |
 |---|---:|
@@ -59,14 +59,16 @@ Verified on **2026-07-28** from the current CSV and JSON artifacts:
 | Feature CSV columns | 133 total: 23 metadata + 110 raw numeric features (schema v2) |
 | Active visual features | 81 |
 | Active visual families | 7 |
-| Feature Groups representatives | 7 configured defaults, one per family; browser-session overrides synchronize Clustering |
+| Feature Groups representatives | 7 configured defaults, one per family; browser-session overrides live-synchronize Image Clustering controls and computation |
 | Complexity representative | Canny edge density; grayscale quadtree remains an active secondary feature |
 | Feature Values features | The 7 configured Feature Groups representatives |
 | Feature-v2 release gate | Blocked pending completion of the frozen two-rater benchmark |
-| Feature Groups pilot sample | Defaults: up to 20 dataset-balanced icons per family from 28,260 certain-mask rows; exploratory overrides use the 129-row clustering sample |
+| Feature Groups pilot sample | Defaults: 10 equal-width bins across each eligible feature range, with up to 2 random icons per bin from 28,260 certain-mask rows; meaningful zeros remain valid and low-information cohorts are flagged; exploratory overrides use the 129-row clustering sample |
+| Image Clustering sample | Unique seven-family composite, up to 20 stratified icons per family; verified as 140 icons for the default All cohort |
 | Feature Groups comparison | Exactly 3 selected sample icons; all 7 representative values in a separate fullscreen modal |
-| Dashboard rows | 129 |
-| Dashboard sampling | Up to 10 random icons per set, seed 42 |
+| Generated dashboard rows | 129 for Metadata/Combined projections and exploratory-family fallback |
+| Generated dashboard sampling | Up to 10 random icons per set, seed 42 |
+| AI Clustering experiment | Exact shared Feature Groups sample; explicit OpenRouter image-embedding run; tracked SQLite cache/history |
 | Dashboard variants | Image, metadata, combined |
 | Dashboard cluster values | 3, 5, 7, 10 |
 | Human-response dataset | Not implemented yet |

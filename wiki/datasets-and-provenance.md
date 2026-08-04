@@ -85,7 +85,7 @@ Do not infer missing metadata from visual appearance without a documented rule. 
 
 ## Feature-Corpus Coverage
 
-The current `features.csv` covers all 28,749 canonical rows across all 13 sets. The verified run used neither `--limit` nor `--per-set-limit`, and `feature_failures.json` is empty. Dashboard clustering uses a separate deterministic 129-row sample; Feature Groups filters the corpus to the 28,260 certain-mask rows before building its compact pool for transient family samples of up to 20 icons and three-icon comparisons, as described in [Dashboard implementation](dashboard-implementation.md).
+The current `features.csv` covers all 28,749 canonical rows across all 13 sets. The verified run used neither `--limit` nor `--per-set-limit`, and `feature_failures.json` is empty. Feature Groups filters the corpus to the 28,260 certain-mask rows before building its compact pool for transient equal-width stratified family samples and three-icon comparisons. Image and AI Clustering use the unique composite of all seven family samples, normally 140 icons for the All cohort. The separate deterministic 129-row generated sample remains authoritative for Metadata/Combined projections and exploratory-representative fallback, as described in [Dashboard implementation](dashboard-implementation.md).
 
 ## Provenance and Legal Caveats
 

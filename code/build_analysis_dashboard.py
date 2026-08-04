@@ -17,6 +17,14 @@ import numpy as np
 import build_clustering_metadata_sample as metadata_helpers
 import extract_icon_features
 from thesis_pipeline.features import registry as feature_registry
+from thesis_pipeline.clustering import (
+    hierarchical_single_linkage_labels,
+    kmeans,
+    pairwise_distances,
+    pca_2d,
+    silhouette_proxy,
+    standardize,
+)
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -28,7 +36,9 @@ ASSETS_DIR = OUTPUT_DIR / "assets"
 PLOTLY_ASSET = ASSETS_DIR / "plotly.min.js"
 
 PER_SET_SAMPLE_SIZE = 10
-FEATURE_GROUP_SAMPLE_SIZE = 20
+FEATURE_GROUP_BIN_COUNT = 10
+FEATURE_GROUP_SAMPLES_PER_BIN = 2
+FEATURE_GROUP_SAMPLE_SIZE = FEATURE_GROUP_BIN_COUNT * FEATURE_GROUP_SAMPLES_PER_BIN
 FEATURE_GROUP_COMPARISON_SIZE = 3
 K_VALUES = (3, 5, 7, 10)
 PRIMARY_K = 7
@@ -245,11 +255,17 @@ def to_float(value: object, default: float = 0.0) -> float:
     return number
 
 
-def standardize(matrix: np.ndarray) -> tuple[np.ndarray, list[float], list[float]]:
-    means = matrix.mean(axis=0)
-    stds = matrix.std(axis=0)
-    stds = np.where(stds == 0, 1.0, stds)
-    return (matrix - means) / stds, means.tolist(), stds.tolist()
+def to_optional_float(value: object) -> float | None:
+    """Return a finite numeric value without turning missing data into a meaningful zero."""
+    if value is None or value == "":
+        return None
+    try:
+        number = float(value)
+    except (TypeError, ValueError):
+        return None
+    if math.isnan(number) or math.isinf(number):
+        return None
+    return number
 
 
 def finite_float(value: object) -> float:
@@ -662,136 +678,6 @@ def feature_matrices(rows: list[dict], feature_by_id: dict[str, dict]) -> dict[s
     }
 
 
-def pca_2d(matrix: np.ndarray) -> np.ndarray:
-    centered = matrix - matrix.mean(axis=0)
-    if centered.shape[1] == 1:
-        return np.column_stack([centered[:, 0], np.zeros(len(centered))])
-    _, _, vt = np.linalg.svd(centered, full_matrices=False)
-    components = vt[:2].T
-    coords = centered @ components
-    if coords.shape[1] == 1:
-        coords = np.column_stack([coords[:, 0], np.zeros(len(coords))])
-    return coords[:, :2]
-
-
-def kmeans(matrix: np.ndarray, k: int, seed: int, iterations: int = 80) -> tuple[np.ndarray, np.ndarray]:
-    rng = np.random.default_rng(seed + k)
-    if k >= len(matrix):
-        labels = np.arange(len(matrix), dtype=int)
-        return labels, matrix.copy()
-    centers = matrix[rng.choice(len(matrix), size=k, replace=False)].copy()
-    labels = np.zeros(len(matrix), dtype=int)
-    for _ in range(iterations):
-        distances = squared_distances(matrix, centers)
-        new_labels = distances.argmin(axis=1)
-        if np.array_equal(labels, new_labels):
-            break
-        labels = new_labels
-        for cluster in range(k):
-            members = matrix[labels == cluster]
-            if len(members):
-                centers[cluster] = members.mean(axis=0)
-            else:
-                centers[cluster] = matrix[rng.integers(0, len(matrix))]
-    return labels, centers
-
-
-def squared_distances(a: np.ndarray, b: np.ndarray) -> np.ndarray:
-    return ((a[:, None, :] - b[None, :, :]) ** 2).sum(axis=2)
-
-
-def silhouette_proxy(matrix: np.ndarray, labels: np.ndarray, centers: np.ndarray) -> float:
-    own = np.linalg.norm(matrix - centers[labels], axis=1)
-    distances = np.linalg.norm(matrix[:, None, :] - centers[None, :, :], axis=2)
-    if centers.shape[0] > 1:
-        distances[np.arange(len(matrix)), labels] = np.inf
-        nearest_other = distances.min(axis=1)
-    else:
-        nearest_other = np.zeros(len(matrix))
-    denom = np.maximum(own, nearest_other)
-    scores = np.where(denom > 0, (nearest_other - own) / denom, 0.0)
-    return float(scores.mean())
-
-
-def pairwise_distances(matrix: np.ndarray) -> np.ndarray:
-    norms = (matrix**2).sum(axis=1)
-    squared = norms[:, None] + norms[None, :] - 2 * matrix @ matrix.T
-    squared = np.maximum(squared, 0.0)
-    return np.sqrt(squared)
-
-
-def hierarchical_single_linkage_labels(matrix: np.ndarray, k_values: tuple[int, ...]) -> dict[int, np.ndarray]:
-    distances = pairwise_distances(matrix)
-    edges = []
-    for i in range(len(matrix)):
-        row = distances[i, i + 1 :]
-        for offset, distance in enumerate(row, start=i + 1):
-            edges.append((float(distance), i, offset))
-    edges.sort(key=lambda item: item[0])
-
-    parent = list(range(len(matrix)))
-    size = [1] * len(matrix)
-    mst_edges = []
-
-    def find(item: int) -> int:
-        while parent[item] != item:
-            parent[item] = parent[parent[item]]
-            item = parent[item]
-        return item
-
-    for distance, left, right in edges:
-        root_left = find(left)
-        root_right = find(right)
-        if root_left == root_right:
-            continue
-        if size[root_left] < size[root_right]:
-            root_left, root_right = root_right, root_left
-        parent[root_right] = root_left
-        size[root_left] += size[root_right]
-        mst_edges.append((distance, left, right))
-        if len(mst_edges) == len(matrix) - 1:
-            break
-
-    labels_by_k = {}
-    for k in k_values:
-        labels_by_k[k] = labels_from_mst(len(matrix), mst_edges, k)
-    return labels_by_k
-
-
-def labels_from_mst(node_count: int, mst_edges: list[tuple[float, int, int]], k: int) -> np.ndarray:
-    kept_edges = sorted(mst_edges, key=lambda item: item[0])[: max(0, node_count - k)]
-    parent = list(range(node_count))
-    size = [1] * node_count
-
-    def find(item: int) -> int:
-        while parent[item] != item:
-            parent[item] = parent[parent[item]]
-            item = parent[item]
-        return item
-
-    def union(left: int, right: int) -> None:
-        root_left = find(left)
-        root_right = find(right)
-        if root_left == root_right:
-            return
-        if size[root_left] < size[root_right]:
-            root_left, root_right = root_right, root_left
-        parent[root_right] = root_left
-        size[root_left] += size[root_right]
-
-    for _, left, right in kept_edges:
-        union(left, right)
-
-    cluster_index: dict[int, int] = {}
-    labels = np.zeros(node_count, dtype=int)
-    for item in range(node_count):
-        root = find(item)
-        if root not in cluster_index:
-            cluster_index[root] = len(cluster_index)
-        labels[item] = cluster_index[root]
-    return labels
-
-
 def representative_indices(matrix: np.ndarray, labels: np.ndarray, limit: int = 8) -> dict[int, list[int]]:
     representatives: dict[int, list[int]] = {}
     for cluster in sorted(set(labels.tolist())):
@@ -924,6 +810,10 @@ def build_feature_group_records(feature_rows: list[dict]) -> list[dict]:
         mask_is_uncertain = str(row.get("mask_is_uncertain", "")).strip().lower() == "true"
         if not row.get("icon_id") or not normalized_path or mask_is_uncertain:
             continue
+        image_features = {}
+        for column in value_columns:
+            value = to_optional_float(row.get(column))
+            image_features[column] = round(value, 6) if value is not None else None
         records.append(
             {
                 "icon_id": row["icon_id"],
@@ -936,9 +826,7 @@ def build_feature_group_records(feature_rows: list[dict]) -> list[dict]:
                 "mask_border_contact": round(to_float(row.get("mask_border_contact")), 6),
                 "mask_confidence": round(to_float(row.get("mask_confidence")), 6),
                 "mask_is_uncertain": False,
-                "image_features": {
-                    column: round(to_float(row.get(column)), 6) for column in value_columns
-                },
+                "image_features": image_features,
             }
         )
     return records
@@ -979,7 +867,9 @@ def write_dashboard_data(rows: list[dict], feature_by_id: dict[str, dict], matri
             "row_count": len(records),
             "per_set_sample_size": PER_SET_SAMPLE_SIZE,
             "feature_group_sample_size": FEATURE_GROUP_SAMPLE_SIZE,
-            "feature_group_sampling": "dataset_balanced_two_stage",
+            "feature_group_sampling": "equal_width_stratified_random",
+            "feature_group_bin_count": FEATURE_GROUP_BIN_COUNT,
+            "feature_group_samples_per_bin": FEATURE_GROUP_SAMPLES_PER_BIN,
             "feature_group_excludes_uncertain_masks": True,
             "feature_group_source": feature_group_source,
             "feature_group_source_row_count": len(feature_group_records),
@@ -1153,6 +1043,9 @@ def write_index_html() -> None:
     .family-sample-average span {{ color: #18202f; font-size: 12px; font-weight: 650; }}
     .family-sample-average small {{ margin-top: 2px; color: var(--muted); font-size: 11px; font-weight: 400; }}
     .family-sample-average code {{ color: #18202f; font-size: 19px; font-weight: 700; font-variant-numeric: tabular-nums; }}
+    .family-value-quality {{ margin: 0 0 12px; padding: 9px 11px; border: 1px solid #cddfeb; border-radius: 6px; background: #f3f9fd; color: #294b61; font-size: 11px; line-height: 1.45; }}
+    .family-value-quality.low-information {{ border-color: #ead7a2; background: #fff9e8; color: #674f12; }}
+    .family-value-quality b {{ color: #18202f; }}
     .family-icon-grid {{ display: grid; grid-template-columns: repeat(auto-fill, minmax(112px, 1fr)); gap: 10px; }}
     .family-icon {{ min-width: 0; padding: 8px; border: 1px solid var(--border); border-radius: 6px; background: #fbfcfe; }}
     .family-icon.selected {{ border-color: #a000a8; box-shadow: 0 0 0 2px rgba(160,0,168,.12); background: #fffaff; }}
@@ -1260,6 +1153,28 @@ def write_index_html() -> None:
     .correlation-item button {{ margin: 3px 0; border: 0; background: transparent; padding: 0; color: #18202f; font-weight: 650; text-align: left; }}
     .correlation-item button:hover {{ background: transparent; text-decoration: underline; }}
     .correlation-item b {{ display: block; font-size: 13px; font-variant-numeric: tabular-nums; }}
+    .ai-clustering {{ padding: 18px; }}
+    .ai-header {{ display: flex; align-items: start; justify-content: space-between; gap: 18px; margin-bottom: 14px; }}
+    .ai-header h2 {{ margin: 0 0 5px; font-size: 20px; text-transform: none; letter-spacing: 0; color: #18202f; }}
+    .ai-header p {{ margin: 0; max-width: 780px; color: var(--muted); font-size: 13px; line-height: 1.45; }}
+    .ai-run {{ background: #18202f; color: white; border-color: #18202f; font-weight: 650; white-space: nowrap; }}
+    .ai-run:disabled {{ opacity: .45; cursor: not-allowed; }}
+    .ai-status {{ border: 1px solid var(--border); background: var(--panel); border-radius: 7px; padding: 10px 12px; margin-bottom: 14px; font-size: 13px; }}
+    .ai-status[data-kind="stale"] {{ border-color: #d69e2e; background: #fffaf0; }}
+    .ai-status[data-kind="error"] {{ border-color: #c53030; background: #fff5f5; }}
+    .ai-facts, .ai-metrics {{ display: grid; grid-template-columns: repeat(4, minmax(130px, 1fr)); gap: 8px; margin-bottom: 14px; }}
+    .ai-fact {{ border: 1px solid var(--border); border-radius: 6px; padding: 9px; min-width: 0; }}
+    .ai-fact span {{ display: block; color: var(--muted); font-size: 11px; text-transform: uppercase; }}
+    .ai-fact b {{ display: block; margin-top: 3px; overflow-wrap: anywhere; }}
+    .ai-plots {{ display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; margin-bottom: 14px; }}
+    .ai-panel {{ border: 1px solid var(--border); border-radius: 7px; overflow: hidden; }}
+    .ai-panel h3 {{ margin: 0; padding: 9px 11px; border-bottom: 1px solid var(--border); font-size: 14px; }}
+    .ai-plot {{ height: 480px; }}
+    .ai-lower {{ display: grid; grid-template-columns: minmax(300px, .8fr) minmax(480px, 1.2fr); gap: 12px; }}
+    .ai-table-wrap {{ overflow: auto; }}
+    .ai-table th, .ai-table td {{ padding: 7px 8px; border-bottom: 1px solid #edf0f4; text-align: left; }}
+    .ai-table th {{ background: var(--panel); font-size: 11px; }}
+    .ai-table td:last-child {{ text-align: left; }}
     @media (max-width: 980px) {{
       #clusteringView.active {{ grid-template-columns: 1fr; }}
       aside, aside.right {{ max-height: none; border: 0; border-bottom: 1px solid var(--border); }}
@@ -1272,6 +1187,8 @@ def write_index_html() -> None:
       .family-detail-actions {{ width: 100%; justify-content: space-between; }}
       .explorer-stats {{ grid-template-columns: repeat(2, minmax(120px, 1fr)); }}
       .example-strip {{ grid-template-columns: repeat(2, minmax(120px, 1fr)); }}
+      .ai-plots, .ai-lower {{ grid-template-columns: 1fr; }}
+      .ai-facts, .ai-metrics {{ grid-template-columns: repeat(2, minmax(120px, 1fr)); }}
     }}
   </style>
 </head>
@@ -1284,6 +1201,7 @@ def write_index_html() -> None:
       <button type="button" data-view="featureGroups">Feature Groups</button>
       <button type="button" data-view="featureExplorer">Feature Values</button>
       <button type="button" data-view="featureReview">Feature Review</button>
+      <button type="button" data-view="aiClustering">AI Clustering</button>
     </nav>
   </header>
   <main id="clusteringView" class="view active">
@@ -1374,6 +1292,23 @@ def write_index_html() -> None:
       <span class="muted">Loading feature examples...</span>
     </div>
   </section>
+  <section id="aiClusteringView" class="view ai-clustering">
+    <div class="ai-header">
+      <div><h2>AI Clustering</h2><p>Compare feature-based clustering with image-embedding clustering for the same seven-family composite sample: up to 20 unique icons from each feature family. Metrics measure agreement only; they do not establish that either result is better.</p></div>
+      <button class="ai-run" id="aiRunButton" type="button" disabled>Run AI Clustering</button>
+    </div>
+    <div class="ai-status" id="aiStatus" aria-live="polite">Checking the local AI service...</div>
+    <div class="ai-facts" id="aiFacts"></div>
+    <div class="ai-plots">
+      <section class="ai-panel"><h3>Current feature-based clustering</h3><div class="ai-plot" id="aiFeatureScatter"></div></section>
+      <section class="ai-panel"><h3>AI image-embedding clustering</h3><div class="ai-plot" id="aiEmbeddingScatter"></div></section>
+    </div>
+    <div class="ai-metrics" id="aiMetrics"></div>
+    <div class="ai-lower">
+      <section class="ai-panel"><h3>Feature versus AI cross-table</h3><div class="ai-table-wrap" id="aiCrossTable"></div></section>
+      <section class="ai-panel"><h3>Recent runs</h3><div class="ai-table-wrap" id="aiRecentRuns"></div></section>
+    </div>
+  </section>
   <div id="familyDetailModal" class="family-detail-modal" role="presentation" aria-hidden="true">
     <section class="family-detail-dialog" role="dialog" aria-modal="true" aria-labelledby="familyDetailTitle">
       <header class="family-detail-header">
@@ -1414,8 +1349,9 @@ def write_index_html() -> None:
     let familyDetailReturnFocus = null;
     let familyComparisonReturnFocus = null;
     let familyComparisonIds = new Set();
+    let sharedSampleFamilyId = null;
+    let sharedSampleColorMode = "all";
     const familySamples = new Map();
-    const familySamplingStates = new Map();
     const representativeFeaturesByFamily = new Map();
     const computedCache = new Map();
 
@@ -1439,12 +1375,15 @@ def write_index_html() -> None:
       search: "",
       selectedFeatureId: null
     }};
+    const aiState = {{service: null, currentRun: null, stale: true, running: false, error: null, recentRuns: []}};
 
     fetch("dashboard_data.json").then(r => r.json()).then(data => {{
       dashboard = data;
-      state.activeFeatures = new Set(configuredAnalysisFeatureIds());
       initializeRepresentativeFeatures();
+      state.activeFeatures = new Set(representativeFeatureIds());
+      sharedSampleFamilyId = visibleFeatureSections()[0]?.id || null;
       initializeControls();
+      initializeAiClustering();
       render();
     }});
 
@@ -1468,8 +1407,8 @@ def write_index_html() -> None:
       installToggleMultiSelect("setFilter", "setFilter");
 
       document.getElementById("variantSelect").addEventListener("change", e => {{ state.variant = e.target.value; render(); }});
-      document.getElementById("methodSelect").addEventListener("change", e => {{ state.method = e.target.value; renderMethodNote(); render(); }});
-      document.getElementById("kSelect").addEventListener("change", e => {{ state.k = e.target.value; render(); }});
+      document.getElementById("methodSelect").addEventListener("change", e => {{ state.method = e.target.value; markAiClusteringStale(); renderMethodNote(); render(); }});
+      document.getElementById("kSelect").addEventListener("change", e => {{ state.k = e.target.value; markAiClusteringStale(); render(); }});
       document.getElementById("colorSelect").addEventListener("change", e => {{ state.color = e.target.value; render(); }});
       document.getElementById("setFilter").addEventListener("change", e => {{
         state.setFilter = new Set(Array.from(e.target.selectedOptions).map(o => o.value));
@@ -1497,11 +1436,13 @@ def write_index_html() -> None:
       document.getElementById("featureGroupsView").classList.toggle("active", view === "featureGroups");
       document.getElementById("featureReviewView").classList.toggle("active", view === "featureReview");
       document.getElementById("featureExplorerView").classList.toggle("active", view === "featureExplorer");
+      document.getElementById("aiClusteringView").classList.toggle("active", view === "aiClustering");
       hideHoverPreview();
       if (view === "clustering") render();
       if (view === "featureGroups") renderFeatureGroups();
       if (view === "featureReview") renderFeatureReview();
       if (view === "featureExplorer") renderFeatureExplorer();
+      if (view === "aiClustering") renderAiClustering();
     }}
 
     function initializeFeatureReviewControls() {{
@@ -1562,17 +1503,11 @@ def write_index_html() -> None:
       return visibleFeatureSections().flatMap(section => section.features.map(feature => feature.id));
     }}
 
-    function configuredAnalysisFeatureIds() {{
-      const configured = dashboard.metadata.image_feature_columns || [];
-      return configured.length ? configured : visibleFeatureIds();
-    }}
-
     function clusteringFeatureSections() {{
-      const allowed = new Set(configuredAnalysisFeatureIds());
       return visibleFeatureSections()
         .map(section => ({{
           ...section,
-          features: section.features.filter(feature => allowed.has(feature.id))
+          features: representativeFeature(section) ? [representativeFeature(section)] : []
         }}))
         .filter(section => section.features.length);
     }}
@@ -1582,7 +1517,7 @@ def write_index_html() -> None:
     }}
 
     function selectedFeatureIds() {{
-      const ordered = configuredAnalysisFeatureIds().filter(feature => state.activeFeatures.has(feature));
+      const ordered = representativeFeatureIds().filter(feature => state.activeFeatures.has(feature));
       return ordered;
     }}
 
@@ -1622,14 +1557,23 @@ def write_index_html() -> None:
     function updateRepresentativeFeature(familyId, featureId) {{
       const section = sectionById(familyId);
       if (!section || !section.features.some(feature => feature.id === featureId)) return;
+      const previousFeature = representativeFeature(section);
+      const wasActiveInClustering = previousFeature && state.activeFeatures.has(previousFeature.id);
       representativeFeaturesByFamily.set(familyId, featureId);
+      if (previousFeature) state.activeFeatures.delete(previousFeature.id);
+      if (wasActiveInClustering) state.activeFeatures.add(featureId);
+      if (previousFeature && state.color === previousFeature.id) state.color = featureId;
       Array.from(familySamples.keys())
         .filter(key => key.startsWith(`${{familyId}}:`))
         .forEach(key => familySamples.delete(key));
       familyComparisonIds.clear();
       computedCache.clear();
+      markAiClusteringStale();
+      renderFeatureControls();
+      fillColorSelect("colorSelect", state.color);
       renderFeatureGroups();
       if (activeFamilyId === familyId) renderFamilyDetail();
+      render();
     }}
 
     function renderFeatureControls() {{
@@ -1669,7 +1613,7 @@ def write_index_html() -> None:
         if (!button) return;
         const preset = button.dataset.featurePreset;
         const section = clusteringSectionById(preset);
-        setActiveFeatures(preset === "all" ? configuredAnalysisFeatureIds() : section.features.map(feature => feature.id));
+        setActiveFeatures(preset === "all" ? representativeFeatureIds() : section.features.map(feature => feature.id));
       }});
 
       checks.addEventListener("click", event => {{
@@ -1689,6 +1633,7 @@ def write_index_html() -> None:
         if (!event.target.classList.contains("feature-toggle")) return;
         state.activeFeatures = new Set(Array.from(checks.querySelectorAll(".feature-toggle:checked")).map(input => input.value));
         computedCache.clear();
+        markAiClusteringStale();
         render();
       }});
 
@@ -1810,6 +1755,7 @@ def write_index_html() -> None:
         if (!activeFamilyId) return;
         familyComparisonIds.clear();
         replaceFamilySample(activeFamilyId, familyColorMode);
+        setSharedClusteringSample(activeFamilyId, familyColorMode);
         renderFamilyDetail();
         document.getElementById("familyRandomize").focus();
       }});
@@ -1840,10 +1786,18 @@ def write_index_html() -> None:
       return orientationConfidence(record) >= threshold;
     }}
 
+    function representativeValue(record, featureId) {{
+      const rawValue = (record.image_features || {{}})[featureId];
+      if (rawValue === null || rawValue === undefined || rawValue === "") return null;
+      const value = Number(rawValue);
+      return Number.isFinite(value) ? value : null;
+    }}
+
     function representativeRecordIsEligible(familyId, record) {{
       const section = visibleFeatureSections().find(item => item.id === familyId);
       if (!section) return false;
       const selectedFeature = representativeFeature(section);
+      if (representativeValue(record, selectedFeature.id) === null) return false;
       return selectedFeature.id !== "principal_axis_orientation_v2" || hasDefinedOrientation(record);
     }}
 
@@ -1870,6 +1824,19 @@ def write_index_html() -> None:
       return `${{familyId}}:${{colorMode}}`;
     }}
 
+    function setSharedClusteringSample(familyId, colorMode) {{
+      sharedSampleFamilyId = familyId;
+      sharedSampleColorMode = colorMode;
+      selectedIconId = null;
+      computedCache.clear();
+      markAiClusteringStale();
+    }}
+
+    function clusteringRecords() {{
+      if (state.variant !== "image" || !sharedSampleFamilyId) return dashboard.records || [];
+      return combinedFamilySample(sharedSampleColorMode);
+    }}
+
     function randomSample(records, limit) {{
       const shuffled = records.slice();
       for (let index = 0; index < Math.min(limit, shuffled.length); index += 1) {{
@@ -1879,64 +1846,97 @@ def write_index_html() -> None:
       return shuffled.slice(0, limit);
     }}
 
-    function familySamplingState(key) {{
-      if (!familySamplingStates.has(key)) {{
-        familySamplingStates.set(key, {{
-          datasetDrawCounts: new Map(),
-          iconQueues: new Map(),
-        }});
-      }}
-      return familySamplingStates.get(key);
+    function quantile(sortedValues, fraction) {{
+      if (!sortedValues.length) return null;
+      const position = Math.min(sortedValues.length - 1, Math.max(0, (sortedValues.length - 1) * fraction));
+      const lower = Math.floor(position);
+      const upper = Math.ceil(position);
+      if (lower === upper) return sortedValues[lower];
+      return sortedValues[lower] + (sortedValues[upper] - sortedValues[lower]) * (position - lower);
     }}
 
-    function drawDatasetBalancedSample(population, limit, key) {{
-      const recordsByDataset = new Map();
-      population.forEach(record => {{
-        const dataset = record.set_name || "Unknown dataset";
-        if (!recordsByDataset.has(dataset)) recordsByDataset.set(dataset, []);
-        recordsByDataset.get(dataset).push(record);
-      }});
-      const state = familySamplingState(key);
-      const sampleDatasetCounts = new Map();
-      const sample = [];
-      const targetSize = Math.min(limit, population.length);
+    function axialMeanDegrees(values) {{
+      if (!values.length) return 0;
+      const doubled = values.map(value => value * 2 * Math.PI / 180);
+      const angle = Math.atan2(
+        doubled.reduce((total, value) => total + Math.sin(value), 0),
+        doubled.reduce((total, value) => total + Math.cos(value), 0)
+      ) / 2 * 180 / Math.PI;
+      return (angle + 180) % 180;
+    }}
 
-      while (sample.length < targetSize) {{
-        const availableDatasets = Array.from(recordsByDataset)
-          .filter(([dataset, records]) => (sampleDatasetCounts.get(dataset) || 0) < records.length)
-          .map(([dataset]) => dataset);
-        if (!availableDatasets.length) break;
+    function axialOffsetDegrees(value, center) {{
+      return ((value - center + 270) % 180) - 90;
+    }}
 
-        const minimumSampleCount = Math.min(
-          ...availableDatasets.map(dataset => sampleDatasetCounts.get(dataset) || 0)
-        );
-        const leastUsedInSample = availableDatasets.filter(
-          dataset => (sampleDatasetCounts.get(dataset) || 0) === minimumSampleCount
-        );
-        const minimumSessionCount = Math.min(
-          ...leastUsedInSample.map(dataset => state.datasetDrawCounts.get(dataset) || 0)
-        );
-        const balancedCandidates = leastUsedInSample.filter(
-          dataset => (state.datasetDrawCounts.get(dataset) || 0) === minimumSessionCount
-        );
-        const dataset = balancedCandidates[Math.floor(Math.random() * balancedCandidates.length)];
-        const datasetRecords = recordsByDataset.get(dataset);
-        let iconQueue = state.iconQueues.get(dataset) || [];
-        if (!iconQueue.length) iconQueue = randomSample(datasetRecords, datasetRecords.length);
-        const record = iconQueue.shift();
-        state.iconQueues.set(dataset, iconQueue);
-        sample.push(record);
-        sampleDatasetCounts.set(dataset, (sampleDatasetCounts.get(dataset) || 0) + 1);
-        state.datasetDrawCounts.set(dataset, (state.datasetDrawCounts.get(dataset) || 0) + 1);
+    function representativeValueProfile(population, featureId) {{
+      const values = population
+        .map(record => representativeValue(record, featureId))
+        .filter(value => value !== null)
+        .sort((left, right) => left - right);
+      if (!values.length) return {{count: 0, distinctCount: 0, minimum: null, maximum: null, robustSpan: 0, informative: false}};
+      const resolution = featureId === "principal_axis_orientation_v2" ? 1 : 0.001;
+      const isOrientation = featureId === "principal_axis_orientation_v2";
+      const orientationBinCount = Math.round(180 / resolution);
+      const distinctCount = new Set(values.map(value => {{
+        const rounded = Math.round((isOrientation ? ((value % 180) + 180) % 180 : value) / resolution);
+        return isOrientation ? rounded % orientationBinCount : rounded;
+      }})).size;
+      let robustSpan = Number(quantile(values, 0.90)) - Number(quantile(values, 0.10));
+      let informative = distinctCount >= 3 && robustSpan >= resolution * 2;
+      if (isOrientation) {{
+        const doubled = values.map(value => value * 2 * Math.PI / 180);
+        const meanSin = doubled.reduce((total, value) => total + Math.sin(value), 0) / doubled.length;
+        const meanCos = doubled.reduce((total, value) => total + Math.cos(value), 0) / doubled.length;
+        robustSpan = 1 - Math.hypot(meanSin, meanCos);
+        const twoDegreeAxialDispersion = 1 - Math.cos(4 * Math.PI / 180);
+        informative = distinctCount >= 3 && robustSpan >= twoDegreeAxialDispersion;
       }}
-      return sample;
+      return {{
+        count: values.length,
+        distinctCount,
+        minimum: values[0],
+        maximum: values[values.length - 1],
+        robustSpan,
+        informative,
+      }};
+    }}
+
+    function drawEqualWidthStratifiedSample(population, featureId) {{
+      const binCount = Number(dashboard.metadata.feature_group_bin_count || 10);
+      const samplesPerBin = Number(dashboard.metadata.feature_group_samples_per_bin || 2);
+      const valuedRecords = population
+        .map(record => ({{record, value: representativeValue(record, featureId)}}))
+        .filter(item => item.value !== null);
+      if (!valuedRecords.length) return [];
+      const minimum = Math.min(...valuedRecords.map(item => item.value));
+      const maximum = Math.max(...valuedRecords.map(item => item.value));
+      const bins = Array.from({{length: binCount}}, () => []);
+      if (maximum === minimum) {{
+        bins[0] = valuedRecords.map(item => item.record);
+      }} else {{
+        const width = (maximum - minimum) / binCount;
+        valuedRecords.forEach(item => {{
+          const bin = Math.min(binCount - 1, Math.floor((item.value - minimum) / width));
+          bins[bin].push(item.record);
+        }});
+      }}
+      return bins.flatMap(bin => randomSample(bin, samplesPerBin));
     }}
 
     function replaceFamilySample(familyId, colorMode) {{
-      const population = familyPopulation(familyId, colorMode);
-      const limit = Number(dashboard.metadata.feature_group_sample_size || 20);
+      const usedIconIds = new Set();
+      visibleFeatureSections().forEach(section => {{
+        if (section.id === familyId) return;
+        const sample = familySamples.get(familySampleKey(section.id, colorMode)) || [];
+        sample.forEach(record => usedIconIds.add(record.icon_id));
+      }});
+      const population = familyPopulation(familyId, colorMode)
+        .filter(record => !usedIconIds.has(record.icon_id));
       const key = familySampleKey(familyId, colorMode);
-      const sample = drawDatasetBalancedSample(population, limit, key);
+      const section = visibleFeatureSections().find(item => item.id === familyId);
+      const selectedFeature = representativeFeature(section);
+      const sample = drawEqualWidthStratifiedSample(population, selectedFeature.id);
       familySamples.set(key, sample);
       return sample;
     }}
@@ -1946,10 +1946,18 @@ def write_index_html() -> None:
       return familySamples.get(key) || replaceFamilySample(familyId, colorMode);
     }}
 
+    function combinedFamilySample(colorMode) {{
+      const records = visibleFeatureSections()
+        .flatMap(section => currentFamilySample(section.id, colorMode));
+      const uniqueRecords = new Map(records.map(record => [record.icon_id, record]));
+      return Array.from(uniqueRecords.values());
+    }}
+
     function openFamilyDetail(familyId, trigger) {{
       const section = visibleFeatureSections().find(item => item.id === familyId);
       if (!section) return;
       activeFamilyId = familyId;
+      setSharedClusteringSample(familyId, familyColorMode);
       familyComparisonIds.clear();
       familyDetailReturnFocus = trigger || document.activeElement;
       const modal = document.getElementById("familyDetailModal");
@@ -2025,9 +2033,9 @@ def write_index_html() -> None:
                   return `<tr class="${{compareSection.id === activeFamilyId ? "current-family" : ""}}">
                     <td>${{escapeHtml(compareSection.human_category || compareSection.title)}}<br><span class="feature-id">${{escapeHtml(compareFeature.label)}}</span></td>
                     ${{selectedRecords.map(record => {{
-                      const value = Number((record.image_features || {{}})[compareFeature.id]);
+                      const value = representativeValue(record, compareFeature.id);
                       if (compareIsOrientation && orientationConfidence(record) < orientationThreshold) return "<td>Undefined</td>";
-                      return `<td>${{Number.isFinite(value) ? formatFeatureValue(value) : "—"}}${{compareIsOrientation && Number.isFinite(value) ? "°" : ""}}</td>`;
+                      return `<td>${{value !== null ? formatFeatureValue(value) : "—"}}${{compareIsOrientation && value !== null ? "°" : ""}}</td>`;
                     }}).join("")}}
                   </tr>`;
                 }}).join("")}}
@@ -2059,6 +2067,7 @@ def write_index_html() -> None:
       document.querySelectorAll("#familyColorFilters button").forEach(button => {{
         button.addEventListener("click", () => {{
           familyColorMode = button.dataset.colorMode;
+          setSharedClusteringSample(activeFamilyId, familyColorMode);
           familyComparisonIds.clear();
           renderFamilyDetail();
           document.querySelector(`#familyColorFilters [data-color-mode="${{familyColorMode}}"]`).focus();
@@ -2066,6 +2075,7 @@ def write_index_html() -> None:
       }});
       const population = familyPopulation(activeFamilyId, familyColorMode);
       const isOrientation = selectedFeature.id === "principal_axis_orientation_v2";
+      const valueProfile = representativeValueProfile(population, selectedFeature.id);
       const orientationThreshold = Number(dashboard.metadata.orientation_confidence_threshold || 0.20);
       const records = currentFamilySample(activeFamilyId, familyColorMode)
         .slice()
@@ -2075,12 +2085,12 @@ def write_index_html() -> None:
             const rightDefined = orientationConfidence(right) >= orientationThreshold;
             if (leftDefined !== rightDefined) return leftDefined ? -1 : 1;
           }}
-          return Number(left.image_features[selectedFeature.id]) - Number(right.image_features[selectedFeature.id]);
+          return representativeValue(left, selectedFeature.id) - representativeValue(right, selectedFeature.id);
         }});
       const sampleValues = records
         .filter(record => !isOrientation || orientationConfidence(record) >= orientationThreshold)
-        .map(record => Number(record.image_features[selectedFeature.id]))
-        .filter(value => Number.isFinite(value));
+        .map(record => representativeValue(record, selectedFeature.id))
+        .filter(value => value !== null);
       let sampleAverage = null;
       if (sampleValues.length && isOrientation) {{
         const doubled = sampleValues.map(value => value * 2 * Math.PI / 180);
@@ -2094,9 +2104,12 @@ def write_index_html() -> None:
       }}
       const representedDatasets = new Set(records.map(record => record.set_name || "Unknown dataset")).size;
       document.getElementById("familyDetailCount").textContent =
-        `${{records.length}} dataset-balanced icons from ${{population.length}} matching · ${{representedDatasets}} datasets`;
+        `${{records.length}} stratified icons from ${{population.length}} matching · ${{representedDatasets}} datasets`;
       document.getElementById("familyRandomize").disabled = population.length <= records.length;
       const comparisonReady = familyComparisonIds.size === {FEATURE_GROUP_COMPARISON_SIZE};
+      const valueQualityNotice = valueProfile.informative
+        ? `<div class="family-value-quality"><b>Value-diverse sample.</b> Valid zero and near-zero measurements remain included. The minimum-to-maximum range is split into 10 equal-width bins, with up to 2 icons selected randomly from each bin.</div>`
+        : `<div class="family-value-quality low-information"><b>Low information in this cohort.</b> The valid measurements have too little spread for a useful low-to-high comparison. Meaningful zero and near-zero values are retained rather than treated as missing.</div>`;
       const icons = records.length ? `<div class="family-icon-grid">${{records.map(record => {{
         const confidence = orientationConfidence(record);
         const orientationUndefined = isOrientation && confidence < orientationThreshold;
@@ -2139,7 +2152,8 @@ def write_index_html() -> None:
             ${{usesConfiguredRepresentative ? `<p class="family-selected-citation">${{escapeHtml(section.representative_citation || "")}}</p>` : ""}}
           </div>
         </section>
-        <div class="family-icon-heading"><h3>${{records.length}}-icon pilot sample</h3><span class="muted">Balanced across eligible datasets, then ${{isOrientation ? "placed in angular order from 0Â° to 180Â°; only confidence-defined orientations are shown" : `ordered by ${{escapeHtml(selectedFeature.label.toLowerCase())}}`}}.</span></div>
+        <div class="family-icon-heading"><h3>${{records.length}}-icon pilot sample</h3><span class="muted">Randomly sampled up to 2 per equal-width value bin, then ${{isOrientation ? "placed in angular order from 0Â° to 180Â°; only confidence-defined orientations are shown" : `ordered by ${{escapeHtml(selectedFeature.label.toLowerCase())}}`}}.</span></div>
+        ${{valueQualityNotice}}
         <div class="family-sample-average">
           <span>Average of shown icons<small>${{isOrientation ? `Axial circular mean of ${{sampleValues.length}} defined orientations from these ${{records.length}} icons` : `Arithmetic mean ${{escapeHtml(selectedFeature.label.toLowerCase())}} across these ${{sampleValues.length}} icons`}}</small></span>
           <code id="familySampleAverage">${{sampleAverage === null ? "—" : formatFeatureValue(sampleAverage)}}</code>
@@ -2165,10 +2179,11 @@ def write_index_html() -> None:
     }}
 
     function setActiveFeatures(featureIds) {{
-      const allowed = new Set(configuredAnalysisFeatureIds());
+      const allowed = new Set(representativeFeatureIds());
       state.activeFeatures = new Set(featureIds.filter(featureId => allowed.has(featureId)));
       syncFeatureCheckboxes();
       computedCache.clear();
+      markAiClusteringStale();
       render();
     }}
 
@@ -2438,10 +2453,14 @@ def write_index_html() -> None:
         renderNoFeatureSelection();
         return;
       }}
+      const records = clusteringRecords();
+      document.getElementById("datasetSummary").textContent = state.variant === "image"
+        ? `${{records.length}} shared icons · ${{visibleFeatureSections().length}} feature families · ${{title(sharedSampleColorMode)}}`
+        : `${{dashboard.metadata.row_count}} icons, ${{dashboard.metadata.per_set_sample_size}} random per dataset`;
       const projection = getProjection();
       const labels = projection.labels;
       const coords = projection.coords;
-      const filtered = dashboard.records.map((record, index) => ({{record, index}})).filter(item => passesFilters(item.record));
+      const filtered = records.map((record, index) => ({{record, index}})).filter(item => passesFilters(item.record));
       const customData = filtered.map(item => [item.record.icon_id]);
       const plotPoints = filtered.map(item => [coords[item.index][0], coords[item.index][1]]);
       const ranges = plotRanges(plotPoints);
@@ -2469,8 +2488,8 @@ def write_index_html() -> None:
       document.getElementById("scatter").on("plotly_hover", event => {{
         const point = event.points[0];
         const iconId = point.customdata[0];
-        const record = dashboard.records.find(item => item.icon_id === iconId);
-        if (record) renderHoverPreview(record, labels[dashboard.records.indexOf(record)], event.event);
+        const record = records.find(item => item.icon_id === iconId);
+        if (record) renderHoverPreview(record, labels[records.indexOf(record)], event.event);
       }});
       document.getElementById("scatter").on("plotly_unhover", hideHoverPreview);
       renderDetail(labels);
@@ -2501,6 +2520,190 @@ def write_index_html() -> None:
         '<p class="muted">No feature-based clusters yet. Select features from the sidebar or use a preset.</p>';
     }}
 
+    async function initializeAiClustering() {{
+      document.getElementById("aiRunButton").addEventListener("click", runAiClustering);
+      try {{
+        const response = await fetch("/api/ai-clustering/status", {{cache: "no-store"}});
+        if (!response.ok) throw new Error("Local AI service is unavailable.");
+        aiState.service = await response.json();
+        await refreshAiRuns();
+      }} catch (error) {{
+        aiState.service = {{configured: false, model_id: "Unavailable", message: "Start code/serve_analysis_dashboard.py to enable this experiment."}};
+        aiState.error = error.message;
+      }}
+      renderAiClustering();
+    }}
+
+    function markAiClusteringStale() {{
+      aiState.stale = true;
+      if (reviewState.view === "aiClustering") renderAiClustering();
+    }}
+
+    function currentAiRecords() {{
+      if (!sharedSampleFamilyId) return [];
+      return combinedFamilySample(sharedSampleColorMode);
+    }}
+
+    function getImageProjection(records=currentAiRecords()) {{
+      const features = selectedFeatureIds();
+      if (!features.length || !records.length) return {{coords: [], labels: []}};
+      const key = `image|${{state.method}}|${{state.k}}|${{features.join(",")}}|${{records.map(record => record.icon_id).join(",")}}`;
+      if (computedCache.has(key)) return computedCache.get(key);
+      const matrix = standardize(records.map(record => features.map(feature => Number(record.image_features[feature] || 0))));
+      const effectiveK = Math.min(Number(state.k), records.length);
+      const projection = {{
+        coords: pca2d(matrix),
+        labels: state.method === "hierarchical" ? hierarchicalLabels(matrix, effectiveK) : kmeansLabels(matrix, effectiveK)
+      }};
+      computedCache.set(key, projection);
+      return projection;
+    }}
+
+    async function runAiClustering() {{
+      const records = currentAiRecords();
+      const projection = getImageProjection(records);
+      if (!records.length || !selectedFeatureIds().length || !aiState.service?.configured) return;
+      aiState.running = true;
+      aiState.error = null;
+      renderAiClustering();
+      const payload = {{
+        family_id: "all_families",
+        cohort: sharedSampleColorMode,
+        representative_feature_id: representativeFeatureIds().join(","),
+        method: state.method,
+        requested_k: Number(state.k),
+        seed: 42,
+        icon_ids: records.map(record => record.icon_id),
+        feature_labels: projection.labels,
+        feature_coords: projection.coords
+      }};
+      try {{
+        const response = await fetch("/api/ai-clustering/runs", {{
+          method: "POST", headers: {{"Content-Type": "application/json"}}, body: JSON.stringify(payload)
+        }});
+        const result = await response.json();
+        if (!response.ok) throw new Error(result.error || `AI service returned ${{response.status}}`);
+        aiState.currentRun = result;
+        aiState.stale = false;
+        if (aiState.service) {{
+          aiState.service.cached_embeddings = Number(aiState.service.cached_embeddings || 0) + Number(result.cache_misses || 0);
+          aiState.service.saved_runs = Number(aiState.service.saved_runs || 0) + 1;
+        }}
+        await refreshAiRuns();
+      }} catch (error) {{
+        aiState.error = error.message;
+        try {{ await refreshAiRuns(); }} catch (_) {{ /* Preserve the original run error. */ }}
+      }} finally {{
+        aiState.running = false;
+        renderAiClustering();
+      }}
+    }}
+
+    async function refreshAiRuns() {{
+      const response = await fetch("/api/ai-clustering/runs?limit=20", {{cache: "no-store"}});
+      if (!response.ok) throw new Error("Recent AI runs could not be loaded.");
+      aiState.recentRuns = (await response.json()).runs || [];
+    }}
+
+    async function loadAiRun(runId) {{
+      try {{
+        const response = await fetch(`/api/ai-clustering/runs/${{encodeURIComponent(runId)}}`, {{cache: "no-store"}});
+        const run = await response.json();
+        if (!response.ok) throw new Error(run.error || "Run could not be loaded.");
+        aiState.currentRun = run;
+        aiState.stale = true;
+        aiState.error = null;
+      }} catch (error) {{ aiState.error = error.message; }}
+      renderAiClustering();
+    }}
+
+    function renderAiClustering() {{
+      const container = document.getElementById("aiClusteringView");
+      if (!container || !dashboard) return;
+      const records = currentAiRecords();
+      const service = aiState.service;
+      const canRun = Boolean(service?.configured && records.length && selectedFeatureIds().length && !aiState.running);
+      const runButton = document.getElementById("aiRunButton");
+      runButton.disabled = !canRun;
+      runButton.textContent = aiState.running ? "Running..." : "Run AI Clustering";
+      let status = service?.message || "Checking the local AI service...";
+      let kind = "ready";
+      if (aiState.error) {{ status = aiState.error; kind = "error"; }}
+      else if (aiState.running) status = "Requesting uncached image embeddings and computing the comparison...";
+      else if (aiState.currentRun && aiState.stale) {{ status = "The displayed result is saved history or is stale because the sample or clustering settings changed. Run explicitly to refresh it."; kind = "stale"; }}
+      else if (!selectedFeatureIds().length) {{ status = "Select at least one feature in Clustering before running this comparison."; kind = "stale"; }}
+      document.getElementById("aiStatus").textContent = status;
+      document.getElementById("aiStatus").dataset.kind = kind;
+      document.getElementById("aiFacts").innerHTML = [
+        ["Shared sample / cohort", `${{visibleFeatureSections().length}} families / ${{sharedSampleColorMode}}`],
+        ["Icons", records.length],
+        ["Model", service?.model_id || "—"],
+        ["Method / k", `${{state.method}} / ${{state.k}}`],
+        ["Stored cache", `${{service?.cached_embeddings ?? 0}} embeddings / ${{service?.saved_runs ?? 0}} runs`]
+      ].map(([label, value]) => `<div class="ai-fact"><span>${{escapeHtml(label)}}</span><b>${{escapeHtml(value)}}</b></div>`).join("");
+      if (aiState.currentRun?.status === "completed") renderAiRun(aiState.currentRun);
+      else renderEmptyAiPlots(records);
+      renderAiHistory();
+    }}
+
+    function renderEmptyAiPlots(records) {{
+      const projection = getImageProjection(records);
+      renderAiPlot("aiFeatureScatter", records.map((record, index) => ({{...record, x: projection.coords[index]?.[0] || 0, y: projection.coords[index]?.[1] || 0, cluster: projection.labels[index] || 0}})), "Feature cluster");
+      Plotly.react("aiEmbeddingScatter", [], {{annotations: [{{text: "Run AI Clustering to compute image embeddings.", x: .5, y: .5, xref: "paper", yref: "paper", showarrow: false}}], xaxis: {{visible: false}}, yaxis: {{visible: false}}}}, {{responsive: true}});
+      document.getElementById("aiMetrics").innerHTML = "";
+      document.getElementById("aiCrossTable").innerHTML = '<p class="muted" style="padding:10px">No completed comparison loaded.</p>';
+    }}
+
+    function renderAiRun(run) {{
+      const lookup = new Map([...(dashboard.feature_group_records || []), ...(dashboard.records || [])].map(record => [record.icon_id, record]));
+      const featureItems = run.items.map(item => ({{...lookup.get(item.icon_id), x: item.feature_x, y: item.feature_y, cluster: item.feature_label}}));
+      const aiItems = run.items.map(item => ({{...lookup.get(item.icon_id), x: item.ai_x, y: item.ai_y, cluster: item.ai_label}}));
+      renderAiPlot("aiFeatureScatter", featureItems, "Feature cluster");
+      renderAiPlot("aiEmbeddingScatter", aiItems, "AI cluster");
+      synchronizeAiPlots();
+      const metrics = run.metrics || {{}};
+      document.getElementById("aiMetrics").innerHTML = [
+        ["Pairwise agreement", metrics.pairwise_same_cluster_agreement],
+        ["Cache", `${{run.cache_hits}} hit / ${{run.cache_misses}} miss`]
+      ].map(([label, value]) => `<div class="ai-fact"><span>${{escapeHtml(label)}}</span><b>${{typeof value === "number" ? value.toFixed(3) : escapeHtml(value ?? "—")}}</b></div>`).join("");
+      renderAiCrossTable(metrics.cross_table);
+      if (run.warning && !aiState.error) {{ document.getElementById("aiStatus").textContent = run.warning; document.getElementById("aiStatus").dataset.kind = "stale"; }}
+    }}
+
+    function renderAiPlot(id, items, clusterTitle) {{
+      const coords = items.map(item => [Number(item.x), Number(item.y)]);
+      const ranges = plotRanges(coords);
+      Plotly.react(id, [{{x: coords.map(point => point[0]), y: coords.map(point => point[1]), mode: "markers", marker: {{...interactionMarker(), color: items.map(item => item.cluster)}}, selected: {{marker: {{size: 38, opacity: .35, color: "#a000a8", line: {{width: 2, color: "#a000a8"}}}}}}, unselected: {{marker: {{opacity: .01}}}}, customdata: items.map(item => [item.icon_id]), hoverinfo: "none"}}], {{
+        margin: {{l: 38, r: 12, t: 12, b: 38}}, xaxis: {{title: "PCA 1", range: ranges.x}}, yaxis: {{title: "PCA 2", range: ranges.y}},
+        images: items.map(item => ({{source: item.normalized_path, xref: "x", yref: "y", x: item.x, y: item.y, sizex: ranges.spanX * .08, sizey: ranges.spanY * .08, xanchor: "center", yanchor: "middle", sizing: "contain", layer: "above"}})), showlegend: false
+      }}, {{responsive: true}});
+    }}
+
+    function synchronizeAiPlots() {{
+      let syncing = false;
+      [["aiFeatureScatter", "aiEmbeddingScatter"], ["aiEmbeddingScatter", "aiFeatureScatter"]].forEach(([source, target]) => {{
+        const plot = document.getElementById(source);
+        plot.on("plotly_hover", event => {{ if (!syncing) {{ syncing = true; Plotly.Fx.hover(target, [{{curveNumber: 0, pointNumber: event.points[0].pointNumber}}]); syncing = false; }} }});
+        plot.on("plotly_unhover", () => Plotly.Fx.unhover(target));
+        plot.on("plotly_click", event => {{
+          const selected = event.points[0].pointNumber;
+          Plotly.restyle("aiFeatureScatter", {{selectedpoints: [[selected]]}});
+          Plotly.restyle("aiEmbeddingScatter", {{selectedpoints: [[selected]]}});
+        }});
+      }});
+    }}
+
+    function renderAiCrossTable(table) {{
+      if (!table) {{ document.getElementById("aiCrossTable").innerHTML = ""; return; }}
+      document.getElementById("aiCrossTable").innerHTML = `<table class="ai-table"><thead><tr><th>Feature \\ AI</th>${{table.ai_labels.map(label => `<th>${{label}}</th>`).join("")}}</tr></thead><tbody>${{table.feature_labels.map((label, row) => `<tr><th>${{label}}</th>${{table.counts[row].map(count => `<td>${{count}}</td>`).join("")}}</tr>`).join("")}}</tbody></table>`;
+    }}
+
+    function renderAiHistory() {{
+      const rows = aiState.recentRuns || [];
+      document.getElementById("aiRecentRuns").innerHTML = rows.length ? `<table class="ai-table"><thead><tr><th>Time</th><th>Family</th><th>Status</th><th>Method</th><th></th></tr></thead><tbody>${{rows.map(run => `<tr><td>${{escapeHtml(new Date(run.created_at).toLocaleString())}}</td><td>${{escapeHtml(run.family_id)}} / ${{escapeHtml(run.cohort)}}</td><td>${{escapeHtml(run.status)}}</td><td>${{escapeHtml(run.method)}} k=${{run.effective_k}}</td><td>${{run.status === "completed" ? `<button type="button" data-ai-load="${{escapeHtml(run.run_id)}}">Load</button>` : escapeHtml(run.error || "—")}}</td></tr>`).join("")}}</tbody></table>` : '<p class="muted" style="padding:10px">No saved runs yet.</p>';
+      document.querySelectorAll("[data-ai-load]").forEach(button => button.addEventListener("click", () => loadAiRun(button.dataset.aiLoad)));
+    }}
+
     function getProjection() {{
       if (state.variant !== "image") {{
         return {{
@@ -2508,15 +2711,7 @@ def write_index_html() -> None:
           labels: dashboard.clusters[state.variant][state.method][state.k].labels
         }};
       }}
-      const features = selectedFeatureIds();
-      const key = `${{state.method}}|${{state.k}}|${{features.join(",")}}`;
-      if (computedCache.has(key)) return computedCache.get(key);
-      const matrix = standardize(dashboard.records.map(record => features.map(feature => Number(record.image_features[feature] || 0))));
-      const coords = pca2d(matrix);
-      const labels = state.method === "hierarchical" ? hierarchicalLabels(matrix, Number(state.k)) : kmeansLabels(matrix, Number(state.k));
-      const projection = {{coords, labels}};
-      computedCache.set(key, projection);
-      return projection;
+      return getImageProjection(clusteringRecords());
     }}
 
     function passesFilters(record) {{
@@ -2666,9 +2861,13 @@ def write_index_html() -> None:
 
     function renderDetail(labels) {{
       const detail = document.getElementById("iconDetail");
-      const record = dashboard.records.find(r => r.icon_id === selectedIconId);
-      if (!record) return;
-      const index = dashboard.records.indexOf(record);
+      const records = clusteringRecords();
+      const record = records.find(r => r.icon_id === selectedIconId);
+      if (!record) {{
+        detail.innerHTML = '<span class="muted">Click a point to inspect an icon from the shared sample.</span>';
+        return;
+      }}
+      const index = records.indexOf(record);
       const featureGroups = groupedFeatureHtml(record, visibleFeatureIds(), true, null);
       const mcdougallRows = Object.entries(record.mcdougall || {{}})
         .filter(([, value]) => value !== "")
@@ -2679,7 +2878,7 @@ def write_index_html() -> None:
         <p class="muted">${{escapeHtml(record.set_name)}}<br>Cluster: ${{labels[index]}}</p>
         ${{featureGroups}}
         <p>${{mcdougallRows}}</p>
-        <p class="muted">${{escapeHtml(record.metadata_tokens).slice(0, 300)}}</p>`;
+        <p class="muted">${{escapeHtml(record.metadata_tokens || "").slice(0, 300)}}</p>`;
     }}
 
     function renderClusterSummary(labels, filtered) {{
@@ -2787,7 +2986,7 @@ def write_index_html() -> None:
     }}
 
     function standardizedImageMatrix(features) {{
-      return standardize(dashboard.records.map(record => features.map(feature => Number(record.image_features[feature] || 0))));
+      return standardize(clusteringRecords().map(record => features.map(feature => Number(record.image_features[feature] || 0))));
     }}
 
     function formatFeatureValue(value) {{

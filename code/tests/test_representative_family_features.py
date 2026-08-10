@@ -32,7 +32,7 @@ def test_each_family_has_one_documented_representative_feature() -> None:
     for section in sections:
         representative = section["representative_feature"]
         assert representative["id"] == section["representative_feature_id"]
-        assert representative["id"] in {feature["id"] for feature in section["features"]}
+        assert [feature["id"] for feature in section["features"]] == [representative["id"]]
         assert section["representative_interpretation"]
         assert section["representative_rationale"]
         assert section["representative_evidence"]
@@ -68,7 +68,8 @@ def test_feature_group_detail_uses_registry_label(tmp_path, monkeypatch) -> None
     dashboard.write_index_html()
 
     index = (tmp_path / "index.html").read_text(encoding="utf-8")
-    assert "Selected feature Â· active registry" in index
+    assert "Configured Feature Family representative" in index
+    assert "Selected feature Â· active registry" not in index
     assert "Selected feature Â· schema v" not in index
 
 

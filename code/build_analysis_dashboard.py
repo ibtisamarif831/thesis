@@ -112,17 +112,23 @@ REDUNDANCY_MODERATE_THRESHOLD = 0.70
 
 
 def image_feature_sections() -> list[dict[str, object]]:
-    """Return the legacy dashboard serialization of the shared feature registry."""
+    """Return one configured representative for each dashboard feature family."""
 
-    return feature_registry.dashboard_sections()
+    sections = []
+    for section in feature_registry.dashboard_sections():
+        representative = dict(section["representative_feature"])
+        sections.append({**section, "features": [representative]})
+    return sections
 
 
 def active_image_feature_columns() -> list[str]:
-    return list(feature_registry.analysis_feature_ids())
+    """Return the dashboard's fixed one-feature-per-family allow-list."""
+
+    return list(feature_registry.representative_feature_ids())
 
 
 def active_image_feature_groups() -> list[list[str]]:
-    return [list(group) for group in feature_registry.analysis_feature_groups()]
+    return [[feature_id] for feature_id in feature_registry.representative_feature_ids()]
 
 
 def read_csv(path: Path) -> list[dict[str, str]]:
@@ -767,7 +773,11 @@ def write_feature_tables(rows: list[dict], feature_by_id: dict[str, dict], matri
     for index, row in enumerate(rows):
         base = {column: row.get(column, "") for column in METADATA_COLUMNS}
         image_rows.append(
-            base | {column: feature_by_id[row["icon_id"]].get(column, "") for column in IMAGE_FEATURE_COLUMNS}
+            base
+            | {
+                column: feature_by_id[row["icon_id"]].get(column, "")
+                for column in active_image_feature_columns()
+            }
         )
         metadata_rows.append(
             base
@@ -834,10 +844,21 @@ def build_feature_group_records(feature_rows: list[dict]) -> list[dict]:
 
 def write_dashboard_data(rows: list[dict], feature_by_id: dict[str, dict], matrices: dict[str, dict], clusters: dict) -> None:
     records = []
+    dashboard_feature_columns = list(
+        dict.fromkeys(
+            [
+                *active_image_feature_columns(),
+                "is_monochrome",
+                "orientation_confidence_v2",
+                "red_pixel_ratio_v2",
+                "strict_red_flag_v2",
+            ]
+        )
+    )
     for row in rows:
         image_features = {
             column: round(to_float(feature_by_id[row["icon_id"]].get(column)), 6)
-            for column in IMAGE_FEATURE_COLUMNS
+            for column in dashboard_feature_columns
         }
         mcdougall = {column: row.get(column, "") for column in MCDOUGALL_NUMERIC_COLUMNS}
         mcdougall["mcdougall_common_response"] = row.get("mcdougall_common_response", "")
@@ -878,12 +899,6 @@ def write_dashboard_data(rows: list[dict], feature_by_id: dict[str, dict], matri
             "primary_k": PRIMARY_K,
             "feature_variants": list(FEATURE_VARIANTS),
             "image_feature_columns": matrices["image"]["columns"],
-            "raw_image_feature_columns": IMAGE_FEATURE_COLUMNS,
-            "excluded_image_features": sorted(EXCLUDED_IMAGE_FEATURES),
-            "excluded_image_feature_reasons": EXCLUDED_IMAGE_FEATURE_REASONS,
-            "image_feature_groups": {
-                extractor.name: list(extractor.columns) for extractor in extract_icon_features.FEATURE_EXTRACTORS
-            },
             "image_feature_sections": image_feature_sections(),
             "mcdougall_numeric_columns": MCDOUGALL_NUMERIC_COLUMNS,
         },
@@ -925,6 +940,8 @@ def write_index_html() -> None:
     .view {{ display: none; }}
     .view.active {{ display: block; }}
     #clusteringView.active {{ display: grid; grid-template-columns: 300px minmax(520px, 1fr) 330px; min-height: calc(100vh - 52px); }}
+    #clusteringView.controls-collapsed {{ grid-template-columns: minmax(520px, 1fr) 330px; }}
+    #clusteringView.controls-collapsed > .clustering-sidebar {{ display: none; }}
     aside {{ border-right: 1px solid var(--border); padding: 14px; overflow: auto; max-height: calc(100vh - 52px); }}
     aside.right {{ border-left: 1px solid var(--border); border-right: 0; }}
     section.control {{ margin-bottom: 18px; }}
@@ -961,7 +978,7 @@ def write_index_html() -> None:
     .method-note {{ margin-top: 5px; font-size: 12px; line-height: 1.35; color: var(--muted); }}
     .plot-wrap {{ padding: 10px; min-width: 0; }}
     #scatter {{ width: 100%; height: calc(100vh - 76px); }}
-    #hoverPreview {{ position: fixed; z-index: 20; display: none; pointer-events: none; max-width: 360px; max-height: calc(100vh - 16px); overflow: hidden; padding: 8px 10px; border-radius: 0; background: #a000a8; color: white; box-shadow: none; font-size: 18px; line-height: 1.28; }}
+    #hoverPreview {{ position: fixed; z-index: 20; display: none; pointer-events: none; width: min(440px, calc(100vw - 16px)); max-height: calc(100vh - 16px); overflow: hidden; padding: 8px 10px; border-radius: 0; background: #a000a8; color: white; box-shadow: none; font-size: 18px; line-height: 1.28; }}
     #hoverPreview img {{ width: 84px; height: 84px; object-fit: contain; border: 1px solid rgba(255,255,255,.65); background: white; margin: 8px 10px 2px 0; vertical-align: top; }}
     #hoverPreview b {{ font-size: 18px; }}
     #hoverPreview .hover-grid {{ display: grid; grid-template-columns: 94px minmax(0, 1fr); align-items: start; gap: 0; margin-bottom: 4px; }}
@@ -972,11 +989,18 @@ def write_index_html() -> None:
     #hoverPreview table {{ color: white; }}
     #hoverPreview td {{ border-bottom: 1px solid rgba(255,255,255,.42); }}
     #hoverPreview td:last-child {{ color: white; font-variant-numeric: tabular-nums; }}
+    #hoverPreview .feature-value-card {{ border-color: rgba(255,255,255,.42); background: rgba(255,255,255,.10); }}
+    #hoverPreview .feature-value-head b:last-child {{ color: #fff; }}
+    #hoverPreview .feature-value-meta, #hoverPreview .feature-range-labels, #hoverPreview .feature-range-legend {{ color: rgba(255,255,255,.88); }}
+    #hoverPreview .feature-range-track {{ background: rgba(255,255,255,.28); }}
+    #hoverPreview .feature-range-marker.global {{ background: white; }}
+    #hoverPreview .feature-range-marker.subject {{ background: #ffe56b; }}
     .detail-img {{ width: 96px; height: 96px; object-fit: contain; border: 1px solid var(--border); background: white; }}
     .plot-wrap {{ min-width: 0; display: grid; grid-template-rows: auto minmax(0, 1fr); }}
     .plot-selection-toolbar {{ display: flex; align-items: center; gap: 7px; flex-wrap: wrap; padding: 8px 12px; border-bottom: 1px solid var(--border); background: #f8fafc; }}
     .plot-selection-toolbar button {{ padding: 6px 9px; font-size: 12px; }}
     .plot-selection-toolbar button.active {{ border-color: #a000a8; background: #fff0ff; color: #7b287f; font-weight: 700; }}
+    .sidebar-toggle {{ font-weight: 650; }}
     .plot-selection-status {{ margin-left: auto; color: var(--muted); font-size: 12px; }}
     .lasso-selection-summary {{ margin-bottom: 10px; padding: 9px; border: 1px solid #d8b7dc; border-radius: 7px; background: #fffaff; }}
     .lasso-selection-summary p {{ margin: 3px 0; font-size: 12px; }}
@@ -1015,6 +1039,11 @@ def write_index_html() -> None:
     .cluster-feature-stats td.delta-positive {{ color: #9b2335; font-weight: 700; }}
     .cluster-feature-stats td.delta-negative {{ color: #2465a7; font-weight: 700; }}
     .summary-actions {{ display: flex; justify-content: flex-end; margin-top: 8px; }}
+    .cluster-summary-launchers {{ display: grid; gap: 8px; }}
+    .cluster-summary-launchers button {{ width: 100%; padding: 9px 10px; font-weight: 650; text-align: left; }}
+    .cluster-analysis-modal-intro {{ margin: 0 0 12px; color: var(--muted); font-size: 12px; line-height: 1.45; }}
+    .cluster-analysis-list {{ display: grid; gap: 12px; }}
+    .cluster-analysis-list .summary-cluster {{ margin: 0; }}
     .cluster-fullscreen-open {{ font-size: 12px; font-weight: 650; }}
     .rep-icons {{ display: grid; grid-template-columns: repeat(auto-fill, minmax(72px, 1fr)); gap: 8px; margin-top: 8px; }}
     .rep-icon {{ min-width: 0; }}
@@ -1023,6 +1052,26 @@ def write_index_html() -> None:
     .feature-group-detail {{ margin: 10px 0; }}
     .feature-group-detail h4 {{ font-size: 13px; margin: 0 0 2px; }}
     .feature-group-detail p {{ margin: 0 0 4px; font-size: 12px; color: var(--muted); line-height: 1.35; }}
+    .feature-value-list {{ display: grid; gap: 8px; }}
+    .feature-value-card {{ padding: 8px; border: 1px solid var(--border); border-radius: 6px; background: #fbfcfe; }}
+    .feature-value-card.compact {{ padding: 6px 8px 4px; }}
+    .feature-value-card.compact .feature-range-track {{ margin-top: 6px; margin-bottom: 2px; }}
+    .feature-value-head {{ display: flex; align-items: baseline; justify-content: space-between; gap: 8px; font-size: 12px; }}
+    .feature-value-head b:last-child {{ color: #7b287f; font-size: 14px; font-variant-numeric: tabular-nums; }}
+    .feature-value-meta {{ margin-top: 3px; color: #4d5665; font-size: 10px; line-height: 1.35; }}
+    .feature-range-track {{ position: relative; height: 7px; margin: 8px 2px 4px; border-radius: 999px; background: #dfe4ec; }}
+    .feature-range-middle {{ position: absolute; top: 0; height: 100%; border-radius: 999px; background: #aeb8c8; }}
+    .feature-range-marker {{ position: absolute; top: -4px; width: 3px; height: 15px; border-radius: 2px; transform: translateX(-50%); }}
+    .feature-range-marker.global {{ background: #344054; }}
+    .feature-range-marker.subject {{ width: 4px; background: #a000a8; }}
+    .feature-range-labels, .feature-range-legend {{ display: flex; justify-content: space-between; gap: 8px; color: var(--muted); font-size: 9px; font-variant-numeric: tabular-nums; }}
+    .feature-range-legend {{ justify-content: flex-start; margin-top: 3px; }}
+    .feature-range-key {{ display: inline-flex; align-items: center; gap: 3px; }}
+    .feature-range-swatch {{ width: 8px; height: 3px; border-radius: 2px; background: #344054; }}
+    .feature-range-swatch.subject {{ height: 4px; background: #a000a8; }}
+    .lasso-feature-comparison {{ margin: 10px 0; padding: 9px; border: 1px solid var(--border); border-radius: 7px; background: white; }}
+    .lasso-feature-comparison h3 {{ margin: 0 0 4px; font-size: 13px; }}
+    .lasso-feature-comparison > p {{ margin: 0 0 8px; color: var(--muted); font-size: 10px; }}
     .feature-group-detail .family-reading {{ color: #3d4656; }}
     table {{ width: 100%; border-collapse: collapse; font-size: 12px; }}
     td {{ border-bottom: 1px solid #edf0f4; padding: 4px 0; vertical-align: top; }}
@@ -1220,6 +1269,10 @@ def write_index_html() -> None:
     .ai-fact span {{ display: block; color: var(--muted); font-size: 11px; text-transform: uppercase; }}
     .ai-fact b {{ display: block; margin-top: 3px; overflow-wrap: anywhere; }}
     .ai-workspace {{ display: grid; grid-template-columns: minmax(520px, 1fr) 360px; gap: 12px; align-items: start; margin-bottom: 14px; }}
+    .ai-workspace.ai-sidebar-collapsed {{ grid-template-columns: minmax(520px, 1fr); }}
+    .ai-workspace.ai-sidebar-collapsed > .ai-analysis {{ display: none; }}
+    .ai-workspace-toolbar {{ display: flex; justify-content: flex-end; margin: 0 0 8px; }}
+    .ai-workspace-toolbar button {{ font-size: 12px; font-weight: 650; }}
     .ai-primary-plot {{ height: 680px; }}
     .ai-analysis {{ display: grid; gap: 12px; min-width: 0; }}
     .ai-analysis .ai-panel {{ max-height: 420px; overflow: auto; }}
@@ -1276,7 +1329,7 @@ def write_index_html() -> None:
     </nav>
   </header>
   <main id="clusteringView" class="view active">
-    <aside>
+    <aside class="clustering-sidebar" id="clusteringSidebar">
       <section class="control">
         <h2>Feature Variant</h2>
         <label><select id="variantSelect"></select></label>
@@ -1305,6 +1358,7 @@ def write_index_html() -> None:
     </aside>
     <div class="plot-wrap">
       <div class="plot-selection-toolbar" aria-label="Clustering chart interaction tools">
+        <button type="button" class="sidebar-toggle" id="sidebarToggle" aria-controls="clusteringSidebar" aria-expanded="true">Hide sidebar</button>
         <button type="button" id="lassoMode" class="active" aria-pressed="true">Lasso select</button>
         <button type="button" id="zoomMode" aria-pressed="false">Rectangle zoom</button>
         <button type="button" id="clearLassoSelection" disabled>Clear selection</button>
@@ -1320,7 +1374,7 @@ def write_index_html() -> None:
       </section>
       <section class="control">
         <h2>Cluster Summary</h2>
-        <div id="clusterSummary"></div>
+        <div id="clusterSummary"><span class="muted">Loading cluster actions...</span></div>
       </section>
     </aside>
   </main>
@@ -1384,9 +1438,10 @@ def write_index_html() -> None:
     </div>
     <div class="ai-status" id="aiStatus" aria-live="polite">Checking the local AI service...</div>
     <div class="ai-facts" id="aiFacts"></div>
-    <div class="ai-workspace">
+    <div class="ai-workspace-toolbar"><button type="button" id="aiSidebarToggle" aria-controls="aiAnalysisSidebar" aria-expanded="true">Hide sidebar</button></div>
+    <div class="ai-workspace" id="aiWorkspace">
       <section class="ai-panel"><h3>AI image-embedding clustering</h3><div class="ai-primary-plot" id="aiEmbeddingScatter"></div></section>
-      <aside class="ai-analysis">
+      <aside class="ai-analysis" id="aiAnalysisSidebar">
         <section class="ai-panel"><h3>Selected icon</h3><div class="ai-analysis-body ai-selected-icon" id="aiIconDetail"><span class="muted">Run or load AI clustering, then click an icon.</span></div></section>
         <section class="ai-panel"><h3>Which measured feature separates these clusters most?</h3><div class="ai-analysis-body" id="aiFeatureContributions"><span class="muted">Run or load AI clustering to calculate the ranking.</span></div></section>
         <section class="ai-panel"><h3>AI cluster summary</h3><div class="ai-analysis-body ai-cluster-summary" id="aiClusterSummary"><span class="muted">Run or load AI clustering to inspect clusters.</span></div></section>
@@ -1474,7 +1529,6 @@ def write_index_html() -> None:
     let sharedSampleFamilyId = null;
     let sharedSampleColorMode = "all";
     const familySamples = new Map();
-    const representativeFeaturesByFamily = new Map();
     const computedCache = new Map();
     const PLOT_ICON_SCALE = 0.055;
 
@@ -1503,7 +1557,6 @@ def write_index_html() -> None:
 
     fetch("dashboard_data.json").then(r => r.json()).then(data => {{
       dashboard = data;
-      initializeRepresentativeFeatures();
       state.activeFeatures = new Set(representativeFeatureIds());
       sharedSampleFamilyId = visibleFeatureSections()[0]?.id || null;
       initializeControls();
@@ -1527,6 +1580,7 @@ def write_index_html() -> None:
       initializeFamilyDetailControls();
       initializeClusterModalControls();
       initializePlotSelectionControls();
+      initializeSidebarToggle();
 
       const sets = unique(dashboard.records.map(r => r.set_name)).sort();
       fillSelect("setFilter", sets.map(v => [v, v]), "", true);
@@ -1615,8 +1669,8 @@ def write_index_html() -> None:
     function initializePlotSelectionControls() {{
       document.getElementById("lassoMode").addEventListener("click", () => setPlotDragMode("lasso"));
       document.getElementById("zoomMode").addEventListener("click", () => setPlotDragMode("zoom"));
-      document.getElementById("clearLassoSelection").addEventListener("click", () => clearLassoSelection(false));
-      document.getElementById("resetPlotView").addEventListener("click", () => clearLassoSelection(true));
+      document.getElementById("clearLassoSelection").addEventListener("click", clearLassoSelection);
+      document.getElementById("resetPlotView").addEventListener("click", resetPlotView);
       updatePlotSelectionControls();
     }}
 
@@ -1665,14 +1719,6 @@ def write_index_html() -> None:
       return featureSections().filter(section => section.visible !== false);
     }}
 
-    function allFeatureIds() {{
-      return featureSections().flatMap(section => section.features.map(feature => feature.id));
-    }}
-
-    function visibleFeatureIds() {{
-      return visibleFeatureSections().flatMap(section => section.features.map(feature => feature.id));
-    }}
-
     function clusteringFeatureSections() {{
       return visibleFeatureSections()
         .map(section => ({{
@@ -1691,10 +1737,6 @@ def write_index_html() -> None:
       return ordered;
     }}
 
-    function sectionById(sectionId) {{
-      return visibleFeatureSections().find(section => section.id === sectionId);
-    }}
-
     function featureInfo(featureId) {{
       for (const section of featureSections()) {{
         const feature = section.features.find(item => item.id === featureId);
@@ -1703,17 +1745,8 @@ def write_index_html() -> None:
       return {{id: featureId, label: title(featureId), group: "", group_title: "", meaning: ""}};
     }}
 
-    function initializeRepresentativeFeatures() {{
-      featureSections().forEach(section => {{
-        const configured = section.representative_feature || section.features[0];
-        if (configured) representativeFeaturesByFamily.set(section.id, configured.id);
-      }});
-    }}
-
     function representativeFeature(section) {{
-      const selectedId = representativeFeaturesByFamily.get(section.id);
-      return section.features.find(feature => feature.id === selectedId)
-        || section.representative_feature
+      return section.representative_feature
         || section.features[0];
     }}
 
@@ -1722,28 +1755,6 @@ def write_index_html() -> None:
         .map(section => representativeFeature(section))
         .filter(Boolean)
         .map(feature => feature.id);
-    }}
-
-    function updateRepresentativeFeature(familyId, featureId) {{
-      const section = sectionById(familyId);
-      if (!section || !section.features.some(feature => feature.id === featureId)) return;
-      const previousFeature = representativeFeature(section);
-      const wasActiveInClustering = previousFeature && state.activeFeatures.has(previousFeature.id);
-      representativeFeaturesByFamily.set(familyId, featureId);
-      if (previousFeature) state.activeFeatures.delete(previousFeature.id);
-      if (wasActiveInClustering) state.activeFeatures.add(featureId);
-      if (previousFeature && state.color === previousFeature.id) state.color = featureId;
-      Array.from(familySamples.keys())
-        .filter(key => key.startsWith(`${{familyId}}:`))
-        .forEach(key => familySamples.delete(key));
-      familyComparisonIds.clear();
-      computedCache.clear();
-      markAiClusteringStale();
-      renderFeatureControls();
-      fillColorSelect("colorSelect", state.color);
-      renderFeatureGroups();
-      if (activeFamilyId === familyId) renderFamilyDetail();
-      render();
     }}
 
     function renderFeatureControls() {{
@@ -1890,12 +1901,7 @@ def write_index_html() -> None:
                   const feature = representativeFeature(section);
                   return `<tr>
                     <td><b>${{escapeHtml(section.human_category || section.title.replace(" Features", ""))}}</b></td>
-                    <td>
-                      <label class="sr-only" for="familyRepresentative-${{escapeHtml(section.id)}}">Representative feature for ${{escapeHtml(section.title)}}</label>
-                      <select class="family-representative-select" id="familyRepresentative-${{escapeHtml(section.id)}}" data-family-id="${{escapeHtml(section.id)}}">
-                        ${{section.features.map(option => `<option value="${{escapeHtml(option.id)}}" ${{option.id === feature.id ? "selected" : ""}}>${{escapeHtml(option.label)}} · ${{escapeHtml(option.id)}}</option>`).join("")}}
-                      </select>
-                    </td>
+                    <td><b>${{escapeHtml(feature.label)}}</b><br><span class="feature-id">${{escapeHtml(feature.id)}}</span></td>
                     <td><button class="family-detail-button" type="button" data-family-id="${{escapeHtml(section.id)}}">View details</button></td>
                   </tr>`;
                 }}).join("")}}
@@ -1906,14 +1912,6 @@ def write_index_html() -> None:
       container.innerHTML = overview;
       container.querySelectorAll(".family-detail-button").forEach(button => {{
         button.addEventListener("click", () => openFamilyDetail(button.dataset.familyId, button));
-      }});
-      container.querySelectorAll(".family-representative-select").forEach(select => {{
-        select.addEventListener("change", () => {{
-          const familyId = select.dataset.familyId;
-          updateRepresentativeFeature(familyId, select.value);
-          const refreshed = document.querySelector(`.family-representative-select[data-family-id="${{CSS.escape(familyId)}}"]`);
-          if (refreshed) refreshed.focus();
-        }});
       }});
     }}
 
@@ -1948,12 +1946,34 @@ def write_index_html() -> None:
       }});
     }}
 
-    function openClusterModal(cluster, items, trigger, sourceLabel=null) {{
+    function initializeSidebarToggle() {{
+      const view = document.getElementById("clusteringView");
+      const button = document.getElementById("sidebarToggle");
+      button.addEventListener("click", () => {{
+        const collapsed = view.classList.toggle("controls-collapsed");
+        button.textContent = collapsed ? "Show sidebar" : "Hide sidebar";
+        button.setAttribute("aria-expanded", String(!collapsed));
+        window.requestAnimationFrame(() => Plotly.Plots.resize(document.getElementById("scatter")));
+      }});
+    }}
+
+    function openClusterAnalysisModal(titleText, descriptionText, bodyHtml, trigger) {{
       clusterModalReturnFocus = trigger || document.activeElement;
-      document.getElementById("clusterModalTitle").textContent = `${{sourceLabel || methodLabel()}} cluster ${{cluster}}`;
-      document.getElementById("clusterModalDescription").textContent =
-        `${{items.length}} icons in the current ${{sourceLabel ? "AI" : "filtered"}} clustering view.`;
-      document.getElementById("clusterModalBody").innerHTML = `
+      document.getElementById("clusterModalTitle").textContent = titleText;
+      document.getElementById("clusterModalDescription").textContent = descriptionText;
+      document.getElementById("clusterModalBody").innerHTML = bodyHtml;
+      const modal = document.getElementById("clusterModal");
+      modal.classList.add("open");
+      modal.setAttribute("aria-hidden", "false");
+      document.body.style.overflow = "hidden";
+      document.getElementById("clusterModalClose").focus();
+    }}
+
+    function openClusterModal(cluster, items, trigger, sourceLabel=null) {{
+      openClusterAnalysisModal(
+        `${{sourceLabel || methodLabel()}} cluster ${{cluster}}`,
+        `${{items.length}} icons in the current ${{sourceLabel ? "AI" : "filtered"}} clustering view.`,
+        `
         <div class="cluster-icon-grid">
           ${{items.map(item => `
             <article class="cluster-icon-card">
@@ -1961,12 +1981,9 @@ def write_index_html() -> None:
               <b title="${{escapeHtml(item.record.label)}}">${{escapeHtml(item.record.label)}}</b>
               <span title="${{escapeHtml(item.record.set_name)}}">${{escapeHtml(item.record.set_name)}}</span>
             </article>`).join("")}}
-        </div>`;
-      const modal = document.getElementById("clusterModal");
-      modal.classList.add("open");
-      modal.setAttribute("aria-hidden", "false");
-      document.body.style.overflow = "hidden";
-      document.getElementById("clusterModalClose").focus();
+        </div>`,
+        trigger
+      );
     }}
 
     function closeClusterModal() {{
@@ -2010,19 +2027,12 @@ def write_index_html() -> None:
       return selectedFeature.id !== "principal_axis_orientation_v2" || hasDefinedOrientation(record);
     }}
 
-    function familySourceRecords(familyId) {{
-      const fullCorpusRecords = dashboard.feature_group_records || [];
-      const firstFullCorpusRecord = fullCorpusRecords[0];
-      const supportsCurrentRepresentatives = firstFullCorpusRecord
-        && representativeFeatureIds().every(featureId =>
-          Object.hasOwn(firstFullCorpusRecord.image_features || {{}}, featureId)
-        );
-      if (supportsCurrentRepresentatives) return fullCorpusRecords;
-      return dashboard.records || [];
+    function familySourceRecords() {{
+      return dashboard.feature_group_records || [];
     }}
 
     function familyPopulation(familyId, colorMode) {{
-      const records = familySourceRecords(familyId);
+      const records = familySourceRecords();
       return records.filter(record =>
         representativeRecordIsEligible(familyId, record)
         && (colorMode === "all" || iconColorMode(record) === colorMode)
@@ -2258,9 +2268,7 @@ def write_index_html() -> None:
       const section = visibleFeatureSections().find(item => item.id === activeFamilyId);
       if (!section) return;
       const selectedFeature = representativeFeature(section);
-      const configuredFeature = section.representative_feature || section.features[0];
-      const usesConfiguredRepresentative = selectedFeature.id === configuredFeature.id;
-      const allRecords = familySourceRecords(activeFamilyId)
+      const allRecords = familySourceRecords()
         .filter(record => representativeRecordIsEligible(activeFamilyId, record));
       const counts = {{
         all: allRecords.length,
@@ -2343,22 +2351,16 @@ def write_index_html() -> None:
       document.getElementById("familyDetailBody").innerHTML = `
         <section class="family-selected-feature">
           <div>
-            <span class="family-selected-kicker">Selected feature Â· active registry</span>
+            <span class="family-selected-kicker">Configured Feature Family representative</span>
             <h3>${{escapeHtml(selectedFeature.label)}}</h3>
             <p>${{escapeHtml(selectedFeature.meaning || "Extracted image feature.")}}</p>
             <span class="family-selected-id">${{escapeHtml(selectedFeature.id)}}</span>
           </div>
           <div class="family-selected-evidence">
-            <p><b>How to read it.</b> ${{escapeHtml(usesConfiguredRepresentative
-              ? (section.representative_interpretation || selectedFeature.meaning)
-              : selectedFeature.meaning)}}</p>
-            <p><b>Why this one.</b> ${{escapeHtml(usesConfiguredRepresentative
-              ? (section.representative_rationale || "Selected as the configured representative for this visual family.")
-              : "Selected for this browser session to explore how this family measurement changes the clustering.")}}</p>
-            <p><b>Evidence.</b> ${{escapeHtml(usesConfiguredRepresentative
-              ? (section.representative_evidence || "The literature supports this visual construct; the implementation remains a computational proxy.")
-              : "The configured representative remains the documented study default; this session override is exploratory.")}}</p>
-            ${{usesConfiguredRepresentative ? `<p class="family-selected-citation">${{escapeHtml(section.representative_citation || "")}}</p>` : ""}}
+            <p><b>How to read it.</b> ${{escapeHtml(section.representative_interpretation || selectedFeature.meaning)}}</p>
+            <p><b>Why this one.</b> ${{escapeHtml(section.representative_rationale || "Selected as the configured representative for this visual family.")}}</p>
+            <p><b>Evidence.</b> ${{escapeHtml(section.representative_evidence || "The literature supports this visual construct; the implementation remains a computational proxy.")}}</p>
+            <p class="family-selected-citation">${{escapeHtml(section.representative_citation || "")}}</p>
           </div>
         </section>
         <div class="family-icon-heading"><h3>${{records.length}}-icon pilot sample</h3><span class="muted">Randomly sampled up to 2 per equal-width value bin, then ${{isOrientation ? "placed in angular order from 0Â° to 180Â°; only confidence-defined orientations are shown" : `ordered by ${{escapeHtml(selectedFeature.label.toLowerCase())}}`}}.</span></div>
@@ -2725,7 +2727,7 @@ def write_index_html() -> None:
         const point = event.points[0];
         const iconId = point.customdata[0];
         const record = records.find(item => item.icon_id === iconId);
-        if (record) renderHoverPreview(record, labels[records.indexOf(record)], event.event);
+        if (record) renderHoverPreview(record, labels[records.indexOf(record)], event.event, records);
       }});
       scatter.on("plotly_unhover", hideHoverPreview);
       scatter.on("plotly_selected", event => applyLassoSelection(event));
@@ -2762,6 +2764,7 @@ def write_index_html() -> None:
     }}
 
     async function initializeAiClustering() {{
+      initializeAiSidebarToggle();
       document.getElementById("aiRunButton").addEventListener("click", runAiClustering);
       fillSelect("aiKSelect", dashboard.metadata.k_values.map(k => [String(k), String(k)]), state.k);
       document.getElementById("aiMethodSelect").value = state.method;
@@ -2961,7 +2964,7 @@ def write_index_html() -> None:
       }});
       plot.on("plotly_hover", event => {{
         const item = items[event.points[0].pointNumber];
-        if (item) renderHoverPreview(item, item.cluster, event.event);
+        if (item) renderHoverPreview(item, item.cluster, event.event, items);
       }});
       plot.on("plotly_unhover", hideHoverPreview);
     }}
@@ -2974,7 +2977,7 @@ def write_index_html() -> None:
         <img class="detail-img" src="${{record.normalized_path}}" alt="">
         <h3>${{escapeHtml(record.label || record.icon_id)}}</h3>
         <p class="muted">${{escapeHtml(record.set_name || "")}}<br>AI cluster: ${{escapeHtml(record.cluster)}}</p>
-        ${{groupedFeatureHtml(record, representativeFeatureIds(), false, null)}}`;
+        ${{groupedFeatureHtml(record, representativeFeatureIds(), false, null, items, true)}}`;
     }}
 
     function aiFeatureDefinition(featureId) {{
@@ -3038,34 +3041,61 @@ def write_index_html() -> None:
       const entries = Array.from(byCluster.entries()).sort((a, b) => a[0] - b[0]);
       const container = document.getElementById("aiClusterSummary");
       container.innerHTML = `
-        <p class="cluster-profile-note">Embedding contribution measures the actual AI space. Measured-feature contribution and the heatmap are post-hoc explanations across the seven thesis representatives.</p>
-        ${{clusterHeatmapHtml(measuredProfile, "AI clusters by measured feature")}}
-        ${{entries.map(([cluster, members], entryIndex) => {{
+        <div class="cluster-summary-launchers">
+          <button type="button" data-ai-cluster-heatmap>Show heatmap</button>
+          <button type="button" data-ai-cluster-details>View all cluster details</button>
+        </div>`;
+      container.querySelector("[data-ai-cluster-heatmap]")?.addEventListener("click", event => {{
+        openClusterAnalysisModal(
+          "AI cluster heatmap",
+          "Post-hoc measured-feature profiles across the AI clusters.",
+          `<p class="cluster-analysis-modal-intro">The heatmap describes the AI clusters after clustering across the seven thesis representatives. These features were not inputs to the embedding model.</p>${{clusterHeatmapHtml(measuredProfile, "AI clusters by measured feature")}}`,
+          event.currentTarget
+        );
+      }});
+      container.querySelector("[data-ai-cluster-details]")?.addEventListener("click", event => {{
+        const detailHtml = entries.map(([cluster, members]) => {{
           const measured = measuredByCluster.get(cluster);
           const embedding = embeddingByCluster.get(Number(cluster));
-          return `
-        <details class="summary-cluster">
-          <summary><b>AI cluster ${{escapeHtml(cluster)}} · ${{escapeHtml(measured?.descriptiveLabel || "Measured profile")}}</b> <span class="muted">(${{members.length}} icons)</span><br><span class="muted">Sets: ${{escapeHtml(topCounts(members.map(item => item.record.set_name), 2).join(", "))}}</span></summary>
-          <div class="summary-details">
-            ${{clusterMetricsHtml([
-              ["Embedding variance", embedding ? `${{(Number(embedding.variance_contribution) * 100).toFixed(1)}}%` : "Unavailable"],
-              ["Embedding strength", embedding ? Number(embedding.separation_strength).toFixed(5) : "Unavailable"],
-              ["Measured variance", measured ? `${{(measured.varianceContribution * 100).toFixed(1)}}%` : "—"],
-              ["Measured strength", measured ? measured.separationStrength.toFixed(3) : "—"],
-              ["Cluster size", members.length]
-            ])}}
-            ${{clusterIconStatisticsHtml(members.map(item => item.record), members.length, items.length)}}
-            ${{clusterFeatureStatisticsHtml(measuredProfile, measured)}}
-            <div class="summary-explain">Most characteristic measured features: ${{escapeHtml(aiClusterExplanation(items, cluster))}}</div>
-            <div class="rep-icons">${{members.slice(0, 12).map(item => `<div class="rep-icon"><img src="${{item.record.normalized_path}}" title="${{escapeHtml(item.record.label)}}" alt=""><span>${{escapeHtml(item.record.label)}}</span></div>`).join("")}}</div>
-            <div class="summary-actions"><button class="cluster-fullscreen-open" type="button" data-ai-cluster-entry="${{entryIndex}}">View all ${{members.length}} icons fullscreen</button></div>
-          </div>
-        </details>`;
-        }}).join("")}}`;
-      container.querySelectorAll("[data-ai-cluster-entry]").forEach(button => button.addEventListener("click", () => {{
-        const entry = entries[Number(button.dataset.aiClusterEntry)];
-        if (entry) openClusterModal(entry[0], entry[1], button, "AI");
-      }}));
+          const clusterRecords = members.map(item => item.record);
+          return clusterDetailCardHtml({{
+            heading: `AI cluster ${{cluster}} · ${{measured?.descriptiveLabel || "Measured profile"}}`,
+            countLabel: `${{members.length}} icons`,
+            setsLabel: topCounts(clusterRecords.map(item => item.set_name), 2).join(", "),
+            metrics: [
+              ["Variance contribution", embedding ? `${{(Number(embedding.variance_contribution) * 100).toFixed(1)}}%` : "Unavailable"],
+              ["Separation strength", embedding ? Number(embedding.separation_strength).toFixed(5) : "Unavailable"],
+              ["Full cluster size", members.length],
+              ["Post-hoc measured variance", measured ? `${{(measured.varianceContribution * 100).toFixed(1)}}%` : "—"],
+              ["Post-hoc measured strength", measured ? measured.separationStrength.toFixed(3) : "—"]
+            ],
+            clusterRecords,
+            visibleCount: members.length,
+            totalCount: items.length,
+            profile: measuredProfile,
+            clusterProfile: measured,
+            explanationHtml: `<div class="summary-explain">Most characteristic measured features: ${{escapeHtml(aiClusterExplanation(items, cluster))}}</div>`,
+            iconsHtml: members.map(item => `<div class="rep-icon"><img src="${{item.record.normalized_path}}" title="${{escapeHtml(item.record.label)}}" alt=""><span>${{escapeHtml(item.record.label)}}</span></div>`).join("")
+          }});
+        }}).join("");
+        openClusterAnalysisModal(
+          "AI cluster details",
+          `${{entries.length}} clusters in the loaded AI result.`,
+          `<p class="cluster-analysis-modal-intro">Every cluster uses the same detail layout as Image Clustering. Variance contribution and separation strength are calculated in the model-embedding space; measured-feature statistics are post-hoc descriptions.</p><div class="cluster-analysis-list">${{detailHtml}}</div>`,
+          event.currentTarget
+        );
+      }});
+    }}
+
+    function initializeAiSidebarToggle() {{
+      const workspace = document.getElementById("aiWorkspace");
+      const button = document.getElementById("aiSidebarToggle");
+      button.addEventListener("click", () => {{
+        const collapsed = workspace.classList.toggle("ai-sidebar-collapsed");
+        button.textContent = collapsed ? "Show sidebar" : "Hide sidebar";
+        button.setAttribute("aria-expanded", String(!collapsed));
+        window.requestAnimationFrame(() => Plotly.Plots.resize(document.getElementById("aiEmbeddingScatter")));
+      }});
     }}
 
     function openAiComparison() {{
@@ -3251,7 +3281,7 @@ def write_index_html() -> None:
     function applyLassoSelection(event) {{
       const points = event?.points || [];
       if (!points.length || !currentPlotContext) {{
-        clearLassoSelection(false);
+        clearLassoSelection();
         return;
       }}
       selectedIconIds = new Set(points.map(point => point.customdata?.[0]).filter(Boolean));
@@ -3283,29 +3313,25 @@ def write_index_html() -> None:
       }});
     }}
 
-    function clearLassoSelection(resetView) {{
+    function clearLassoSelection() {{
       selectedIconIds = new Set();
       selectedIconId = null;
-      if (currentPlotContext) {{
-        Plotly.restyle("scatter", {{selectedpoints: [null]}});
-        const layoutUpdate = {{images: plotImages(
-          currentPlotContext.filtered,
-          currentPlotContext.coords,
-          currentPlotContext.ranges
-        )}};
-        if (resetView) {{
-          layoutUpdate["xaxis.range"] = currentPlotContext.ranges.x;
-          layoutUpdate["yaxis.range"] = currentPlotContext.ranges.y;
-        }}
-        Plotly.relayout("scatter", layoutUpdate);
-        renderDetail(currentPlotContext.labels);
-      }}
-      updatePlotSelectionControls();
+      hideHoverPreview();
+      if (currentPlotContext) render();
+      else updatePlotSelectionControls();
     }}
 
-    function renderHoverPreview(record, cluster, event) {{
+    function resetPlotView() {{
+      selectedIconIds = new Set();
+      selectedIconId = null;
+      hideHoverPreview();
+      if (currentPlotContext) render();
+      else updatePlotSelectionControls();
+    }}
+
+    function renderHoverPreview(record, cluster, event, comparisonRecords=clusteringRecords()) {{
       const preview = document.getElementById("hoverPreview");
-      const features = groupedFeatureHtml(record, selectedFeatureIds(), false, 10);
+      const features = groupedFeatureHtml(record, selectedFeatureIds(), false, 10, comparisonRecords, true);
       preview.innerHTML = `
         <div class="hover-grid">
           <img src="${{record.normalized_path}}" alt="">
@@ -3353,7 +3379,7 @@ def write_index_html() -> None:
         return;
       }}
       const index = records.indexOf(record);
-      const featureGroups = groupedFeatureHtml(record, visibleFeatureIds(), true, null);
+      const featureGroups = groupedFeatureHtml(record, representativeFeatureIds(), false, null, records, true);
       const mcdougallRows = Object.entries(record.mcdougall || {{}})
         .filter(([, value]) => value !== "")
         .map(([key, value]) => `<span class="pill">${{title(key)}}: ${{escapeHtml(String(value))}}</span>`).join("");
@@ -3361,6 +3387,7 @@ def write_index_html() -> None:
         <section class="lasso-selection-summary">
           <b>${{lassoRecords.length}} lasso-selected icon${{lassoRecords.length === 1 ? "" : "s"}}</b>
           <p>${{escapeHtml(topCounts(lassoRecords.map(item => item.set_name), 3).join(", "))}}</p>
+          ${{lassoFeatureComparisonHtml(lassoRecords, records, representativeFeatureIds())}}
           <div class="lasso-icon-grid">
             ${{lassoRecords.map(item => `<button type="button" class="lasso-icon-button ${{item.icon_id === selectedIconId ? "active" : ""}}" data-lasso-icon-id="${{escapeHtml(item.icon_id)}}" title="Inspect ${{escapeHtml(item.label)}}">
               <img src="${{item.normalized_path}}" alt=""><span>${{escapeHtml(item.label)}}</span>
@@ -3396,43 +3423,55 @@ def write_index_html() -> None:
       }});
       const clusterEntries = Array.from(byCluster.entries()).sort((a,b) => a[0]-b[0]);
       container.innerHTML = `
-        ${{profileAvailable
-          ? `<p class="cluster-profile-note">Contribution is each cluster's size-weighted share of total between-cluster variance in the selected feature space. Separation strength is the cluster centre's average squared standardized distance from the overall centre.</p>${{clusterHeatmapHtml(profile, "Selected-feature cluster profiles")}}`
-          : '<p class="cluster-profile-note">Cluster variance profiles require the original clustering dimensions and are currently available for the Image variant only.</p>'}}
-        ${{clusterEntries.map(([cluster, items], entryIndex) => {{
-        const topSets = topCounts(items.map(item => item.record.set_name), 2).join(", ");
-        const clusterProfile = profileByCluster.get(cluster);
-        const clusterRecords = labels.map((label, index) => label === cluster ? allRecords[index] : null).filter(Boolean);
-        const explanation = profileAvailable ? clusterExplanation(labels, cluster, selectedFeatureIds()) : '<div class="summary-explain">Measured-feature interpretation is not shown for precomputed Metadata or Combined clusters.</div>';
-        const icons = items.slice(0, 12).map(item => `
-          <div class="rep-icon">
-            <img src="${{item.record.normalized_path}}" title="${{escapeHtml(item.record.label)}}" alt="">
-            <span title="${{escapeHtml(item.record.label)}}">${{escapeHtml(item.record.label)}}</span>
-          </div>`).join("");
-        return `<details class="summary-cluster">
-          <summary><b>${{methodLabel()}} cluster ${{cluster}}${{clusterProfile ? ` · ${{escapeHtml(clusterProfile.descriptiveLabel)}}` : ""}}</b> <span class="muted">(${{items.length}} visible icons)</span><br>
-            <span class="muted">Sets: ${{escapeHtml(topSets)}}</span></summary>
-          <div class="summary-details">
-            ${{clusterProfile ? clusterMetricsHtml([
-              ["Variance contribution", clusterProfile ? `${{(clusterProfile.varianceContribution * 100).toFixed(1)}}%` : "—"],
-              ["Separation strength", clusterProfile ? clusterProfile.separationStrength.toFixed(3) : "—"],
-              ["Full cluster size", clusterProfile?.size ?? "—"]
-            ]) : ""}}
-            ${{clusterIconStatisticsHtml(clusterRecords, items.length, allRecords.length)}}
-            ${{profileAvailable ? clusterFeatureStatisticsHtml(profile, clusterProfile) : ""}}
-            ${{explanation}}
-            <div class="rep-icons">${{icons}}</div>
-            <div class="summary-actions">
-              <button class="cluster-fullscreen-open" type="button" data-cluster-entry="${{entryIndex}}">View all ${{items.length}} icons fullscreen</button>
-            </div>
-          </div>
-        </details>`;
-      }}).join("")}}`;
-      container.querySelectorAll(".cluster-fullscreen-open").forEach(button => {{
-        button.addEventListener("click", () => {{
-          const entry = clusterEntries[Number(button.dataset.clusterEntry)];
-          if (entry) openClusterModal(entry[0], entry[1], button);
-        }});
+        <div class="cluster-summary-launchers">
+          <button type="button" data-cluster-heatmap ${{profileAvailable ? "" : "disabled"}}>Show heatmap</button>
+          <button type="button" data-cluster-details>View all cluster details</button>
+        </div>
+        ${{profileAvailable ? "" : '<p class="cluster-profile-note">Heatmaps are available for the Image variant only.</p>'}}`;
+
+      container.querySelector("[data-cluster-heatmap]")?.addEventListener("click", event => {{
+        openClusterAnalysisModal(
+          `${{methodLabel()}} cluster heatmap`,
+          "Signed standardized feature profiles for every cluster.",
+          `<p class="cluster-analysis-modal-intro">Contribution is each cluster's size-weighted share of total between-cluster variance in the selected feature space. Separation strength is the cluster centre's average squared standardized distance from the overall centre.</p>${{clusterHeatmapHtml(profile, "Selected-feature cluster profiles")}}`,
+          event.currentTarget
+        );
+      }});
+      container.querySelector("[data-cluster-details]")?.addEventListener("click", event => {{
+        const detailHtml = clusterEntries.map(([cluster, items]) => {{
+          const topSets = topCounts(items.map(item => item.record.set_name), 2).join(", ");
+          const clusterProfile = profileByCluster.get(cluster);
+          const clusterRecords = labels.map((label, index) => label === cluster ? allRecords[index] : null).filter(Boolean);
+          const explanation = profileAvailable ? clusterExplanation(labels, cluster, selectedFeatureIds()) : '<div class="summary-explain">Measured-feature interpretation is not shown for precomputed Metadata or Combined clusters.</div>';
+          const icons = items.map(item => `
+            <div class="rep-icon">
+              <img src="${{item.record.normalized_path}}" title="${{escapeHtml(item.record.label)}}" alt="">
+              <span title="${{escapeHtml(item.record.label)}}">${{escapeHtml(item.record.label)}}</span>
+            </div>`).join("");
+          return clusterDetailCardHtml({{
+            heading: `${{methodLabel()}} cluster ${{cluster}}${{clusterProfile ? ` · ${{clusterProfile.descriptiveLabel}}` : ""}}`,
+            countLabel: `${{items.length}} visible icons`,
+            setsLabel: topSets,
+            metrics: clusterProfile ? [
+              ["Variance contribution", `${{(clusterProfile.varianceContribution * 100).toFixed(1)}}%`],
+              ["Separation strength", clusterProfile.separationStrength.toFixed(3)],
+              ["Full cluster size", clusterProfile.size]
+            ] : [],
+            clusterRecords,
+            visibleCount: items.length,
+            totalCount: allRecords.length,
+            profile: profileAvailable ? profile : null,
+            clusterProfile,
+            explanationHtml: explanation,
+            iconsHtml: icons
+          }});
+        }}).join("");
+        openClusterAnalysisModal(
+          `${{methodLabel()}} cluster details`,
+          `${{clusterEntries.length}} clusters in the current filtered view.`,
+          `<p class="cluster-analysis-modal-intro">Every cluster is expanded below with its statistics, interpretation, and all currently visible icons.</p><div class="cluster-analysis-list">${{detailHtml}}</div>`,
+          event.currentTarget
+        );
       }});
     }}
 
@@ -3440,7 +3479,111 @@ def write_index_html() -> None:
       return state.method === "hierarchical" ? "Hierarchical" : "K-Means";
     }}
 
-    function groupedFeatureHtml(record, featureIds, includeDescriptions=true, maxFeatures=null) {{
+    function comparisonFeatureValue(record, featureId) {{
+      const rawValue = record?.image_features?.[featureId];
+      if (rawValue === null || rawValue === undefined || rawValue === "") return null;
+      const value = Number(rawValue);
+      if (!Number.isFinite(value)) return null;
+      if (featureId === "principal_axis_orientation_v2" && !hasDefinedOrientation(record)) return null;
+      return value;
+    }}
+
+    function quantileSorted(sorted, quantile) {{
+      if (!sorted.length) return null;
+      const position = (sorted.length - 1) * quantile;
+      const lower = Math.floor(position);
+      const upper = Math.ceil(position);
+      if (lower === upper) return sorted[lower];
+      return sorted[lower] + (sorted[upper] - sorted[lower]) * (position - lower);
+    }}
+
+    function featureDistribution(records, featureId) {{
+      const values = records
+        .map(record => comparisonFeatureValue(record, featureId))
+        .filter(value => value !== null)
+        .sort((a, b) => a - b);
+      if (!values.length) return null;
+      return {{
+        values,
+        count: values.length,
+        min: values[0],
+        q1: quantileSorted(values, 0.25),
+        median: quantileSorted(values, 0.5),
+        q3: quantileSorted(values, 0.75),
+        max: values[values.length - 1]
+      }};
+    }}
+
+    function featureRangePercent(value, distribution) {{
+      if (!distribution || distribution.max === distribution.min) return 50;
+      return Math.max(0, Math.min(100, (value - distribution.min) / (distribution.max - distribution.min) * 100));
+    }}
+
+    function featurePercentile(value, distribution) {{
+      if (!distribution?.values.length) return null;
+      const less = distribution.values.filter(item => item < value).length;
+      const equal = distribution.values.filter(item => item === value).length;
+      return (less + equal * 0.5) / distribution.values.length * 100;
+    }}
+
+    function featureMedianDifference(value, median, featureId) {{
+      let difference = value - median;
+      if (featureId === "principal_axis_orientation_v2") difference = ((difference + 90) % 180 + 180) % 180 - 90;
+      return difference;
+    }}
+
+    function ordinalPercentile(value) {{
+      const rounded = Math.max(0, Math.min(100, Math.round(value)));
+      const mod100 = rounded % 100;
+      const suffix = mod100 >= 11 && mod100 <= 13 ? "th" : ({{1: "st", 2: "nd", 3: "rd"}}[rounded % 10] || "th");
+      return `${{rounded}}${{suffix}} percentile`;
+    }}
+
+    function featureComparisonCardHtml(feature, value, distribution, subjectLabel, populationSize, compact=false) {{
+      if (value === null || !distribution) return `<div class="feature-value-card"><div class="feature-value-head"><b>${{escapeHtml(feature.label)}}</b><b>Undefined</b></div></div>`;
+      const subjectPosition = featureRangePercent(value, distribution);
+      const medianPosition = featureRangePercent(distribution.median, distribution);
+      const q1Position = featureRangePercent(distribution.q1, distribution);
+      const q3Position = featureRangePercent(distribution.q3, distribution);
+      const percentile = featurePercentile(value, distribution);
+      const difference = featureMedianDifference(value, distribution.median, feature.id);
+      const differenceLabel = `${{difference >= 0 ? "+" : ""}}${{formatFeatureValue(difference)}} from median`;
+      const definedLabel = distribution.count === populationSize ? "" : ` · ${{distribution.count}} defined`;
+      const track = `<div class="feature-range-track" aria-label="${{escapeHtml(feature.label)}}: ${{escapeHtml(subjectLabel)}} ${{formatFeatureValue(value)}}; range ${{formatFeatureValue(distribution.min)}} to ${{formatFeatureValue(distribution.max)}}; all-icons median ${{formatFeatureValue(distribution.median)}}">
+          <span class="feature-range-middle" style="left:${{q1Position.toFixed(2)}}%;width:${{Math.max(0, q3Position - q1Position).toFixed(2)}}%"></span>
+          <span class="feature-range-marker global" style="left:${{medianPosition.toFixed(2)}}%" title="Global median ${{formatFeatureValue(distribution.median)}}"></span>
+          <span class="feature-range-marker subject" style="left:${{subjectPosition.toFixed(2)}}%" title="${{escapeHtml(subjectLabel)}} ${{formatFeatureValue(value)}}"></span>
+        </div>`;
+      if (compact) return `<div class="feature-value-card compact">
+        <div class="feature-value-head"><b title="${{escapeHtml(feature.meaning)}}">${{escapeHtml(feature.label)}}</b><b>${{formatFeatureValue(value)}}</b></div>
+        ${{track}}
+      </div>`;
+      return `<div class="feature-value-card">
+        <div class="feature-value-head"><b title="${{escapeHtml(feature.meaning)}}">${{escapeHtml(feature.label)}}</b><b>${{formatFeatureValue(value)}}</b></div>
+        <div class="feature-value-meta">All ${{populationSize}} icons: median ${{formatFeatureValue(distribution.median)}} · middle 50% ${{formatFeatureValue(distribution.q1)}}–${{formatFeatureValue(distribution.q3)}}${{definedLabel}}</div>
+        <div class="feature-value-meta">${{escapeHtml(subjectLabel)}}: ${{differenceLabel}} · ${{ordinalPercentile(percentile)}}</div>
+        ${{track}}
+        <div class="feature-range-labels"><span>Min ${{formatFeatureValue(distribution.min)}}</span><span>Max ${{formatFeatureValue(distribution.max)}}</span></div>
+        <div class="feature-range-legend"><span class="feature-range-key"><i class="feature-range-swatch subject"></i>${{escapeHtml(subjectLabel)}}</span><span class="feature-range-key"><i class="feature-range-swatch"></i>All-icons median</span></div>
+      </div>`;
+    }}
+
+    function lassoFeatureComparisonHtml(selectedRecords, allRecords, featureIds) {{
+      if (!selectedRecords.length) return "";
+      const cards = featureIds.map(featureId => {{
+        const feature = featureInfo(featureId);
+        const selectedDistribution = featureDistribution(selectedRecords, featureId);
+        const globalDistribution = featureDistribution(allRecords, featureId);
+        return featureComparisonCardHtml(feature, selectedDistribution?.median ?? null, globalDistribution, `Selected median (n=${{selectedDistribution?.count || 0}})`, allRecords.length, true);
+      }}).join("");
+      return `<section class="lasso-feature-comparison">
+        <h3>Selected group vs all ${{allRecords.length}} icons</h3>
+        <p>The colored marker is the lasso-selected median; the dark marker is the full-sample median.</p>
+        <div class="feature-value-list">${{cards}}</div>
+      </section>`;
+    }}
+
+    function groupedFeatureHtml(record, featureIds, includeDescriptions=true, maxFeatures=null, comparisonRecords=clusteringRecords(), compact=false) {{
       const selected = new Set(featureIds);
       const featureLimit = maxFeatures === null ? featureIds.length : maxFeatures;
       let shown = 0;
@@ -3449,11 +3592,14 @@ def write_index_html() -> None:
         if (!features.length || shown >= featureLimit) return "";
         const visible = features.slice(0, Math.max(0, featureLimit - shown));
         shown += visible.length;
-        const rows = visible.map(feature => `
-          <tr>
-            <td title="${{escapeHtml(feature.meaning)}}">${{escapeHtml(feature.label)}}</td>
-            <td>${{formatFeatureValue(record.image_features[feature.id])}}</td>
-          </tr>`).join("");
+        const rows = visible.map(feature => featureComparisonCardHtml(
+          feature,
+          comparisonFeatureValue(record, feature.id),
+          featureDistribution(comparisonRecords, feature.id),
+          "Icon",
+          comparisonRecords.length,
+          compact
+        )).join("");
         const description = includeDescriptions ? `<p>${{escapeHtml(section.description)}}</p>` : "";
         const familyReading = includeDescriptions ? `
           <p class="family-reading"><b>Human perception:</b> ${{escapeHtml(section.perception || "This family describes a perceptual visual channel.")}}</p>
@@ -3463,7 +3609,7 @@ def write_index_html() -> None:
           <h4>${{escapeHtml(section.title)}}</h4>
           ${{description}}
           ${{familyReading}}
-          <table>${{rows}}</table>
+          <div class="feature-value-list">${{rows}}</div>
         </div>`;
       }}).join("");
       const omitted = featureIds.length - shown;
@@ -3529,6 +3675,19 @@ def write_index_html() -> None:
 
     function clusterMetricsHtml(metrics) {{
       return `<div class="cluster-metrics">${{metrics.map(([label, value]) => `<div class="cluster-metric"><span>${{escapeHtml(label)}}</span><b>${{escapeHtml(value)}}</b></div>`).join("")}}</div>`;
+    }}
+
+    function clusterDetailCardHtml({{heading, countLabel, setsLabel, metrics, clusterRecords, visibleCount, totalCount, profile, clusterProfile, explanationHtml, iconsHtml}}) {{
+      return `<details class="summary-cluster" open>
+        <summary><b>${{escapeHtml(heading)}}</b> <span class="muted">(${{escapeHtml(countLabel)}})</span><br><span class="muted">Sets: ${{escapeHtml(setsLabel)}}</span></summary>
+        <div class="summary-details">
+          ${{metrics.length ? clusterMetricsHtml(metrics) : ""}}
+          ${{clusterIconStatisticsHtml(clusterRecords, visibleCount, totalCount)}}
+          ${{profile ? clusterFeatureStatisticsHtml(profile, clusterProfile) : ""}}
+          ${{explanationHtml}}
+          <div class="rep-icons">${{iconsHtml}}</div>
+        </div>
+      </details>`;
     }}
 
     function clusterHeatmapHtml(profile, titleText) {{

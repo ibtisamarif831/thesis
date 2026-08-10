@@ -1,0 +1,173 @@
+{"kind":"deck","id":"pr/16llc2","name":"Deck"}
+{"kind":"layout","layoutId":"524d7e87-ba4b-4159-ae09-a3aa92b3b216","name":"Master","type":"master"}
+{"kind":"layout","layoutId":"0912de24-62a1-42cf-8883-a96bbffa0594","name":"Title Slide","type":"title"}
+{"kind":"slide","id":"sl/e5kdaq","slide":1,"title":"THESIS PROGRESS PRESENTATION","textShapes":4}
+{"kind":"textbox","id":"sh/jqlkzqxk","slide":1,"text":"THESIS PROGRESS PRESENTATION","textPreview":"THESIS PROGRESS PRESENTATION","textChars":28,"textLines":1,"bbox":[42,42,620,30]}
+{"kind":"textbox","id":"sh/4rulsvy5","slide":1,"text":"[THESIS TITLE]","textPreview":"[THESIS TITLE]","textChars":14,"textLines":1,"bbox":[42,205,1080,125]}
+{"kind":"shape","id":"sh/5s3210fq","slide":1,"bbox":[42,371,188,5]}
+{"kind":"textbox","id":"sh/u1sjm1g3","slide":1,"text":"Research problem, questions, and literature review","textPreview":"Research problem, questions, and literature review","textChars":50,"textLines":1,"bbox":[42,414,760,65]}
+{"kind":"textbox","id":"sh/vm1kv6x8","slide":1,"text":"Name · Programme · Supervisor · Date","textPreview":"Name · Programme · Supervisor · Date","textChars":36,"textLines":1,"bbox":[42,588,760,28]}
+{"kind":"notes","id":"nt/e5kdaq","slide":1,"text":"Replace the title and identity line when the final thesis wording is confirmed.\n\n[Sources]"}
+{"kind":"slide","id":"sl/n90uuh","slide":2,"title":"01 · THE PROBLEM","textShapes":5}
+{"kind":"textbox","id":"sh/nq94fi5c","slide":2,"text":"01 · THE PROBLEM","textPreview":"01 · THE PROBLEM","textChars":16,"textLines":1,"bbox":[42,35,330,24]}
+{"kind":"textbox","id":"sh/ori58nmh","slide":2,"text":"02","textPreview":"02","textChars":2,"textLines":1,"bbox":[1180,665,58,20]}
+{"kind":"textbox","id":"sh/psrmhsn2","slide":2,"text":"Visual similarity creates a practical comparison problem","textPreview":"Visual similarity creates a practical comparison problem","textChars":56,"textLines":1,"bbox":[42,78,1196,110]}
+{"kind":"textbox","id":"sh/at0nad4n","slide":2,"text":"Large icon collections contain repeated shapes, subtle variations, and icons that may become difficult to distinguish. Manual inspection cannot consistently explain which visible properties make two icons appear close or different.","textPreview":"Large icon collections contain repeated shapes, subtle variations, and icons that may become difficult to distinguish. Manual inspection ...","textChars":231,"textLines":1,"bbox":[42,224,510,172]}
+{"kind":"textbox","id":"sh/bu9oji58","slide":2,"text":"The thesis therefore needs an auditable bridge between visible pixels and later human judgments—without confusing visual similarity with semantic meaning.","textPreview":"The thesis therefore needs an auditable bridge between visible pixels and later human judgments—without confusing visual similarity with ...","textChars":154,"textLines":1,"bbox":[42,438,510,130]}
+{"kind":"shape","id":"sh/cfi5cnmt","slide":2,"bbox":[610,176,628,452]}
+{"kind":"image","id":"im/gv25cvmd","slide":2,"name":"","alt":"Closest cross-set feature-similar icon pairs","bbox":[626,191,596,423]}
+{"kind":"notes","id":"nt/n90uuh","slide":2,"text":"\n[Sources]\n- wiki/thesis-overview.md\n- icon_data/analysis/similarity/closest_cross_set_pairs_euclidean.png"}
+{"kind":"slide","id":"sl/z3ki6b","slide":3,"title":"02–03 · AIM AND RESEARCH QUESTIONS","textShapes":10}
+{"kind":"textbox","id":"sh/36907ypw","slide":3,"text":"02–03 · AIM AND RESEARCH QUESTIONS","textPreview":"02–03 · AIM AND RESEARCH QUESTIONS","textChars":34,"textLines":1,"bbox":[42,35,330,24]}
+{"kind":"textbox","id":"sh/o7i1036h","slide":3,"text":"03","textPreview":"03","textChars":2,"textLines":1,"bbox":[1180,665,58,20]}
+{"kind":"textbox","id":"sh/p8ri9872","slide":3,"text":"The study connects computer measurements with human responses","textPreview":"The study connects computer measurements with human responses","textChars":61,"textLines":1,"bbox":[42,78,1196,84]}
+{"kind":"textbox","id":"sh/ehgjutof","slide":3,"text":"Working aim: organize literature-supported visible icon properties into measurable feature families, then test where those measurements agree—or disagree—with human identification and perception.","textPreview":"Working aim: organize literature-supported visible icon properties into measurable feature families, then test where those measurements a...","textChars":195,"textLines":1,"bbox":[42,171,1138,83]}
+{"kind":"textbox","id":"sh/fi903yp0","slide":3,"text":"RQ1","textPreview":"RQ1","textChars":3,"textLines":1,"bbox":[42,295,100,42]}
+{"kind":"textbox","id":"sh/gji1w365","slide":3,"text":"Which visible properties can be measured consistently from normalized icon images?","textPreview":"Which visible properties can be measured consistently from normalized icon images?","textChars":82,"textLines":1,"bbox":[168,294,1000,58]}
+{"kind":"shape","id":"sh/1kri587q","slide":3,"bbox":[42,371,1196,1]}
+{"kind":"textbox","id":"sh/ydkj6doj","slide":3,"text":"RQ2","textPreview":"RQ2","textChars":3,"textLines":1,"bbox":[42,402,100,42]}
+{"kind":"textbox","id":"sh/zetkfi54","slide":3,"text":"How can those measurements describe similarity, distance, and potential confusability?","textPreview":"How can those measurements describe similarity, distance, and potential confusability?","textChars":86,"textLines":1,"bbox":[168,401,1000,58]}
+{"kind":"shape","id":"sh/fu5cral0","slide":3,"bbox":[42,478,1196,1]}
+{"kind":"textbox","id":"sh/e9wvypkf","slide":3,"text":"RQ3","textPreview":"RQ3","textChars":3,"textLines":1,"bbox":[42,509,100,42]}
+{"kind":"textbox","id":"sh/1wnutk36","slide":3,"text":"How well do computer-side measurements correspond to human identification and similarity judgments?","textPreview":"How well do computer-side measurements correspond to human identification and similarity judgments?","textChars":99,"textLines":1,"bbox":[168,508,1000,58]}
+{"kind":"notes","id":"nt/z3ki6b","slide":3,"text":"\n[Sources]\n- wiki/thesis-overview.md\n- wiki/evaluation-and-human-study.md"}
+{"kind":"slide","id":"sl/ntdhro","slide":4,"title":"04 · LITERATURE REVIEW","textShapes":16}
+{"kind":"textbox","id":"sh/t0365k7y","slide":4,"text":"04 · LITERATURE REVIEW","textPreview":"04 · LITERATURE REVIEW","textChars":22,"textLines":1,"bbox":[42,35,330,24]}
+{"kind":"textbox","id":"sh/6xcnu5o7","slide":4,"text":"04","textPreview":"04","textChars":2,"textLines":1,"bbox":[1180,665,58,20]}
+{"kind":"textbox","id":"sh/7ylo3aps","slide":4,"text":"Seven papers define four parts of the thesis","textPreview":"Seven papers define four parts of the thesis","textChars":44,"textLines":1,"bbox":[42,78,1196,76]}
+{"kind":"textbox","id":"sh/kvu5sf61","slide":4,"text":"The literature does not provide one complete model. Instead, it contributes complementary evidence for measurement, perceptual design, distinguishability, and evaluation.","textPreview":"The literature does not provide one complete model. Instead, it contributes complementary evidence for measurement, perceptual design, di...","textChars":170,"textLines":1,"bbox":[42,162,1120,70]}
+{"kind":"textbox","id":"sh/lw36107m","slide":4,"text":"MEASUREMENT","textPreview":"MEASUREMENT","textChars":11,"textLines":1,"bbox":[42,270,236,23]}
+{"kind":"textbox","id":"sh/y9snq5ob","slide":4,"text":"Forsythe · Garcia","textPreview":"Forsythe · Garcia","textChars":17,"textLines":1,"bbox":[292,268,380,30]}
+{"kind":"textbox","id":"sh/ju1ozapw","slide":4,"text":"Complexity, structure, abstractness, and the boundary between pixels and context.","textPreview":"Complexity, structure, abstractness, and the boundary between pixels and context.","textChars":81,"textLines":1,"bbox":[700,267,500,47]}
+{"kind":"shape","id":"sh/w7a5ov65","slide":4,"bbox":[42,330,1196,1]}
+{"kind":"textbox","id":"sh/x8j6x07q","slide":4,"text":"VISUAL FOUNDATIONS","textPreview":"VISUAL FOUNDATIONS","textChars":18,"textLines":1,"bbox":[42,359,236,23]}
+{"kind":"textbox","id":"sh/pwjm54r6","slide":4,"text":"Borgo et al.","textPreview":"Borgo et al.","textChars":12,"textLines":1,"bbox":[292,357,380,30]}
+{"kind":"textbox","id":"sh/ova5cjal","slide":4,"text":"Visual channels, Gestalt organization, and task-dependent glyph design.","textPreview":"Visual channels, Gestalt organization, and task-dependent glyph design.","textChars":71,"textLines":1,"bbox":[700,356,500,47]}
+{"kind":"shape","id":"sh/3u143e90","slide":4,"bbox":[42,419,1196,1]}
+{"kind":"textbox","id":"sh/2tsna9sf","slide":4,"text":"DISTINGUISHABILITY","textPreview":"DISTINGUISHABILITY","textChars":18,"textLines":1,"bbox":[42,448,236,23]}
+{"kind":"textbox","id":"sh/1szm14ru","slide":4,"text":"Legg et al. · Fuchs et al. (contour)","textPreview":"Legg et al. · Fuchs et al. (contour)","textChars":36,"textLines":1,"bbox":[292,446,380,30]}
+{"kind":"textbox","id":"sh/grql8zap","slide":4,"text":"Distance across channels, contour, closure, and similarity strategy.","textPreview":"Distance across channels, contour, closure, and similarity strategy.","textChars":68,"textLines":1,"bbox":[700,445,500,47]}
+{"kind":"shape","id":"sh/fqh4zu94","slide":4,"bbox":[42,508,1196,1]}
+{"kind":"textbox","id":"sh/ep836psj","slide":4,"text":"DESIGN & EVALUATION","textPreview":"DESIGN & EVALUATION","textChars":19,"textLines":1,"bbox":[42,537,236,23]}
+{"kind":"textbox","id":"sh/t4zmxkry","slide":4,"text":"Maguire et al. · Fuchs et al. (review)","textPreview":"Maguire et al. · Fuchs et al. (review)","textChars":38,"textLines":1,"bbox":[292,535,380,30]}
+{"kind":"textbox","id":"sh/s3ql4zad","slide":4,"text":"Systematic glyph design and evidence-based user-study planning.","textPreview":"Systematic glyph design and evidence-based user-study planning.","textChars":63,"textLines":1,"bbox":[700,534,500,47]}
+{"kind":"notes","id":"nt/ntdhro","slide":4,"text":"\n[Sources]\n- wiki/literature-and-evidence.md\n- notes/paper_feature_review.md\n- papers/extracted_text/README.md"}
+{"kind":"slide","id":"sl/yvxz0h","slide":5,"title":"04 · LITERATURE REVIEW","textShapes":12}
+{"kind":"textbox","id":"sh/xc7atobi","slide":5,"text":"04 · LITERATURE REVIEW","textPreview":"04 · LITERATURE REVIEW","textChars":22,"textLines":1,"bbox":[42,35,330,24]}
+{"kind":"textbox","id":"sh/a9wri9c7","slide":5,"text":"05","textPreview":"05","textChars":2,"textLines":1,"bbox":[1180,665,58,20]}
+{"kind":"textbox","id":"sh/va5sretc","slide":5,"text":"Measuring icon complexity automatically","textPreview":"Measuring icon complexity automatically","textChars":39,"textLines":1,"bbox":[42,70,1196,74]}
+{"kind":"textbox","id":"sh/kfy9oju9","slide":5,"text":"Forsythe, Sheehy & Sawey · 2003","textPreview":"Forsythe, Sheehy & Sawey · 2003","textChars":31,"textLines":1,"bbox":[42,143,1180,30]}
+{"kind":"shape","id":"sh/5g7axobu","slide":5,"bbox":[820,188,418,438]}
+{"kind":"textbox","id":"sh/jepsvyto","slide":5,"text":"PURPOSE","textPreview":"PURPOSE","textChars":7,"textLines":1,"bbox":[42,190,718,24]}
+{"kind":"textbox","id":"sh/0ju9czup","slide":5,"text":"Test whether image-processing measurements can estimate human judgments of icon complexity.","textPreview":"Test whether image-processing measurements can estimate human judgments of icon complexity.","textChars":91,"textLines":1,"bbox":[42,219,718,72]}
+{"kind":"textbox","id":"sh/lknal4va","slide":5,"text":"METHOD","textPreview":"METHOD","textChars":6,"textLines":1,"bbox":[42,298,718,24]}
+{"kind":"textbox","id":"sh/t0zqhgn2","slide":5,"text":"Six pixel-derived properties were correlated with established human complexity ratings for a random sample of 68 icons.","textPreview":"Six pixel-derived properties were correlated with established human complexity ratings for a random sample of 68 icons.","textChars":119,"textLines":1,"bbox":[42,327,718,72]}
+{"kind":"textbox","id":"sh/szqp8b6h","slide":5,"text":"MAIN FINDING","textPreview":"MAIN FINDING","textChars":12,"textLines":1,"bbox":[42,406,718,24]}
+{"kind":"textbox","id":"sh/7yh8f65w","slide":5,"text":"Structural variability and edge information showed the strongest relationships with perceived complexity (ρ = .65 and .64).","textPreview":"Structural variability and edge information showed the strongest relationships with perceived complexity (ρ = .65 and .64).","textChars":123,"textLines":1,"bbox":[42,435,718,72]}
+{"kind":"shape","id":"sh/6x876lob","slide":5,"bbox":[42,529,718,97]}
+{"kind":"textbox","id":"sh/hojql0ny","slide":5,"text":"WHY IT MATTERS HERE","textPreview":"WHY IT MATTERS HERE","textChars":19,"textLines":1,"bbox":[62,546,678,20]}
+{"kind":"textbox","id":"sh/gna9cv6d","slide":5,"text":"Provides the strongest direct basis for edge density and structural variability as computational complexity proxies.","textPreview":"Provides the strongest direct basis for edge density and structural variability as computational complexity proxies.","textChars":116,"textLines":1,"bbox":[62,573,678,42]}
+{"kind":"image","id":"im/361cje5w","slide":5,"name":"","alt":"First page of Measuring icon complexity automatically","bbox":[838,202,382,410]}
+{"kind":"notes","id":"nt/yvxz0h","slide":5,"text":"Keep the claim narrow: the paper supports complexity estimation, not semantic understanding.\n\n[Sources]\n- papers/Forsythe-Measuring_cion_complexity_automated.pdf, pp. 1–9"}
+{"kind":"slide","id":"sl/g23zec","slide":6,"title":"04 · LITERATURE REVIEW","textShapes":12}
+{"kind":"textbox","id":"sh/uhonqx0z","slide":6,"text":"04 · LITERATURE REVIEW","textPreview":"04 · LITERATURE REVIEW","textChars":22,"textLines":1,"bbox":[42,35,330,24]}
+{"kind":"textbox","id":"sh/hkf6lsja","slide":6,"text":"06","textPreview":"06","textChars":2,"textLines":1,"bbox":[1180,665,58,20]}
+{"kind":"textbox","id":"sh/gj65snip","slide":6,"text":"Abstractness affects identification","textPreview":"Abstractness affects identification","textChars":35,"textLines":1,"bbox":[42,70,1196,74]}
+{"kind":"textbox","id":"sh/7ex4fi18","slide":6,"text":"Garcia, Badre & Stasko · 1994","textPreview":"Garcia, Badre & Stasko · 1994","textChars":29,"textLines":1,"bbox":[42,143,1180,30]}
+{"kind":"shape","id":"sh/6donmd0n","slide":6,"bbox":[42,188,418,438]}
+{"kind":"textbox","id":"sh/sf65onit","slide":6,"text":"PURPOSE","textPreview":"PURPOSE","textChars":7,"textLines":1,"bbox":[478,190,718,24]}
+{"kind":"textbox","id":"sh/jqd4by1c","slide":6,"text":"Develop a quantitative abstractness–concreteness metric and test whether it matches users’ judgments and task performance.","textPreview":"Develop a quantitative abstractness–concreteness metric and test whether it matches users’ judgments and task performance.","textChars":122,"textLines":1,"bbox":[478,219,718,72]}
+{"kind":"textbox","id":"sh/ip4nidkr","slide":6,"text":"METHOD","textPreview":"METHOD","textChars":6,"textLines":1,"bbox":[478,298,718,24]}
+{"kind":"textbox","id":"sh/w7epsjq5","slide":6,"text":"Different participant groups ranked abstract and concrete icon sets, matched icons to Pascal constructs, and completed context conditions.","textPreview":"Different participant groups ranked abstract and concrete icon sets, matched icons to Pascal constructs, and completed context conditions.","textChars":138,"textLines":1,"bbox":[478,327,718,72]}
+{"kind":"textbox","id":"sh/h8nqlo7q","slide":6,"text":"MAIN FINDING","textPreview":"MAIN FINDING","textChars":12,"textLines":1,"bbox":[478,406,718,24]}
+{"kind":"textbox","id":"sh/u5w7q98z","slide":6,"text":"The metric aligned with subjective judgments; concrete icons were identified better, and context changed identification performance.","textPreview":"The metric aligned with subjective judgments; concrete icons were identified better, and context changed identification performance.","textChars":132,"textLines":1,"bbox":[478,435,718,72]}
+{"kind":"shape","id":"sh/v658jepk","slide":6,"bbox":[478,529,718,97]}
+{"kind":"textbox","id":"sh/83epojqt","slide":6,"text":"WHY IT MATTERS HERE","textPreview":"WHY IT MATTERS HERE","textChars":19,"textLines":1,"bbox":[498,546,678,20]}
+{"kind":"textbox","id":"sh/94nqho7e","slide":6,"text":"Shows that measurable structure matters, but meaning and context cannot be inferred reliably from pixels alone.","textPreview":"Shows that measurable structure matters, but meaning and context cannot be inferred reliably from pixels alone.","textChars":111,"textLines":1,"bbox":[498,573,678,42]}
+{"kind":"image","id":"im/gbu14nax","slide":6,"name":"","alt":"First page of Abstractness affects identification","bbox":[60,202,382,410]}
+{"kind":"notes","id":"nt/g23zec","slide":6,"text":"This paper combines a structural metric with subjective ranking and identification tasks.\n\n[Sources]\n- papers/Garcia-Development_validation_icons_abstractness.pdf, pp. 1–21"}
+{"kind":"slide","id":"sl/c6bk6f","slide":7,"title":"04 · LITERATURE REVIEW","textShapes":12}
+{"kind":"textbox","id":"sh/kv25wzat","slide":7,"text":"04 · LITERATURE REVIEW","textPreview":"04 · LITERATURE REVIEW","textChars":22,"textLines":1,"bbox":[42,35,330,24]}
+{"kind":"textbox","id":"sh/zuto3u98","slide":7,"text":"07","textPreview":"07","textChars":2,"textLines":1,"bbox":[1180,665,58,20]}
+{"kind":"textbox","id":"sh/ytknupsn","slide":7,"text":"Glyph design needs perceptual foundations","textPreview":"Glyph design needs perceptual foundations","textChars":41,"textLines":1,"bbox":[42,70,1196,74]}
+{"kind":"textbox","id":"sh/90v694ra","slide":7,"text":"Borgo et al. · 2013","textPreview":"Borgo et al. · 2013","textChars":19,"textLines":1,"bbox":[42,143,1180,30]}
+{"kind":"shape","id":"sh/8zm50zap","slide":7,"bbox":[820,188,418,438]}
+{"kind":"textbox","id":"sh/mx4nypsz","slide":7,"text":"PURPOSE","textPreview":"PURPOSE","textChars":7,"textLines":1,"bbox":[42,190,718,24]}
+{"kind":"textbox","id":"sh/p4bmx0b6","slide":7,"text":"Connect glyph visualization to semiotics, perception, design guidelines, implementation techniques, and application practice.","textPreview":"Connect glyph visualization to semiotics, perception, design guidelines, implementation techniques, and application practice.","textChars":125,"textLines":1,"bbox":[42,219,718,72]}
+{"kind":"textbox","id":"sh/o3i5ofal","slide":7,"text":"METHOD","textPreview":"METHOD","textChars":6,"textLines":1,"bbox":[42,298,718,24]}
+{"kind":"textbox","id":"sh/2lobuho7","slide":7,"text":"A state-of-the-art review synthesizing foundations and design knowledge across glyph-based visualization research.","textPreview":"A state-of-the-art review synthesizing foundations and design knowledge across glyph-based visualization research.","textChars":114,"textLines":1,"bbox":[42,327,718,72]}
+{"kind":"textbox","id":"sh/3mxs3mpc","slide":7,"text":"MAIN FINDING","textPreview":"MAIN FINDING","textChars":12,"textLines":1,"bbox":[42,406,718,24]}
+{"kind":"textbox","id":"sh/onqtw76x","slide":7,"text":"Shape, colour, texture, size, orientation, curvature, and grouping act as visual channels whose effectiveness depends on task and context.","textPreview":"Shape, colour, texture, size, orientation, curvature, and grouping act as visual channels whose effectiveness depends on task and context.","textChars":138,"textLines":1,"bbox":[42,435,718,72]}
+{"kind":"shape","id":"sh/poza5c7i","slide":7,"bbox":[42,529,718,97]}
+{"kind":"textbox","id":"sh/qp8byho3","slide":7,"text":"WHY IT MATTERS HERE","textPreview":"WHY IT MATTERS HERE","textChars":19,"textLines":1,"bbox":[62,546,678,20]}
+{"kind":"textbox","id":"sh/bqhs7mpo","slide":7,"text":"Provides the conceptual map for the thesis’s visual families while warning against treating feature distance as a complete perceptual model.","textPreview":"Provides the conceptual map for the thesis’s visual families while warning against treating feature distance as a complete perceptual model.","textChars":140,"textLines":1,"bbox":[62,573,678,42]}
+{"kind":"image","id":"im/at03ut03","slide":7,"name":"","alt":"First page of Glyph design needs perceptual foundations","bbox":[838,202,382,410]}
+{"kind":"notes","id":"nt/c6bk6f","slide":7,"text":"This is a review and design synthesis, not a single controlled participant experiment.\n\n[Sources]\n- papers/Glyph-based_Visualization_Foundations_Design_Guidelines_Techniques_Applications.pdf, pp. 1–26"}
+{"kind":"slide","id":"sl/aq5zt3","slide":8,"title":"04 · LITERATURE REVIEW","textShapes":12}
+{"kind":"textbox","id":"sh/ipk3itgv","slide":8,"text":"04 · LITERATURE REVIEW","textPreview":"04 · LITERATURE REVIEW","textChars":22,"textLines":1,"bbox":[42,35,330,24]}
+{"kind":"textbox","id":"sh/5sbmt8f6","slide":8,"text":"08","textPreview":"08","textChars":2,"textLines":1,"bbox":[1180,665,58,20]}
+{"kind":"textbox","id":"sh/4r25k3yl","slide":8,"text":"Channel distance can reduce glyph confusion","textPreview":"Channel distance can reduce glyph confusion","textChars":43,"textLines":1,"bbox":[42,70,1196,74]}
+{"kind":"textbox","id":"sh/vmt4nex4","slide":8,"text":"Legg, Maguire, Walton & Chen · 2016","textPreview":"Legg, Maguire, Walton & Chen · 2016","textChars":35,"textLines":1,"bbox":[42,143,1180,30]}
+{"kind":"shape","id":"sh/u103e9gj","slide":8,"bbox":[42,188,418,438]}
+{"kind":"textbox","id":"sh/gn2lgjyp","slide":8,"text":"PURPOSE","textPreview":"PURPOSE","textChars":7,"textLines":1,"bbox":[478,190,718,24]}
+{"kind":"textbox","id":"sh/7y94jex8","slide":8,"text":"Adapt Hamming distance to glyph design so visually separable glyph sets can be designed more systematically.","textPreview":"Adapt Hamming distance to glyph design so visually separable glyph sets can be designed more systematically.","textChars":108,"textLines":1,"bbox":[478,219,718,72]}
+{"kind":"textbox","id":"sh/6x03a9gn","slide":8,"text":"METHOD","textPreview":"METHOD","textChars":6,"textLines":1,"bbox":[478,298,718,24]}
+{"kind":"textbox","id":"sh/wjuls3mh","slide":8,"text":"The authors define quasi-Hamming distance, estimate channel separability with a 20-participant survey, and demonstrate it in a file-event glyph system.","textPreview":"The authors define quasi-Hamming distance, estimate channel separability with a 20-participant survey, and demonstrate it in a file-event...","textChars":151,"textLines":1,"bbox":[478,327,718,72]}
+{"kind":"textbox","id":"sh/hk3ml832","slide":8,"text":"MAIN FINDING","textPreview":"MAIN FINDING","textChars":12,"textLines":1,"bbox":[478,406,718,24]}
+{"kind":"textbox","id":"sh/uhs3qt4b","slide":8,"text":"Increasing differences across visual channels can reduce vulnerability to perceptual errors, although separability varies by channel.","textPreview":"Increasing differences across visual channels can reduce vulnerability to perceptual errors, although separability varies by channel.","textChars":133,"textLines":1,"bbox":[478,435,718,72]}
+{"kind":"shape","id":"sh/vi14jylw","slide":8,"bbox":[478,529,718,97]}
+{"kind":"textbox","id":"sh/8falo3m5","slide":8,"text":"WHY IT MATTERS HERE","textPreview":"WHY IT MATTERS HERE","textChars":19,"textLines":1,"bbox":[498,546,678,20]}
+{"kind":"textbox","id":"sh/9gjmho3q","slide":8,"text":"Motivates pairwise distinguishability and family-wise distance, but does not validate the thesis’s exact continuous feature formulas.","textPreview":"Motivates pairwise distinguishability and family-wise distance, but does not validate the thesis’s exact continuous feature formulas.","textChars":133,"textLines":1,"bbox":[498,573,678,42]}
+{"kind":"image","id":"im/s3mponi1","slide":8,"name":"","alt":"First page of Channel distance can reduce glyph confusion","bbox":[60,202,382,410]}
+{"kind":"notes","id":"nt/aq5zt3","slide":8,"text":"Present quasi-Hamming distance as an inspiration for set-relative distinguishability, not as the implemented metric itself.\n\n[Sources]\n- papers/Glyph_Visualization_A_Fail-Safe_Design_Scheme_Based_on_Quasi-Hamming_Distances.pdf, pp. 1–11"}
+{"kind":"slide","id":"sl/ofhlf6","slide":9,"title":"04 · LITERATURE REVIEW","textShapes":12}
+{"kind":"textbox","id":"sh/dsjyt0ry","slide":9,"text":"04 · LITERATURE REVIEW","textPreview":"04 · LITERATURE REVIEW","textChars":22,"textLines":1,"bbox":[42,35,330,24]}
+{"kind":"textbox","id":"sh/qp8fy5sn","slide":9,"text":"09","textPreview":"09","textChars":2,"textLines":1,"bbox":[1180,665,58,20]}
+{"kind":"textbox","id":"sh/rq1wra98","slide":9,"text":"A taxonomy can guide scalable glyph design","textPreview":"A taxonomy can guide scalable glyph design","textChars":42,"textLines":1,"bbox":[42,70,1196,74]}
+{"kind":"textbox","id":"sh/0vax4fap","slide":9,"text":"Maguire et al. · 2012","textPreview":"Maguire et al. · 2012","textChars":21,"textLines":1,"bbox":[42,143,1180,30]}
+{"kind":"shape","id":"sh/1wjyxkra","slide":9,"bbox":[820,188,418,438]}
+{"kind":"textbox","id":"sh/zu1gva94","slide":9,"text":"PURPOSE","textPreview":"PURPOSE","textChars":7,"textLines":1,"bbox":[42,190,718,24]}
+{"kind":"textbox","id":"sh/ozux8fal","slide":9,"text":"Replace ad-hoc glyph creation with a systematic process that scales to many domain concepts.","textPreview":"Replace ad-hoc glyph creation with a systematic process that scales to many domain concepts.","textChars":92,"textLines":1,"bbox":[42,219,718,72]}
+{"kind":"textbox","id":"sh/903y1kr6","slide":9,"text":"METHOD","textPreview":"METHOD","textChars":6,"textLines":1,"bbox":[42,298,718,24]}
+{"kind":"textbox","id":"sh/dob6lcb6","slide":9,"text":"A design methodology combines a concept taxonomy, a hierarchy of visual channels, and a biological-workflow case study.","textPreview":"A design methodology combines a concept taxonomy, a hierarchy of visual channels, and a biological-workflow case study.","textChars":119,"textLines":1,"bbox":[42,327,718,72]}
+{"kind":"textbox","id":"sh/cn25s7ul","slide":9,"text":"MAIN FINDING","textPreview":"MAIN FINDING","textChars":12,"textLines":1,"bbox":[42,406,718,24]}
+{"kind":"textbox","id":"sh/rmtoj2d0","slide":9,"text":"Structured categorization and deliberate visual-channel assignment can produce a more scalable, application-specific glyph language.","textPreview":"Structured categorization and deliberate visual-channel assignment can produce a more scalable, application-specific glyph language.","textChars":132,"textLines":1,"bbox":[42,435,718,72]}
+{"kind":"shape","id":"sh/ql0nqhcf","slide":9,"bbox":[42,529,718,97]}
+{"kind":"textbox","id":"sh/1sb6pwb2","slide":9,"text":"WHY IT MATTERS HERE","textPreview":"WHY IT MATTERS HERE","textChars":19,"textLines":1,"bbox":[62,546,678,20]}
+{"kind":"textbox","id":"sh/0r2pwruh","slide":9,"text":"Supports organizing semantic categories as metadata and design context—not claiming that low-level image features recover meaning.","textPreview":"Supports organizing semantic categories as metadata and design context—not claiming that low-level image features recover meaning.","textChars":130,"textLines":1,"bbox":[62,573,678,42]}
+{"kind":"image","id":"im/fi543mdk","slide":9,"name":"","alt":"First page of A taxonomy can guide scalable glyph design","bbox":[838,202,382,410]}
+{"kind":"notes","id":"nt/ofhlf6","slide":9,"text":"Keep taxonomy and semantic mapping outside the computer-vision feature families.\n\n[Sources]\n- papers/Taxonomy-Based_Glyph_Designwith_a_Case_Study_on_Visualizing_Workflows_of_Biological_Experiments.pdf, pp. 1–10"}
+{"kind":"slide","id":"sl/9jd11c","slide":10,"title":"04 · LITERATURE REVIEW","textShapes":12}
+{"kind":"textbox","id":"sh/ypsvm9o7","slide":10,"text":"04 · LITERATURE REVIEW","textPreview":"04 · LITERATURE REVIEW","textChars":22,"textLines":1,"bbox":[42,35,330,24]}
+{"kind":"textbox","id":"sh/lcjehony","slide":10,"text":"10","textPreview":"10","textChars":2,"textLines":1,"bbox":[1180,665,58,20]}
+{"kind":"textbox","id":"sh/0radoj6d","slide":10,"text":"Contours shift perceived similarity","textPreview":"Contours shift perceived similarity","textChars":35,"textLines":1,"bbox":[42,70,1196,74]}
+{"kind":"textbox","id":"sh/bmhwbe5w","slide":10,"text":"Fuchs et al. · 2014","textPreview":"Fuchs et al. · 2014","textChars":19,"textLines":1,"bbox":[42,143,1180,30]}
+{"kind":"shape","id":"sh/ql8vi9ob","slide":10,"bbox":[42,188,418,438]}
+{"kind":"textbox","id":"sh/cnqdkj6h","slide":10,"text":"PURPOSE","textPreview":"PURPOSE","textChars":7,"textLines":1,"bbox":[478,190,718,24]}
+{"kind":"textbox","id":"sh/vilwny50","slide":10,"text":"Test how contour, fill, and reference structures influence similarity judgments for star glyphs.","textPreview":"Test how contour, fill, and reference structures influence similarity judgments for star glyphs.","textChars":96,"textLines":1,"bbox":[478,219,718,72]}
+{"kind":"textbox","id":"sh/ahcfutof","slide":10,"text":"METHOD","textPreview":"METHOD","textChars":6,"textLines":1,"bbox":[478,298,718,24]}
+{"kind":"textbox","id":"sh/c36do3il","slide":10,"text":"Three experiments compared experts, trained novices, and online participants using target-plus-alternative similarity-selection tasks.","textPreview":"Three experiments compared experts, trained novices, and online participants using target-plus-alternative similarity-selection tasks.","textChars":134,"textLines":1,"bbox":[478,327,718,72]}
+{"kind":"textbox","id":"sh/x4fuh8z6","slide":10,"text":"MAIN FINDING","textPreview":"MAIN FINDING","textChars":12,"textLines":1,"bbox":[478,406,718,24]}
+{"kind":"textbox","id":"sh/a1ovmt0f","slide":10,"text":"Simple star glyphs without contours best supported data similarity; contours could shift attention toward overall shape instead.","textPreview":"Simple star glyphs without contours best supported data similarity; contours could shift attention toward overall shape instead.","textChars":128,"textLines":1,"bbox":[478,435,718,72]}
+{"kind":"shape","id":"sh/b2xcfyh0","slide":10,"bbox":[478,529,718,97]}
+{"kind":"textbox","id":"sh/ozmdk3ip","slide":10,"text":"WHY IT MATTERS HERE","textPreview":"WHY IT MATTERS HERE","textChars":19,"textLines":1,"bbox":[498,546,678,20]}
+{"kind":"textbox","id":"sh/p0vudozu","slide":10,"text":"Justifies contour and enclosure features while showing that similarity is task-dependent and cannot be reduced to one universal distance.","textPreview":"Justifies contour and enclosure features while showing that similarity is task-dependent and cannot be reduced to one universal distance.","textChars":137,"textLines":1,"bbox":[498,573,678,42]}
+{"kind":"image","id":"im/8na9cnut","slide":10,"name":"","alt":"First page of Contours shift perceived similarity","bbox":[60,202,382,410]}
+{"kind":"notes","id":"nt/9jd11c","slide":10,"text":"Experiment 1 included 12 novices and 12 experts; Experiment 2 retained 36 online participants after controls.\n\n[Sources]\n- papers/The_Influence_of_Contour_on_Similarity_Perception_of_Star_Glyphs.pdf, pp. 1–11"}
+{"kind":"slide","id":"sl/9bf97b","slide":11,"title":"04 · LITERATURE REVIEW","textShapes":12}
+{"kind":"textbox","id":"sh/3y10bips","slide":11,"text":"04 · LITERATURE REVIEW","textPreview":"04 · LITERATURE REVIEW","textChars":22,"textLines":1,"bbox":[42,35,330,24]}
+{"kind":"textbox","id":"sh/oja1k36d","slide":11,"text":"11","textPreview":"11","textChars":2,"textLines":1,"bbox":[1180,665,58,20]}
+{"kind":"textbox","id":"sh/pk32d87y","slide":11,"text":"Glyph evaluation is strongly task-dependent","textPreview":"Glyph evaluation is strongly task-dependent","textChars":43,"textLines":1,"bbox":[42,70,1196,74]}
+{"kind":"textbox","id":"sh/qlcjmdoj","slide":11,"text":"Fuchs, Isenberg, Bezerianos & Keim · 2017","textPreview":"Fuchs, Isenberg, Bezerianos & Keim · 2017","textChars":41,"textLines":1,"bbox":[42,143,1180,30]}
+{"kind":"shape","id":"sh/bmlkfip4","slide":11,"bbox":[820,188,418,438]}
+{"kind":"textbox","id":"sh/do32hs7u","slide":11,"text":"PURPOSE","textPreview":"PURPOSE","textChars":7,"textLines":1,"bbox":[42,190,718,24]}
+{"kind":"textbox","id":"sh/ypcjqxof","slide":11,"text":"Organize what controlled glyph studies tested, which tasks they used, and what design conclusions can be drawn.","textPreview":"Organize what controlled glyph studies tested, which tasks they used, and what design conclusions can be drawn.","textChars":111,"textLines":1,"bbox":[42,219,718,72]}
+{"kind":"textbox","id":"sh/zqlkj2p0","slide":11,"text":"METHOD","textPreview":"METHOD","textChars":6,"textLines":1,"bbox":[42,298,718,24]}
+{"kind":"textbox","id":"sh/jy9wv2dw","slide":11,"text":"A systematic review and meta-analysis of 64 quantitative controlled user-study papers spanning roughly six decades.","textPreview":"A systematic review and meta-analysis of 64 quantitative controlled user-study papers spanning roughly six decades.","textChars":115,"textLines":1,"bbox":[42,327,718,72]}
+{"kind":"textbox","id":"sh/yx0f2xwb","slide":11,"text":"MAIN FINDING","textPreview":"MAIN FINDING","textChars":12,"textLines":1,"bbox":[42,406,718,24]}
+{"kind":"textbox","id":"sh/l0rexcvm","slide":11,"text":"Glyph performance depends on design, task, presentation setting, and data; the review identifies evidence patterns and open research gaps.","textPreview":"Glyph performance depends on design, task, presentation setting, and data; the review identifies evidence patterns and open research gaps.","textChars":138,"textLines":1,"bbox":[42,435,718,72]}
+{"kind":"shape","id":"sh/kzix47eh","slide":11,"bbox":[42,529,718,97]}
+{"kind":"textbox","id":"sh/bupwridk","slide":11,"text":"WHY IT MATTERS HERE","textPreview":"WHY IT MATTERS HERE","textChars":19,"textLines":1,"bbox":[62,546,678,20]}
+{"kind":"textbox","id":"sh/atgvydwz","slide":11,"text":"Supports a quantitative human study and helps separate identification, similarity, confusability, accuracy, and response time as different outcomes.","textPreview":"Supports a quantitative human study and helps separate identification, similarity, confusability, accuracy, and response time as differen...","textChars":148,"textLines":1,"bbox":[62,573,678,42]}
+{"kind":"image","id":"im/98val8vi","slide":11,"name":"","alt":"First page of Glyph evaluation is strongly task-dependent","bbox":[838,202,382,410]}
+{"kind":"notes","id":"nt/9bf97b","slide":11,"text":"Use this paper to justify the study-design layer rather than an individual image-feature formula.\n\n[Sources]\n- papers/A_Systematic_Review_of_Experimental_Studies_on_Data_Glyphs.pdf, pp. 1–17"}

@@ -187,10 +187,11 @@ def test_generated_dashboard_contains_ai_clustering_contract() -> None:
         'id="aiIconDetail"',
         "aiFeatureSeparation",
         "clusterInterpretationProfile",
+        "clusterDetailCardHtml",
         "Variance contribution",
         "Separation strength",
-        "Embedding variance",
-        "Measured variance",
+        "Post-hoc measured variance",
+        "Post-hoc measured strength",
         "AI clusters by measured feature",
         "Icon statistics",
         "Feature statistics",
@@ -199,10 +200,13 @@ def test_generated_dashboard_contains_ai_clustering_contract() -> None:
         "Overall mean",
         "aiFeatureScatter",
         "aiEmbeddingScatter",
+        'groupedFeatureHtml(record, representativeFeatureIds(), false, null, items, true)',
+        'renderHoverPreview(item, item.cluster, event.event, items)',
         "/api/ai-clustering/runs",
     ):
         assert expected in html
     assert "between-cluster variance" in html
+    assert "calculated in the model-embedding space" in html
     assert "the embedding model did not receive these feature values" in html
     assert "const PLOT_ICON_SCALE = 0.055" in html
     assert html.count("ranges.spanX * PLOT_ICON_SCALE") == 2

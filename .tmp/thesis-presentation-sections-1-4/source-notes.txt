@@ -1,0 +1,20 @@
+Communication job: By the end, the thesis supervisor should understand the research problem, the working research questions, and how each of the seven local papers contributes to the thesis direction.
+
+Visual route: Codex Grid layout library, adapted from the title, split-image, sequence, and topic-map silhouettes. White canvas, black type, gray structural panels, and restrained blue accent.
+
+Repository sources:
+- wiki/thesis-overview.md
+- wiki/evaluation-and-human-study.md
+- wiki/literature-and-evidence.md
+- notes/paper_feature_review.md
+- papers/extracted_text/README.md
+- icon_data/analysis/similarity/closest_cross_set_pairs_euclidean.png
+
+Primary literature sources:
+- papers/A_Systematic_Review_of_Experimental_Studies_on_Data_Glyphs.pdf
+- papers/Forsythe-Measuring_cion_complexity_automated.pdf
+- papers/Garcia-Development_validation_icons_abstractness.pdf
+- papers/Glyph-based_Visualization_Foundations_Design_Guidelines_Techniques_Applications.pdf
+- papers/Glyph_Visualization_A_Fail-Safe_Design_Scheme_Based_on_Quasi-Hamming_Distances.pdf
+- papers/Taxonomy-Based_Glyph_Designwith_a_Case_Study_on_Visualizing_Workflows_of_Biological_Experiments.pdf
+- papers/The_Influence_of_Contour_on_Similarity_Perception_of_Star_Glyphs.pdf

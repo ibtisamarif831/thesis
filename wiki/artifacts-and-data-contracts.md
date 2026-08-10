@@ -59,7 +59,7 @@ Distance-matrix row and column order must match the source feature-frame order. 
 
 ## Dashboard Contract
 
-`dashboard_data.json` is the runtime API for the static UI. Its top-level `metadata`, `records`, `clusters`, `feature_review`, and `feature_explorer` keys are documented in [Dashboard implementation](dashboard-implementation.md). `metadata.analysis_feature_preset` records the code-selected profile, while `metadata.image_feature_columns` records its resolved columns. Feature definitions under `metadata.image_feature_sections` include registry-owned `evidence_scope`, `evidence`, and `citation` fields for every active registry feature.
+`dashboard_data.json` is the runtime API for the static UI. Its top-level `metadata`, `records`, `clusters`, `feature_review`, and `feature_explorer` keys are documented in [Dashboard implementation](dashboard-implementation.md). `metadata.analysis_feature_preset` records the code-selected profile, while `metadata.image_feature_columns` records the seven resolved representatives. Each section under `metadata.image_feature_sections` contains only its configured representative, including registry-owned `evidence_scope`, `evidence`, and `citation` fields. Generated `records[].image_features` likewise contain only those seven representatives plus the auxiliary monochrome, orientation-confidence, red-ratio, and strict-red fields required by the UI; raw registry columns are not a browser API.
 
 The dashboard folder also contains the exact CSV inputs/outputs used to audit the generated view. Do not assume all sections use the same sample size.
 

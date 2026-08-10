@@ -145,11 +145,44 @@ def test_dashboard_compatibility_adapter_matches_generated_contract() -> None:
     assert dashboard.EXCLUDED_IMAGE_FEATURES == set(registry.excluded_feature_ids())
     assert payload["metadata"]["analysis_feature_preset"] == registry.ANALYSIS_FEATURE_PRESET
     assert payload["metadata"]["image_feature_columns"] == list(registry.analysis_feature_ids())
+    assert [
+        section["features"][0]["id"]
+        for section in payload["metadata"]["image_feature_sections"]
+    ] == list(registry.analysis_feature_ids())
+    assert all(
+        len(section["features"]) == 1
+        for section in payload["metadata"]["image_feature_sections"]
+    )
+    assert "raw_image_feature_columns" not in payload["metadata"]
+    assert "excluded_image_features" not in payload["metadata"]
+    expected_record_features = set(registry.analysis_feature_ids()) | {
+        "is_monochrome",
+        "orientation_confidence_v2",
+        "red_pixel_ratio_v2",
+        "strict_red_flag_v2",
+    }
+    assert all(
+        set(record["image_features"]) == expected_record_features
+        for record in payload["records"]
+    )
     assert all(
         feature["evidence"] and feature["citation"] and feature["evidence_scope"]
         for section in payload["metadata"]["image_feature_sections"]
         for feature in section["features"]
     )
+
+
+def test_dashboard_allow_list_does_not_expand_with_analysis_preset(monkeypatch) -> None:
+    monkeypatch.setattr(registry, "ANALYSIS_FEATURE_PRESET", "full_registry")
+
+    assert len(registry.analysis_feature_ids()) == 81
+    assert dashboard.active_image_feature_columns() == list(
+        registry.representative_feature_ids()
+    )
+    assert dashboard.active_image_feature_groups() == [
+        [feature_id] for feature_id in registry.representative_feature_ids()
+    ]
+    assert all(len(section["features"]) == 1 for section in dashboard.image_feature_sections())
 
 
 def test_similarity_uses_registry_groups_and_preserves_transformed_order() -> None:

@@ -86,7 +86,7 @@ Each icon is displayed at its PCA coordinates as the normalized image itself, wi
 
 The selected-icon panel shows the icon, label, set, cluster, values for all visible active features, family interpretations, McDougall ratings when present, and metadata tokens.
 
-The cluster-summary panel lists visible clusters, current filtered counts, dominant sets, standardized distinctive families/features, and up to twelve representative icons. “Distinctive” means far from the sample mean in standardized feature space; it is descriptive, not causal.
+The cluster-summary panel lists visible clusters, current filtered counts, dominant sets, standardized distinctive families/features, and up to twelve representative icons. Each expanded summary also has a **View all N icons fullscreen** button. It opens a scrollable full-viewport gallery containing every icon in that cluster under the current icon-set filter, with each icon's label and source set. Close it with its close button or **Escape**; focus returns to the button that opened it. “Distinctive” means far from the sample mean in standardized feature space; it is descriptive, not causal.
 
 ## Feature Groups View
 

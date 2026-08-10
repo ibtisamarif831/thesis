@@ -83,7 +83,7 @@ The right sidebar shows:
 - selected feature values;
 - McDougall ratings when available;
 - cluster summaries;
-- representative icons for visible clusters.
+- up to twelve representative icons for each visible cluster, plus a fullscreen gallery containing all icons in that cluster under the current filter.
 
 The **Feature Values** tab contains exactly the same seven representative features used by Feature Groups, one from each active visual family. Feature Review's Spearman analysis still supplies correlation context for those representatives, but it no longer determines which features appear in Feature Values. For the selected representative, the tab shows its family, strongest absolute Spearman correlation, summary statistics, and representative icons in three value bands:
 

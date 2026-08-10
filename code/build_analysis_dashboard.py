@@ -982,6 +982,8 @@ def write_index_html() -> None:
     .summary-cluster[open] summary {{ border-bottom: 1px solid var(--border); background: #fbfcfe; }}
     .summary-details {{ padding: 8px; }}
     .summary-explain {{ margin-top: 4px; font-size: 12px; color: #3d4656; }}
+    .summary-actions {{ display: flex; justify-content: flex-end; margin-top: 8px; }}
+    .cluster-fullscreen-open {{ font-size: 12px; font-weight: 650; }}
     .rep-icons {{ display: grid; grid-template-columns: repeat(auto-fill, minmax(72px, 1fr)); gap: 8px; margin-top: 8px; }}
     .rep-icon {{ min-width: 0; }}
     .rep-icon img {{ width: 72px; height: 72px; object-fit: contain; border: 1px solid var(--border); background: white; display: block; }}
@@ -1082,6 +1084,20 @@ def write_index_html() -> None:
     .family-comparison-table thead th {{ color: #3d4656; background: #faf7fb; }}
     .family-comparison-table tr.current-family td {{ background: #fff2ff; font-weight: 700; }}
     .family-comparison-table tbody tr:last-child td {{ border-bottom: 0; }}
+    .cluster-modal {{ position: fixed; inset: 0; z-index: 75; display: none; background: white; }}
+    .cluster-modal.open {{ display: grid; animation: family-backdrop-in .16s ease-out; }}
+    .cluster-dialog {{ width: 100vw; height: 100vh; height: 100dvh; min-width: 0; overflow: hidden; display: grid; grid-template-rows: auto minmax(0, 1fr); background: white; animation: family-dialog-in .2s ease-out; }}
+    .cluster-modal-header {{ display: flex; align-items: start; justify-content: space-between; gap: 20px; padding: 18px 20px 14px; border-bottom: 1px solid var(--border); }}
+    .cluster-modal-header h2 {{ margin: 0 0 5px; color: #18202f; font-size: 20px; }}
+    .cluster-modal-header p {{ margin: 0; color: #667085; font-size: 12px; }}
+    .cluster-modal-close {{ flex: 0 0 auto; width: 34px; height: 34px; padding: 0; border-radius: 50%; font-size: 20px; line-height: 1; }}
+    .cluster-modal-body {{ min-height: 0; overflow: auto; padding: 20px; background: #f8fafc; }}
+    .cluster-icon-grid {{ display: grid; grid-template-columns: repeat(auto-fill, minmax(132px, 1fr)); gap: 12px; }}
+    .cluster-icon-card {{ min-width: 0; padding: 10px; border: 1px solid var(--border); border-radius: 8px; background: white; }}
+    .cluster-icon-card img {{ width: 100%; aspect-ratio: 1; object-fit: contain; display: block; border: 1px solid #e5e9f0; background: white; }}
+    .cluster-icon-card b, .cluster-icon-card span {{ display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }}
+    .cluster-icon-card b {{ margin-top: 7px; color: #18202f; font-size: 12px; }}
+    .cluster-icon-card span {{ margin-top: 3px; color: var(--muted); font-size: 10px; }}
     .mask-warning {{ display: block; margin-top: 5px; color: #8a4b08; font-size: 10px; font-style: normal; font-weight: 650; }}
     .family-icon-empty {{ padding: 28px 12px; border: 1px dashed var(--border); text-align: center; color: var(--muted); font-size: 13px; }}
     @keyframes family-backdrop-in {{ from {{ opacity: 0; }} to {{ opacity: 1; }} }}
@@ -1340,6 +1356,18 @@ def write_index_html() -> None:
       <div class="comparison-body" id="comparisonBody"></div>
     </section>
   </div>
+  <div id="clusterModal" class="cluster-modal" role="presentation" aria-hidden="true">
+    <section class="cluster-dialog" role="dialog" aria-modal="true" aria-labelledby="clusterModalTitle">
+      <header class="cluster-modal-header">
+        <div>
+          <h2 id="clusterModalTitle">Cluster icons</h2>
+          <p id="clusterModalDescription"></p>
+        </div>
+        <button class="cluster-modal-close" id="clusterModalClose" type="button" aria-label="Close cluster fullscreen view">&times;</button>
+      </header>
+      <div class="cluster-modal-body" id="clusterModalBody"></div>
+    </section>
+  </div>
   <div id="hoverPreview"></div>
   <script>
     let dashboard = null;
@@ -1349,6 +1377,7 @@ def write_index_html() -> None:
     let familyDetailReturnFocus = null;
     let familyComparisonReturnFocus = null;
     let familyComparisonIds = new Set();
+    let clusterModalReturnFocus = null;
     let sharedSampleFamilyId = null;
     let sharedSampleColorMode = "all";
     const familySamples = new Map();
@@ -1401,6 +1430,7 @@ def write_index_html() -> None:
       initializeFeatureReviewControls();
       initializeFeatureExplorerControls();
       initializeFamilyDetailControls();
+      initializeClusterModalControls();
 
       const sets = unique(dashboard.records.map(r => r.set_name)).sort();
       fillSelect("setFilter", sets.map(v => [v, v]), "", true);
@@ -1767,6 +1797,45 @@ def write_index_html() -> None:
         if (document.getElementById("comparisonModal").classList.contains("open")) closeFamilyComparison();
         else if (modal.classList.contains("open")) closeFamilyDetail();
       }});
+    }}
+
+    function initializeClusterModalControls() {{
+      document.getElementById("clusterModalClose").addEventListener("click", closeClusterModal);
+      document.addEventListener("keydown", event => {{
+        if (event.key === "Escape" && document.getElementById("clusterModal").classList.contains("open")) {{
+          closeClusterModal();
+        }}
+      }});
+    }}
+
+    function openClusterModal(cluster, items, trigger) {{
+      clusterModalReturnFocus = trigger || document.activeElement;
+      document.getElementById("clusterModalTitle").textContent = `${{methodLabel()}} cluster ${{cluster}}`;
+      document.getElementById("clusterModalDescription").textContent =
+        `${{items.length}} icons in the current filtered clustering view.`;
+      document.getElementById("clusterModalBody").innerHTML = `
+        <div class="cluster-icon-grid">
+          ${{items.map(item => `
+            <article class="cluster-icon-card">
+              <img src="${{item.record.normalized_path}}" alt="">
+              <b title="${{escapeHtml(item.record.label)}}">${{escapeHtml(item.record.label)}}</b>
+              <span title="${{escapeHtml(item.record.set_name)}}">${{escapeHtml(item.record.set_name)}}</span>
+            </article>`).join("")}}
+        </div>`;
+      const modal = document.getElementById("clusterModal");
+      modal.classList.add("open");
+      modal.setAttribute("aria-hidden", "false");
+      document.body.style.overflow = "hidden";
+      document.getElementById("clusterModalClose").focus();
+    }}
+
+    function closeClusterModal() {{
+      const modal = document.getElementById("clusterModal");
+      if (!modal.classList.contains("open")) return;
+      modal.classList.remove("open");
+      modal.setAttribute("aria-hidden", "true");
+      document.body.style.overflow = "";
+      if (clusterModalReturnFocus && document.body.contains(clusterModalReturnFocus)) clusterModalReturnFocus.focus();
     }}
 
     function iconColorMode(record) {{
@@ -2889,7 +2958,8 @@ def write_index_html() -> None:
         if (!byCluster.has(cluster)) byCluster.set(cluster, []);
         byCluster.get(cluster).push(item);
       }});
-      container.innerHTML = Array.from(byCluster.entries()).sort((a,b) => a[0]-b[0]).map(([cluster, items]) => {{
+      const clusterEntries = Array.from(byCluster.entries()).sort((a,b) => a[0]-b[0]);
+      container.innerHTML = clusterEntries.map(([cluster, items], entryIndex) => {{
         const topSets = topCounts(items.map(item => item.record.set_name), 2).join(", ");
         const explanation = clusterExplanation(labels, cluster, selectedFeatureIds());
         const icons = items.slice(0, 12).map(item => `
@@ -2903,9 +2973,18 @@ def write_index_html() -> None:
           <div class="summary-details">
             ${{explanation}}
             <div class="rep-icons">${{icons}}</div>
+            <div class="summary-actions">
+              <button class="cluster-fullscreen-open" type="button" data-cluster-entry="${{entryIndex}}">View all ${{items.length}} icons fullscreen</button>
+            </div>
           </div>
         </details>`;
       }}).join("");
+      container.querySelectorAll(".cluster-fullscreen-open").forEach(button => {{
+        button.addEventListener("click", () => {{
+          const entry = clusterEntries[Number(button.dataset.clusterEntry)];
+          if (entry) openClusterModal(entry[0], entry[1], button);
+        }});
+      }});
     }}
 
     function methodLabel() {{

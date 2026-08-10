@@ -83,6 +83,8 @@ The front end should access feature definitions through `metadata.image_feature_
 
 ## Front-End State
 
+Cluster summaries render up to twelve preview icons in the right sidebar. Their fullscreen action receives the complete filtered item list for that cluster, so the modal gallery is not capped at twelve and remains consistent with the active icon-set filter. The cluster modal uses the full viewport (`100vw` by `100dvh`, with `100vh` fallback), scrolls only its gallery body, closes with its close button or **Escape**, and restores focus to its originating summary button.
+
 The generated browser application keeps these related state objects:
 
 - clustering state: variant, method, count, color choice, selected image features, and set filter;

@@ -5,6 +5,8 @@ from __future__ import annotations
 import math
 from collections import Counter
 
+import numpy as np
+
 
 def _comb2(value: int) -> int:
     return value * (value - 1) // 2
@@ -70,3 +72,29 @@ def agreement_metrics(left: list[int], right: list[int]) -> dict[str, object]:
         "pairwise_same_cluster_agreement": pairwise_same_cluster_agreement(left, right),
         "cross_table": cross_table(left, right),
     }
+
+
+def cluster_variance_profile(matrix: np.ndarray, labels: list[int]) -> list[dict[str, object]]:
+    """Describe each cluster's share of between-cluster variance in the supplied space."""
+    values = np.asarray(matrix, dtype=float)
+    if values.ndim != 2 or len(values) != len(labels) or not len(values):
+        raise ValueError("matrix and labels must describe the same non-empty sample")
+    if not np.isfinite(values).all():
+        raise ValueError("matrix must contain only finite values")
+    label_array = np.asarray(labels, dtype=int)
+    overall = values.mean(axis=0)
+    entries: list[dict[str, object]] = []
+    for cluster in sorted(set(labels)):
+        members = values[label_array == cluster]
+        delta = members.mean(axis=0) - overall
+        squared_distance = float(np.dot(delta, delta))
+        entries.append({
+            "cluster": int(cluster),
+            "size": int(len(members)),
+            "weighted_between_variance": float(len(members) * squared_distance),
+            "separation_strength": float(np.mean(np.square(delta))),
+        })
+    total = sum(float(entry["weighted_between_variance"]) for entry in entries)
+    for entry in entries:
+        entry["variance_contribution"] = float(entry["weighted_between_variance"]) / total if total else 0.0
+    return entries

@@ -16,7 +16,7 @@ from dotenv import load_dotenv
 
 from thesis_pipeline.clustering import hierarchical_single_linkage_labels, kmeans, pca_2d
 
-from .metrics import agreement_metrics
+from .metrics import agreement_metrics, cluster_variance_profile
 from .openrouter import DEFAULT_URL, OpenRouterClient
 from .storage import AIClusteringStore
 
@@ -73,7 +73,8 @@ class AIClusteringService:
         return self.store.list_runs(limit)
 
     def get_run(self, run_id: str) -> dict[str, object] | None:
-        return self.store.get_run(run_id)
+        run = self.store.get_run(run_id)
+        return self._enrich_embedding_variance(run) if run else None
 
     def run(self, payload: object) -> dict[str, object]:
         with self._run_lock:
@@ -151,14 +152,41 @@ class AIClusteringService:
             for index, item in enumerate(items):
                 item.update(ai_label=ai_labels[index], ai_x=float(coords[index, 0]), ai_y=float(coords[index, 1]))
             metrics = agreement_metrics(request["feature_labels"], ai_labels)
+            metrics["embedding_cluster_profile"] = cluster_variance_profile(matrix, ai_labels)
             self.store.finish_run(run_id, metrics, usage, hits, misses, warning, items)
         except Exception as error:
             self.store.fail_run(run_id, str(error), hits, misses)
             raise
-        result = self.store.get_run(run_id)
+        result = self.get_run(run_id)
         if result is None:
             raise RuntimeError("Completed run was not persisted")
         return result
+
+    def _enrich_embedding_variance(self, run: dict[str, object]) -> dict[str, object]:
+        metrics = dict(run.get("metrics") or {})
+        if run.get("status") != "completed" or metrics.get("embedding_cluster_profile"):
+            return run
+        records = self._record_lookup()
+        vectors: list[np.ndarray] = []
+        labels: list[int] = []
+        try:
+            for item in run.get("items") or []:
+                icon_id = str(item["icon_id"])
+                record = records[icon_id]
+                image_hash = hashlib.sha256(self._read_normalized_image(record)).hexdigest()
+                vector = self.store.get_embedding(str(run["model_id"]), icon_id, image_hash)
+                if vector is None or item.get("ai_label") is None:
+                    return run
+                vectors.append(vector.astype(float))
+                labels.append(int(item["ai_label"]))
+            matrix = np.vstack(vectors)
+            norms = np.linalg.norm(matrix, axis=1, keepdims=True)
+            if np.any(norms == 0):
+                return run
+            metrics["embedding_cluster_profile"] = cluster_variance_profile(matrix / norms, labels)
+            return {**run, "metrics": metrics}
+        except (KeyError, OSError, ValueError):
+            return run
 
     def _record_lookup(self) -> dict[str, dict[str, object]]:
         payload = json.loads(self.config.dashboard_data_path.read_text(encoding="utf-8"))

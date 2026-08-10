@@ -94,7 +94,7 @@ Read each dataset README/source note before regeneration.
 
 ## AI Clustering SQLite Contract
 
-`icon_data/analysis/ai_clustering/ai_clustering.sqlite3` is an intentionally tracked schema-versioned binary artifact. Version 1 contains `embeddings` (model ID, icon ID, image SHA-256, dimension, float32 vector, creation time), `runs` (status, configuration, agreement metrics, usage, cache counts, warnings/errors), and `run_items` (ordered icon IDs, feature/AI labels, and both PCA coordinate pairs). Completed and failed valid runs are durable. The database contains neither `OPENROUTER_API_KEY` nor base64 payloads, uses rollback-journal mode, and must be closed before committing. Avoid concurrent writers and never add `-wal` or `-shm` sidecars.
+`icon_data/analysis/ai_clustering/ai_clustering.sqlite3` is an intentionally tracked schema-versioned binary artifact. Version 1 contains `embeddings` (model ID, icon ID, image SHA-256, dimension, float32 vector, creation time), `runs` (status, configuration, JSON metrics including agreement and optional embedding cluster-variance profiles, usage, cache counts, warnings/errors), and `run_items` (ordered icon IDs, feature/AI labels, and both PCA coordinate pairs). The optional profile adds no columns or schema migration. Completed and failed valid runs are durable. Older completed runs can be enriched in the API response from hash-matched cached embeddings without modifying the database. The database contains neither `OPENROUTER_API_KEY` nor base64 payloads, uses rollback-journal mode, and must be closed before committing. Avoid concurrent writers and never add `-wal` or `-shm` sidecars.
 
 ## Schema-Change Checklist
 

@@ -973,6 +973,18 @@ def write_index_html() -> None:
     #hoverPreview td {{ border-bottom: 1px solid rgba(255,255,255,.42); }}
     #hoverPreview td:last-child {{ color: white; font-variant-numeric: tabular-nums; }}
     .detail-img {{ width: 96px; height: 96px; object-fit: contain; border: 1px solid var(--border); background: white; }}
+    .plot-wrap {{ min-width: 0; display: grid; grid-template-rows: auto minmax(0, 1fr); }}
+    .plot-selection-toolbar {{ display: flex; align-items: center; gap: 7px; flex-wrap: wrap; padding: 8px 12px; border-bottom: 1px solid var(--border); background: #f8fafc; }}
+    .plot-selection-toolbar button {{ padding: 6px 9px; font-size: 12px; }}
+    .plot-selection-toolbar button.active {{ border-color: #a000a8; background: #fff0ff; color: #7b287f; font-weight: 700; }}
+    .plot-selection-status {{ margin-left: auto; color: var(--muted); font-size: 12px; }}
+    .lasso-selection-summary {{ margin-bottom: 10px; padding: 9px; border: 1px solid #d8b7dc; border-radius: 7px; background: #fffaff; }}
+    .lasso-selection-summary p {{ margin: 3px 0; font-size: 12px; }}
+    .lasso-icon-grid {{ display: grid; grid-template-columns: repeat(auto-fill, minmax(62px, 1fr)); gap: 6px; max-height: 240px; margin-top: 8px; overflow: auto; }}
+    .lasso-icon-button {{ min-width: 0; padding: 4px; background: white; text-align: left; }}
+    .lasso-icon-button.active {{ border-color: #a000a8; box-shadow: 0 0 0 1px #a000a8; }}
+    .lasso-icon-button img {{ width: 100%; aspect-ratio: 1; object-fit: contain; display: block; }}
+    .lasso-icon-button span {{ display: block; margin-top: 3px; overflow: hidden; color: #3d4656; font-size: 10px; text-overflow: ellipsis; white-space: nowrap; }}
     .muted {{ color: var(--muted); }}
     .sr-only {{ position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }}
     .pill {{ display: inline-block; padding: 2px 6px; border: 1px solid var(--border); border-radius: 999px; margin: 2px; font-size: 12px; background: var(--panel); }}
@@ -982,6 +994,26 @@ def write_index_html() -> None:
     .summary-cluster[open] summary {{ border-bottom: 1px solid var(--border); background: #fbfcfe; }}
     .summary-details {{ padding: 8px; }}
     .summary-explain {{ margin-top: 4px; font-size: 12px; color: #3d4656; }}
+    .cluster-metrics {{ display: grid; grid-template-columns: repeat(3, minmax(90px, 1fr)); gap: 6px; margin: 8px 0; }}
+    .cluster-metric {{ padding: 7px; border: 1px solid var(--border); border-radius: 5px; background: white; }}
+    .cluster-metric span {{ display: block; color: var(--muted); font-size: 9px; text-transform: uppercase; letter-spacing: .03em; }}
+    .cluster-metric b {{ display: block; margin-top: 2px; color: #18202f; font-size: 13px; font-variant-numeric: tabular-nums; }}
+    .cluster-heatmap-wrap {{ overflow-x: auto; margin: 0 0 12px; border: 1px solid var(--border); border-radius: 6px; background: white; }}
+    .cluster-heatmap {{ min-width: 720px; }}
+    .cluster-heatmap th, .cluster-heatmap td {{ padding: 6px 7px; border-right: 1px solid #edf0f4; border-bottom: 1px solid #edf0f4; text-align: center; font-size: 10px; }}
+    .cluster-heatmap th:first-child, .cluster-heatmap td:first-child {{ position: sticky; left: 0; z-index: 1; min-width: 180px; background: white; text-align: left; }}
+    .cluster-heatmap thead th {{ background: #f4f6fa; color: #3d4656; }}
+    .cluster-heatmap td {{ font-variant-numeric: tabular-nums; }}
+    .cluster-profile-note {{ margin: 0 0 8px; color: var(--muted); font-size: 11px; line-height: 1.4; }}
+    .cluster-statistics-section {{ margin: 11px 0; }}
+    .cluster-statistics-section h4 {{ margin: 0 0 6px; color: #18202f; font-size: 12px; }}
+    .cluster-feature-stats-wrap {{ overflow-x: auto; border: 1px solid var(--border); border-radius: 6px; background: white; }}
+    .cluster-feature-stats {{ min-width: 920px; }}
+    .cluster-feature-stats th, .cluster-feature-stats td {{ padding: 6px 7px; border-right: 1px solid #edf0f4; border-bottom: 1px solid #edf0f4; text-align: right; font-size: 10px; font-variant-numeric: tabular-nums; }}
+    .cluster-feature-stats th:first-child, .cluster-feature-stats td:first-child {{ position: sticky; left: 0; z-index: 1; min-width: 150px; background: white; text-align: left; }}
+    .cluster-feature-stats thead th {{ background: #f4f6fa; color: #3d4656; white-space: nowrap; }}
+    .cluster-feature-stats td.delta-positive {{ color: #9b2335; font-weight: 700; }}
+    .cluster-feature-stats td.delta-negative {{ color: #2465a7; font-weight: 700; }}
     .summary-actions {{ display: flex; justify-content: flex-end; margin-top: 8px; }}
     .cluster-fullscreen-open {{ font-size: 12px; font-weight: 650; }}
     .rep-icons {{ display: grid; grid-template-columns: repeat(auto-fill, minmax(72px, 1fr)); gap: 8px; margin-top: 8px; }}
@@ -1173,8 +1205,13 @@ def write_index_html() -> None:
     .ai-header {{ display: flex; align-items: start; justify-content: space-between; gap: 18px; margin-bottom: 14px; }}
     .ai-header h2 {{ margin: 0 0 5px; font-size: 20px; text-transform: none; letter-spacing: 0; color: #18202f; }}
     .ai-header p {{ margin: 0; max-width: 780px; color: var(--muted); font-size: 13px; line-height: 1.45; }}
+    .ai-header-actions {{ display: flex; align-items: center; gap: 8px; flex-wrap: wrap; justify-content: flex-end; }}
+    .ai-header-actions label {{ min-width: 118px; margin: 0; color: var(--muted); font-size: 11px; }}
+    .ai-header-actions select {{ margin-top: 3px; padding: 6px 8px; }}
     .ai-run {{ background: #18202f; color: white; border-color: #18202f; font-weight: 650; white-space: nowrap; }}
     .ai-run:disabled {{ opacity: .45; cursor: not-allowed; }}
+    .ai-compare-open {{ border-color: #a000a8; color: #7b287f; background: #fffaff; font-weight: 650; white-space: nowrap; }}
+    .ai-compare-open:disabled {{ opacity: .45; cursor: not-allowed; }}
     .ai-status {{ border: 1px solid var(--border); background: var(--panel); border-radius: 7px; padding: 10px 12px; margin-bottom: 14px; font-size: 13px; }}
     .ai-status[data-kind="stale"] {{ border-color: #d69e2e; background: #fffaf0; }}
     .ai-status[data-kind="error"] {{ border-color: #c53030; background: #fff5f5; }}
@@ -1182,6 +1219,19 @@ def write_index_html() -> None:
     .ai-fact {{ border: 1px solid var(--border); border-radius: 6px; padding: 9px; min-width: 0; }}
     .ai-fact span {{ display: block; color: var(--muted); font-size: 11px; text-transform: uppercase; }}
     .ai-fact b {{ display: block; margin-top: 3px; overflow-wrap: anywhere; }}
+    .ai-workspace {{ display: grid; grid-template-columns: minmax(520px, 1fr) 360px; gap: 12px; align-items: start; margin-bottom: 14px; }}
+    .ai-primary-plot {{ height: 680px; }}
+    .ai-analysis {{ display: grid; gap: 12px; min-width: 0; }}
+    .ai-analysis .ai-panel {{ max-height: 420px; overflow: auto; }}
+    .ai-analysis-body {{ padding: 10px 11px; }}
+    .ai-contribution-note {{ margin: 0 0 9px; color: var(--muted); font-size: 11px; line-height: 1.4; }}
+    .ai-contribution-row {{ display: grid; grid-template-columns: minmax(120px, 1fr) 86px 46px; gap: 8px; align-items: center; margin: 7px 0; font-size: 11px; }}
+    .ai-contribution-row b {{ overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }}
+    .ai-contribution-track {{ height: 7px; border-radius: 999px; background: #edf0f4; overflow: hidden; }}
+    .ai-contribution-fill {{ height: 100%; background: #a000a8; border-radius: inherit; }}
+    .ai-contribution-value {{ text-align: right; font-variant-numeric: tabular-nums; color: #3d4656; }}
+    .ai-cluster-summary .summary-cluster {{ margin-bottom: 7px; }}
+    .ai-selected-icon .detail-img {{ max-width: 120px; }}
     .ai-plots {{ display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; margin-bottom: 14px; }}
     .ai-panel {{ border: 1px solid var(--border); border-radius: 7px; overflow: hidden; }}
     .ai-panel h3 {{ margin: 0; padding: 9px 11px; border-bottom: 1px solid var(--border); font-size: 14px; }}
@@ -1191,6 +1241,10 @@ def write_index_html() -> None:
     .ai-table th, .ai-table td {{ padding: 7px 8px; border-bottom: 1px solid #edf0f4; text-align: left; }}
     .ai-table th {{ background: var(--panel); font-size: 11px; }}
     .ai-table td:last-child {{ text-align: left; }}
+    .ai-comparison-modal {{ position: fixed; inset: 0; z-index: 80; display: none; background: white; }}
+    .ai-comparison-modal.open {{ display: grid; animation: family-backdrop-in .16s ease-out; }}
+    .ai-comparison-dialog {{ width: 100vw; height: 100vh; height: 100dvh; min-width: 0; overflow: hidden; display: grid; grid-template-rows: auto minmax(0, 1fr); background: white; }}
+    .ai-comparison-body {{ min-height: 0; overflow: auto; padding: 18px 20px 24px; background: #f8fafc; }}
     @media (max-width: 980px) {{
       #clusteringView.active {{ grid-template-columns: 1fr; }}
       aside, aside.right {{ max-height: none; border: 0; border-bottom: 1px solid var(--border); }}
@@ -1203,7 +1257,8 @@ def write_index_html() -> None:
       .family-detail-actions {{ width: 100%; justify-content: space-between; }}
       .explorer-stats {{ grid-template-columns: repeat(2, minmax(120px, 1fr)); }}
       .example-strip {{ grid-template-columns: repeat(2, minmax(120px, 1fr)); }}
-      .ai-plots, .ai-lower {{ grid-template-columns: 1fr; }}
+      .ai-workspace, .ai-plots, .ai-lower {{ grid-template-columns: 1fr; }}
+      .ai-primary-plot {{ height: 520px; }}
       .ai-facts, .ai-metrics {{ grid-template-columns: repeat(2, minmax(120px, 1fr)); }}
     }}
   </style>
@@ -1248,10 +1303,19 @@ def write_index_html() -> None:
         </div>
       </section>
     </aside>
-    <div class="plot-wrap"><div id="scatter"></div></div>
+    <div class="plot-wrap">
+      <div class="plot-selection-toolbar" aria-label="Clustering chart interaction tools">
+        <button type="button" id="lassoMode" class="active" aria-pressed="true">Lasso select</button>
+        <button type="button" id="zoomMode" aria-pressed="false">Rectangle zoom</button>
+        <button type="button" id="clearLassoSelection" disabled>Clear selection</button>
+        <button type="button" id="resetPlotView">Reset view</button>
+        <span class="plot-selection-status" id="plotSelectionStatus" aria-live="polite">Draw freely around icons to select and zoom.</span>
+      </div>
+      <div id="scatter"></div>
+    </div>
     <aside class="right">
       <section class="control">
-        <h2>Selected Icon</h2>
+        <h2 id="selectedIconHeading">Selected Icon</h2>
         <div id="iconDetail" class="muted">Click a point to inspect an icon.</div>
       </section>
       <section class="control">
@@ -1310,20 +1374,25 @@ def write_index_html() -> None:
   </section>
   <section id="aiClusteringView" class="view ai-clustering">
     <div class="ai-header">
-      <div><h2>AI Clustering</h2><p>Compare feature-based clustering with image-embedding clustering for the same seven-family composite sample: up to 20 unique icons from each feature family. Metrics measure agreement only; they do not establish that either result is better.</p></div>
-      <button class="ai-run" id="aiRunButton" type="button" disabled>Run AI Clustering</button>
+      <div><h2>AI Clustering</h2><p>Inspect image-embedding clusters for the same seven-family composite sample. Measured-feature contributions describe which visual features best separate the AI clusters; they are explanations after clustering, not inputs to the AI model.</p></div>
+      <div class="ai-header-actions">
+        <label>Method<select id="aiMethodSelect"><option value="kmeans">K-Means</option><option value="hierarchical">Hierarchical</option></select></label>
+        <label>Cluster count<select id="aiKSelect"></select></label>
+        <button class="ai-compare-open" id="aiComparisonOpen" type="button" disabled>Open feature vs AI comparison</button>
+        <button class="ai-run" id="aiRunButton" type="button" disabled>Run AI Clustering</button>
+      </div>
     </div>
     <div class="ai-status" id="aiStatus" aria-live="polite">Checking the local AI service...</div>
     <div class="ai-facts" id="aiFacts"></div>
-    <div class="ai-plots">
-      <section class="ai-panel"><h3>Current feature-based clustering</h3><div class="ai-plot" id="aiFeatureScatter"></div></section>
-      <section class="ai-panel"><h3>AI image-embedding clustering</h3><div class="ai-plot" id="aiEmbeddingScatter"></div></section>
+    <div class="ai-workspace">
+      <section class="ai-panel"><h3>AI image-embedding clustering</h3><div class="ai-primary-plot" id="aiEmbeddingScatter"></div></section>
+      <aside class="ai-analysis">
+        <section class="ai-panel"><h3>Selected icon</h3><div class="ai-analysis-body ai-selected-icon" id="aiIconDetail"><span class="muted">Run or load AI clustering, then click an icon.</span></div></section>
+        <section class="ai-panel"><h3>Which measured feature separates these clusters most?</h3><div class="ai-analysis-body" id="aiFeatureContributions"><span class="muted">Run or load AI clustering to calculate the ranking.</span></div></section>
+        <section class="ai-panel"><h3>AI cluster summary</h3><div class="ai-analysis-body ai-cluster-summary" id="aiClusterSummary"><span class="muted">Run or load AI clustering to inspect clusters.</span></div></section>
+      </aside>
     </div>
-    <div class="ai-metrics" id="aiMetrics"></div>
-    <div class="ai-lower">
-      <section class="ai-panel"><h3>Feature versus AI cross-table</h3><div class="ai-table-wrap" id="aiCrossTable"></div></section>
-      <section class="ai-panel"><h3>Recent runs</h3><div class="ai-table-wrap" id="aiRecentRuns"></div></section>
-    </div>
+    <section class="ai-panel"><h3>Recent runs</h3><div class="ai-table-wrap" id="aiRecentRuns"></div></section>
   </section>
   <div id="familyDetailModal" class="family-detail-modal" role="presentation" aria-hidden="true">
     <section class="family-detail-dialog" role="dialog" aria-modal="true" aria-labelledby="familyDetailTitle">
@@ -1368,27 +1437,53 @@ def write_index_html() -> None:
       <div class="cluster-modal-body" id="clusterModalBody"></div>
     </section>
   </div>
+  <div id="aiComparisonModal" class="ai-comparison-modal" role="presentation" aria-hidden="true">
+    <section class="ai-comparison-dialog" role="dialog" aria-modal="true" aria-labelledby="aiComparisonTitle">
+      <header class="comparison-header">
+        <div>
+          <h2 id="aiComparisonTitle">Feature-based vs AI clustering</h2>
+          <p>Same icons and clustering settings. Agreement measures similarity between assignments, not correctness.</p>
+        </div>
+        <button class="comparison-close" id="aiComparisonClose" type="button" aria-label="Close AI comparison">&times;</button>
+      </header>
+      <div class="ai-comparison-body">
+        <div class="ai-plots">
+          <section class="ai-panel"><h3>Feature-based clustering</h3><div class="ai-plot" id="aiFeatureScatter"></div></section>
+          <section class="ai-panel"><h3>AI image-embedding clustering</h3><div class="ai-plot" id="aiComparisonEmbeddingScatter"></div></section>
+        </div>
+        <div class="ai-metrics" id="aiMetrics"></div>
+        <section class="ai-panel"><h3>Feature versus AI cross-table</h3><div class="ai-table-wrap" id="aiCrossTable"></div></section>
+      </div>
+    </section>
+  </div>
   <div id="hoverPreview"></div>
   <script>
     let dashboard = null;
     let selectedIconId = null;
+    let selectedIconIds = new Set();
+    let lassoContextKey = null;
+    let currentPlotContext = null;
     let activeFamilyId = null;
     let familyColorMode = "all";
     let familyDetailReturnFocus = null;
     let familyComparisonReturnFocus = null;
     let familyComparisonIds = new Set();
     let clusterModalReturnFocus = null;
+    let aiComparisonReturnFocus = null;
+    let aiSelectedIconId = null;
     let sharedSampleFamilyId = null;
     let sharedSampleColorMode = "all";
     const familySamples = new Map();
     const representativeFeaturesByFamily = new Map();
     const computedCache = new Map();
+    const PLOT_ICON_SCALE = 0.055;
 
     const state = {{
       variant: "image",
       method: "kmeans",
       k: "{PRIMARY_K}",
       color: "cluster",
+      dragMode: "lasso",
       activeFeatures: new Set(),
       setFilter: new Set()
     }};
@@ -1431,14 +1526,25 @@ def write_index_html() -> None:
       initializeFeatureExplorerControls();
       initializeFamilyDetailControls();
       initializeClusterModalControls();
+      initializePlotSelectionControls();
 
       const sets = unique(dashboard.records.map(r => r.set_name)).sort();
       fillSelect("setFilter", sets.map(v => [v, v]), "", true);
       installToggleMultiSelect("setFilter", "setFilter");
 
       document.getElementById("variantSelect").addEventListener("change", e => {{ state.variant = e.target.value; render(); }});
-      document.getElementById("methodSelect").addEventListener("change", e => {{ state.method = e.target.value; markAiClusteringStale(); renderMethodNote(); render(); }});
-      document.getElementById("kSelect").addEventListener("change", e => {{ state.k = e.target.value; markAiClusteringStale(); render(); }});
+      document.getElementById("methodSelect").addEventListener("change", e => {{
+        state.method = e.target.value;
+        const aiMethod = document.getElementById("aiMethodSelect");
+        if (aiMethod) aiMethod.value = state.method;
+        markAiClusteringStale(); renderMethodNote(); render();
+      }});
+      document.getElementById("kSelect").addEventListener("change", e => {{
+        state.k = e.target.value;
+        const aiK = document.getElementById("aiKSelect");
+        if (aiK) aiK.value = state.k;
+        markAiClusteringStale(); render();
+      }});
       document.getElementById("colorSelect").addEventListener("change", e => {{ state.color = e.target.value; render(); }});
       document.getElementById("setFilter").addEventListener("change", e => {{
         state.setFilter = new Set(Array.from(e.target.selectedOptions).map(o => o.value));
@@ -1504,6 +1610,40 @@ def write_index_html() -> None:
       note.textContent = state.method === "hierarchical"
         ? "Hierarchical clustering builds nearest-neighbor links between icons, then cuts the tree at the selected cluster count."
         : "K-Means clustering groups icons around cluster centers at the selected cluster count.";
+    }}
+
+    function initializePlotSelectionControls() {{
+      document.getElementById("lassoMode").addEventListener("click", () => setPlotDragMode("lasso"));
+      document.getElementById("zoomMode").addEventListener("click", () => setPlotDragMode("zoom"));
+      document.getElementById("clearLassoSelection").addEventListener("click", () => clearLassoSelection(false));
+      document.getElementById("resetPlotView").addEventListener("click", () => clearLassoSelection(true));
+      updatePlotSelectionControls();
+    }}
+
+    function setPlotDragMode(mode) {{
+      state.dragMode = mode === "zoom" ? "zoom" : "lasso";
+      const scatter = document.getElementById("scatter");
+      if (scatter?.layout) Plotly.relayout(scatter, {{dragmode: state.dragMode}});
+      updatePlotSelectionControls();
+    }}
+
+    function updatePlotSelectionControls() {{
+      const lassoButton = document.getElementById("lassoMode");
+      const zoomButton = document.getElementById("zoomMode");
+      const clearButton = document.getElementById("clearLassoSelection");
+      const status = document.getElementById("plotSelectionStatus");
+      if (!lassoButton || !zoomButton || !clearButton || !status) return;
+      const lassoActive = state.dragMode === "lasso";
+      lassoButton.classList.toggle("active", lassoActive);
+      lassoButton.setAttribute("aria-pressed", String(lassoActive));
+      zoomButton.classList.toggle("active", !lassoActive);
+      zoomButton.setAttribute("aria-pressed", String(!lassoActive));
+      clearButton.disabled = selectedIconIds.size === 0;
+      status.textContent = selectedIconIds.size
+        ? `${{selectedIconIds.size}} icon${{selectedIconIds.size === 1 ? "" : "s"}} selected · non-selected icons are dimmed.`
+        : lassoActive
+          ? "Draw freely around icons to select and zoom."
+          : "Drag a rectangle to zoom; switch back to Lasso select for free-form selection.";
     }}
 
     function featureSections() {{
@@ -1808,11 +1948,11 @@ def write_index_html() -> None:
       }});
     }}
 
-    function openClusterModal(cluster, items, trigger) {{
+    function openClusterModal(cluster, items, trigger, sourceLabel=null) {{
       clusterModalReturnFocus = trigger || document.activeElement;
-      document.getElementById("clusterModalTitle").textContent = `${{methodLabel()}} cluster ${{cluster}}`;
+      document.getElementById("clusterModalTitle").textContent = `${{sourceLabel || methodLabel()}} cluster ${{cluster}}`;
       document.getElementById("clusterModalDescription").textContent =
-        `${{items.length}} icons in the current filtered clustering view.`;
+        `${{items.length}} icons in the current ${{sourceLabel ? "AI" : "filtered"}} clustering view.`;
       document.getElementById("clusterModalBody").innerHTML = `
         <div class="cluster-icon-grid">
           ${{items.map(item => `
@@ -2530,9 +2670,26 @@ def write_index_html() -> None:
       const labels = projection.labels;
       const coords = projection.coords;
       const filtered = records.map((record, index) => ({{record, index}})).filter(item => passesFilters(item.record));
+      const nextLassoContextKey = [
+        state.variant,
+        state.method,
+        state.k,
+        selectedFeatureIds().join(","),
+        Array.from(state.setFilter).sort().join(","),
+        filtered.map(item => item.record.icon_id).join(",")
+      ].join("|");
+      if (lassoContextKey !== null && lassoContextKey !== nextLassoContextKey) {{
+        selectedIconIds = new Set();
+        selectedIconId = null;
+      }}
+      lassoContextKey = nextLassoContextKey;
       const customData = filtered.map(item => [item.record.icon_id]);
       const plotPoints = filtered.map(item => [coords[item.index][0], coords[item.index][1]]);
       const ranges = plotRanges(plotPoints);
+      const selectedPoints = filtered
+        .map((item, pointNumber) => selectedIconIds.has(item.record.icon_id) ? pointNumber : -1)
+        .filter(pointNumber => pointNumber >= 0);
+      currentPlotContext = {{records, labels, coords, filtered, ranges}};
 
       Plotly.react("scatter", [{{
         x: filtered.map(item => coords[item.index][0]),
@@ -2540,6 +2697,9 @@ def write_index_html() -> None:
         mode: "markers",
         type: "scatter",
         marker: interactionMarker(),
+        selectedpoints: selectedPoints,
+        selected: {{marker: {{size: 34, opacity: .32, color: "#a000a8", line: {{width: 2, color: "#a000a8"}}}}}},
+        unselected: {{marker: {{opacity: .01}}}},
         customdata: customData,
         hoverinfo: "none"
       }}], {{
@@ -2547,20 +2707,29 @@ def write_index_html() -> None:
         xaxis: {{title: "PCA 1", zeroline: false, range: ranges.x}},
         yaxis: {{title: "PCA 2", zeroline: false, range: ranges.y}},
         images: plotImages(filtered, coords, ranges),
+        dragmode: state.dragMode,
+        selectdirection: "any",
         showlegend: false
-      }}, {{responsive: true}});
+      }}, {{responsive: true, scrollZoom: true, displaylogo: false, modeBarButtonsToAdd: ["lasso2d", "select2d"]}});
 
-      document.getElementById("scatter").on("plotly_click", event => {{
+      const scatter = document.getElementById("scatter");
+      scatter.removeAllListeners?.("plotly_click");
+      scatter.removeAllListeners?.("plotly_hover");
+      scatter.removeAllListeners?.("plotly_unhover");
+      scatter.removeAllListeners?.("plotly_selected");
+      scatter.on("plotly_click", event => {{
         selectedIconId = event.points[0].customdata[0];
         renderDetail(labels);
       }});
-      document.getElementById("scatter").on("plotly_hover", event => {{
+      scatter.on("plotly_hover", event => {{
         const point = event.points[0];
         const iconId = point.customdata[0];
         const record = records.find(item => item.icon_id === iconId);
         if (record) renderHoverPreview(record, labels[records.indexOf(record)], event.event);
       }});
-      document.getElementById("scatter").on("plotly_unhover", hideHoverPreview);
+      scatter.on("plotly_unhover", hideHoverPreview);
+      scatter.on("plotly_selected", event => applyLassoSelection(event));
+      updatePlotSelectionControls();
       renderDetail(labels);
       renderClusterSummary(labels, filtered);
     }}
@@ -2568,6 +2737,8 @@ def write_index_html() -> None:
     function renderNoFeatureSelection() {{
       hideHoverPreview();
       selectedIconId = null;
+      selectedIconIds = new Set();
+      currentPlotContext = null;
       Plotly.react("scatter", [], {{
         margin: {{l: 42, r: 14, t: 16, b: 42}},
         xaxis: {{title: "PCA 1", zeroline: false, visible: false}},
@@ -2587,10 +2758,35 @@ def write_index_html() -> None:
         '<span class="muted">Select one or more image features, then click a point to inspect an icon.</span>';
       document.getElementById("clusterSummary").innerHTML =
         '<p class="muted">No feature-based clusters yet. Select features from the sidebar or use a preset.</p>';
+      updatePlotSelectionControls();
     }}
 
     async function initializeAiClustering() {{
       document.getElementById("aiRunButton").addEventListener("click", runAiClustering);
+      fillSelect("aiKSelect", dashboard.metadata.k_values.map(k => [String(k), String(k)]), state.k);
+      document.getElementById("aiMethodSelect").value = state.method;
+      document.getElementById("aiMethodSelect").addEventListener("change", event => {{
+        state.method = event.target.value;
+        document.getElementById("methodSelect").value = state.method;
+        markAiClusteringStale();
+        renderMethodNote();
+        render();
+      }});
+      document.getElementById("aiKSelect").addEventListener("change", event => {{
+        state.k = event.target.value;
+        document.getElementById("kSelect").value = state.k;
+        markAiClusteringStale();
+        render();
+      }});
+      document.getElementById("aiComparisonOpen").addEventListener("click", openAiComparison);
+      document.getElementById("aiComparisonClose").addEventListener("click", closeAiComparison);
+      const comparisonModal = document.getElementById("aiComparisonModal");
+      comparisonModal.addEventListener("click", event => {{
+        if (event.target === comparisonModal) closeAiComparison();
+      }});
+      document.addEventListener("keydown", event => {{
+        if (event.key === "Escape" && comparisonModal.classList.contains("open")) closeAiComparison();
+      }});
       try {{
         const response = await fetch("/api/ai-clustering/status", {{cache: "no-store"}});
         if (!response.ok) throw new Error("Local AI service is unavailable.");
@@ -2695,6 +2891,7 @@ def write_index_html() -> None:
       const runButton = document.getElementById("aiRunButton");
       runButton.disabled = !canRun;
       runButton.textContent = aiState.running ? "Running..." : "Run AI Clustering";
+      document.getElementById("aiComparisonOpen").disabled = aiState.currentRun?.status !== "completed";
       let status = service?.message || "Checking the local AI service...";
       let kind = "ready";
       if (aiState.error) {{ status = aiState.error; kind = "error"; }}
@@ -2707,7 +2904,7 @@ def write_index_html() -> None:
         ["Shared sample / cohort", `${{visibleFeatureSections().length}} families / ${{sharedSampleColorMode}}`],
         ["Icons", records.length],
         ["Model", service?.model_id || "—"],
-        ["Method / k", `${{state.method}} / ${{state.k}}`],
+        ["Displayed method / k", aiState.currentRun?.status === "completed" ? `${{aiState.currentRun.method}} / ${{aiState.currentRun.effective_k}}` : `${{state.method}} / ${{state.k}}`],
         ["Stored cache", `${{service?.cached_embeddings ?? 0}} embeddings / ${{service?.saved_runs ?? 0}} runs`]
       ].map(([label, value]) => `<div class="ai-fact"><span>${{escapeHtml(label)}}</span><b>${{escapeHtml(value)}}</b></div>`).join("");
       if (aiState.currentRun?.status === "completed") renderAiRun(aiState.currentRun);
@@ -2716,19 +2913,186 @@ def write_index_html() -> None:
     }}
 
     function renderEmptyAiPlots(records) {{
-      const projection = getImageProjection(records);
-      renderAiPlot("aiFeatureScatter", records.map((record, index) => ({{...record, x: projection.coords[index]?.[0] || 0, y: projection.coords[index]?.[1] || 0, cluster: projection.labels[index] || 0}})), "Feature cluster");
       Plotly.react("aiEmbeddingScatter", [], {{annotations: [{{text: "Run AI Clustering to compute image embeddings.", x: .5, y: .5, xref: "paper", yref: "paper", showarrow: false}}], xaxis: {{visible: false}}, yaxis: {{visible: false}}}}, {{responsive: true}});
-      document.getElementById("aiMetrics").innerHTML = "";
-      document.getElementById("aiCrossTable").innerHTML = '<p class="muted" style="padding:10px">No completed comparison loaded.</p>';
+      aiSelectedIconId = null;
+      document.getElementById("aiIconDetail").innerHTML = '<span class="muted">Run or load AI clustering, then click an icon.</span>';
+      document.getElementById("aiFeatureContributions").innerHTML = '<span class="muted">Run or load AI clustering to calculate the ranking.</span>';
+      document.getElementById("aiClusterSummary").innerHTML = '<span class="muted">Run or load AI clustering to inspect clusters.</span>';
     }}
 
     function renderAiRun(run) {{
+      const items = aiRunItems(run);
+      if (aiSelectedIconId && !items.some(item => item.icon_id === aiSelectedIconId)) aiSelectedIconId = null;
+      renderAiPlot("aiEmbeddingScatter", items, "AI cluster", true);
+      renderAiSelectedIcon(items);
+      renderAiFeatureContributions(items);
+      renderAiClusterSummary(items, run);
+      if (run.warning && !aiState.error) {{ document.getElementById("aiStatus").textContent = run.warning; document.getElementById("aiStatus").dataset.kind = "stale"; }}
+    }}
+
+    function aiRunItems(run, side="ai") {{
       const lookup = new Map([...(dashboard.feature_group_records || []), ...(dashboard.records || [])].map(record => [record.icon_id, record]));
-      const featureItems = run.items.map(item => ({{...lookup.get(item.icon_id), x: item.feature_x, y: item.feature_y, cluster: item.feature_label}}));
-      const aiItems = run.items.map(item => ({{...lookup.get(item.icon_id), x: item.ai_x, y: item.ai_y, cluster: item.ai_label}}));
+      return (run.items || []).map(item => ({{
+        ...lookup.get(item.icon_id),
+        icon_id: item.icon_id,
+        x: side === "feature" ? item.feature_x : item.ai_x,
+        y: side === "feature" ? item.feature_y : item.ai_y,
+        cluster: side === "feature" ? item.feature_label : item.ai_label
+      }})).filter(item => item.normalized_path);
+    }}
+
+    function renderAiPlot(id, items, clusterTitle, interactive=false) {{
+      const coords = items.map(item => [Number(item.x), Number(item.y)]);
+      const ranges = plotRanges(coords);
+      const selectedIndex = items.findIndex(item => item.icon_id === aiSelectedIconId);
+      Plotly.react(id, [{{x: coords.map(point => point[0]), y: coords.map(point => point[1]), mode: "markers", marker: {{...interactionMarker(), color: items.map(item => item.cluster)}}, selectedpoints: selectedIndex >= 0 ? [selectedIndex] : [], selected: {{marker: {{size: 38, opacity: .35, color: "#a000a8", line: {{width: 2, color: "#a000a8"}}}}}}, unselected: {{marker: {{opacity: .01}}}}, customdata: items.map(item => [item.icon_id]), hoverinfo: "none"}}], {{
+        margin: {{l: 38, r: 12, t: 12, b: 38}}, xaxis: {{title: "PCA 1", range: ranges.x}}, yaxis: {{title: "PCA 2", range: ranges.y}},
+        images: items.map(item => ({{source: item.normalized_path, xref: "x", yref: "y", x: item.x, y: item.y, sizex: ranges.spanX * PLOT_ICON_SCALE, sizey: ranges.spanY * PLOT_ICON_SCALE, xanchor: "center", yanchor: "middle", sizing: "contain", layer: "above"}})), showlegend: false
+      }}, {{responsive: true}});
+      if (!interactive) return;
+      const plot = document.getElementById(id);
+      plot.removeAllListeners?.("plotly_click");
+      plot.removeAllListeners?.("plotly_hover");
+      plot.removeAllListeners?.("plotly_unhover");
+      plot.on("plotly_click", event => {{
+        aiSelectedIconId = event.points[0].customdata[0];
+        Plotly.restyle(id, {{selectedpoints: [[event.points[0].pointNumber]]}});
+        renderAiSelectedIcon(items);
+      }});
+      plot.on("plotly_hover", event => {{
+        const item = items[event.points[0].pointNumber];
+        if (item) renderHoverPreview(item, item.cluster, event.event);
+      }});
+      plot.on("plotly_unhover", hideHoverPreview);
+    }}
+
+    function renderAiSelectedIcon(items) {{
+      const record = items.find(item => item.icon_id === aiSelectedIconId);
+      const detail = document.getElementById("aiIconDetail");
+      if (!record) {{ detail.innerHTML = '<span class="muted">Click an icon to inspect its AI cluster and measured feature values.</span>'; return; }}
+      detail.innerHTML = `
+        <img class="detail-img" src="${{record.normalized_path}}" alt="">
+        <h3>${{escapeHtml(record.label || record.icon_id)}}</h3>
+        <p class="muted">${{escapeHtml(record.set_name || "")}}<br>AI cluster: ${{escapeHtml(record.cluster)}}</p>
+        ${{groupedFeatureHtml(record, representativeFeatureIds(), false, null)}}`;
+    }}
+
+    function aiFeatureDefinition(featureId) {{
+      for (const section of visibleFeatureSections()) {{
+        const feature = section.features.find(item => item.id === featureId);
+        if (feature) return {{...feature, section}};
+      }}
+      return {{id: featureId, label: title(featureId), section: {{title: "Image Features"}}}};
+    }}
+
+    function aiFeatureSeparation(items) {{
+      const features = representativeFeatureIds();
+      if (!items.length || !features.length) return [];
+      const matrix = standardize(items.map(item => features.map(feature => Number(item.image_features?.[feature] || 0))));
+      const clusters = unique(items.map(item => item.cluster));
+      const scores = features.map((featureId, column) => {{
+        const total = matrix.reduce((sum, row) => sum + row[column] * row[column], 0);
+        const between = clusters.reduce((sum, cluster) => {{
+          const members = items.map((item, index) => item.cluster === cluster ? index : -1).filter(index => index >= 0);
+          const mean = members.reduce((value, index) => value + matrix[index][column], 0) / Math.max(1, members.length);
+          return sum + members.length * mean * mean;
+        }}, 0);
+        return {{...aiFeatureDefinition(featureId), score: total ? between / total : 0, matrix, column}};
+      }});
+      const scoreTotal = scores.reduce((sum, item) => sum + item.score, 0) || 1;
+      return scores.map(item => ({{...item, share: item.score / scoreTotal}})).sort((a, b) => b.share - a.share);
+    }}
+
+    function renderAiFeatureContributions(items) {{
+      const scores = aiFeatureSeparation(items);
+      document.getElementById("aiFeatureContributions").innerHTML = `
+        <p class="ai-contribution-note">Ranked by each standardized feature's share of between-cluster variance. This describes association with the AI result; the embedding model did not receive these feature values.</p>
+        ${{scores.map(item => `<div class="ai-contribution-row" title="${{escapeHtml(item.section.title)}} · separation R² ${{item.score.toFixed(3)}}">
+          <b>${{escapeHtml(item.label)}}</b>
+          <span class="ai-contribution-track"><span class="ai-contribution-fill" style="width:${{(item.share * 100).toFixed(1)}}%"></span></span>
+          <span class="ai-contribution-value">${{(item.share * 100).toFixed(1)}}%</span>
+        </div>`).join("")}}`;
+    }}
+
+    function aiClusterExplanation(items, cluster) {{
+      const features = representativeFeatureIds();
+      const matrix = standardize(items.map(item => features.map(feature => Number(item.image_features?.[feature] || 0))));
+      const members = items.map((item, index) => item.cluster === cluster ? index : -1).filter(index => index >= 0);
+      return features.map((featureId, column) => {{
+        const mean = members.reduce((sum, index) => sum + matrix[index][column], 0) / Math.max(1, members.length);
+        return {{...aiFeatureDefinition(featureId), mean}};
+      }}).sort((a, b) => Math.abs(b.mean) - Math.abs(a.mean)).slice(0, 3)
+        .map(item => `${{item.label}} (${{item.mean >= 0 ? "high" : "low"}}, ${{Math.abs(item.mean).toFixed(2)}}z)`).join(", ");
+    }}
+
+    function renderAiClusterSummary(items, run) {{
+      const labels = items.map(item => item.cluster);
+      const measuredProfile = clusterInterpretationProfile(items, labels, representativeFeatureIds());
+      const measuredByCluster = new Map(measuredProfile.clusters.map(item => [item.cluster, item]));
+      const embeddingByCluster = new Map((run.metrics?.embedding_cluster_profile || []).map(item => [Number(item.cluster), item]));
+      const byCluster = new Map();
+      items.forEach((item, index) => {{
+        if (!byCluster.has(item.cluster)) byCluster.set(item.cluster, []);
+        byCluster.get(item.cluster).push({{record: item, index}});
+      }});
+      const entries = Array.from(byCluster.entries()).sort((a, b) => a[0] - b[0]);
+      const container = document.getElementById("aiClusterSummary");
+      container.innerHTML = `
+        <p class="cluster-profile-note">Embedding contribution measures the actual AI space. Measured-feature contribution and the heatmap are post-hoc explanations across the seven thesis representatives.</p>
+        ${{clusterHeatmapHtml(measuredProfile, "AI clusters by measured feature")}}
+        ${{entries.map(([cluster, members], entryIndex) => {{
+          const measured = measuredByCluster.get(cluster);
+          const embedding = embeddingByCluster.get(Number(cluster));
+          return `
+        <details class="summary-cluster">
+          <summary><b>AI cluster ${{escapeHtml(cluster)}} · ${{escapeHtml(measured?.descriptiveLabel || "Measured profile")}}</b> <span class="muted">(${{members.length}} icons)</span><br><span class="muted">Sets: ${{escapeHtml(topCounts(members.map(item => item.record.set_name), 2).join(", "))}}</span></summary>
+          <div class="summary-details">
+            ${{clusterMetricsHtml([
+              ["Embedding variance", embedding ? `${{(Number(embedding.variance_contribution) * 100).toFixed(1)}}%` : "Unavailable"],
+              ["Embedding strength", embedding ? Number(embedding.separation_strength).toFixed(5) : "Unavailable"],
+              ["Measured variance", measured ? `${{(measured.varianceContribution * 100).toFixed(1)}}%` : "—"],
+              ["Measured strength", measured ? measured.separationStrength.toFixed(3) : "—"],
+              ["Cluster size", members.length]
+            ])}}
+            ${{clusterIconStatisticsHtml(members.map(item => item.record), members.length, items.length)}}
+            ${{clusterFeatureStatisticsHtml(measuredProfile, measured)}}
+            <div class="summary-explain">Most characteristic measured features: ${{escapeHtml(aiClusterExplanation(items, cluster))}}</div>
+            <div class="rep-icons">${{members.slice(0, 12).map(item => `<div class="rep-icon"><img src="${{item.record.normalized_path}}" title="${{escapeHtml(item.record.label)}}" alt=""><span>${{escapeHtml(item.record.label)}}</span></div>`).join("")}}</div>
+            <div class="summary-actions"><button class="cluster-fullscreen-open" type="button" data-ai-cluster-entry="${{entryIndex}}">View all ${{members.length}} icons fullscreen</button></div>
+          </div>
+        </details>`;
+        }}).join("")}}`;
+      container.querySelectorAll("[data-ai-cluster-entry]").forEach(button => button.addEventListener("click", () => {{
+        const entry = entries[Number(button.dataset.aiClusterEntry)];
+        if (entry) openClusterModal(entry[0], entry[1], button, "AI");
+      }}));
+    }}
+
+    function openAiComparison() {{
+      if (aiState.currentRun?.status !== "completed") return;
+      aiComparisonReturnFocus = document.activeElement;
+      const modal = document.getElementById("aiComparisonModal");
+      modal.classList.add("open");
+      modal.setAttribute("aria-hidden", "false");
+      document.body.style.overflow = "hidden";
+      renderAiComparison(aiState.currentRun);
+      document.getElementById("aiComparisonClose").focus();
+    }}
+
+    function closeAiComparison() {{
+      const modal = document.getElementById("aiComparisonModal");
+      if (!modal.classList.contains("open")) return;
+      modal.classList.remove("open");
+      modal.setAttribute("aria-hidden", "true");
+      document.body.style.overflow = "";
+      if (aiComparisonReturnFocus && document.body.contains(aiComparisonReturnFocus)) aiComparisonReturnFocus.focus();
+    }}
+
+    function renderAiComparison(run) {{
+      const featureItems = aiRunItems(run, "feature");
+      const aiItems = aiRunItems(run, "ai");
       renderAiPlot("aiFeatureScatter", featureItems, "Feature cluster");
-      renderAiPlot("aiEmbeddingScatter", aiItems, "AI cluster");
+      renderAiPlot("aiComparisonEmbeddingScatter", aiItems, "AI cluster");
       synchronizeAiPlots();
       const metrics = run.metrics || {{}};
       document.getElementById("aiMetrics").innerHTML = [
@@ -2736,28 +3100,21 @@ def write_index_html() -> None:
         ["Cache", `${{run.cache_hits}} hit / ${{run.cache_misses}} miss`]
       ].map(([label, value]) => `<div class="ai-fact"><span>${{escapeHtml(label)}}</span><b>${{typeof value === "number" ? value.toFixed(3) : escapeHtml(value ?? "—")}}</b></div>`).join("");
       renderAiCrossTable(metrics.cross_table);
-      if (run.warning && !aiState.error) {{ document.getElementById("aiStatus").textContent = run.warning; document.getElementById("aiStatus").dataset.kind = "stale"; }}
-    }}
-
-    function renderAiPlot(id, items, clusterTitle) {{
-      const coords = items.map(item => [Number(item.x), Number(item.y)]);
-      const ranges = plotRanges(coords);
-      Plotly.react(id, [{{x: coords.map(point => point[0]), y: coords.map(point => point[1]), mode: "markers", marker: {{...interactionMarker(), color: items.map(item => item.cluster)}}, selected: {{marker: {{size: 38, opacity: .35, color: "#a000a8", line: {{width: 2, color: "#a000a8"}}}}}}, unselected: {{marker: {{opacity: .01}}}}, customdata: items.map(item => [item.icon_id]), hoverinfo: "none"}}], {{
-        margin: {{l: 38, r: 12, t: 12, b: 38}}, xaxis: {{title: "PCA 1", range: ranges.x}}, yaxis: {{title: "PCA 2", range: ranges.y}},
-        images: items.map(item => ({{source: item.normalized_path, xref: "x", yref: "y", x: item.x, y: item.y, sizex: ranges.spanX * .08, sizey: ranges.spanY * .08, xanchor: "center", yanchor: "middle", sizing: "contain", layer: "above"}})), showlegend: false
-      }}, {{responsive: true}});
     }}
 
     function synchronizeAiPlots() {{
       let syncing = false;
-      [["aiFeatureScatter", "aiEmbeddingScatter"], ["aiEmbeddingScatter", "aiFeatureScatter"]].forEach(([source, target]) => {{
+      [["aiFeatureScatter", "aiComparisonEmbeddingScatter"], ["aiComparisonEmbeddingScatter", "aiFeatureScatter"]].forEach(([source, target]) => {{
         const plot = document.getElementById(source);
+        plot.removeAllListeners?.("plotly_hover");
+        plot.removeAllListeners?.("plotly_unhover");
+        plot.removeAllListeners?.("plotly_click");
         plot.on("plotly_hover", event => {{ if (!syncing) {{ syncing = true; Plotly.Fx.hover(target, [{{curveNumber: 0, pointNumber: event.points[0].pointNumber}}]); syncing = false; }} }});
         plot.on("plotly_unhover", () => Plotly.Fx.unhover(target));
         plot.on("plotly_click", event => {{
           const selected = event.points[0].pointNumber;
           Plotly.restyle("aiFeatureScatter", {{selectedpoints: [[selected]]}});
-          Plotly.restyle("aiEmbeddingScatter", {{selectedpoints: [[selected]]}});
+          Plotly.restyle("aiComparisonEmbeddingScatter", {{selectedpoints: [[selected]]}});
         }});
       }});
     }}
@@ -2872,8 +3229,9 @@ def write_index_html() -> None:
     }}
 
     function plotImages(filtered, coords, ranges) {{
-      const sizeX = ranges.spanX * 0.055;
-      const sizeY = ranges.spanY * 0.055;
+      const sizeX = ranges.spanX * PLOT_ICON_SCALE;
+      const sizeY = ranges.spanY * PLOT_ICON_SCALE;
+      const hasSelection = selectedIconIds.size > 0;
       return filtered.map(item => ({{
         source: item.record.normalized_path,
         xref: "x",
@@ -2886,8 +3244,63 @@ def write_index_html() -> None:
         yanchor: "middle",
         sizing: "contain",
         layer: "above",
-        opacity: 0.96
+        opacity: hasSelection && !selectedIconIds.has(item.record.icon_id) ? 0.10 : 0.96
       }}));
+    }}
+
+    function applyLassoSelection(event) {{
+      const points = event?.points || [];
+      if (!points.length || !currentPlotContext) {{
+        clearLassoSelection(false);
+        return;
+      }}
+      selectedIconIds = new Set(points.map(point => point.customdata?.[0]).filter(Boolean));
+      selectedIconId = points[0].customdata?.[0] || null;
+      const selectedPointNumbers = points.map(point => point.pointNumber);
+      Plotly.restyle("scatter", {{selectedpoints: [selectedPointNumbers]}});
+      Plotly.relayout("scatter", {{images: plotImages(
+        currentPlotContext.filtered,
+        currentPlotContext.coords,
+        currentPlotContext.ranges
+      )}});
+      zoomToSelectedPoints(points);
+      renderDetail(currentPlotContext.labels);
+      updatePlotSelectionControls();
+    }}
+
+    function zoomToSelectedPoints(points) {{
+      if (!points.length || !currentPlotContext) return;
+      const xs = points.map(point => Number(point.x)).filter(Number.isFinite);
+      const ys = points.map(point => Number(point.y)).filter(Number.isFinite);
+      if (!xs.length || !ys.length) return;
+      const spanX = Math.max(Math.max(...xs) - Math.min(...xs), currentPlotContext.ranges.spanX * 0.06);
+      const spanY = Math.max(Math.max(...ys) - Math.min(...ys), currentPlotContext.ranges.spanY * 0.06);
+      const padX = spanX * 0.35;
+      const padY = spanY * 0.35;
+      Plotly.relayout("scatter", {{
+        "xaxis.range": [Math.min(...xs) - padX, Math.max(...xs) + padX],
+        "yaxis.range": [Math.min(...ys) - padY, Math.max(...ys) + padY]
+      }});
+    }}
+
+    function clearLassoSelection(resetView) {{
+      selectedIconIds = new Set();
+      selectedIconId = null;
+      if (currentPlotContext) {{
+        Plotly.restyle("scatter", {{selectedpoints: [null]}});
+        const layoutUpdate = {{images: plotImages(
+          currentPlotContext.filtered,
+          currentPlotContext.coords,
+          currentPlotContext.ranges
+        )}};
+        if (resetView) {{
+          layoutUpdate["xaxis.range"] = currentPlotContext.ranges.x;
+          layoutUpdate["yaxis.range"] = currentPlotContext.ranges.y;
+        }}
+        Plotly.relayout("scatter", layoutUpdate);
+        renderDetail(currentPlotContext.labels);
+      }}
+      updatePlotSelectionControls();
     }}
 
     function renderHoverPreview(record, cluster, event) {{
@@ -2930,9 +3343,12 @@ def write_index_html() -> None:
 
     function renderDetail(labels) {{
       const detail = document.getElementById("iconDetail");
+      const heading = document.getElementById("selectedIconHeading");
       const records = clusteringRecords();
+      const lassoRecords = records.filter(record => selectedIconIds.has(record.icon_id));
       const record = records.find(r => r.icon_id === selectedIconId);
       if (!record) {{
+        heading.textContent = "Selected Icon";
         detail.innerHTML = '<span class="muted">Click a point to inspect an icon from the shared sample.</span>';
         return;
       }}
@@ -2941,17 +3357,37 @@ def write_index_html() -> None:
       const mcdougallRows = Object.entries(record.mcdougall || {{}})
         .filter(([, value]) => value !== "")
         .map(([key, value]) => `<span class="pill">${{title(key)}}: ${{escapeHtml(String(value))}}</span>`).join("");
+      const lassoSummary = lassoRecords.length ? `
+        <section class="lasso-selection-summary">
+          <b>${{lassoRecords.length}} lasso-selected icon${{lassoRecords.length === 1 ? "" : "s"}}</b>
+          <p>${{escapeHtml(topCounts(lassoRecords.map(item => item.set_name), 3).join(", "))}}</p>
+          <div class="lasso-icon-grid">
+            ${{lassoRecords.map(item => `<button type="button" class="lasso-icon-button ${{item.icon_id === selectedIconId ? "active" : ""}}" data-lasso-icon-id="${{escapeHtml(item.icon_id)}}" title="Inspect ${{escapeHtml(item.label)}}">
+              <img src="${{item.normalized_path}}" alt=""><span>${{escapeHtml(item.label)}}</span>
+            </button>`).join("")}}
+          </div>
+        </section>` : "";
+      heading.textContent = lassoRecords.length ? `Lasso Selection (${{lassoRecords.length}})` : "Selected Icon";
       detail.innerHTML = `
+        ${{lassoSummary}}
         <img class="detail-img" src="${{record.normalized_path}}" alt="">
         <h3>${{escapeHtml(record.label)}}</h3>
         <p class="muted">${{escapeHtml(record.set_name)}}<br>Cluster: ${{labels[index]}}</p>
         ${{featureGroups}}
         <p>${{mcdougallRows}}</p>
         <p class="muted">${{escapeHtml(record.metadata_tokens || "").slice(0, 300)}}</p>`;
+      detail.querySelectorAll("[data-lasso-icon-id]").forEach(button => button.addEventListener("click", () => {{
+        selectedIconId = button.dataset.lassoIconId;
+        renderDetail(labels);
+      }}));
     }}
 
     function renderClusterSummary(labels, filtered) {{
       const container = document.getElementById("clusterSummary");
+      const profileAvailable = state.variant === "image";
+      const allRecords = clusteringRecords();
+      const profile = profileAvailable ? clusterInterpretationProfile(allRecords, labels, selectedFeatureIds()) : {{features: [], clusters: []}};
+      const profileByCluster = new Map(profile.clusters.map(item => [item.cluster, item]));
       const byCluster = new Map();
       filtered.forEach(item => {{
         const cluster = labels[item.index];
@@ -2959,18 +3395,31 @@ def write_index_html() -> None:
         byCluster.get(cluster).push(item);
       }});
       const clusterEntries = Array.from(byCluster.entries()).sort((a,b) => a[0]-b[0]);
-      container.innerHTML = clusterEntries.map(([cluster, items], entryIndex) => {{
+      container.innerHTML = `
+        ${{profileAvailable
+          ? `<p class="cluster-profile-note">Contribution is each cluster's size-weighted share of total between-cluster variance in the selected feature space. Separation strength is the cluster centre's average squared standardized distance from the overall centre.</p>${{clusterHeatmapHtml(profile, "Selected-feature cluster profiles")}}`
+          : '<p class="cluster-profile-note">Cluster variance profiles require the original clustering dimensions and are currently available for the Image variant only.</p>'}}
+        ${{clusterEntries.map(([cluster, items], entryIndex) => {{
         const topSets = topCounts(items.map(item => item.record.set_name), 2).join(", ");
-        const explanation = clusterExplanation(labels, cluster, selectedFeatureIds());
+        const clusterProfile = profileByCluster.get(cluster);
+        const clusterRecords = labels.map((label, index) => label === cluster ? allRecords[index] : null).filter(Boolean);
+        const explanation = profileAvailable ? clusterExplanation(labels, cluster, selectedFeatureIds()) : '<div class="summary-explain">Measured-feature interpretation is not shown for precomputed Metadata or Combined clusters.</div>';
         const icons = items.slice(0, 12).map(item => `
           <div class="rep-icon">
             <img src="${{item.record.normalized_path}}" title="${{escapeHtml(item.record.label)}}" alt="">
             <span title="${{escapeHtml(item.record.label)}}">${{escapeHtml(item.record.label)}}</span>
           </div>`).join("");
         return `<details class="summary-cluster">
-          <summary><b>${{methodLabel()}} cluster ${{cluster}}</b> <span class="muted">(${{items.length}} icons)</span><br>
+          <summary><b>${{methodLabel()}} cluster ${{cluster}}${{clusterProfile ? ` · ${{escapeHtml(clusterProfile.descriptiveLabel)}}` : ""}}</b> <span class="muted">(${{items.length}} visible icons)</span><br>
             <span class="muted">Sets: ${{escapeHtml(topSets)}}</span></summary>
           <div class="summary-details">
+            ${{clusterProfile ? clusterMetricsHtml([
+              ["Variance contribution", clusterProfile ? `${{(clusterProfile.varianceContribution * 100).toFixed(1)}}%` : "—"],
+              ["Separation strength", clusterProfile ? clusterProfile.separationStrength.toFixed(3) : "—"],
+              ["Full cluster size", clusterProfile?.size ?? "—"]
+            ]) : ""}}
+            ${{clusterIconStatisticsHtml(clusterRecords, items.length, allRecords.length)}}
+            ${{profileAvailable ? clusterFeatureStatisticsHtml(profile, clusterProfile) : ""}}
             ${{explanation}}
             <div class="rep-icons">${{icons}}</div>
             <div class="summary-actions">
@@ -2978,7 +3427,7 @@ def write_index_html() -> None:
             </div>
           </div>
         </details>`;
-      }}).join("");
+      }}).join("")}}`;
       container.querySelectorAll(".cluster-fullscreen-open").forEach(button => {{
         button.addEventListener("click", () => {{
           const entry = clusterEntries[Number(button.dataset.clusterEntry)];
@@ -3035,6 +3484,122 @@ def write_index_html() -> None:
         }}
       }}
       return lines;
+    }}
+
+    function clusterInterpretationProfile(records, labels, featureIds) {{
+      const features = featureIds.map(aiFeatureDefinition);
+      if (!records.length || !features.length) return {{features, clusters: []}};
+      const rawMatrix = records.map(record => features.map(feature => Number(record.image_features?.[feature.id] || 0)));
+      const overallStats = features.map((feature, column) => numericSummary(rawMatrix.map(row => row[column])));
+      const matrix = standardize(rawMatrix);
+      const clusters = unique(labels).sort((a, b) => a - b).map(cluster => {{
+        const members = labels.map((label, index) => label === cluster ? index : -1).filter(index => index >= 0);
+        const means = features.map((feature, column) => members.reduce((sum, index) => sum + matrix[index][column], 0) / Math.max(1, members.length));
+        const featureStats = features.map((feature, column) => numericSummary(members.map(index => rawMatrix[index][column])));
+        const squaredDistance = means.reduce((sum, value) => sum + value * value, 0);
+        const ranked = means.map((value, index) => ({{feature: features[index], value}})).sort((a, b) => Math.abs(b.value) - Math.abs(a.value));
+        return {{
+          cluster,
+          size: members.length,
+          means,
+          featureStats,
+          weightedBetweenVariance: members.length * squaredDistance,
+          separationStrength: squaredDistance / features.length,
+          descriptiveLabel: ranked.slice(0, 2).map(item => `${{item.value >= 0 ? "High" : "Low"}} ${{shortFeatureLabel(item.feature.label)}}`).join(" / ")
+        }};
+      }});
+      const total = clusters.reduce((sum, item) => sum + item.weightedBetweenVariance, 0) || 1;
+      clusters.forEach(item => item.varianceContribution = item.weightedBetweenVariance / total);
+      return {{features, overallStats, clusters}};
+    }}
+
+    function numericSummary(values) {{
+      const sorted = values.map(Number).filter(Number.isFinite).sort((a, b) => a - b);
+      if (!sorted.length) return {{count: 0, mean: null, median: null, std: null, min: null, max: null}};
+      const mean = sorted.reduce((sum, value) => sum + value, 0) / sorted.length;
+      const middle = Math.floor(sorted.length / 2);
+      const median = sorted.length % 2 ? sorted[middle] : (sorted[middle - 1] + sorted[middle]) / 2;
+      const variance = sorted.reduce((sum, value) => sum + Math.pow(value - mean, 2), 0) / sorted.length;
+      return {{count: sorted.length, mean, median, std: Math.sqrt(variance), min: sorted[0], max: sorted[sorted.length - 1]}};
+    }}
+
+    function shortFeatureLabel(label) {{
+      return String(label).replace(/\\s*\\(v\\d+\\)\\s*/gi, "").replace(/\\s+/g, " ").trim();
+    }}
+
+    function clusterMetricsHtml(metrics) {{
+      return `<div class="cluster-metrics">${{metrics.map(([label, value]) => `<div class="cluster-metric"><span>${{escapeHtml(label)}}</span><b>${{escapeHtml(value)}}</b></div>`).join("")}}</div>`;
+    }}
+
+    function clusterHeatmapHtml(profile, titleText) {{
+      if (!profile.clusters.length) return "";
+      return `<div class="cluster-heatmap-wrap" role="region" aria-label="${{escapeHtml(titleText)}}">
+        <table class="cluster-heatmap">
+          <thead><tr><th>${{escapeHtml(titleText)}}</th>${{profile.features.map(feature => `<th title="${{escapeHtml(feature.label)}}">${{escapeHtml(shortFeatureLabel(feature.label))}}</th>`).join("")}}</tr></thead>
+          <tbody>${{profile.clusters.map(cluster => `<tr><th>Cluster ${{escapeHtml(cluster.cluster)}} · ${{escapeHtml(cluster.descriptiveLabel)}}</th>${{cluster.means.map(value => `<td style="${{clusterHeatmapCellStyle(value)}}" title="${{value >= 0 ? "High" : "Low"}} by ${{Math.abs(value).toFixed(3)}} standard deviations">${{value >= 0 ? "+" : ""}}${{value.toFixed(2)}}z</td>`).join("")}}</tr>`).join("")}}</tbody>
+        </table>
+      </div>`;
+    }}
+
+    function clusterHeatmapCellStyle(value) {{
+      const intensity = Math.min(0.82, 0.12 + Math.abs(value) / 2.5 * 0.7);
+      const background = value >= 0 ? `rgba(190, 45, 55, ${{intensity.toFixed(3)}})` : `rgba(35, 105, 180, ${{intensity.toFixed(3)}})`;
+      return `background:${{background}};color:${{intensity > 0.5 ? "white" : "#18202f"}}`;
+    }}
+
+    function clusterIconStatisticsHtml(clusterRecords, visibleCount, totalCount) {{
+      const setCounts = new Map();
+      clusterRecords.forEach(record => setCounts.set(record.set_name, (setCounts.get(record.set_name) || 0) + 1));
+      const dominant = Array.from(setCounts.entries()).sort((a, b) => b[1] - a[1])[0] || ["—", 0];
+      const sampleShare = totalCount ? clusterRecords.length / totalCount * 100 : 0;
+      const dominantShare = clusterRecords.length ? dominant[1] / clusterRecords.length * 100 : 0;
+      return `<section class="cluster-statistics-section">
+        <h4>Icon statistics</h4>
+        ${{clusterMetricsHtml([
+          ["Icons in cluster", clusterRecords.length],
+          ["Share of sample", `${{sampleShare.toFixed(1)}}%`],
+          ["Currently visible", visibleCount],
+          ["Icon sets", setCounts.size],
+          ["Dominant set", dominant[0]],
+          ["Dominant-set share", `${{dominantShare.toFixed(1)}}%`]
+        ])}}
+      </section>`;
+    }}
+
+    function clusterFeatureStatisticsHtml(profile, clusterProfile) {{
+      if (!clusterProfile || !profile.features.length) return "";
+      return `<section class="cluster-statistics-section">
+        <h4>Feature statistics</h4>
+        <p class="cluster-profile-note">Raw cluster statistics are shown beside the full-sample mean. Difference is the signed standardized cluster-mean deviation used by the profile heatmap.</p>
+        <div class="cluster-feature-stats-wrap">
+          <table class="cluster-feature-stats">
+            <thead><tr><th>Feature</th><th>N</th><th>Cluster mean</th><th>Median</th><th>Std. dev.</th><th>Min</th><th>Max</th><th>Overall mean</th><th>Difference</th></tr></thead>
+            <tbody>${{profile.features.map((feature, index) => {{
+              const stats = clusterProfile.featureStats[index];
+              const overall = profile.overallStats[index];
+              const difference = clusterProfile.means[index];
+              return `<tr>
+                <td title="${{escapeHtml(feature.label)}}">${{escapeHtml(shortFeatureLabel(feature.label))}}</td>
+                <td>${{stats.count}}</td>
+                <td>${{formatStatistic(stats.mean)}}</td>
+                <td>${{formatStatistic(stats.median)}}</td>
+                <td>${{formatStatistic(stats.std)}}</td>
+                <td>${{formatStatistic(stats.min)}}</td>
+                <td>${{formatStatistic(stats.max)}}</td>
+                <td>${{formatStatistic(overall.mean)}}</td>
+                <td class="${{difference >= 0 ? "delta-positive" : "delta-negative"}}">${{difference >= 0 ? "+" : ""}}${{difference.toFixed(2)}}z</td>
+              </tr>`;
+            }}).join("")}}</tbody>
+          </table>
+        </div>
+      </section>`;
+    }}
+
+    function formatStatistic(value) {{
+      if (!Number.isFinite(value)) return "—";
+      const absolute = Math.abs(value);
+      if (absolute !== 0 && (absolute < 0.001 || absolute >= 10000)) return value.toExponential(3);
+      return Number(value.toFixed(4)).toString();
     }}
 
     function clusterExplanation(labels, cluster, featureIds) {{

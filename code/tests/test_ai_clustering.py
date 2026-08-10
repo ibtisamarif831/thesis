@@ -9,7 +9,7 @@ from urllib.request import urlopen
 
 import numpy as np
 
-from thesis_pipeline.ai_clustering.metrics import agreement_metrics
+from thesis_pipeline.ai_clustering.metrics import agreement_metrics, cluster_variance_profile
 from thesis_pipeline.ai_clustering.openrouter import EmbeddingResponse, OpenRouterClient, OpenRouterError, image_embedding_payload
 from thesis_pipeline.ai_clustering.service import AIClusteringService, RequestValidationError, ServiceConfig
 from serve_analysis_dashboard import DashboardHandler
@@ -100,6 +100,14 @@ def test_metrics_are_invariant_to_cluster_number_permutations() -> None:
     assert metrics["pairwise_same_cluster_agreement"] == 1.0
 
 
+def test_cluster_variance_profile_separates_size_and_strength() -> None:
+    matrix = np.array([[-3.0], [-3.0], [1.0], [1.0], [1.0], [1.0]])
+    profile = cluster_variance_profile(matrix, [0, 0, 1, 1, 1, 1])
+    assert sum(item["variance_contribution"] for item in profile) == 1.0
+    assert profile[0]["separation_strength"] > profile[1]["separation_strength"]
+    assert profile[0]["variance_contribution"] > profile[1]["variance_contribution"]
+
+
 def test_run_is_persisted_and_second_run_uses_cache(tmp_path: Path) -> None:
     client = FakeClient()
     service, payload = make_service(tmp_path, client)
@@ -110,6 +118,7 @@ def test_run_is_persisted_and_second_run_uses_cache(tmp_path: Path) -> None:
     assert second["cache_hits"] == 4
     assert len(client.calls) == 1
     assert [item["icon_id"] for item in first["items"]] == payload["icon_ids"]
+    assert np.isclose(sum(item["variance_contribution"] for item in first["metrics"]["embedding_cluster_profile"]), 1.0)
     assert service.get_run(first["run_id"])["metrics"] == first["metrics"]
     assert len(service.list_runs()) == 2
     with sqlite3.connect(service.config.database_path) as connection:
@@ -128,6 +137,20 @@ def test_image_hash_change_invalidates_only_that_embedding(tmp_path: Path) -> No
     assert result["cache_misses"] == 1
     assert len(client.calls) == 2
     assert len(client.calls[-1]) == 1
+
+
+def test_old_run_is_enriched_from_cache_without_database_rewrite(tmp_path: Path) -> None:
+    service, payload = make_service(tmp_path)
+    result = service.run(payload)
+    legacy_metrics = agreement_metrics(payload["feature_labels"], [item["ai_label"] for item in result["items"]])
+    with sqlite3.connect(service.config.database_path) as connection:
+        connection.execute("UPDATE runs SET metrics_json=? WHERE run_id=?", (json.dumps(legacy_metrics), result["run_id"]))
+    enriched = service.get_run(result["run_id"])
+    assert enriched is not None
+    assert "embedding_cluster_profile" in enriched["metrics"]
+    with sqlite3.connect(service.config.database_path) as connection:
+        persisted = json.loads(connection.execute("SELECT metrics_json FROM runs WHERE run_id=?", (result["run_id"],)).fetchone()[0])
+    assert "embedding_cluster_profile" not in persisted
 
 
 def test_failed_run_is_saved_and_arbitrary_ids_are_rejected(tmp_path: Path) -> None:
@@ -154,8 +177,36 @@ def test_k_above_sample_size_is_capped_with_warning(tmp_path: Path) -> None:
 
 def test_generated_dashboard_contains_ai_clustering_contract() -> None:
     html = (Path(__file__).parents[2] / "icon_data" / "analysis" / "analysis_dashboard" / "index.html").read_text(encoding="utf-8")
-    for expected in ("AI Clustering", "Run AI Clustering", "aiFeatureScatter", "aiEmbeddingScatter", "/api/ai-clustering/runs"):
+    for expected in (
+        "AI Clustering",
+        "Run AI Clustering",
+        "Open feature vs AI comparison",
+        'id="aiComparisonModal"',
+        'id="aiFeatureContributions"',
+        'id="aiClusterSummary"',
+        'id="aiIconDetail"',
+        "aiFeatureSeparation",
+        "clusterInterpretationProfile",
+        "Variance contribution",
+        "Separation strength",
+        "Embedding variance",
+        "Measured variance",
+        "AI clusters by measured feature",
+        "Icon statistics",
+        "Feature statistics",
+        "Share of sample",
+        "Cluster mean",
+        "Overall mean",
+        "aiFeatureScatter",
+        "aiEmbeddingScatter",
+        "/api/ai-clustering/runs",
+    ):
         assert expected in html
+    assert "between-cluster variance" in html
+    assert "the embedding model did not receive these feature values" in html
+    assert "const PLOT_ICON_SCALE = 0.055" in html
+    assert html.count("ranges.spanX * PLOT_ICON_SCALE") == 2
+    assert html.count("ranges.spanY * PLOT_ICON_SCALE") == 2
     assert "Adjusted Rand index" not in html
     assert "Normalized mutual information" not in html
     assert "Reported usage" not in html

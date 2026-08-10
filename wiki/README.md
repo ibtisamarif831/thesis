@@ -64,11 +64,11 @@ Verified on **2026-08-03** from the current CSV and JSON artifacts:
 | Feature Values features | The 7 configured Feature Groups representatives |
 | Feature-v2 release gate | Blocked pending completion of the frozen two-rater benchmark |
 | Feature Groups pilot sample | Defaults: 10 equal-width bins across each eligible feature range, with up to 2 random icons per bin from 28,260 certain-mask rows; meaningful zeros remain valid and low-information cohorts are flagged; exploratory overrides use the 129-row clustering sample |
-| Image Clustering sample | Unique seven-family composite, up to 20 stratified icons per family; verified as 140 icons for the default All cohort |
+| Image Clustering sample | Unique seven-family composite, up to 20 stratified icons per family; verified as 140 icons for the default All cohort; cluster summaries include descriptive labels, variance contribution/strength, a feature-profile heatmap, icon composition statistics, and raw per-feature descriptive statistics |
 | Feature Groups comparison | Exactly 3 selected sample icons; all 7 representative values in a separate fullscreen modal |
 | Generated dashboard rows | 129 for Metadata/Combined projections and exploratory-family fallback |
 | Generated dashboard sampling | Up to 10 random icons per set, seed 42 |
-| AI Clustering experiment | Exact shared Feature Groups sample; explicit OpenRouter image-embedding run; tracked SQLite cache/history |
+| AI Clustering experiment | Exact shared Feature Groups sample; explicit OpenRouter image-embedding run; inspectable AI plot, descriptive cluster labels, actual embedding-space contribution, post-hoc measured-feature contribution/heatmap, icon and seven-feature statistics, cluster galleries, modal feature-vs-AI comparison, and tracked SQLite cache/history |
 | Dashboard variants | Image, metadata, combined |
 | Dashboard cluster values | 3, 5, 7, 10 |
 | Human-response dataset | Not implemented yet |

@@ -9,6 +9,7 @@ The wiki explains the system; it does not replace generated metadata or executab
 | Need | Page |
 |---|---|
 | Understand the thesis and its boundaries | [Thesis overview](thesis-overview.md) |
+| Continue the separate LaTeX thesis document | [Thesis document handoff](../THESIS_DOCUMENT_HANDOFF.md) |
 | Find a directory, script, input, or output | [Repository architecture](repository-architecture.md) |
 | Understand the 13 icon collections and canonical CSV | [Datasets and provenance](datasets-and-provenance.md) |
 | Follow data from source icons to analysis artifacts | [End-to-end pipeline](pipeline.md) |

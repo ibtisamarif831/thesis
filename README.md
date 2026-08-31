@@ -6,6 +6,8 @@ Start with the **[repository wiki](wiki/README.md)**. It covers the thesis bound
 
 For AI-agent rules, read [AGENTS.md](AGENTS.md) first, followed by the detailed routing guide in [agent.md](agent.md).
 
+The separate LaTeX/Overleaf project and its current unpushed source state are documented in [the thesis document handoff](THESIS_DOCUMENT_HANDOFF.md).
+
 ## Run the Dashboard
 
 From the repository root:

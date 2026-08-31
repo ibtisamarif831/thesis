@@ -1,0 +1,343 @@
+{
+  "schema": "openai.presentation.layout/v4",
+  "unit": "px",
+  "slide": {
+    "aid": "sl/82apwk",
+    "id": "82apwk",
+    "slide": 1,
+    "layoutId": "43f92343-9ece-482f-877e-12a4d6b415ee",
+    "layoutName": "Title Slide",
+    "layoutType": "title",
+    "masterLayoutId": "86f32aac-0a3c-4dfe-8a40-fdcd1e6c1e4c",
+    "masterLayoutName": "Master",
+    "backgroundColor": "#FFFFFF",
+    "frame": {
+      "left": 0,
+      "top": 0,
+      "width": 1280,
+      "height": 720
+    }
+  },
+  "theme": {
+    "colorSchemeName": "ChatGPT",
+    "colors": {
+      "accent1": "#156082",
+      "accent2": "#E97132",
+      "accent3": "#196B24",
+      "accent4": "#0F9ED5",
+      "accent5": "#A02B93",
+      "accent6": "#4EA72E",
+      "bg1": "#FFFFFF",
+      "bg2": "#000000",
+      "tx1": "#1F1F1F",
+      "tx2": "#FFFFFF",
+      "dk1": "#000000",
+      "lt1": "#FFFFFF",
+      "dk2": "#0E2841",
+      "lt2": "#E8E8E8",
+      "hlink": "#467886",
+      "folHlink": "#96607D"
+    },
+    "typefaces": [
+      "Helvetica Neue"
+    ]
+  },
+  "inheritedLayers": [
+    {
+      "scope": "layout",
+      "id": "43f92343-9ece-482f-877e-12a4d6b415ee",
+      "name": "Title Slide",
+      "type": "title",
+      "parentLayoutId": "86f32aac-0a3c-4dfe-8a40-fdcd1e6c1e4c",
+      "elements": []
+    },
+    {
+      "scope": "master",
+      "id": "86f32aac-0a3c-4dfe-8a40-fdcd1e6c1e4c",
+      "name": "Master",
+      "type": "master",
+      "elements": []
+    }
+  ],
+  "elements": [
+    {
+      "order": 1,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/psbu1wbe",
+      "id": "1",
+      "bbox": [
+        42,
+        42,
+        620,
+        30
+      ],
+      "geometry": "rect",
+      "text": "THESIS PROGRESS PRESENTATION",
+      "textPreview": "THESIS PROGRESS PRESENTATION",
+      "resolvedFontSize": 18,
+      "resolvedTextStyle": {
+        "anchor": 1,
+        "fontSize": 18,
+        "typeface": "Helvetica Neue",
+        "color": "#3D8DFF",
+        "bold": true,
+        "alignment": "left",
+        "verticalAlignment": "top",
+        "insets": {
+          "top": 4.8,
+          "right": 9.6,
+          "bottom": 4.8,
+          "left": 9.6
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "THESIS PROGRESS PRESENTATION"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "THESIS PROGRESS PRESENTATION",
+          "resolvedTextStyle": {
+            "fontSize": 18,
+            "typeface": "Helvetica Neue",
+            "color": "#3D8DFF",
+            "bold": true,
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "THESIS PROGRESS PRESENTATION",
+              "fontSize": 18,
+              "typeface": "Helvetica Neue",
+              "color": "#3D8DFF",
+              "bold": true,
+              "alignment": "left"
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 2,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/2pkb6hsn",
+      "id": "2",
+      "bbox": [
+        42,
+        205,
+        1080,
+        125
+      ],
+      "geometry": "rect",
+      "text": "Perception of Glyphs",
+      "textPreview": "Perception of Glyphs",
+      "resolvedFontSize": 72,
+      "resolvedTextStyle": {
+        "anchor": 3,
+        "fontSize": 72,
+        "typeface": "Helvetica Neue",
+        "color": "#111111",
+        "bold": true,
+        "alignment": "left",
+        "verticalAlignment": "bottom",
+        "insets": {
+          "top": 4.8,
+          "right": 9.6,
+          "bottom": 4.8,
+          "left": 9.6
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "Perception of Glyphs"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "Perception of Glyphs",
+          "resolvedTextStyle": {
+            "fontSize": 72,
+            "typeface": "Helvetica Neue",
+            "color": "#111111",
+            "bold": true,
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "Perception of Glyphs",
+              "fontSize": 72,
+              "typeface": "Helvetica Neue",
+              "color": "#111111",
+              "bold": true,
+              "alignment": "left"
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 3,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/3qtczmt8",
+      "id": "3",
+      "bbox": [
+        42,
+        371,
+        188,
+        5
+      ],
+      "geometry": "rect",
+      "fillColor": "#6DCBF4",
+      "lineWidth": 0
+    },
+    {
+      "order": 4,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/gnit47ah",
+      "id": "4",
+      "bbox": [
+        42,
+        414,
+        1030,
+        65
+      ],
+      "geometry": "rect",
+      "text": "When do glyph sets stop being discernible as size is reduced?",
+      "textPreview": "When do glyph sets stop being discernible as size is reduced?",
+      "resolvedFontSize": 30,
+      "resolvedTextStyle": {
+        "anchor": 1,
+        "fontSize": 30,
+        "typeface": "Helvetica Neue",
+        "color": "#111111",
+        "alignment": "left",
+        "verticalAlignment": "top",
+        "insets": {
+          "top": 4.8,
+          "right": 9.6,
+          "bottom": 4.8,
+          "left": 9.6
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "When do glyph sets stop being discernible as size is reduced?"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "When do glyph sets stop being discernible as size is reduced?",
+          "resolvedTextStyle": {
+            "fontSize": 30,
+            "typeface": "Helvetica Neue",
+            "color": "#111111",
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "When do glyph sets stop being discernible as size is reduced?",
+              "fontSize": 30,
+              "typeface": "Helvetica Neue",
+              "color": "#111111",
+              "alignment": "left"
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 5,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/1oruxcb2",
+      "id": "5",
+      "bbox": [
+        42,
+        588,
+        1080,
+        28
+      ],
+      "geometry": "rect",
+      "text": "Name · Programme · Bauhaus-Universität Weimar · Supervisor · August 2026",
+      "textPreview": "Name · Programme · Bauhaus-Universität Weimar · Supervisor · August 2026",
+      "resolvedFontSize": 18,
+      "resolvedTextStyle": {
+        "anchor": 1,
+        "fontSize": 18,
+        "typeface": "Helvetica Neue",
+        "color": "#5E6672",
+        "alignment": "left",
+        "verticalAlignment": "top",
+        "insets": {
+          "top": 4.8,
+          "right": 9.6,
+          "bottom": 4.8,
+          "left": 9.6
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "Name · Programme · Bauhaus-Universität Weimar · Supervisor · August 2026"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "Name · Programme · Bauhaus-Universität Weimar · Supervisor · August 2026",
+          "resolvedTextStyle": {
+            "fontSize": 18,
+            "typeface": "Helvetica Neue",
+            "color": "#5E6672",
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "Name · Programme · Bauhaus-Universität Weimar · Supervisor · August 2026",
+              "fontSize": 18,
+              "typeface": "Helvetica Neue",
+              "color": "#5E6672",
+              "alignment": "left"
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    }
+  ],
+  "composeRuns": []
+}

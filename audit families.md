@@ -15,6 +15,14 @@ The audited full-corpus cohorts contain:
 
 The Red cohort is too small and repetitive for strong conclusions. It consists mostly of basic signs, shapes, and color-like pictograms, with the China flag as the only more internally detailed example.
 
+## Corpus-quality follow-up (2026-08-11)
+
+The dashboard now turns this audit boundary into an explicit eligibility report at `icon_data/analysis/analysis_dashboard/feature_group_quality_audit.json`. The hard gate excludes missing identity/path data, uncertain foreground masks, and missing or non-finite values in any of the seven representatives. On the current corpus this retains 28,260 of 28,749 rows and excludes the same 489 uncertain-mask rows; no representative values are missing or non-finite.
+
+The bottom 1% of each audited scalar distribution is recorded as a diagnostic candidate set, not an exclusion rule. A narrower engineering visual inspection covered the 35 icons with either an exact zero in Canny edge density, enclosure/fill/symmetry/texture or mask coverage in the bottom 0.1%. The examples were valid minimal marks, punctuation, line symbols, white sign variants, or a flat color swatch, so none was removed. This inspection is not independent human validation.
+
+Consequently, zero saturation remains valid grayscale evidence, 0° remains a valid horizontal axis, low-confidence orientation is omitted from orientation-specific Feature Groups sampling and displayed distribution summaries, and low/near-low scalar values remain eligible unless a separate technical defect is documented.
+
 ## Summary
 
 | Family | Finding |

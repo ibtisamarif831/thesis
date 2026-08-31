@@ -11,7 +11,7 @@ if str(CODE_DIR) not in sys.path:
 import build_analysis_dashboard as dashboard
 
 
-def test_cluster_summary_moves_heatmap_and_all_details_into_modal(tmp_path, monkeypatch) -> None:
+def test_cluster_summary_lists_clusters_and_opens_one_detail_modal(tmp_path, monkeypatch) -> None:
     monkeypatch.setattr(dashboard, "OUTPUT_DIR", tmp_path)
 
     dashboard.write_index_html()
@@ -20,15 +20,19 @@ def test_cluster_summary_moves_heatmap_and_all_details_into_modal(tmp_path, monk
     assert 'id="clusterModal"' in index
     assert 'class="cluster-dialog"' in index
     assert ".cluster-dialog { width: 100vw; height: 100vh; height: 100dvh;" in index
-    assert "Show heatmap" in index
-    assert index.count("View all cluster details") == 2
+    assert "Show heatmap" not in index
+    assert "View all cluster details" not in index
     assert "openClusterAnalysisModal(" in index
-    assert 'class="cluster-analysis-list"' in index
+    assert 'class="cluster-sidebar-list"' in index
+    assert 'class="cluster-sidebar-entry" data-cluster-id=' in index
+    assert 'class="cluster-sidebar-entry" data-ai-cluster-id=' in index
     assert 'class="summary-cluster" open' in index
     assert "function clusterDetailCardHtml(" in index
-    assert index.count("return clusterDetailCardHtml({") == 2
-    assert "Every cluster is expanded below" in index
-    assert "members.map(item =>" in index
+    assert index.count("const detailHtml = clusterDetailCardHtml({") == 2
+    assert "function clusterIconValuesTableHtml(records)" in index
+    assert 'class="cluster-icon-values"' in index
+    assert "Icons and feature values" in index
+    assert "every assigned icon with all seven representative values" in index
     assert 'event.key === "Escape"' in index
     assert "clusterModalReturnFocus.focus()" in index
 

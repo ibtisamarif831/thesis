@@ -19,6 +19,7 @@ The wiki explains the system; it does not replace generated metadata or executab
 | Change dashboard generation or its JSON/CSV contract | [Dashboard implementation](dashboard-implementation.md) |
 | Trace claims to the local papers and research notes | [Literature and evidence](literature-and-evidence.md) |
 | Understand the planned human study and comparison | [Evaluation and human study](evaluation-and-human-study.md) |
+| Review the working path from glyph selection to study design | [Current state and user-study plan](../user%20studio/current-state-and-user-study-plan.md) |
 | Find runnable commands and script parameters | [Commands and scripts](commands-and-scripts.md) |
 | Know which files are generated and by what | [Artifacts and data contracts](artifacts-and-data-contracts.md) |
 | Work safely as an AI agent or contributor | [Agent and contributor guide](agent-and-contributor-guide.md) |
@@ -48,7 +49,7 @@ flowchart LR
 
 ## Current Snapshot
 
-Verified on **2026-08-03** from the current CSV and JSON artifacts:
+Verified on **2026-08-11** from the current CSV/JSON artifacts and served dashboard behavior:
 
 | Item | Current value |
 |---|---:|
@@ -63,12 +64,12 @@ Verified on **2026-08-03** from the current CSV and JSON artifacts:
 | Complexity representative | Canny edge density; grayscale quadtree remains an active secondary feature |
 | Feature Values features | The 7 configured Feature Groups representatives |
 | Feature-v2 release gate | Blocked pending completion of the frozen two-rater benchmark |
-| Feature Groups pilot sample | 10 equal-width bins across each eligible representative range, with up to 2 random icons per bin from 28,260 certain-mask rows; meaningful zeros remain valid and low-information cohorts are flagged |
-| Image Clustering sample | Unique seven-family composite, up to 20 stratified icons per family; verified as 140 icons for the default All cohort; hover/click values and lasso medians are compared with this sample's median, middle 50%, percentile, and range; a compact sidebar opens fullscreen heatmap and all-cluster details |
+| Feature Groups pilot sample | 10 equal-width bins across each eligible representative range, with up to 2 random icons per bin from 28,260 quality-eligible rows; 489 uncertain masks are excluded, missing/non-finite representatives would be excluded, and meaningful zeros remain valid |
+| Image Clustering sample | Unique seven-family composite from 28,260 quality-eligible rows, up to 20 stratified icons per family; 489 uncertain masks are excluded, while valid low/zero values remain; verified as 140 icons for the default All cohort; hover/click values and lasso medians are compared with this sample's distribution; a compact sidebar lists every cluster and opens one-cluster fullscreen details with a complete seven-value icon table |
 | Feature Groups comparison | Exactly 3 selected sample icons; all 7 representative values in a separate fullscreen modal |
 | Generated dashboard rows | 129 for Metadata/Combined projections |
 | Generated dashboard sampling | Up to 10 random icons per set, seed 42 |
-| AI Clustering experiment | Exact shared Feature Groups sample; explicit OpenRouter image-embedding run; inspectable AI plot with collapsible analysis sidebar, descriptive cluster labels, actual embedding-space contribution, modal post-hoc heatmap/all-cluster details, icon and seven-feature statistics, modal feature-vs-AI comparison, and tracked SQLite cache/history |
+| AI Clustering experiment | Exact shared Feature Groups sample; explicit OpenRouter image-embedding run; inspectable AI plot with collapsible analysis sidebar, descriptive cluster entries, actual embedding-space contribution, modal post-hoc heatmap/per-cluster details, complete seven-value icon tables, modal feature-vs-AI comparison, and tracked SQLite cache/history |
 | Dashboard variants | Image, metadata, combined |
 | Dashboard cluster values | 3, 5, 7, 10 |
 | Human-response dataset | Not implemented yet |

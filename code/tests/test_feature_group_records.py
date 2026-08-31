@@ -64,7 +64,7 @@ def test_feature_group_payload_excludes_uncertain_masks() -> None:
     assert records[0]["mask_is_uncertain"] is False
 
 
-def test_feature_group_payload_does_not_coerce_missing_values_to_zero() -> None:
+def test_feature_group_payload_excludes_missing_representative_values() -> None:
     row = {
         "icon_id": "example",
         "label": "Example icon",
@@ -76,10 +76,36 @@ def test_feature_group_payload_does_not_coerce_missing_values_to_zero() -> None:
         row[section["representative_feature_id"]] = "0"
     row["mean_saturation_v2"] = "not-a-number"
 
-    [record] = dashboard.build_feature_group_records([row])
+    records, audit = dashboard.build_feature_group_payload([row])
 
-    assert record["image_features"]["canny_edge_density"] == 0
-    assert record["image_features"]["mean_saturation_v2"] is None
+    assert records == []
+    assert audit["excluded_row_count"] == 1
+    assert audit["exclusion_reason_counts"] == {
+        "missing_or_nonfinite_representative_value": 1
+    }
+
+
+def test_feature_group_quality_audit_keeps_valid_zero_and_low_tail_values() -> None:
+    row = {
+        "icon_id": "valid-low",
+        "label": "Valid low icon",
+        "set_id": "set-a",
+        "set_name": "Set A",
+        "normalized_path": "icon_data/normalized_256/set-a/valid-low.png",
+        "mask_coverage": "0.001",
+        "orientation_confidence_v2": "0.8",
+    }
+    for section in dashboard.image_feature_sections():
+        row[section["representative_feature_id"]] = "0"
+
+    records, audit = dashboard.build_feature_group_payload([row])
+
+    assert [record["icon_id"] for record in records] == ["valid-low"]
+    assert records[0]["image_features"]["mean_saturation_v2"] == 0
+    assert records[0]["image_features"]["principal_axis_orientation_v2"] == 0
+    assert audit["excluded_row_count"] == 0
+    assert audit["low_tail_review"]["candidate_count"] == 1
+    assert audit["low_tail_review"]["excluded_by_low_value_count"] == 0
 
 
 def test_feature_group_pilot_size_is_twenty() -> None:
@@ -170,6 +196,8 @@ def test_feature_group_html_preserves_meaningful_zero_and_flags_low_information(
 
     index = (tmp_path / "index.html").read_text(encoding="utf-8")
     assert "function representativeValue(record, featureId)" in index
+    assert "function requiredRepresentativeValue(record, featureId)" in index
+    assert "record.image_features[feature] || 0" not in index
     assert "function representativeValueProfile(population, featureId)" in index
     assert "function axialMeanDegrees(values)" in index
     assert "function axialOffsetDegrees(value, center)" in index

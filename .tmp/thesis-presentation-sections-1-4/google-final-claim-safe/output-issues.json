@@ -1,0 +1,18 @@
+{
+  "schemaVersion": 1,
+  "presentation": {
+    "id": "1JfRMxbgkq1TC0JoFUpbYyZCgINCCxYIxCmdSrcvoN4k",
+    "title": "Progress Presentation",
+    "revisionId": "z3p_rXAkFWe4lw",
+    "slideCount": 16
+  },
+  "snapshotSha256": "2d2a5b243d045d6550dde834ee2e4c83695269758ac24a8f0b45e46d0f2c886e",
+  "summary": {
+    "totalIssues": 0,
+    "reportedIssues": 0,
+    "truncated": false,
+    "bySeverity": {},
+    "byCode": {}
+  },
+  "issues": []
+}

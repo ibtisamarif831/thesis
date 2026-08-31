@@ -192,7 +192,6 @@ def test_generated_dashboard_contains_ai_clustering_contract() -> None:
         "Separation strength",
         "Post-hoc measured variance",
         "Post-hoc measured strength",
-        "AI clusters by measured feature",
         "Icon statistics",
         "Feature statistics",
         "Share of sample",

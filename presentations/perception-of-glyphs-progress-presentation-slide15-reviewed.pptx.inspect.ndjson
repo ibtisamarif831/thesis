@@ -1,0 +1,354 @@
+{"kind":"deck","id":"pr/uacxp1","name":"Deck"}
+{"kind":"layout","layoutId":"/ppt/slideMasters/slideMaster1.xml","name":"Master","type":"master"}
+{"kind":"layout","layoutId":"/ppt/slideLayouts/slideLayout1.xml","name":"Title Slide","type":"title"}
+{"kind":"slide","id":"sl/y90nupkv","slide":1,"title":"THESIS PROGRESS PRESENTATION","textShapes":4}
+{"kind":"textbox","id":"sh/ts7md4r2","slide":1,"text":"THESIS PROGRESS PRESENTATION","textPreview":"THESIS PROGRESS PRESENTATION","textChars":28,"textLines":1,"bbox":[42,42,620,30]}
+{"kind":"textbox","id":"sh/547294r6","slide":1,"text":"Perception of Glyphs","textPreview":"Perception of Glyphs","textChars":20,"textLines":1,"bbox":[42,205,1080,125]}
+{"kind":"shape","id":"sh/k3yl0zql","slide":1,"bbox":[42,371,188,5]}
+{"kind":"textbox","id":"sh/7qp4be9c","slide":1,"text":"When do glyph sets stop being discernible as size is reduced?","textPreview":"When do glyph sets stop being discernible as size is reduced?","textChars":61,"textLines":1,"bbox":[42,414,1030,65]}
+{"kind":"textbox","id":"sh/65g3298r","slide":1,"text":"Name · Programme · Bauhaus-Universität Weimar · Supervisor · August 2026","textPreview":"Name · Programme · Bauhaus-Universität Weimar · Supervisor · August 2026","textChars":72,"textLines":1,"bbox":[42,588,1080,28]}
+{"kind":"notes","id":"nt/y90nupkv","slide":1,"text":"Replace only the name, programme, and supervisor fields.\n\n[Sources]\n- Supervisor-provided thesis title and project description supplied by the user."}
+{"kind":"slide","id":"sl/hwbqtkby","slide":2,"title":"01 · THE PROBLEM","textShapes":8}
+{"kind":"textbox","id":"sh/9wnqhczy","slide":2,"text":"01 · THE PROBLEM","textPreview":"01 · THE PROBLEM","textChars":16,"textLines":1,"bbox":[42,35,330,24]}
+{"kind":"textbox","id":"sh/9072xkry","slide":2,"text":"02","textPreview":"02","textChars":2,"textLines":1,"bbox":[1180,665,58,20]}
+{"kind":"textbox","id":"sh/ozy1ofad","slide":2,"text":"When do reduced glyphs stop being discernible?","textPreview":"When do reduced glyphs stop being discernible?","textChars":46,"textLines":1,"bbox":[42,78,1196,84]}
+{"kind":"textbox","id":"sh/b29kza94","slide":2,"text":"As size decreases:\n\nFine detail disappears\nInternal gaps close\nThin strokes weaken\nShape differences collapse","textPreview":"As size decreases: |  | Fine detail disappears | Internal gaps close | Thin strokes weaken | Shape differences collapse","textChars":109,"textLines":6,"bbox":[42,201,510,177]}
+{"kind":"textbox","id":"sh/a10jqpsj","slide":2,"text":"Target outcome\n\nSmallest discernible size\n+\nVisual predictors of confusion","textPreview":"Target outcome |  | Smallest discernible size | + | Visual predictors of confusion","textChars":74,"textLines":5,"bbox":[42,421,510,141]}
+{"kind":"shape","id":"sh/x4r21kru","slide":2,"bbox":[610,176,628,452]}
+{"kind":"textbox","id":"sh/w3i1sfa9","slide":2,"text":"GLYPH SET · DECREASING DISPLAY SIZE","textPreview":"GLYPH SET · DECREASING DISPLAY SIZE","textChars":35,"textLines":1,"bbox":[641,205,566,26]}
+{"kind":"textbox","id":"sh/q5wjelsz","slide":2,"text":"Legg et al., 2017 · Figure 1","textPreview":"Legg et al., 2017 · Figure 1","textChars":28,"textLines":1,"bbox":[780,514,290,21]}
+{"kind":"textbox","id":"sh/ove9o7yd","slide":2,"text":"At what point do set members become confused?","textPreview":"At what point do set members become confused?","textChars":45,"textLines":1,"bbox":[658,548,532,35]}
+{"kind":"image","id":"im/507e5kja","slide":2,"name":"","bbox":[745,245.13,360,261.73]}
+{"kind":"notes","id":"nt/hwbqtkby","slide":2,"text":"\n[Sources]\n- Supervisor-provided thesis title and project description supplied by the user.\n- papers/Glyph_Visualization_A_Fail-Safe_Design_Scheme_Based_on_Quasi-Hamming_Distances.pdf, Figure 1, p. 32."}
+{"kind":"slide","id":"sl/ofy9wn61","slide":3,"title":"02–03 · AIM AND RESEARCH DIRECTION","textShapes":10}
+{"kind":"textbox","id":"sh/83ulovat","slide":3,"text":"02–03 · AIM AND RESEARCH DIRECTION","textPreview":"02–03 · AIM AND RESEARCH DIRECTION","textChars":34,"textLines":1,"bbox":[42,35,330,24]}
+{"kind":"textbox","id":"sh/cza94vmx","slide":3,"text":"03","textPreview":"03","textChars":2,"textLines":1,"bbox":[1180,665,58,20]}
+{"kind":"textbox","id":"sh/d0jax03i","slide":3,"text":"The research goal is explicitly size-dependent","textPreview":"The research goal is explicitly size-dependent","textChars":46,"textLines":1,"bbox":[42,78,1196,84]}
+{"kind":"textbox","id":"sh/298ryl4v","slide":3,"text":"Primary aim · Size-dependent discernibility\nCurrent focus · Computational basis for glyph selection","textPreview":"Primary aim · Size-dependent discernibility | Current focus · Computational basis for glyph selection","textChars":99,"textLines":2,"bbox":[42,171,1138,83]}
+{"kind":"textbox","id":"sh/3ah8rqlg","slide":3,"text":"GOAL","textPreview":"GOAL","textChars":4,"textLines":1,"bbox":[42,295,100,42]}
+{"kind":"textbox","id":"sh/obq90bml","slide":3,"text":"Discernibility thresholds across display sizes","textPreview":"Discernibility thresholds across display sizes","textChars":46,"textLines":1,"bbox":[168,294,1000,58]}
+{"kind":"shape","id":"sh/pcjqtg36","slide":3,"bbox":[42,371,1196,1]}
+{"kind":"textbox","id":"sh/m5cra54z","slide":3,"text":"NOW","textPreview":"NOW","textChars":3,"textLines":1,"bbox":[42,402,100,42]}
+{"kind":"textbox","id":"sh/n6ls3alk","slide":3,"text":"Seven feature families · clustering · candidate selection","textPreview":"Seven feature families · clustering · candidate selection","textChars":57,"textLines":1,"bbox":[168,401,1000,58]}
+{"kind":"shape","id":"sh/n2l4fq98","slide":3,"bbox":[42,478,1196,1]}
+{"kind":"textbox","id":"sh/m1c3mlsn","slide":3,"text":"LATER","textPreview":"LATER","textChars":5,"textLines":1,"bbox":[42,509,100,42]}
+{"kind":"textbox","id":"sh/943mhgre","slide":3,"text":"Research questions · protocol · measures","textPreview":"Research questions · protocol · measures","textChars":40,"textLines":1,"bbox":[168,508,1000,58]}
+{"kind":"notes","id":"nt/ofy9wn61","slide":3,"text":"\n[Sources]\n- wiki/thesis-overview.md\n- wiki/evaluation-and-human-study.md"}
+{"kind":"slide","id":"sl/jyx0ra1s","slide":4,"title":"04 · LITERATURE REVIEW","textShapes":14}
+{"kind":"textbox","id":"sh/g36tgryd","slide":4,"text":"04 · LITERATURE REVIEW","textPreview":"04 · LITERATURE REVIEW","textChars":22,"textLines":1,"bbox":[42,35,330,24]}
+{"kind":"textbox","id":"sh/1cj2d8b6","slide":4,"text":"04","textPreview":"04","textChars":2,"textLines":1,"bbox":[1180,665,58,20]}
+{"kind":"textbox","id":"sh/0ba143al","slide":4,"text":"Literature shaped the system and guides the next phase","textPreview":"Literature shaped the system and guides the next phase","textChars":54,"textLines":1,"bbox":[42,78,1196,62]}
+{"kind":"textbox","id":"sh/rm1k7yt4","slide":4,"text":"Five implementation influences · one human-evaluation review","textPreview":"Five implementation influences · one human-evaluation review","textChars":60,"textLines":1,"bbox":[42,158,1160,58]}
+{"kind":"textbox","id":"sh/ql8jytsj","slide":4,"text":"MEASURABLE STRUCTURE","textPreview":"MEASURABLE STRUCTURE","textChars":20,"textLines":1,"bbox":[42,250,280,25]}
+{"kind":"textbox","id":"sh/doj29oba","slide":4,"text":"Forsythe et al. (2003) · Garcia et al. (1994) · Borgo et al. (2013)","textPreview":"Forsythe et al. (2003) · Garcia et al. (1994) · Borgo et al. (2013)","textChars":67,"textLines":1,"bbox":[350,248,470,54]}
+{"kind":"textbox","id":"sh/sna103ap","slide":4,"text":"Evidence for measurable visual concepts","textPreview":"Evidence for measurable visual concepts","textChars":39,"textLines":1,"bbox":[880,248,325,54]}
+{"kind":"shape","id":"sh/3ihk3et8","slide":4,"bbox":[42,324,1196,1]}
+{"kind":"textbox","id":"sh/ih8ju9sn","slide":4,"text":"SET-RELATIVE SEPARATION","textPreview":"SET-RELATIVE SEPARATION","textChars":23,"textLines":1,"bbox":[42,355,280,25]}
+{"kind":"textbox","id":"sh/kbm987y5","slide":4,"text":"Legg et al. (2017) · Fuchs et al. (2014)","textPreview":"Legg et al. (2017) · Fuchs et al. (2014)","textChars":40,"textLines":1,"bbox":[350,353,470,54]}
+{"kind":"textbox","id":"sh/5cva1cfq","slide":4,"text":"Pairwise distance · contour-aware contrasts","textPreview":"Pairwise distance · contour-aware contrasts","textChars":43,"textLines":1,"bbox":[880,353,325,54]}
+{"kind":"shape","id":"sh/i94r6xgz","slide":4,"bbox":[42,429,1196,1]}
+{"kind":"textbox","id":"sh/jadsz2xk","slide":4,"text":"HUMAN EVALUATION","textPreview":"HUMAN EVALUATION","textChars":16,"textLines":1,"bbox":[42,460,280,25]}
+{"kind":"textbox","id":"sh/w72947yt","slide":4,"text":"Fuchs et al. (2017)","textPreview":"Fuchs et al. (2017)","textChars":19,"textLines":1,"bbox":[350,458,470,54]}
+{"kind":"textbox","id":"sh/x8vaxsfe","slide":4,"text":"Task- and condition-dependent performance","textPreview":"Task- and condition-dependent performance","textChars":41,"textLines":1,"bbox":[880,458,325,54]}
+{"kind":"shape","id":"sh/a5kr2xg3","slide":4,"bbox":[96,579,1088,70]}
+{"kind":"textbox","id":"sh/v6tsv2xo","slide":4,"text":"Reviewed gap · No validated size thresholds found for heterogeneous icon sets","textPreview":"Reviewed gap · No validated size thresholds found for heterogeneous icon sets","textChars":77,"textLines":1,"bbox":[122,598,1036,38]}
+{"kind":"notes","id":"nt/jyx0ra1s","slide":4,"text":"Five papers shaped the current measurements and glyph-selection workflow. The 2017 systematic review informs the later study-design phase.\nLegg et al. support pairwise and set-relative perceptual distance; clustering is a project step applied afterward, not a method validated by that paper.\nThe stated research gap is limited to the reviewed local literature: this corpus does not establish validated size-dependent thresholds for heterogeneous icon sets.\nMaguire et al. (2012) was reviewed as design context but is omitted from the main narrative because it did not materially determine the current image-feature implementation.\n\n[Sources]\n- papers/Forsythe-Measuring_cion_complexity_automated.pdf, pp. 4–7\n- papers/Garcia-Development_validation_icons_abstractness.pdf, pp. 3–4, 11, 20\n- papers/Glyph-based_Visualization_Foundations_Design_Guidelines_Techniques_Applications.pdf, pp. 7–10, 12, 16\n- papers/Glyph_Visualization_A_Fail-Safe_Design_Scheme_Based_on_Quasi-Hamming_Distances.pdf, pp. 4–6\n- papers/The_Influence_of_Contour_on_Similarity_Perception_of_Star_Glyphs.pdf, pp. 2–3, 6–8\n- papers/A_Systematic_Review_of_Experimental_Studies_on_Data_Glyphs.pdf, pp. 1–17"}
+{"kind":"slide","id":"sl/i107q5of","slide":5,"title":"04 · LITERATURE REVIEW","textShapes":26}
+{"kind":"textbox","id":"sh/wve1knyx","slide":5,"text":"04 · LITERATURE REVIEW","textPreview":"04 · LITERATURE REVIEW","textChars":22,"textLines":1,"bbox":[42,35,330,24]}
+{"kind":"textbox","id":"sh/dgbulwnm","slide":5,"text":"05","textPreview":"05","textChars":2,"textLines":1,"bbox":[1180,665,58,20]}
+{"kind":"textbox","id":"sh/cf2tcr61","slide":5,"text":"Visual concepts became measurable features","textPreview":"Visual concepts became measurable features","textChars":42,"textLines":1,"bbox":[42,78,1196,62]}
+{"kind":"textbox","id":"sh/z2tcnm5s","slide":5,"text":"One close measure-level match · six project-defined proxies","textPreview":"One close measure-level match · six project-defined proxies","textChars":59,"textLines":1,"bbox":[42,156,1160,56]}
+{"kind":"textbox","id":"sh/yhkbe1o7","slide":5,"text":"FAMILY","textPreview":"FAMILY","textChars":6,"textLines":1,"bbox":[42,235,180,22]}
+{"kind":"textbox","id":"sh/l4bupwny","slide":5,"text":"LITERATURE BASIS","textPreview":"LITERATURE BASIS","textChars":16,"textLines":1,"bbox":[250,235,300,22]}
+{"kind":"textbox","id":"sh/032tgr6d","slide":5,"text":"IMPLEMENTED REPRESENTATIVE","textPreview":"IMPLEMENTED REPRESENTATIVE","textChars":26,"textLines":1,"bbox":[590,235,330,22]}
+{"kind":"textbox","id":"sh/n6dcr65o","slide":5,"text":"RELATION TO LITERATURE","textPreview":"RELATION TO LITERATURE","textChars":22,"textLines":1,"bbox":[960,235,250,22]}
+{"kind":"shape","id":"sh/m5kbi1oj","slide":5,"bbox":[42,268,1196,2]}
+{"kind":"textbox","id":"sh/w32dkbuh","slide":5,"text":"Complexity","textPreview":"Complexity","textChars":10,"textLines":1,"bbox":[42,292,180,48]}
+{"kind":"textbox","id":"sh/x4vedgvm","slide":5,"text":"Forsythe et al. (2003)","textPreview":"Forsythe et al. (2003)","textChars":22,"textLines":1,"bbox":[250,292,300,48]}
+{"kind":"textbox","id":"sh/ahkvi1cb","slide":5,"text":"Canny edge density","textPreview":"Canny edge density","textChars":18,"textLines":1,"bbox":[590,292,330,48]}
+{"kind":"textbox","id":"sh/v2twb6dw","slide":5,"text":"Closest measure-level evidence","textPreview":"Closest measure-level evidence","textChars":30,"textLines":1,"bbox":[960,292,250,48]}
+{"kind":"shape","id":"sh/k7mxovud","slide":5,"bbox":[42,343,1196,1]}
+{"kind":"textbox","id":"sh/58vehgvy","slide":5,"text":"Shape · Density","textPreview":"Shape · Density","textChars":15,"textLines":1,"bbox":[42,361,180,48]}
+{"kind":"textbox","id":"sh/i54fmlc7","slide":5,"text":"Garcia et al. (1994) · Fuchs et al. (2014)","textPreview":"Garcia et al. (1994) · Fuchs et al. (2014)","textChars":42,"textLines":1,"bbox":[250,361,300,48]}
+{"kind":"textbox","id":"sh/j6dwfqds","slide":5,"text":"Enclosure · Solid fill","textPreview":"Enclosure · Solid fill","textChars":22,"textLines":1,"bbox":[590,361,330,48]}
+{"kind":"textbox","id":"sh/sb6xsvu9","slide":5,"text":"Project-defined proxies","textPreview":"Project-defined proxies","textChars":23,"textLines":1,"bbox":[960,361,250,48]}
+{"kind":"shape","id":"sh/tcfel0vu","slide":5,"bbox":[42,412,1196,1]}
+{"kind":"textbox","id":"sh/hgrmpwj2","slide":5,"text":"Stroke · Texture","textPreview":"Stroke · Texture","textChars":16,"textLines":1,"bbox":[42,430,180,48]}
+{"kind":"textbox","id":"sh/gfi5grih","slide":5,"text":"Legg et al. (2017)","textPreview":"Legg et al. (2017)","textChars":18,"textLines":1,"bbox":[250,430,300,48]}
+{"kind":"textbox","id":"sh/fe94nm1w","slide":5,"text":"Orientation · Local texture","textPreview":"Orientation · Local texture","textChars":27,"textLines":1,"bbox":[590,430,330,48]}
+{"kind":"textbox","id":"sh/ud0ne10b","slide":5,"text":"Project-defined proxies","textPreview":"Project-defined proxies","textChars":23,"textLines":1,"bbox":[960,430,250,48]}
+{"kind":"shape","id":"sh/pkr6tgjy","slide":5,"bbox":[42,481,1196,1]}
+{"kind":"textbox","id":"sh/4ji5kbid","slide":5,"text":"Balance · Colour","textPreview":"Balance · Colour","textChars":16,"textLines":1,"bbox":[42,499,180,48]}
+{"kind":"textbox","id":"sh/3i94r61s","slide":5,"text":"Borgo et al. (2013)","textPreview":"Borgo et al. (2013)","textChars":19,"textLines":1,"bbox":[250,499,300,48]}
+{"kind":"textbox","id":"sh/2h0ni107","slide":5,"text":"Symmetry · Saturation","textPreview":"Symmetry · Saturation","textChars":21,"textLines":1,"bbox":[590,499,330,48]}
+{"kind":"textbox","id":"sh/5o7mhcju","slide":5,"text":"Project-defined proxies","textPreview":"Project-defined proxies","textChars":23,"textLines":1,"bbox":[960,499,250,48]}
+{"kind":"textbox","id":"sh/kny587i9","slide":5,"text":"Forsythe sample · 68 random icons from 239 McDougall symbols","textPreview":"Forsythe sample · 68 random icons from 239 McDougall symbols","textChars":60,"textLines":1,"bbox":[42,564,1196,28]}
+{"kind":"shape","id":"sh/atcjidg7","slide":5,"bbox":[130,606,1020,49]}
+{"kind":"textbox","id":"sh/vu5kbihc","slide":5,"text":"Thesis contribution · Seven reproducible measurements across 28,749 icons","textPreview":"Thesis contribution · Seven reproducible measurements across 28,749 icons","textChars":73,"textLines":1,"bbox":[154,619,972,27]}
+{"kind":"notes","id":"nt/i107q5of","slide":5,"text":"The literature supports the visual constructs. Canny edge density has the closest measure-level evidence, but the repository extraction is still project-specific. The other six exact formulas are project-defined proxies and still require human validation.\nThe 239-icon source-set count is verified from the local McDougall corpus manifest and dataset provenance.\n\n[Sources]\n- papers/Forsythe-Measuring_cion_complexity_automated.pdf, pp. 4–7\n- papers/Garcia-Development_validation_icons_abstractness.pdf, pp. 3–4, 11, 20\n- papers/The_Influence_of_Contour_on_Similarity_Perception_of_Star_Glyphs.pdf, pp. 2–3, 6–8\n- papers/Glyph_Visualization_A_Fail-Safe_Design_Scheme_Based_on_Quasi-Hamming_Distances.pdf, pp. 4–6\n- papers/Glyph-based_Visualization_Foundations_Design_Guidelines_Techniques_Applications.pdf, pp. 7–10, 12, 16\n- wiki/literature-and-evidence.md\n- wiki/feature-system.md"}
+{"kind":"slide","id":"sl/x8f69ofe","slide":6,"title":"04 · LITERATURE REVIEW","textShapes":17}
+{"kind":"textbox","id":"sh/dcnm98zm","slide":6,"text":"04 · LITERATURE REVIEW","textPreview":"04 · LITERATURE REVIEW","textChars":22,"textLines":1,"bbox":[42,35,330,24]}
+{"kind":"textbox","id":"sh/yhg7epsj","slide":6,"text":"06","textPreview":"06","textChars":2,"textLines":1,"bbox":[1180,665,58,20]}
+{"kind":"textbox","id":"sh/zi98nu94","slide":6,"text":"Literature guides glyph selection","textPreview":"Literature guides glyph selection","textChars":33,"textLines":1,"bbox":[42,78,1196,62]}
+{"kind":"textbox","id":"sh/87ipkzal","slide":6,"text":"Literature → candidate selection     Participants → perceptual evidence","textPreview":"Literature → candidate selection     Participants → perceptual evidence","textChars":71,"textLines":1,"bbox":[42,156,1160,50]}
+{"kind":"shape","id":"sh/98rqt4r6","slide":6,"bbox":[426,238,1,310]}
+{"kind":"shape","id":"sh/ml07i9sv","slide":6,"bbox":[852,238,1,310]}
+{"kind":"textbox","id":"sh/7m98ru9g","slide":6,"text":"LEGG ET AL. · 2017","textPreview":"LEGG ET AL. · 2017","textChars":18,"textLines":1,"bbox":[42,245,342,24]}
+{"kind":"textbox","id":"sh/oryp8fah","slide":6,"text":"Multiple visual channels","textPreview":"Multiple visual channels","textChars":24,"textLines":1,"bbox":[42,298,342,92]}
+{"kind":"textbox","id":"sh/pc76hkr2","slide":6,"text":"EFFECT ON THIS WORK","textPreview":"EFFECT ON THIS WORK","textChars":19,"textLines":1,"bbox":[42,430,342,22]}
+{"kind":"textbox","id":"sh/h4bupgn6","slide":6,"text":"Pairwise distance → project grouping\nClose vs. distant candidates","textPreview":"Pairwise distance → project grouping | Close vs. distant candidates","textChars":65,"textLines":2,"bbox":[42,467,342,76]}
+{"kind":"textbox","id":"sh/w32twb6l","slide":6,"text":"FUCHS ET AL. · 2014","textPreview":"FUCHS ET AL. · 2014","textChars":19,"textLines":1,"bbox":[468,245,342,24]}
+{"kind":"textbox","id":"sh/v2tcn650","slide":6,"text":"Contour and fill effects","textPreview":"Contour and fill effects","textChars":24,"textLines":1,"bbox":[468,298,342,92]}
+{"kind":"textbox","id":"sh/u1kbu1ov","slide":6,"text":"EFFECT ON THIS WORK","textPreview":"EFFECT ON THIS WORK","textChars":19,"textLines":1,"bbox":[468,430,342,22]}
+{"kind":"textbox","id":"sh/5svutgni","slide":6,"text":"Enclosure · solid fill\nControlled contrasts","textPreview":"Enclosure · solid fill | Controlled contrasts","textChars":43,"textLines":2,"bbox":[468,467,342,76]}
+{"kind":"textbox","id":"sh/47mt0b6x","slide":6,"text":"FUCHS ET AL. · 2017","textPreview":"FUCHS ET AL. · 2017","textChars":19,"textLines":1,"bbox":[894,245,342,24]}
+{"kind":"textbox","id":"sh/j6dcr65c","slide":6,"text":"Task-dependent performance","textPreview":"Task-dependent performance","textChars":26,"textLines":1,"bbox":[894,298,342,92]}
+{"kind":"textbox","id":"sh/i54bylor","slide":6,"text":"EFFECT ON THIS WORK","textPreview":"EFFECT ON THIS WORK","textChars":19,"textLines":1,"bbox":[894,430,342,22]}
+{"kind":"textbox","id":"sh/twfux0ne","slide":6,"text":"Dashboard-selected stimuli\nParticipant validation","textPreview":"Dashboard-selected stimuli | Participant validation","textChars":49,"textLines":2,"bbox":[894,467,342,76]}
+{"kind":"shape","id":"sh/svmt4v6t","slide":6,"bbox":[76,584,1128,70]}
+{"kind":"textbox","id":"sh/cbe5g3ih","slide":6,"text":"Thesis contribution · Confusion thresholds as display size decreases","textPreview":"Thesis contribution · Confusion thresholds as display size decreases","textChars":68,"textLines":1,"bbox":[100,603,1080,38]}
+{"kind":"notes","id":"nt/x8f69ofe","slide":6,"text":"Legg et al. support pairwise and set-relative perceptual distance. The thesis applies project-defined clustering afterward to organize candidate glyphs; it is not a replication or validation of quasi-Hamming clustering.\nFuchs et al. (2014) reports task-specific contour and fill effects, not a universal accuracy benefit.\nThe 2017 review informs study-design options but does not define a finalized protocol for this thesis.\n\n[Sources]\n- papers/Glyph_Visualization_A_Fail-Safe_Design_Scheme_Based_on_Quasi-Hamming_Distances.pdf, pp. 4–6\n- papers/The_Influence_of_Contour_on_Similarity_Perception_of_Star_Glyphs.pdf, pp. 2–3, 6–8\n- papers/A_Systematic_Review_of_Experimental_Studies_on_Data_Glyphs.pdf, pp. 1–17\n- wiki/evaluation-and-human-study.md"}
+{"kind":"slide","id":"sl/gnmp4jqx","slide":7,"title":"05 · RESEARCH JOURNEY","textShapes":17}
+{"kind":"textbox","id":"sh/50v2pgna","slide":7,"text":"05 · RESEARCH JOURNEY","textPreview":"05 · RESEARCH JOURNEY","textChars":21,"textLines":1,"bbox":[42,35,330,24]}
+{"kind":"textbox","id":"sh/cb2tkvap","slide":7,"text":"07","textPreview":"07","textChars":2,"textLines":1,"bbox":[1180,665,58,20]}
+{"kind":"textbox","id":"sh/dcbud0ra","slide":7,"text":"Analysis prepared glyph selection","textPreview":"Analysis prepared glyph selection","textChars":33,"textLines":1,"bbox":[42,78,1196,74]}
+{"kind":"textbox","id":"sh/ydkbm5sv","slide":7,"text":"Corpus → reliable features → comparable exploration → interpretable clusters","textPreview":"Corpus → reliable features → comparable exploration → interpretable clusters","textChars":76,"textLines":1,"bbox":[42,158,1050,36]}
+{"kind":"shape","id":"sh/zedcfa9g","slide":7,"bbox":[118,351,1034,5]}
+{"kind":"shape","id":"sh/kzmdova1","slide":7,"bbox":[115,328,48,48]}
+{"kind":"textbox","id":"sh/l0vuh0rm","slide":7,"text":"JUNE","textPreview":"JUNE","textChars":4,"textLines":1,"bbox":[54,244,170,28]}
+{"kind":"textbox","id":"sh/eh0ba1sr","slide":7,"text":"Corpus + first pipeline","textPreview":"Corpus + first pipeline","textChars":23,"textLines":1,"bbox":[54,278,170,47]}
+{"kind":"textbox","id":"sh/fi9c369c","slide":7,"text":"13 icon sets\nNormalized images\nFirst extraction + dashboard","textPreview":"13 icon sets | Normalized images | First extraction + dashboard","textChars":59,"textLines":3,"bbox":[54,405,170,137]}
+{"kind":"shape","id":"sh/baxkjqlk","slide":7,"bbox":[418,328,48,48]}
+{"kind":"textbox","id":"sh/a9ojq5kz","slide":7,"text":"JULY","textPreview":"JULY","textChars":4,"textLines":1,"bbox":[357,244,170,28]}
+{"kind":"textbox","id":"sh/xcz2l03q","slide":7,"text":"Feature repair","textPreview":"Feature repair","textChars":14,"textLines":1,"bbox":[357,278,170,47]}
+{"kind":"textbox","id":"sh/cbq1sv25","slide":7,"text":"Corrected semantics\nSchema v2\nShared feature registry","textPreview":"Corrected semantics | Schema v2 | Shared feature registry","textChars":53,"textLines":3,"bbox":[357,405,170,137]}
+{"kind":"shape","id":"sh/n6x0fqlo","slide":7,"bbox":[721,328,48,48]}
+{"kind":"textbox","id":"sh/25ojml43","slide":7,"text":"EARLY AUG","textPreview":"EARLY AUG","textChars":9,"textLines":1,"bbox":[660,244,170,28]}
+{"kind":"textbox","id":"sh/p8fih03e","slide":7,"text":"Comparable exploration","textPreview":"Comparable exploration","textChars":22,"textLines":1,"bbox":[660,278,170,47]}
+{"kind":"textbox","id":"sh/o761ov2t","slide":7,"text":"Balanced sampling\nSaved AI runs\nSide-by-side comparison","textPreview":"Balanced sampling | Saved AI runs | Side-by-side comparison","textChars":55,"textLines":3,"bbox":[660,405,170,137]}
+{"kind":"shape","id":"sh/f2d0b6lc","slide":7,"bbox":[1024,328,48,48]}
+{"kind":"textbox","id":"sh/eh4jil4r","slide":7,"text":"10 AUG","textPreview":"10 AUG","textChars":6,"textLines":1,"bbox":[963,244,170,28]}
+{"kind":"textbox","id":"sh/id4ju1oz","slide":7,"text":"Interpretability","textPreview":"Interpretability","textChars":16,"textLines":1,"bbox":[963,278,170,47]}
+{"kind":"textbox","id":"sh/jedkn654","slide":7,"text":"Lasso selection\nCluster summaries\nPost-hoc feature profiles","textPreview":"Lasso selection | Cluster summaries | Post-hoc feature profiles","textChars":59,"textLines":3,"bbox":[963,405,170,137]}
+{"kind":"textbox","id":"sh/4fm1wb6p","slide":7,"text":"Result · Controlled glyph selection basis—not a discernibility threshold","textPreview":"Result · Controlled glyph selection basis—not a discernibility threshold","textChars":72,"textLines":1,"bbox":[178,590,924,43]}
+{"kind":"notes","id":"nt/gnmp4jqx","slide":7,"text":"\n[Sources]\n- Git history: 4e5d7d64a (2026-06-01), c9616aed2 (2026-07-21), 31e075b7b (2026-07-28), fce7512f1 (2026-08-10)\n- wiki/README.md\n- wiki/dashboard-implementation.md"}
+{"kind":"slide","id":"sl/fu1gfa1s","slide":8,"title":"06 · IMPLEMENTATION","textShapes":35}
+{"kind":"textbox","id":"sh/knq9wza5","slide":8,"text":"06 · IMPLEMENTATION","textPreview":"06 · IMPLEMENTATION","textChars":19,"textLines":1,"bbox":[42,35,330,24]}
+{"kind":"textbox","id":"sh/18byd4zy","slide":8,"text":"08","textPreview":"08","textChars":2,"textLines":1,"bbox":[1180,665,58,20]}
+{"kind":"textbox","id":"sh/g72x4zyd","slide":8,"text":"Thirteen source sets provide 28,749 study candidates","textPreview":"Thirteen source sets provide 28,749 study candidates","textChars":52,"textLines":1,"bbox":[42,76,1196,58]}
+{"kind":"textbox","id":"sh/ri9g7uhw","slide":8,"text":"Canonical records · stable IDs · duplicates and alternate exports excluded","textPreview":"Canonical records · stable IDs · duplicates and alternate exports excluded","textChars":74,"textLines":1,"bbox":[42,143,1120,32]}
+{"kind":"textbox","id":"sh/6h0fypgb","slide":8,"text":"SOURCE SET + EXAMPLE","textPreview":"SOURCE SET + EXAMPLE","textChars":20,"textLines":1,"bbox":[42,188,340,24]}
+{"kind":"textbox","id":"sh/tkby9kzm","slide":8,"text":"ICONS","textPreview":"ICONS","textChars":5,"textLines":1,"bbox":[526,188,90,24]}
+{"kind":"textbox","id":"sh/sjix0zy1","slide":8,"text":"SOURCE SET + EXAMPLE","textPreview":"SOURCE SET + EXAMPLE","textChars":20,"textLines":1,"bbox":[646,188,340,24]}
+{"kind":"textbox","id":"sh/je9g3ahk","slide":8,"text":"ICONS","textPreview":"ICONS","textChars":5,"textLines":1,"bbox":[1130,188,90,24]}
+{"kind":"shape","id":"sh/id0fu50z","slide":8,"bbox":[42,216,44,44]}
+{"kind":"textbox","id":"sh/98rehwve","slide":8,"text":"ARASAAC pictograms","textPreview":"ARASAAC pictograms","textChars":18,"textLines":1,"bbox":[100,226,400,25]}
+{"kind":"textbox","id":"sh/m5gvmhwn","slide":8,"text":"13,798","textPreview":"13,798","textChars":6,"textLines":1,"bbox":[516,226,100,25]}
+{"kind":"shape","id":"sh/n6pwfmd8","slide":8,"bbox":[100,263,516,1]}
+{"kind":"shape","id":"sh/0jydkreh","slide":8,"bbox":[42,272,44,44]}
+{"kind":"textbox","id":"sh/ehgvihwr","slide":8,"text":"Blissymbolics","textPreview":"Blissymbolics","textChars":13,"textLines":1,"bbox":[100,282,400,25]}
+{"kind":"textbox","id":"sh/zipwbmdc","slide":8,"text":"5,825","textPreview":"5,825","textChars":5,"textLines":1,"bbox":[516,282,100,25]}
+{"kind":"shape","id":"sh/kfixwbe1","slide":8,"bbox":[100,319,516,1]}
+{"kind":"shape","id":"sh/lgbepgvm","slide":8,"bbox":[42,328,44,44]}
+{"kind":"textbox","id":"sh/svydgb65","slide":8,"text":"OpenMoji","textPreview":"OpenMoji","textChars":8,"textLines":1,"bbox":[100,338,400,25]}
+{"kind":"textbox","id":"sh/7u5w765k","slide":8,"text":"4,495","textPreview":"4,495","textChars":5,"textLines":1,"bbox":[516,338,100,25]}
+{"kind":"shape","id":"sh/6twve1oz","slide":8,"bbox":[100,375,516,1]}
+{"kind":"shape","id":"sh/5sne5wne","slide":8,"bbox":[42,384,44,44]}
+{"kind":"textbox","id":"sh/jq5w365o","slide":8,"text":"Mulberry symbols","textPreview":"Mulberry symbols","textChars":16,"textLines":1,"bbox":[100,394,400,25]}
+{"kind":"textbox","id":"sh/i5wva1o3","slide":8,"text":"3,436","textPreview":"3,436","textChars":5,"textLines":1,"bbox":[516,394,100,25]}
+{"kind":"shape","id":"sh/x4ne1wni","slide":8,"bbox":[100,431,516,1]}
+{"kind":"shape","id":"sh/w3ed8r6x","slide":8,"bbox":[42,440,44,44]}
+{"kind":"textbox","id":"sh/na1sb2lg","slide":8,"text":"OCHA humanitarian icons","textPreview":"OCHA humanitarian icons","textChars":23,"textLines":1,"bbox":[100,450,400,25]}
+{"kind":"textbox","id":"sh/8bat47ml","slide":8,"text":"359","textPreview":"359","textChars":3,"textLines":1,"bbox":[516,450,100,25]}
+{"kind":"shape","id":"sh/9w3uds36","slide":8,"bbox":[100,487,516,1]}
+{"kind":"shape","id":"sh/y5sbed4j","slide":8,"bbox":[42,496,44,44]}
+{"kind":"textbox","id":"sh/07atgnmp","slide":8,"text":"McDougall symbols","textPreview":"McDougall symbols","textChars":17,"textLines":1,"bbox":[100,506,400,25]}
+{"kind":"textbox","id":"sh/l8ja9s3a","slide":8,"text":"239","textPreview":"239","textChars":3,"textLines":1,"bbox":[516,506,100,25]}
+{"kind":"shape","id":"sh/q18bad4n","slide":8,"bbox":[100,543,516,1]}
+{"kind":"shape","id":"sh/b2hs3il8","slide":8,"bbox":[42,552,44,44]}
+{"kind":"textbox","id":"sh/2ts769o3","slide":8,"text":"Mapbox Maki","textPreview":"Mapbox Maki","textChars":11,"textLines":1,"bbox":[100,562,400,25]}
+{"kind":"textbox","id":"sh/pwjqho7u","slide":8,"text":"215","textPreview":"215","textChars":3,"textLines":1,"bbox":[516,562,100,25]}
+{"kind":"shape","id":"sh/4vap8j69","slide":8,"bbox":[100,599,516,1]}
+{"kind":"shape","id":"sh/fq1obeps","slide":8,"bbox":[646,216,44,44]}
+{"kind":"textbox","id":"sh/hsjqd47y","slide":8,"text":"Healthcare webfont","textPreview":"Healthcare webfont","textChars":18,"textLines":1,"bbox":[704,226,400,25]}
+{"kind":"textbox","id":"sh/grap4zqd","slide":8,"text":"144","textPreview":"144","textChars":3,"textLines":1,"bbox":[1120,226,100,25]}
+{"kind":"shape","id":"sh/72ho7upg","slide":8,"bbox":[704,263,516,1]}
+{"kind":"shape","id":"sh/6187yp8b","slide":8,"bbox":[646,272,44,44]}
+{"kind":"textbox","id":"sh/xwvelwj2","slide":8,"text":"USP medication pictograms","textPreview":"USP medication pictograms","textChars":25,"textLines":1,"bbox":[704,282,400,25]}
+{"kind":"textbox","id":"sh/at4vq1kr","slide":8,"text":"83","textPreview":"83","textChars":2,"textLines":1,"bbox":[1120,282,100,25]}
+{"kind":"shape","id":"sh/budwj61c","slide":8,"bbox":[704,319,516,1]}
+{"kind":"shape","id":"sh/kjmdwbit","slide":8,"bbox":[646,328,44,44]}
+{"kind":"textbox","id":"sh/yx4vu10n","slide":8,"text":"AIGA / DOT signs","textPreview":"AIGA / DOT signs","textChars":16,"textLines":1,"bbox":[704,338,400,25]}
+{"kind":"textbox","id":"sh/zidwn618","slide":8,"text":"80","textPreview":"80","textChars":2,"textLines":1,"bbox":[1120,338,100,25]}
+{"kind":"shape","id":"sh/0n2dkr2p","slide":8,"bbox":[704,375,516,1]}
+{"kind":"shape","id":"sh/1obudcju","slide":8,"bbox":[646,384,44,44]}
+{"kind":"textbox","id":"sh/gjuto3ud","slide":8,"text":"ISO 7010 safety signs","textPreview":"ISO 7010 safety signs","textChars":21,"textLines":1,"bbox":[704,394,400,25]}
+{"kind":"textbox","id":"sh/filsfyts","slide":8,"text":"37","textPreview":"37","textChars":2,"textLines":1,"bbox":[1120,394,100,25]}
+{"kind":"shape","id":"sh/uhsbmtc7","slide":8,"bbox":[704,431,516,1]}
+{"kind":"shape","id":"sh/po3ulsbu","slide":8,"bbox":[646,440,44,44]}
+{"kind":"textbox","id":"sh/3mlcjit4","slide":8,"text":"ISO 15223 medical devices","textPreview":"ISO 15223 medical devices","textChars":25,"textLines":1,"bbox":[704,450,400,25]}
+{"kind":"textbox","id":"sh/2lcbqdcj","slide":8,"text":"29","textPreview":"29","textChars":2,"textLines":1,"bbox":[1120,450,100,25]}
+{"kind":"shape","id":"sh/dcnupsb6","slide":8,"bbox":[704,487,516,1]}
+{"kind":"shape","id":"sh/cbetwnul","slide":8,"bbox":[646,496,44,44]}
+{"kind":"textbox","id":"sh/vyx8ju9o","slide":8,"text":"GHS hazard pictograms","textPreview":"GHS hazard pictograms","textChars":21,"textLines":1,"bbox":[704,506,400,25]}
+{"kind":"textbox","id":"sh/wzq9szat","slide":8,"text":"9","textPreview":"9","textChars":1,"textLines":1,"bbox":[1120,506,100,25]}
+{"kind":"shape","id":"sh/x0zql4re","slide":8,"bbox":[704,543,516,1]}
+{"kind":"shape","id":"sh/i18ru9sz","slide":8,"bbox":[42,622,1196,37]}
+{"kind":"textbox","id":"sh/jmh8nu9k","slide":8,"text":"Stable ID  →  256 × 256 normalized image  →  seven feature measurements  →  interactive review","textPreview":"Stable ID  →  256 × 256 normalized image  →  seven feature measurements  →  interactive review","textChars":94,"textLines":1,"bbox":[64,630,1152,22]}
+{"kind":"image","id":"im/exk32pwn","slide":8,"name":"","bbox":[46,220,36,36]}
+{"kind":"image","id":"im/h47210fu","slide":8,"name":"","bbox":[46,276,36,36]}
+{"kind":"image","id":"im/g3ylsve9","slide":8,"name":"","bbox":[46,332,36,36]}
+{"kind":"image","id":"im/8ruhcf2t","slide":8,"name":"","bbox":[46,388,36,36]}
+{"kind":"image","id":"im/9snylkje","slide":8,"name":"","bbox":[46,444,36,36]}
+{"kind":"image","id":"im/mpczapkn","slide":8,"name":"","bbox":[46,500,36,36]}
+{"kind":"image","id":"im/nqlgju18","slide":8,"name":"","bbox":[46,556,36,36]}
+{"kind":"image","id":"im/0nuh8f2x","slide":8,"name":"","bbox":[650,220,36,36]}
+{"kind":"image","id":"im/lo3yhkji","slide":8,"name":"","bbox":[650,276,36,36]}
+{"kind":"image","id":"im/ylcz65kr","slide":8,"name":"","bbox":[650,332,36,36]}
+{"kind":"image","id":"im/zmlgfa1c","slide":8,"name":"","bbox":[650,388,36,36]}
+{"kind":"image","id":"im/kjehkji1","slide":8,"name":"","bbox":[650,444,36,36]}
+{"kind":"image","id":"im/5k7it4jm","slide":8,"name":"","bbox":[650,500,36,36]}
+{"kind":"notes","id":"nt/fu1gfa1s","slide":8,"text":"A usable icon record is the pipeline's canonical row: one selected source icon after dataset-specific duplicate and alternate-export rules are applied.\nThe displayed examples are representative normalized icons; they do not imply that every set uses the same visual style.\n\n[Sources]\n- icon_data/analysis/dataset.csv (28,749 rows; counts verified 2026-08-16)\n- wiki/datasets-and-provenance.md\n- wiki/pipeline.md"}
+{"kind":"slide","id":"sl/udsvah03","slide":9,"title":"06 · IMPLEMENTATION","textShapes":20}
+{"kind":"textbox","id":"sh/cf6h0fql","slide":9,"text":"06 · IMPLEMENTATION","textPreview":"06 · IMPLEMENTATION","textChars":19,"textLines":1,"bbox":[42,35,330,24]}
+{"kind":"textbox","id":"sh/1cfmhgne","slide":9,"text":"09","textPreview":"09","textChars":2,"textLines":1,"bbox":[1180,665,58,20]}
+{"kind":"textbox","id":"sh/0b65obm9","slide":9,"text":"Seven families describe what may survive at small sizes","textPreview":"Seven families describe what may survive at small sizes","textChars":55,"textLines":1,"bbox":[42,78,1196,74]}
+{"kind":"textbox","id":"sh/nex4jq5k","slide":9,"text":"Candidate predictors of persistence—or confusion—at reduced sizes","textPreview":"Candidate predictors of persistence—or confusion—at reduced sizes","textChars":65,"textLines":1,"bbox":[42,158,1140,55]}
+{"kind":"textbox","id":"sh/mdonql4z","slide":9,"text":"COMPLEXITY","textPreview":"COMPLEXITY","textChars":10,"textLines":1,"bbox":[42,256,190,24]}
+{"kind":"textbox","id":"sh/9gzml0nq","slide":9,"text":"Canny edge density","textPreview":"Canny edge density","textChars":18,"textLines":1,"bbox":[252,254,350,34]}
+{"kind":"shape","id":"sh/ofq5svm5","slide":9,"bbox":[42,304,555,1]}
+{"kind":"textbox","id":"sh/bih4na5w","slide":9,"text":"SHAPE","textPreview":"SHAPE","textChars":5,"textLines":1,"bbox":[42,344,190,24]}
+{"kind":"textbox","id":"sh/ah8nu54b","slide":9,"text":"Enclosure score v2","textPreview":"Enclosure score v2","textChars":18,"textLines":1,"bbox":[252,342,350,34]}
+{"kind":"shape","id":"sh/oza1gfyh","slide":9,"bbox":[42,392,555,1]}
+{"kind":"textbox","id":"sh/p0ji9kf2","slide":9,"text":"STROKE","textPreview":"STROKE","textChars":6,"textLines":1,"bbox":[42,432,190,24]}
+{"kind":"textbox","id":"sh/2xsjepgb","slide":9,"text":"Principal-axis orientation v2","textPreview":"Principal-axis orientation v2","textChars":29,"textLines":1,"bbox":[252,430,350,34]}
+{"kind":"shape","id":"sh/3y107axw","slide":9,"bbox":[42,480,555,1]}
+{"kind":"textbox","id":"sh/cnu1kzyd","slide":9,"text":"DENSITY / FILL","textPreview":"DENSITY / FILL","textChars":14,"textLines":1,"bbox":[42,520,190,24]}
+{"kind":"textbox","id":"sh/do3id4fy","slide":9,"text":"Solid fill ratio v2","textPreview":"Solid fill ratio v2","textChars":19,"textLines":1,"bbox":[252,518,350,34]}
+{"kind":"shape","id":"sh/qlcjipgn","slide":9,"bbox":[42,568,555,1]}
+{"kind":"textbox","id":"sh/bml0buxs","slide":9,"text":"BALANCE","textPreview":"BALANCE","textChars":7,"textLines":1,"bbox":[638,256,190,24]}
+{"kind":"textbox","id":"sh/0ru1ozyp","slide":9,"text":"Horizontal symmetry v2","textPreview":"Horizontal symmetry v2","textChars":22,"textLines":1,"bbox":[848,254,350,34]}
+{"kind":"shape","id":"sh/lsn2h4fa","slide":9,"bbox":[638,304,555,1]}
+{"kind":"textbox","id":"sh/98ji147e","slide":9,"text":"COLOR","textPreview":"COLOR","textChars":5,"textLines":1,"bbox":[638,344,190,24]}
+{"kind":"textbox","id":"sh/87a18zqt","slide":9,"text":"Mean saturation v2","textPreview":"Mean saturation v2","textChars":18,"textLines":1,"bbox":[848,342,350,34]}
+{"kind":"shape","id":"sh/76h0zup8","slide":9,"bbox":[638,392,555,1]}
+{"kind":"textbox","id":"sh/ml8j6p8n","slide":9,"text":"TEXTURE","textPreview":"TEXTURE","textChars":7,"textLines":1,"bbox":[638,432,190,24]}
+{"kind":"textbox","id":"sh/hcji5o7a","slide":9,"text":"Local texture variation v2","textPreview":"Local texture variation v2","textChars":26,"textLines":1,"bbox":[848,430,350,34]}
+{"kind":"shape","id":"sh/wba1cjqp","slide":9,"bbox":[638,480,555,1]}
+{"kind":"shape","id":"sh/va103ep4","slide":9,"bbox":[638,510,555,112]}
+{"kind":"textbox","id":"sh/u9sja98z","slide":9,"text":"Important boundary","textPreview":"Important boundary","textChars":18,"textLines":1,"bbox":[658,527,180,24]}
+{"kind":"textbox","id":"sh/xgzitk76","slide":9,"text":"Candidate predictors only\nDiscernibility requires participant evidence","textPreview":"Candidate predictors only | Discernibility requires participant evidence","textChars":70,"textLines":2,"bbox":[658,558,505,52]}
+{"kind":"notes","id":"nt/udsvah03","slide":9,"text":"\n[Sources]\n- code/thesis_pipeline/features/registry.py\n- wiki/feature-system.md\n- wiki/literature-and-evidence.md"}
+{"kind":"slide","id":"sl/m90b6t0r","slide":10,"title":"07 · CURRENT SYSTEM","textShapes":4}
+{"kind":"textbox","id":"sh/kzu5c32t","slide":10,"text":"07 · CURRENT SYSTEM","textPreview":"07 · CURRENT SYSTEM","textChars":19,"textLines":1,"bbox":[42,35,330,24]}
+{"kind":"textbox","id":"sh/xc3mho32","slide":10,"text":"10","textPreview":"10","textChars":2,"textLines":1,"bbox":[1180,665,58,20]}
+{"kind":"textbox","id":"sh/cbu58j2h","slide":10,"text":"Demo 1: inspect the seven feature families","textPreview":"Demo 1: inspect the seven feature families","textChars":42,"textLines":1,"bbox":[42,78,1196,62]}
+{"kind":"textbox","id":"sh/zelojyl8","slide":10,"text":"Seven measurements · value-stratified examples","textPreview":"Seven measurements · value-stratified examples","textChars":46,"textLines":1,"bbox":[42,151,1140,38]}
+{"kind":"shape","id":"sh/ydcnatkn","slide":10,"bbox":[42,207,1196,438]}
+{"kind":"image","id":"im/ulgr2p4z","slide":10,"name":"","bbox":[63.19,219,1153.62,414]}
+{"kind":"notes","id":"nt/m90b6t0r","slide":10,"text":"Open one family detail during the live demo to show value-stratified examples and the selected representative.\n\n[Sources]\n- icon_data/analysis/analysis_dashboard/index.html (served and browser-verified 2026-08-13)\n- code/build_analysis_dashboard.py\n- wiki/dashboard-ui.md"}
+{"kind":"slide","id":"sl/jetc3ut0","slide":11,"title":"07 · CURRENT SYSTEM","textShapes":4}
+{"kind":"textbox","id":"sh/o7ih0r6h","slide":11,"text":"07 · CURRENT SYSTEM","textPreview":"07 · CURRENT SYSTEM","textChars":19,"textLines":1,"bbox":[42,35,330,24]}
+{"kind":"textbox","id":"sh/xcryxg7y","slide":11,"text":"11","textPreview":"11","textChars":2,"textLines":1,"bbox":[1180,665,58,20]}
+{"kind":"textbox","id":"sh/wbih4b6d","slide":11,"text":"Demo 2: inspect clustering","textPreview":"Demo 2: inspect clustering","textChars":26,"textLines":1,"bbox":[42,78,1196,48]}
+{"kind":"textbox","id":"sh/n69grmpw","slide":11,"text":"Lasso selection · cluster summaries · candidate contrasts","textPreview":"Lasso selection · cluster summaries · candidate contrasts","textChars":57,"textLines":1,"bbox":[42,151,1140,38]}
+{"kind":"shape","id":"sh/250zy18b","slide":11,"bbox":[42,202,1196,456]}
+{"kind":"image","id":"im/2lcz2l0n","slide":11,"name":"","bbox":[54.3,208,1171.4,444]}
+{"kind":"notes","id":"nt/jetc3ut0","slide":11,"text":"During the live demo, use lasso selection, inspect one icon, and open one cluster summary.\nThe dashboard supports candidate selection; it does not measure discernibility.\n\n[Sources]\n- icon_data/analysis/analysis_dashboard/index.html (served and browser-verified 2026-08-13)\n- code/build_analysis_dashboard.py\n- wiki/dashboard-ui.md"}
+{"kind":"slide","id":"sl/8f2psfyx","slide":12,"title":"07 · CURRENT SYSTEM","textShapes":4}
+{"kind":"textbox","id":"sh/sb2lcnmd","slide":12,"text":"07 · CURRENT SYSTEM","textPreview":"07 · CURRENT SYSTEM","textChars":19,"textLines":1,"bbox":[42,35,330,24]}
+{"kind":"textbox","id":"sh/1gbm9s3a","slide":12,"text":"12","textPreview":"12","textChars":2,"textLines":1,"bbox":[1180,665,58,20]}
+{"kind":"textbox","id":"sh/0f2lgnmp","slide":12,"text":"Demo 3: compare feature and AI groupings","textPreview":"Demo 3: compare feature and AI groupings","textChars":40,"textLines":1,"bbox":[42,78,1196,62]}
+{"kind":"textbox","id":"sh/ra943il8","slide":12,"text":"Pairwise agreement · 0.783     Partition similarity—not accuracy","textPreview":"Pairwise agreement · 0.783     Partition similarity—not accuracy","textChars":64,"textLines":1,"bbox":[42,151,1140,38]}
+{"kind":"shape","id":"sh/q903ad4n","slide":12,"bbox":[63,201,1154,456]}
+{"kind":"image","id":"im/yxsr2pg3","slide":12,"name":"","bbox":[93.39,213,1093.22,432]}
+{"kind":"notes","id":"nt/8f2psfyx","slide":12,"text":"Pairwise agreement compares every icon pair: whether both clusterings put the pair together or both put it apart.\nThe AI image-embedding model receives normalized image pixels, not the seven thesis feature values.\n\n[Sources]\n- icon_data/analysis/analysis_dashboard/index.html (served and browser-verified 2026-08-13)\n- code/thesis_pipeline/ai_clustering/metrics.py\n- wiki/dashboard-ui.md\n- wiki/similarity-and-clustering.md"}
+{"kind":"slide","id":"sl/hgzapcr6","slide":13,"title":"08 · CURRENT PROGRESS","textShapes":20}
+{"kind":"textbox","id":"sh/q18f65cr","slide":13,"text":"08 · CURRENT PROGRESS","textPreview":"08 · CURRENT PROGRESS","textChars":21,"textLines":1,"bbox":[42,35,330,24]}
+{"kind":"textbox","id":"sh/q50nydsj","slide":13,"text":"13","textPreview":"13","textChars":2,"textLines":1,"bbox":[1180,665,58,20]}
+{"kind":"textbox","id":"sh/bq9orito","slide":13,"text":"The current system is ready for glyph selection","textPreview":"The current system is ready for glyph selection","textChars":47,"textLines":1,"bbox":[42,88,1196,66]}
+{"kind":"textbox","id":"sh/o3i5w3ad","slide":13,"text":"BUILT AND WORKING","textPreview":"BUILT AND WORKING","textChars":17,"textLines":1,"bbox":[42,193,450,28]}
+{"kind":"textbox","id":"sh/p4r6p8by","slide":13,"text":"NEXT WORK","textPreview":"NEXT WORK","textChars":9,"textLines":1,"bbox":[665,193,450,28]}
+{"kind":"shape","id":"sh/21gnuts7","slide":13,"bbox":[626,185,2,397]}
+{"kind":"textbox","id":"sh/32ponyts","slide":13,"text":"✓","textPreview":"✓","textChars":1,"textLines":1,"bbox":[42,251,38,30]}
+{"kind":"textbox","id":"sh/gzy5s3a1","slide":13,"text":"Icon corpus and normalization","textPreview":"Icon corpus and normalization","textChars":29,"textLines":1,"bbox":[92,252,470,36]}
+{"kind":"textbox","id":"sh/1076lobm","slide":13,"text":"✓","textPreview":"✓","textChars":1,"textLines":1,"bbox":[42,330,38,30]}
+{"kind":"textbox","id":"sh/hcfy9k3u","slide":13,"text":"Seven feature families","textPreview":"Seven feature families","textChars":22,"textLines":1,"bbox":[92,331,470,36]}
+{"kind":"textbox","id":"sh/gb6x0zm9","slide":13,"text":"✓","textPreview":"✓","textChars":1,"textLines":1,"bbox":[42,409,38,30]}
+{"kind":"textbox","id":"sh/vaxg7ulo","slide":13,"text":"Interactive UI and lasso inspection","textPreview":"Interactive UI and lasso inspection","textChars":35,"textLines":1,"bbox":[92,410,470,36]}
+{"kind":"textbox","id":"sh/u9ofyp43","slide":13,"text":"✓","textPreview":"✓","textChars":1,"textLines":1,"bbox":[42,488,38,30]}
+{"kind":"textbox","id":"sh/t8fy5k3i","slide":13,"text":"Clustering and cluster summaries","textPreview":"Clustering and cluster summaries","textChars":32,"textLines":1,"bbox":[92,489,470,36]}
+{"kind":"textbox","id":"sh/876xwfmx","slide":13,"text":"01","textPreview":"01","textChars":2,"textLines":1,"bbox":[665,269,46,28]}
+{"kind":"textbox","id":"sh/7mdg3als","slide":13,"text":"Select glyphs","textPreview":"Select glyphs","textChars":13,"textLines":1,"bbox":[729,267,460,35]}
+{"kind":"textbox","id":"sh/6l4fu547","slide":13,"text":"Feature values · clusters · summaries","textPreview":"Feature values · clusters · summaries","textChars":37,"textLines":1,"bbox":[729,310,448,67]}
+{"kind":"textbox","id":"sh/lkvy103m","slide":13,"text":"02","textPreview":"02","textChars":2,"textLines":1,"bbox":[665,420,46,28]}
+{"kind":"textbox","id":"sh/kjmxsfm1","slide":13,"text":"Design the study","textPreview":"Design the study","textChars":16,"textLines":1,"bbox":[729,418,460,35]}
+{"kind":"textbox","id":"sh/cnqh8fux","slide":13,"text":"Only after glyph selection","textPreview":"Only after glyph selection","textChars":26,"textLines":1,"bbox":[729,461,448,67]}
+{"kind":"textbox","id":"sh/xozyhkbi","slide":13,"text":"Not yet defined · participant protocol · task · measurements","textPreview":"Not yet defined · participant protocol · task · measurements","textChars":60,"textLines":1,"bbox":[42,611,1196,34]}
+{"kind":"notes","id":"nt/hgzapcr6","slide":13,"text":"\n[Sources]\n- wiki/README.md\n- wiki/evaluation-and-human-study.md\n- wiki/limitations-and-backlog.md"}
+{"kind":"slide","id":"sl/6lsnupw7","slide":14,"title":"09 · NEXT PHASE","textShapes":12}
+{"kind":"textbox","id":"sh/y5wjitgj","slide":14,"text":"09 · NEXT PHASE","textPreview":"09 · NEXT PHASE","textChars":15,"textLines":1,"bbox":[42,35,330,24]}
+{"kind":"textbox","id":"sh/xc7eds76","slide":14,"text":"14","textPreview":"14","textChars":2,"textLines":1,"bbox":[1180,665,58,20]}
+{"kind":"textbox","id":"sh/wbydknq1","slide":14,"text":"Next: select glyphs, then design the study","textPreview":"Next: select glyphs, then design the study","textChars":42,"textLines":1,"bbox":[42,78,1196,82]}
+{"kind":"textbox","id":"sh/jepwf2pc","slide":14,"text":"Immediate milestone · reviewed, defensible glyph selection","textPreview":"Immediate milestone · reviewed, defensible glyph selection","textChars":58,"textLines":1,"bbox":[42,164,1150,50]}
+{"kind":"shape","id":"sh/idgvmx8r","slide":14,"bbox":[42,271,535,275]}
+{"kind":"shape","id":"sh/5grehs7i","slide":14,"bbox":[661,271,535,275]}
+{"kind":"textbox","id":"sh/kfidonqx","slide":14,"text":"01","textPreview":"01","textChars":2,"textLines":1,"bbox":[76,305,56,30]}
+{"kind":"textbox","id":"sh/zi5c3y98","slide":14,"text":"Select candidate glyphs","textPreview":"Select candidate glyphs","textChars":23,"textLines":1,"bbox":[76,353,450,42]}
+{"kind":"textbox","id":"sh/ehwvat8n","slide":14,"text":"Dashboard review\nSeven feature values\nClustering + lasso\nCluster summaries","textPreview":"Dashboard review | Seven feature values | Clustering + lasso | Cluster summaries","textChars":74,"textLines":4,"bbox":[76,417,446,91]}
+{"kind":"textbox","id":"sh/c3e1gjyd","slide":14,"text":"02","textPreview":"02","textChars":2,"textLines":1,"bbox":[695,305,56,30]}
+{"kind":"textbox","id":"sh/x4ni9ofy","slide":14,"text":"Design the user study","textPreview":"Design the user study","textChars":21,"textLines":1,"bbox":[695,353,450,42]}
+{"kind":"textbox","id":"sh/a1wze9g7","slide":14,"text":"Research questions\nTask + conditions\nParticipant plan\nMeasurements","textPreview":"Research questions | Task + conditions | Participant plan | Measurements","textChars":66,"textLines":4,"bbox":[695,417,446,91]}
+{"kind":"textbox","id":"sh/b2507exs","slide":14,"text":"→","textPreview":"→","textChars":1,"textLines":1,"bbox":[589,370,60,50]}
+{"kind":"shape","id":"sh/kre1k3y9","slide":14,"bbox":[159,592,962,55]}
+{"kind":"textbox","id":"sh/ls7idofu","slide":14,"text":"Current boundary · user-study design remains open","textPreview":"Current boundary · user-study design remains open","textChars":49,"textLines":1,"bbox":[179,608,922,27]}
+{"kind":"notes","id":"nt/6lsnupw7","slide":14,"text":"The study-design details are intentionally left open at this stage.\n\n[Sources]\n- wiki/dashboard-ui.md\n- wiki/dashboard-implementation.md\n- wiki/evaluation-and-human-study.md"}
+{"kind":"slide","id":"sl/vaxsvy10","slide":15,"title":"09 · NEXT PHASE","textShapes":19}
+{"kind":"textbox","id":"sh/fi1grylo","slide":15,"text":"09 · NEXT PHASE","textPreview":"09 · NEXT PHASE","textChars":15,"textLines":1,"bbox":[42,35,330,24]}
+{"kind":"textbox","id":"sh/547mhg3m","slide":15,"text":"15","textPreview":"15","textChars":2,"textLines":1,"bbox":[1180,665,58,20]}
+{"kind":"textbox","id":"sh/k3y5ov21","slide":15,"text":"Existing user studies measure different outcomes","textPreview":"Existing user studies measure different outcomes","textChars":48,"textLines":1,"bbox":[42,78,1196,62]}
+{"kind":"textbox","id":"sh/76p4jqls","slide":15,"text":"Similarity choice, pairwise differentiation, and task performance answer different questions","textPreview":"Similarity choice, pairwise differentiation, and task performance answer different questions","textChars":92,"textLines":1,"bbox":[42,154,1140,34]}
+{"kind":"shape","id":"sh/65gnqlk7","slide":15,"bbox":[426,221,1,343]}
+{"kind":"shape","id":"sh/t87ml0ji","slide":15,"bbox":[852,221,1,343]}
+{"kind":"textbox","id":"sh/s7y5sv2x","slide":15,"text":"FUCHS ET AL. · 2014","textPreview":"FUCHS ET AL. · 2014","textChars":19,"textLines":1,"bbox":[42,229,342,24]}
+{"kind":"textbox","id":"sh/na5476l8","slide":15,"text":"SIMILARITY CHOICE","textPreview":"SIMILARITY CHOICE","textChars":17,"textLines":1,"bbox":[42,276,342,34]}
+{"kind":"textbox","id":"sh/m9c3e1kn","slide":15,"text":"SAMPLE & TRIALS","textPreview":"SAMPLE & TRIALS","textChars":15,"textLines":1,"bbox":[42,340,342,20]}
+{"kind":"textbox","id":"sh/wrm9kvep","slide":15,"text":"62 accepted · 36 retained\n48 trials per participant\nTarget + eight alternatives","textPreview":"62 accepted · 36 retained | 48 trials per participant | Target + eight alternatives","textChars":79,"textLines":3,"bbox":[42,372,342,80]}
+{"kind":"textbox","id":"sh/hsvat0fa","slide":15,"text":"Task · choose the most similar\nOutcome · one categorical choice","textPreview":"Task · choose the most similar | Outcome · one categorical choice","textChars":63,"textLines":2,"bbox":[42,482,342,70]}
+{"kind":"textbox","id":"sh/upkrilwj","slide":15,"text":"LEGG ET AL. · 2017","textPreview":"LEGG ET AL. · 2017","textChars":18,"textLines":1,"bbox":[468,229,342,24]}
+{"kind":"textbox","id":"sh/vqdsrqx4","slide":15,"text":"PAIRWISE DIFFERENTIATION","textPreview":"PAIRWISE DIFFERENTIATION","textChars":24,"textLines":1,"bbox":[468,276,342,34]}
+{"kind":"textbox","id":"sh/4vm9ovel","slide":15,"text":"SAMPLE & PROCEDURE","textPreview":"SAMPLE & PROCEDURE","textChars":18,"textLines":1,"bbox":[468,340,342,20]}
+{"kind":"textbox","id":"sh/5wvax0f6","slide":15,"text":"20 recruited · 19 analysed\n104 ratings · 96 randomized","textPreview":"20 recruited · 19 analysed | 104 ratings · 96 randomized","textChars":54,"textLines":2,"bbox":[468,372,342,80]}
+{"kind":"textbox","id":"sh/it4rm5wv","slide":15,"text":"Task · rate differentiation, 0–10\nOutcome · perceived distance","textPreview":"Task · rate differentiation, 0–10 | Outcome · perceived distance","textChars":62,"textLines":2,"bbox":[468,482,342,70]}
+{"kind":"textbox","id":"sh/judsvqxg","slide":15,"text":"FUCHS ET AL. · 2017","textPreview":"FUCHS ET AL. · 2017","textChars":19,"textLines":1,"bbox":[894,229,342,24]}
+{"kind":"textbox","id":"sh/0z29cbyh","slide":15,"text":"SYSTEMATIC REVIEW","textPreview":"SYSTEMATIC REVIEW","textChars":17,"textLines":1,"bbox":[894,276,342,34]}
+{"kind":"textbox","id":"sh/l0bqlgf2","slide":15,"text":"REVIEW SCOPE","textPreview":"REVIEW SCOPE","textChars":12,"textLines":1,"bbox":[894,340,342,20]}
+{"kind":"textbox","id":"sh/1kjyt83e","slide":15,"text":"64 controlled-study papers\nAccuracy in 63 · time in 42","textPreview":"64 controlled-study papers | Accuracy in 63 · time in 42","textChars":54,"textLines":2,"bbox":[894,372,342,80]}
+{"kind":"textbox","id":"sh/gjax03m9","slide":15,"text":"Output · tasks, measures, results\nFinding · preference sometimes differed","textPreview":"Output · tasks, measures, results | Finding · preference sometimes differed","textChars":73,"textLines":2,"bbox":[894,482,342,70]}
+{"kind":"notes","id":"nt/vaxsvy10","slide":15,"text":"This slide separates three outcomes that should not be collapsed into one measure.\n\nFuchs et al. (2014), Experiment 2: 62 Amazon Mechanical Turk workers were accepted; 36 were retained after three control questions. Each participant completed 48 trials. A highlighted target appeared with eight alternatives in a 3×3 arrangement, and the participant selected the most similar glyph without training or an explanation of the encoded data.\n\nLegg et al. (2017 issue; copyright 2016): 20 University of Oxford students or employees were recruited and one outlier was excluded. Participants rated 104 glyph pairs on an integer 0–10 scale according to how well they could differentiate them; the 96 non-reference pairs were randomized.\n\nFuchs et al. (2017): the systematic review synthesized 64 quantitative controlled data-glyph user-study papers. Accuracy was recorded in 63 of 64, completion time in 42, and qualitative feedback in 19. The authors also warn that participant preference did not always match measured performance.\n\nBoundary for this thesis: these sources support similarity choice, pairwise differentiation, and task-performance measures. They do not directly establish semantic identification thresholds for heterogeneous icons at reduced sizes.\n\n[Sources]\n- papers/The_Influence_of_Contour_on_Similarity_Perception_of_Star_Glyphs.pdf, p. 6\n- papers/Glyph_Visualization_A_Fail-Safe_Design_Scheme_Based_on_Quasi-Hamming_Distances.pdf, p. 4\n- papers/A_Systematic_Review_of_Experimental_Studies_on_Data_Glyphs.pdf, pp. 1, 4\n- wiki/literature-and-evidence.md\n- wiki/evaluation-and-human-study.md"}
+{"kind":"slide","id":"sl/gny5sjyp","slide":16,"title":"09 · NEXT PHASE","textShapes":10}
+{"kind":"textbox","id":"sh/1ojy10ne","slide":16,"text":"09 · NEXT PHASE","textPreview":"09 · NEXT PHASE","textChars":15,"textLines":1,"bbox":[42,35,330,24]}
+{"kind":"textbox","id":"sh/8z2h8bq1","slide":16,"text":"16","textPreview":"16","textChars":2,"textLines":1,"bbox":[1180,665,58,20]}
+{"kind":"textbox","id":"sh/9kby1g7m","slide":16,"text":"Possible direction for the thesis study","textPreview":"Possible direction for the thesis study","textChars":39,"textLines":1,"bbox":[42,92,1196,86]}
+{"kind":"shape","id":"sh/ytkf2h8j","slide":16,"bbox":[42,259,188,5]}
+{"kind":"textbox","id":"sh/zutgvm94","slide":16,"text":"01","textPreview":"01","textChars":2,"textLines":1,"bbox":[42,324,68,30]}
+{"kind":"textbox","id":"sh/kv2h4rqp","slide":16,"text":"Control display size","textPreview":"Control display size","textChars":20,"textLines":1,"bbox":[128,322,1050,47]}
+{"kind":"textbox","id":"sh/lwbyxwra","slide":16,"text":"02","textPreview":"02","textChars":2,"textLines":1,"bbox":[42,410,68,30]}
+{"kind":"textbox","id":"sh/ip4zel83","slide":16,"text":"Record accuracy and confusion","textPreview":"Record accuracy and confusion","textChars":29,"textLines":1,"bbox":[128,408,1050,47]}
+{"kind":"textbox","id":"sh/3qdg7qpo","slide":16,"text":"03","textPreview":"03","textChars":2,"textLines":1,"bbox":[42,496,68,30]}
+{"kind":"textbox","id":"sh/fm1gzq5o","slide":16,"text":"Ask which visual cues participants used","textPreview":"Ask which visual cues participants used","textChars":39,"textLines":1,"bbox":[128,494,1050,47]}
+{"kind":"textbox","id":"sh/e1sf65o3","slide":16,"text":"Finalize after glyph selection + supervisor discussion","textPreview":"Finalize after glyph selection + supervisor discussion","textChars":54,"textLines":1,"bbox":[42,620,900,29]}
+{"kind":"notes","id":"nt/gny5sjyp","slide":16,"text":"This is a discussion proposal only. The protocol, participant plan, sizes, stimuli, and measures are not finalized.\n\n[Sources]\n- wiki/evaluation-and-human-study.md"}
+{"kind":"slide","id":"sl/14bup87q","slide":17,"title":"10 · CONCLUSION","textShapes":10}
+{"kind":"textbox","id":"sh/29grm1of","slide":17,"text":"10 · CONCLUSION","textPreview":"10 · CONCLUSION","textChars":15,"textLines":1,"bbox":[42,35,330,24]}
+{"kind":"textbox","id":"sh/1c7e50ni","slide":17,"text":"17","textPreview":"17","textChars":2,"textLines":1,"bbox":[1180,665,58,20]}
+{"kind":"textbox","id":"sh/gbedwfmx","slide":17,"text":"A clear basis for the next research phase","textPreview":"A clear basis for the next research phase","textChars":41,"textLines":1,"bbox":[42,92,1196,86]}
+{"kind":"shape","id":"sh/rm5czq50","slide":17,"bbox":[42,259,188,5]}
+{"kind":"textbox","id":"sh/6lwvql4v","slide":17,"text":"01","textPreview":"01","textChars":2,"textLines":1,"bbox":[42,324,68,30]}
+{"kind":"textbox","id":"sh/t8ne10n6","slide":17,"text":"Icon corpus + seven feature families implemented","textPreview":"Icon corpus + seven feature families implemented","textChars":48,"textLines":1,"bbox":[128,322,1050,47]}
+{"kind":"textbox","id":"sh/snedsvml","slide":17,"text":"02","textPreview":"02","textChars":2,"textLines":1,"bbox":[42,410,68,30]}
+{"kind":"textbox","id":"sh/jilcvq54","slide":17,"text":"UI + clustering + summaries ready for glyph review","textPreview":"UI + clustering + summaries ready for glyph review","textChars":50,"textLines":1,"bbox":[128,408,1050,47]}
+{"kind":"textbox","id":"sh/ihcvml4j","slide":17,"text":"03","textPreview":"03","textChars":2,"textLines":1,"bbox":[42,496,68,30]}
+{"kind":"textbox","id":"sh/4by9or6l","slide":17,"text":"Next: glyph selection → user-study design","textPreview":"Next: glyph selection → user-study design","textChars":41,"textLines":1,"bbox":[128,494,1050,47]}
+{"kind":"textbox","id":"sh/pc7qhwn6","slide":17,"text":"Next milestone · a reviewed selection of candidate glyphs","textPreview":"Next milestone · a reviewed selection of candidate glyphs","textChars":57,"textLines":1,"bbox":[42,620,760,29]}
+{"kind":"notes","id":"nt/14bup87q","slide":17,"text":"\n[Sources]\n- wiki/thesis-overview.md\n- wiki/evaluation-and-human-study.md\n- wiki/limitations-and-backlog.md"}

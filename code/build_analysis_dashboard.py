@@ -40,6 +40,15 @@ FEATURE_GROUP_BIN_COUNT = 10
 FEATURE_GROUP_SAMPLES_PER_BIN = 2
 FEATURE_GROUP_SAMPLE_SIZE = FEATURE_GROUP_BIN_COUNT * FEATURE_GROUP_SAMPLES_PER_BIN
 FEATURE_GROUP_COMPARISON_SIZE = 3
+QUALITY_AUDIT_LOW_TAIL_QUANTILE = 0.01
+QUALITY_AUDIT_EXTREME_REVIEW_QUANTILE = 0.001
+QUALITY_AUDIT_SCALAR_FEATURES = (
+    "canny_edge_density",
+    "enclosure_score_v2",
+    "solid_fill_ratio_v2",
+    "horizontal_symmetry_v2",
+    "local_texture_variation_v2",
+)
 K_VALUES = (3, 5, 7, 10)
 PRIMARY_K = 7
 RANDOM_SEED = 42
@@ -798,8 +807,8 @@ def write_feature_tables(rows: list[dict], feature_by_id: dict[str, dict], matri
     write_rows(OUTPUT_DIR / "features_combined.csv", combined_rows)
 
 
-def build_feature_group_records(feature_rows: list[dict]) -> list[dict]:
-    """Build the certain-mask payload used by the Feature Groups pilot gallery."""
+def build_feature_group_payload(feature_rows: list[dict]) -> tuple[list[dict], dict]:
+    """Build the quality-gated Feature Groups payload and its audit report."""
     representative_columns = [
         section["representative_feature_id"] for section in image_feature_sections()
     ]
@@ -815,15 +824,35 @@ def build_feature_group_records(feature_rows: list[dict]) -> list[dict]:
         )
     )
     records = []
+    excluded_reason_counts: Counter[str] = Counter()
+    excluded_icon_ids: dict[str, list[str]] = defaultdict(list)
     for row in feature_rows:
         normalized_path = row.get("normalized_path", "")
         mask_is_uncertain = str(row.get("mask_is_uncertain", "")).strip().lower() == "true"
-        if not row.get("icon_id") or not normalized_path or mask_is_uncertain:
+        reasons = []
+        if not row.get("icon_id"):
+            reasons.append("missing_icon_id")
+        if not normalized_path:
+            reasons.append("missing_normalized_path")
+        if mask_is_uncertain:
+            reasons.append("uncertain_foreground_mask")
+        values = {column: to_optional_float(row.get(column)) for column in value_columns}
+        missing_representatives = [
+            column for column in representative_columns if values[column] is None
+        ]
+        if missing_representatives:
+            reasons.append("missing_or_nonfinite_representative_value")
+        if reasons:
+            icon_id = str(row.get("icon_id") or "")
+            for reason in reasons:
+                excluded_reason_counts[reason] += 1
+                if icon_id:
+                    excluded_icon_ids[reason].append(icon_id)
             continue
-        image_features = {}
-        for column in value_columns:
-            value = to_optional_float(row.get(column))
-            image_features[column] = round(value, 6) if value is not None else None
+        image_features = {
+            column: round(value, 6) if value is not None else None
+            for column, value in values.items()
+        }
         records.append(
             {
                 "icon_id": row["icon_id"],
@@ -839,6 +868,114 @@ def build_feature_group_records(feature_rows: list[dict]) -> list[dict]:
                 "image_features": image_features,
             }
         )
+    scalar_values = {
+        feature_id: sorted(
+            record["image_features"][feature_id]
+            for record in records
+            if record["image_features"][feature_id] is not None
+        )
+        for feature_id in QUALITY_AUDIT_SCALAR_FEATURES
+    }
+    coverage_values = sorted(record["mask_coverage"] for record in records)
+
+    def audit_quantile(values: list[float], fraction: float) -> float | None:
+        if not values:
+            return None
+        position = min(len(values) - 1, max(0.0, (len(values) - 1) * fraction))
+        lower = math.floor(position)
+        upper = math.ceil(position)
+        if lower == upper:
+            return float(values[lower])
+        return float(values[lower] + (values[upper] - values[lower]) * (position - lower))
+
+    low_tail_thresholds = {
+        feature_id: audit_quantile(values, QUALITY_AUDIT_LOW_TAIL_QUANTILE)
+        for feature_id, values in scalar_values.items()
+    }
+    coverage_threshold = audit_quantile(
+        coverage_values, QUALITY_AUDIT_EXTREME_REVIEW_QUANTILE
+    )
+    low_tail_candidate_count = 0
+    extreme_review_candidates = []
+    for record in records:
+        low_tail_features = [
+            feature_id
+            for feature_id in QUALITY_AUDIT_SCALAR_FEATURES
+            if (
+                low_tail_thresholds[feature_id] is not None
+                and record["image_features"][feature_id] <= low_tail_thresholds[feature_id]
+            )
+        ]
+        if low_tail_features:
+            low_tail_candidate_count += 1
+        exact_zero_features = [
+            feature_id
+            for feature_id in QUALITY_AUDIT_SCALAR_FEATURES
+            if record["image_features"][feature_id] == 0
+        ]
+        low_coverage = (
+            coverage_threshold is not None and record["mask_coverage"] <= coverage_threshold
+        )
+        if exact_zero_features or low_coverage:
+            extreme_review_candidates.append(
+                {
+                    "icon_id": record["icon_id"],
+                    "label": record["label"],
+                    "set_name": record["set_name"],
+                    "exact_zero_features": exact_zero_features,
+                    "mask_coverage": record["mask_coverage"],
+                    "low_coverage_candidate": low_coverage,
+                }
+            )
+
+    undefined_orientation_count = sum(
+        (record["image_features"].get("orientation_confidence_v2") or 0)
+        < feature_registry.ORIENTATION_CONFIDENCE_THRESHOLD
+        for record in records
+    )
+    audit = {
+        "policy": "technical_validity_with_diagnostic_low_tail_review",
+        "source_row_count": len(feature_rows),
+        "eligible_row_count": len(records),
+        "excluded_row_count": len(feature_rows) - len(records),
+        "exclusion_reason_counts": dict(sorted(excluded_reason_counts.items())),
+        "excluded_icon_ids_by_reason": {
+            reason: sorted(icon_ids) for reason, icon_ids in sorted(excluded_icon_ids.items())
+        },
+        "orientation": {
+            "confidence_threshold": feature_registry.ORIENTATION_CONFIDENCE_THRESHOLD,
+            "undefined_eligible_row_count": undefined_orientation_count,
+            "policy": (
+                "exclude only from orientation-specific Feature Groups sampling and displayed "
+                "distribution summaries"
+            ),
+        },
+        "low_tail_review": {
+            "quantile": QUALITY_AUDIT_LOW_TAIL_QUANTILE,
+            "scalar_thresholds": low_tail_thresholds,
+            "candidate_count": low_tail_candidate_count,
+            "excluded_by_low_value_count": 0,
+            "decision": (
+                "No automatic low-value exclusion. The documented visual audit shows that "
+                "small values, exact zero saturation, and horizontal orientation can be valid."
+            ),
+        },
+        "extreme_visual_review": {
+            "mask_coverage_quantile": QUALITY_AUDIT_EXTREME_REVIEW_QUANTILE,
+            "mask_coverage_threshold": coverage_threshold,
+            "criteria": "exact zero in an audited scalar feature or bottom 0.1% mask coverage",
+            "candidate_count": len(extreme_review_candidates),
+            "candidates": extreme_review_candidates,
+            "decision": "Retained after engineering visual inspection; no technical defect was confirmed.",
+        },
+    }
+    return records, audit
+
+
+def build_feature_group_records(feature_rows: list[dict]) -> list[dict]:
+    """Build the quality-gated payload used by the Feature Groups pilot gallery."""
+
+    records, _ = build_feature_group_payload(feature_rows)
     return records
 
 
@@ -878,7 +1015,11 @@ def write_dashboard_data(rows: list[dict], feature_by_id: dict[str, dict], matri
 
     feature_review = build_feature_review(feature_by_id)
     feature_group_source_rows, feature_group_source = feature_review_source_rows(feature_by_id)
-    feature_group_records = build_feature_group_records(feature_group_source_rows)
+    feature_group_records, quality_audit = build_feature_group_payload(feature_group_source_rows)
+    (OUTPUT_DIR / "feature_group_quality_audit.json").write_text(
+        json.dumps(quality_audit, ensure_ascii=False, indent=2) + "\n",
+        encoding="utf-8",
+    )
     data = {
         "metadata": {
             "feature_schema_version": feature_registry.FEATURE_SCHEMA_VERSION,
@@ -892,8 +1033,18 @@ def write_dashboard_data(rows: list[dict], feature_by_id: dict[str, dict], matri
             "feature_group_bin_count": FEATURE_GROUP_BIN_COUNT,
             "feature_group_samples_per_bin": FEATURE_GROUP_SAMPLES_PER_BIN,
             "feature_group_excludes_uncertain_masks": True,
+            "feature_group_requires_finite_representatives": True,
             "feature_group_source": feature_group_source,
             "feature_group_source_row_count": len(feature_group_records),
+            "feature_group_quality_audit": {
+                "artifact": "feature_group_quality_audit.json",
+                "eligible_row_count": quality_audit["eligible_row_count"],
+                "excluded_row_count": quality_audit["excluded_row_count"],
+                "exclusion_reason_counts": quality_audit["exclusion_reason_counts"],
+                "low_tail_candidate_count": quality_audit["low_tail_review"]["candidate_count"],
+                "extreme_visual_review_count": quality_audit["extreme_visual_review"]["candidate_count"],
+                "excluded_by_low_value_count": 0,
+            },
             "random_seed": RANDOM_SEED,
             "k_values": list(K_VALUES),
             "primary_k": PRIMARY_K,
@@ -1022,12 +1173,6 @@ def write_index_html() -> None:
     .cluster-metric {{ padding: 7px; border: 1px solid var(--border); border-radius: 5px; background: white; }}
     .cluster-metric span {{ display: block; color: var(--muted); font-size: 9px; text-transform: uppercase; letter-spacing: .03em; }}
     .cluster-metric b {{ display: block; margin-top: 2px; color: #18202f; font-size: 13px; font-variant-numeric: tabular-nums; }}
-    .cluster-heatmap-wrap {{ overflow-x: auto; margin: 0 0 12px; border: 1px solid var(--border); border-radius: 6px; background: white; }}
-    .cluster-heatmap {{ min-width: 720px; }}
-    .cluster-heatmap th, .cluster-heatmap td {{ padding: 6px 7px; border-right: 1px solid #edf0f4; border-bottom: 1px solid #edf0f4; text-align: center; font-size: 10px; }}
-    .cluster-heatmap th:first-child, .cluster-heatmap td:first-child {{ position: sticky; left: 0; z-index: 1; min-width: 180px; background: white; text-align: left; }}
-    .cluster-heatmap thead th {{ background: #f4f6fa; color: #3d4656; }}
-    .cluster-heatmap td {{ font-variant-numeric: tabular-nums; }}
     .cluster-profile-note {{ margin: 0 0 8px; color: var(--muted); font-size: 11px; line-height: 1.4; }}
     .cluster-statistics-section {{ margin: 11px 0; }}
     .cluster-statistics-section h4 {{ margin: 0 0 6px; color: #18202f; font-size: 12px; }}
@@ -1040,15 +1185,24 @@ def write_index_html() -> None:
     .cluster-feature-stats td.delta-negative {{ color: #2465a7; font-weight: 700; }}
     .summary-actions {{ display: flex; justify-content: flex-end; margin-top: 8px; }}
     .cluster-summary-launchers {{ display: grid; gap: 8px; }}
-    .cluster-summary-launchers button {{ width: 100%; padding: 9px 10px; font-weight: 650; text-align: left; }}
+    .cluster-summary-launchers > button {{ width: 100%; padding: 9px 10px; font-weight: 650; text-align: left; }}
+    .cluster-sidebar-list {{ display: grid; gap: 7px; }}
+    .cluster-sidebar-entry {{ width: 100%; padding: 9px 10px; border-color: #d9c6dc; background: #fffaff; text-align: left; }}
+    .cluster-sidebar-entry b, .cluster-sidebar-entry span {{ display: block; }}
+    .cluster-sidebar-entry b {{ color: #3f2142; font-size: 12px; line-height: 1.3; }}
+    .cluster-sidebar-entry span {{ margin-top: 3px; color: var(--muted); font-size: 10px; font-weight: 500; line-height: 1.3; }}
+    .cluster-sidebar-entry:hover, .cluster-sidebar-entry:focus-visible {{ border-color: #a000a8; background: #fff2ff; }}
     .cluster-analysis-modal-intro {{ margin: 0 0 12px; color: var(--muted); font-size: 12px; line-height: 1.45; }}
-    .cluster-analysis-list {{ display: grid; gap: 12px; }}
-    .cluster-analysis-list .summary-cluster {{ margin: 0; }}
     .cluster-fullscreen-open {{ font-size: 12px; font-weight: 650; }}
-    .rep-icons {{ display: grid; grid-template-columns: repeat(auto-fill, minmax(72px, 1fr)); gap: 8px; margin-top: 8px; }}
-    .rep-icon {{ min-width: 0; }}
-    .rep-icon img {{ width: 72px; height: 72px; object-fit: contain; border: 1px solid var(--border); background: white; display: block; }}
-    .rep-icon span {{ display: block; margin-top: 3px; font-size: 11px; color: var(--muted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }}
+    .cluster-icon-values-wrap {{ overflow: auto; border: 1px solid var(--border); border-radius: 6px; background: white; }}
+    .cluster-icon-values {{ min-width: 1180px; }}
+    .cluster-icon-values th, .cluster-icon-values td {{ padding: 6px 7px; border-right: 1px solid #edf0f4; border-bottom: 1px solid #edf0f4; font-size: 10px; vertical-align: middle; }}
+    .cluster-icon-values thead th {{ position: sticky; top: 0; z-index: 2; background: #f4f6fa; color: #3d4656; white-space: nowrap; text-align: right; }}
+    .cluster-icon-values th:nth-child(-n+3), .cluster-icon-values td:nth-child(-n+3) {{ text-align: left; }}
+    .cluster-icon-values td:nth-child(n+4) {{ text-align: right; color: #18202f; font-variant-numeric: tabular-nums; }}
+    .cluster-icon-values img {{ width: 42px; height: 42px; object-fit: contain; display: block; border: 1px solid #e5e9f0; background: white; }}
+    .cluster-icon-values .icon-label {{ min-width: 160px; max-width: 220px; overflow-wrap: anywhere; }}
+    .cluster-icon-values .icon-set {{ min-width: 150px; max-width: 210px; overflow-wrap: anywhere; }}
     .feature-group-detail {{ margin: 10px 0; }}
     .feature-group-detail h4 {{ font-size: 13px; margin: 0 0 2px; }}
     .feature-group-detail p {{ margin: 0 0 4px; font-size: 12px; color: var(--muted); line-height: 1.35; }}
@@ -1173,12 +1327,6 @@ def write_index_html() -> None:
     .cluster-modal-header p {{ margin: 0; color: #667085; font-size: 12px; }}
     .cluster-modal-close {{ flex: 0 0 auto; width: 34px; height: 34px; padding: 0; border-radius: 50%; font-size: 20px; line-height: 1; }}
     .cluster-modal-body {{ min-height: 0; overflow: auto; padding: 20px; background: #f8fafc; }}
-    .cluster-icon-grid {{ display: grid; grid-template-columns: repeat(auto-fill, minmax(132px, 1fr)); gap: 12px; }}
-    .cluster-icon-card {{ min-width: 0; padding: 10px; border: 1px solid var(--border); border-radius: 8px; background: white; }}
-    .cluster-icon-card img {{ width: 100%; aspect-ratio: 1; object-fit: contain; display: block; border: 1px solid #e5e9f0; background: white; }}
-    .cluster-icon-card b, .cluster-icon-card span {{ display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }}
-    .cluster-icon-card b {{ margin-top: 7px; color: #18202f; font-size: 12px; }}
-    .cluster-icon-card span {{ margin-top: 3px; color: var(--muted); font-size: 10px; }}
     .mask-warning {{ display: block; margin-top: 5px; color: #8a4b08; font-size: 10px; font-style: normal; font-weight: 650; }}
     .family-icon-empty {{ padding: 28px 12px; border: 1px dashed var(--border); text-align: center; color: var(--muted); font-size: 13px; }}
     @keyframes family-backdrop-in {{ from {{ opacity: 0; }} to {{ opacity: 1; }} }}
@@ -1969,23 +2117,6 @@ def write_index_html() -> None:
       document.getElementById("clusterModalClose").focus();
     }}
 
-    function openClusterModal(cluster, items, trigger, sourceLabel=null) {{
-      openClusterAnalysisModal(
-        `${{sourceLabel || methodLabel()}} cluster ${{cluster}}`,
-        `${{items.length}} icons in the current ${{sourceLabel ? "AI" : "filtered"}} clustering view.`,
-        `
-        <div class="cluster-icon-grid">
-          ${{items.map(item => `
-            <article class="cluster-icon-card">
-              <img src="${{item.record.normalized_path}}" alt="">
-              <b title="${{escapeHtml(item.record.label)}}">${{escapeHtml(item.record.label)}}</b>
-              <span title="${{escapeHtml(item.record.set_name)}}">${{escapeHtml(item.record.set_name)}}</span>
-            </article>`).join("")}}
-        </div>`,
-        trigger
-      );
-    }}
-
     function closeClusterModal() {{
       const modal = document.getElementById("clusterModal");
       if (!modal.classList.contains("open")) return;
@@ -2017,6 +2148,12 @@ def write_index_html() -> None:
       if (rawValue === null || rawValue === undefined || rawValue === "") return null;
       const value = Number(rawValue);
       return Number.isFinite(value) ? value : null;
+    }}
+
+    function requiredRepresentativeValue(record, featureId) {{
+      const value = representativeValue(record, featureId);
+      if (value === null) throw new Error(`Quality-gated record ${{record.icon_id || "unknown"}} is missing ${{featureId}}.`);
+      return value;
     }}
 
     function representativeRecordIsEligible(familyId, record) {{
@@ -2817,7 +2954,7 @@ def write_index_html() -> None:
       if (!features.length || !records.length) return {{coords: [], labels: []}};
       const key = `image|${{state.method}}|${{state.k}}|${{features.join(",")}}|${{records.map(record => record.icon_id).join(",")}}`;
       if (computedCache.has(key)) return computedCache.get(key);
-      const matrix = standardize(records.map(record => features.map(feature => Number(record.image_features[feature] || 0))));
+      const matrix = standardize(records.map(record => features.map(feature => requiredRepresentativeValue(record, feature))));
       const effectiveK = Math.min(Number(state.k), records.length);
       const projection = {{
         coords: pca2d(matrix),
@@ -3042,23 +3179,27 @@ def write_index_html() -> None:
       const container = document.getElementById("aiClusterSummary");
       container.innerHTML = `
         <div class="cluster-summary-launchers">
-          <button type="button" data-ai-cluster-heatmap>Show heatmap</button>
-          <button type="button" data-ai-cluster-details>View all cluster details</button>
+          <div class="cluster-sidebar-list">
+            ${{entries.map(([cluster, members]) => {{
+              const measured = measuredByCluster.get(cluster);
+              const embedding = embeddingByCluster.get(Number(cluster));
+              const variance = embedding ? `${{(Number(embedding.variance_contribution) * 100).toFixed(1)}}% variance contribution` : "Variance unavailable";
+              return `<button type="button" class="cluster-sidebar-entry" data-ai-cluster-id="${{escapeHtml(cluster)}}" aria-haspopup="dialog">
+                <b>Cluster ${{escapeHtml(cluster)}} · ${{escapeHtml(measured?.descriptiveLabel || "Measured profile")}}</b>
+                <span>${{members.length}} icons · ${{variance}}</span>
+              </button>`;
+            }}).join("")}}
+          </div>
         </div>`;
-      container.querySelector("[data-ai-cluster-heatmap]")?.addEventListener("click", event => {{
-        openClusterAnalysisModal(
-          "AI cluster heatmap",
-          "Post-hoc measured-feature profiles across the AI clusters.",
-          `<p class="cluster-analysis-modal-intro">The heatmap describes the AI clusters after clustering across the seven thesis representatives. These features were not inputs to the embedding model.</p>${{clusterHeatmapHtml(measuredProfile, "AI clusters by measured feature")}}`,
-          event.currentTarget
-        );
-      }});
-      container.querySelector("[data-ai-cluster-details]")?.addEventListener("click", event => {{
-        const detailHtml = entries.map(([cluster, members]) => {{
+      container.querySelectorAll("[data-ai-cluster-id]").forEach(button => button.addEventListener("click", event => {{
+          const clusterId = event.currentTarget.dataset.aiClusterId;
+          const entry = entries.find(([cluster]) => String(cluster) === clusterId);
+          if (!entry) return;
+          const [cluster, members] = entry;
           const measured = measuredByCluster.get(cluster);
           const embedding = embeddingByCluster.get(Number(cluster));
           const clusterRecords = members.map(item => item.record);
-          return clusterDetailCardHtml({{
+          const detailHtml = clusterDetailCardHtml({{
             heading: `AI cluster ${{cluster}} · ${{measured?.descriptiveLabel || "Measured profile"}}`,
             countLabel: `${{members.length}} icons`,
             setsLabel: topCounts(clusterRecords.map(item => item.set_name), 2).join(", "),
@@ -3074,17 +3215,15 @@ def write_index_html() -> None:
             totalCount: items.length,
             profile: measuredProfile,
             clusterProfile: measured,
-            explanationHtml: `<div class="summary-explain">Most characteristic measured features: ${{escapeHtml(aiClusterExplanation(items, cluster))}}</div>`,
-            iconsHtml: members.map(item => `<div class="rep-icon"><img src="${{item.record.normalized_path}}" title="${{escapeHtml(item.record.label)}}" alt=""><span>${{escapeHtml(item.record.label)}}</span></div>`).join("")
+            explanationHtml: `<div class="summary-explain">Most characteristic measured features: ${{escapeHtml(aiClusterExplanation(items, cluster))}}</div>`
           }});
-        }}).join("");
         openClusterAnalysisModal(
-          "AI cluster details",
-          `${{entries.length}} clusters in the loaded AI result.`,
-          `<p class="cluster-analysis-modal-intro">Every cluster uses the same detail layout as Image Clustering. Variance contribution and separation strength are calculated in the model-embedding space; measured-feature statistics are post-hoc descriptions.</p><div class="cluster-analysis-list">${{detailHtml}}</div>`,
+          `AI cluster ${{cluster}} details`,
+          `${{members.length}} icons in this AI cluster.`,
+          `<p class="cluster-analysis-modal-intro">Variance contribution and separation strength are calculated in the model-embedding space; measured-feature statistics are post-hoc descriptions.</p>${{detailHtml}}`,
           event.currentTarget
         );
-      }});
+      }}));
     }}
 
     function initializeAiSidebarToggle() {{
@@ -3415,42 +3554,42 @@ def write_index_html() -> None:
       const allRecords = clusteringRecords();
       const profile = profileAvailable ? clusterInterpretationProfile(allRecords, labels, selectedFeatureIds()) : {{features: [], clusters: []}};
       const profileByCluster = new Map(profile.clusters.map(item => [item.cluster, item]));
+      const visibleIds = new Set(filtered.map(item => item.record.icon_id));
       const byCluster = new Map();
-      filtered.forEach(item => {{
-        const cluster = labels[item.index];
-        if (!byCluster.has(cluster)) byCluster.set(cluster, []);
-        byCluster.get(cluster).push(item);
+      labels.forEach((cluster, index) => {{
+        if (!byCluster.has(cluster)) byCluster.set(cluster, {{records: [], visibleCount: 0}});
+        const record = allRecords[index];
+        byCluster.get(cluster).records.push(record);
+        if (visibleIds.has(record.icon_id)) byCluster.get(cluster).visibleCount += 1;
       }});
       const clusterEntries = Array.from(byCluster.entries()).sort((a,b) => a[0]-b[0]);
       container.innerHTML = `
         <div class="cluster-summary-launchers">
-          <button type="button" data-cluster-heatmap ${{profileAvailable ? "" : "disabled"}}>Show heatmap</button>
-          <button type="button" data-cluster-details>View all cluster details</button>
+          <div class="cluster-sidebar-list">
+            ${{clusterEntries.map(([cluster, clusterData]) => {{
+              const clusterProfile = profileByCluster.get(cluster);
+              const variance = clusterProfile ? `${{(clusterProfile.varianceContribution * 100).toFixed(1)}}% variance contribution` : "Feature profile unavailable";
+              const visible = clusterData.visibleCount === clusterData.records.length ? "" : ` · ${{clusterData.visibleCount}} visible`;
+              return `<button type="button" class="cluster-sidebar-entry" data-cluster-id="${{escapeHtml(cluster)}}" aria-haspopup="dialog">
+                <b>Cluster ${{escapeHtml(cluster)}}${{clusterProfile ? ` · ${{escapeHtml(clusterProfile.descriptiveLabel)}}` : ""}}</b>
+                <span>${{clusterData.records.length}} icons${{visible}} · ${{variance}}</span>
+              </button>`;
+            }}).join("")}}
+          </div>
         </div>
-        ${{profileAvailable ? "" : '<p class="cluster-profile-note">Heatmaps are available for the Image variant only.</p>'}}`;
-
-      container.querySelector("[data-cluster-heatmap]")?.addEventListener("click", event => {{
-        openClusterAnalysisModal(
-          `${{methodLabel()}} cluster heatmap`,
-          "Signed standardized feature profiles for every cluster.",
-          `<p class="cluster-analysis-modal-intro">Contribution is each cluster's size-weighted share of total between-cluster variance in the selected feature space. Separation strength is the cluster centre's average squared standardized distance from the overall centre.</p>${{clusterHeatmapHtml(profile, "Selected-feature cluster profiles")}}`,
-          event.currentTarget
-        );
-      }});
-      container.querySelector("[data-cluster-details]")?.addEventListener("click", event => {{
-        const detailHtml = clusterEntries.map(([cluster, items]) => {{
-          const topSets = topCounts(items.map(item => item.record.set_name), 2).join(", ");
+        `;
+      container.querySelectorAll("[data-cluster-id]").forEach(button => button.addEventListener("click", event => {{
+          const clusterId = event.currentTarget.dataset.clusterId;
+          const entry = clusterEntries.find(([cluster]) => String(cluster) === clusterId);
+          if (!entry) return;
+          const [cluster, clusterData] = entry;
+          const clusterRecords = clusterData.records;
+          const topSets = topCounts(clusterRecords.map(item => item.set_name), 2).join(", ");
           const clusterProfile = profileByCluster.get(cluster);
-          const clusterRecords = labels.map((label, index) => label === cluster ? allRecords[index] : null).filter(Boolean);
           const explanation = profileAvailable ? clusterExplanation(labels, cluster, selectedFeatureIds()) : '<div class="summary-explain">Measured-feature interpretation is not shown for precomputed Metadata or Combined clusters.</div>';
-          const icons = items.map(item => `
-            <div class="rep-icon">
-              <img src="${{item.record.normalized_path}}" title="${{escapeHtml(item.record.label)}}" alt="">
-              <span title="${{escapeHtml(item.record.label)}}">${{escapeHtml(item.record.label)}}</span>
-            </div>`).join("");
-          return clusterDetailCardHtml({{
+          const detailHtml = clusterDetailCardHtml({{
             heading: `${{methodLabel()}} cluster ${{cluster}}${{clusterProfile ? ` · ${{clusterProfile.descriptiveLabel}}` : ""}}`,
-            countLabel: `${{items.length}} visible icons`,
+            countLabel: `${{clusterRecords.length}} icons`,
             setsLabel: topSets,
             metrics: clusterProfile ? [
               ["Variance contribution", `${{(clusterProfile.varianceContribution * 100).toFixed(1)}}%`],
@@ -3458,21 +3597,19 @@ def write_index_html() -> None:
               ["Full cluster size", clusterProfile.size]
             ] : [],
             clusterRecords,
-            visibleCount: items.length,
+            visibleCount: clusterData.visibleCount,
             totalCount: allRecords.length,
             profile: profileAvailable ? profile : null,
             clusterProfile,
-            explanationHtml: explanation,
-            iconsHtml: icons
+            explanationHtml: explanation
           }});
-        }}).join("");
         openClusterAnalysisModal(
-          `${{methodLabel()}} cluster details`,
-          `${{clusterEntries.length}} clusters in the current filtered view.`,
-          `<p class="cluster-analysis-modal-intro">Every cluster is expanded below with its statistics, interpretation, and all currently visible icons.</p><div class="cluster-analysis-list">${{detailHtml}}</div>`,
+          `${{methodLabel()}} cluster ${{cluster}} details`,
+          `${{clusterRecords.length}} icons assigned to this cluster.`,
+          `<p class="cluster-analysis-modal-intro">This modal contains one cluster's statistics, interpretation, and a table of every assigned icon with all seven representative values.</p>${{detailHtml}}`,
           event.currentTarget
         );
-      }});
+      }}));
     }}
 
     function methodLabel() {{
@@ -3635,7 +3772,7 @@ def write_index_html() -> None:
     function clusterInterpretationProfile(records, labels, featureIds) {{
       const features = featureIds.map(aiFeatureDefinition);
       if (!records.length || !features.length) return {{features, clusters: []}};
-      const rawMatrix = records.map(record => features.map(feature => Number(record.image_features?.[feature.id] || 0)));
+      const rawMatrix = records.map(record => features.map(feature => requiredRepresentativeValue(record, feature.id)));
       const overallStats = features.map((feature, column) => numericSummary(rawMatrix.map(row => row[column])));
       const matrix = standardize(rawMatrix);
       const clusters = unique(labels).sort((a, b) => a - b).map(cluster => {{
@@ -3677,7 +3814,7 @@ def write_index_html() -> None:
       return `<div class="cluster-metrics">${{metrics.map(([label, value]) => `<div class="cluster-metric"><span>${{escapeHtml(label)}}</span><b>${{escapeHtml(value)}}</b></div>`).join("")}}</div>`;
     }}
 
-    function clusterDetailCardHtml({{heading, countLabel, setsLabel, metrics, clusterRecords, visibleCount, totalCount, profile, clusterProfile, explanationHtml, iconsHtml}}) {{
+    function clusterDetailCardHtml({{heading, countLabel, setsLabel, metrics, clusterRecords, visibleCount, totalCount, profile, clusterProfile, explanationHtml}}) {{
       return `<details class="summary-cluster" open>
         <summary><b>${{escapeHtml(heading)}}</b> <span class="muted">(${{escapeHtml(countLabel)}})</span><br><span class="muted">Sets: ${{escapeHtml(setsLabel)}}</span></summary>
         <div class="summary-details">
@@ -3685,25 +3822,31 @@ def write_index_html() -> None:
           ${{clusterIconStatisticsHtml(clusterRecords, visibleCount, totalCount)}}
           ${{profile ? clusterFeatureStatisticsHtml(profile, clusterProfile) : ""}}
           ${{explanationHtml}}
-          <div class="rep-icons">${{iconsHtml}}</div>
+          ${{clusterIconValuesTableHtml(clusterRecords)}}
         </div>
       </details>`;
     }}
 
-    function clusterHeatmapHtml(profile, titleText) {{
-      if (!profile.clusters.length) return "";
-      return `<div class="cluster-heatmap-wrap" role="region" aria-label="${{escapeHtml(titleText)}}">
-        <table class="cluster-heatmap">
-          <thead><tr><th>${{escapeHtml(titleText)}}</th>${{profile.features.map(feature => `<th title="${{escapeHtml(feature.label)}}">${{escapeHtml(shortFeatureLabel(feature.label))}}</th>`).join("")}}</tr></thead>
-          <tbody>${{profile.clusters.map(cluster => `<tr><th>Cluster ${{escapeHtml(cluster.cluster)}} · ${{escapeHtml(cluster.descriptiveLabel)}}</th>${{cluster.means.map(value => `<td style="${{clusterHeatmapCellStyle(value)}}" title="${{value >= 0 ? "High" : "Low"}} by ${{Math.abs(value).toFixed(3)}} standard deviations">${{value >= 0 ? "+" : ""}}${{value.toFixed(2)}}z</td>`).join("")}}</tr>`).join("")}}</tbody>
-        </table>
-      </div>`;
-    }}
-
-    function clusterHeatmapCellStyle(value) {{
-      const intensity = Math.min(0.82, 0.12 + Math.abs(value) / 2.5 * 0.7);
-      const background = value >= 0 ? `rgba(190, 45, 55, ${{intensity.toFixed(3)}})` : `rgba(35, 105, 180, ${{intensity.toFixed(3)}})`;
-      return `background:${{background}};color:${{intensity > 0.5 ? "white" : "#18202f"}}`;
+    function clusterIconValuesTableHtml(records) {{
+      const features = representativeFeatureIds().map(featureInfo);
+      return `<section class="cluster-statistics-section">
+        <h4>Icons and feature values</h4>
+        <p class="cluster-profile-note">Every icon assigned to this cluster is listed with all seven representative values. Undefined orientation means its confidence is below the configured threshold.</p>
+        <div class="cluster-icon-values-wrap">
+          <table class="cluster-icon-values">
+            <thead><tr><th>Icon</th><th>Label</th><th>Icon set</th>${{features.map(feature => `<th title="${{escapeHtml(feature.label)}}">${{escapeHtml(shortFeatureLabel(feature.label))}}</th>`).join("")}}</tr></thead>
+            <tbody>${{records.map(record => `<tr>
+              <td><img src="${{record.normalized_path}}" alt=""></td>
+              <td class="icon-label">${{escapeHtml(record.label || record.icon_id)}}</td>
+              <td class="icon-set">${{escapeHtml(record.set_name || "—")}}</td>
+              ${{features.map(feature => {{
+                const value = comparisonFeatureValue(record, feature.id);
+                return `<td>${{value === null ? "Undefined" : formatStatistic(value)}}</td>`;
+              }}).join("")}}
+            </tr>`).join("")}}</tbody>
+          </table>
+        </div>
+      </section>`;
     }}
 
     function clusterIconStatisticsHtml(clusterRecords, visibleCount, totalCount) {{
@@ -3729,7 +3872,7 @@ def write_index_html() -> None:
       if (!clusterProfile || !profile.features.length) return "";
       return `<section class="cluster-statistics-section">
         <h4>Feature statistics</h4>
-        <p class="cluster-profile-note">Raw cluster statistics are shown beside the full-sample mean. Difference is the signed standardized cluster-mean deviation used by the profile heatmap.</p>
+        <p class="cluster-profile-note">Raw cluster statistics are shown beside the full-sample mean. Difference is the signed standardized cluster-mean deviation.</p>
         <div class="cluster-feature-stats-wrap">
           <table class="cluster-feature-stats">
             <thead><tr><th>Feature</th><th>N</th><th>Cluster mean</th><th>Median</th><th>Std. dev.</th><th>Min</th><th>Max</th><th>Overall mean</th><th>Difference</th></tr></thead>
@@ -3789,7 +3932,7 @@ def write_index_html() -> None:
     }}
 
     function standardizedImageMatrix(features) {{
-      return standardize(clusteringRecords().map(record => features.map(feature => Number(record.image_features[feature] || 0))));
+      return standardize(clusteringRecords().map(record => features.map(feature => requiredRepresentativeValue(record, feature))));
     }}
 
     function formatFeatureValue(value) {{

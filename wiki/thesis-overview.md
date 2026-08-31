@@ -2,16 +2,20 @@
 
 [Wiki home](README.md) · [Literature](literature-and-evidence.md) · [Evaluation](evaluation-and-human-study.md)
 
-## Working Thesis Direction
+## Thesis Title and Direction
 
-The project investigates how visual factors identified in icon and glyph perception literature can be organized into computer-measurable feature families, and how those measurements compare with human identification and perception scores for the same stimuli.
+**Title:** Perception of Glyphs
+
+The supervisor-defined objective is to develop and run user studies that determine when a set of glyphs remains discernible as its display size is reduced. Size reduction is therefore the primary experimental condition, not an optional extension.
+
+The computational work supports that objective by organizing literature-grounded visual properties into measurable feature families. Those measurements help select controlled glyph sets and explain why particular glyphs remain distinguishable or become confused at smaller sizes.
 
 The intended comparison has two sides:
 
-1. **Computer side:** values derived from visible pixels, summarized through literature-mapped visual families and pairwise distances.
-2. **Human side:** identification, confidence, similarity, confusability, and optionally response-time or scale-robustness measurements.
+1. **Computer side:** values derived from visible pixels, summarized through literature-mapped visual families and pairwise distances to support stimulus selection and interpretation.
+2. **Human side:** identification and discrimination across decreasing pixel sizes, with accuracy, confusion, confidence, and response time as candidate outcomes.
 
-The final analysis should explain agreement and mismatch: which visible families predict human behavior, where they do not, and what non-visual factors may explain the remaining difference.
+The final analysis should estimate the smallest size at which each glyph set remains reliably discernible, then explain which visible families predict that threshold, where they do not, and what non-visual factors may explain the remaining difference.
 
 ## What This Repository Is
 
@@ -57,24 +61,24 @@ Non-visual factors may still be scientifically important. Store them as metadata
 
 ```mermaid
 flowchart TD
-    A["Active visual feature families"] --> B["Per-icon computer measurements"]
-    A --> C["Pairwise visual distances"]
-    B --> D["Human identification comparison"]
-    C --> E["Human similarity/confusability comparison"]
-    F["Display size or scale condition"] --> D
-    F --> E
-    D --> G["Agreement and mismatch analysis"]
-    E --> G
+    A["Controlled glyph sets"] --> B["Decreasing pixel-size conditions"]
+    B --> C["Human identification and discrimination"]
+    D["Per-icon computer measurements"] --> E["Feature-based hypotheses"]
+    F["Pairwise visual distances"] --> E
+    C --> G["Discernibility thresholds"]
+    E --> H["Agreement and mismatch analysis"]
+    G --> H
 ```
 
 The planned layers are:
 
-- human identification;
-- perceived similarity and confusability;
+- fixed display-size conditions;
+- human identification and pairwise discrimination;
+- confusion, confidence, and response time;
 - computer visual features;
 - pairwise distinguishability;
-- optional scale/display condition;
-- human-computer agreement.
+- per-set or pairwise discernibility thresholds;
+- human-computer agreement and mismatch.
 
 See [Evaluation and human study](evaluation-and-human-study.md) for proposed measures and tables.
 
@@ -82,7 +86,7 @@ See [Evaluation and human study](evaluation-and-human-study.md) for proposed mea
 
 Completed work includes dataset assembly, full-corpus normalization and feature extraction, active-family correction, similarity preprocessing on the earlier pilot, dashboard feature views, literature extraction, and evaluation-layer documentation.
 
-The main missing thesis layer is the human study and the statistical join between participant responses and computer-side scores. Stimulus selection, family-score exports, response schema, and analysis scripts remain in the active backlog.
+The main missing thesis layer is the size-controlled human study and the statistical join between participant responses and computer-side scores. The size conditions, final stimulus sets, study protocol, response schema, and threshold-analysis scripts remain in the active backlog.
 
 Authoritative status files:
 

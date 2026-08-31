@@ -1,0 +1,371 @@
+{"kind":"deck","id":"pr/jeiy70","name":"Deck"}
+{"kind":"layout","layoutId":"5b806c7d-f3ca-49a5-a42c-8729ee68b500","name":"Master","type":"master"}
+{"kind":"layout","layoutId":"f7c181ae-9219-48d7-ab81-3ca1f63347bd","name":"Title Slide","type":"title"}
+{"kind":"slide","id":"sl/y1guz2","slide":1,"title":"THESIS PROGRESS PRESENTATION","textShapes":4}
+{"kind":"textbox","id":"sh/o36t87ut","slide":1,"text":"THESIS PROGRESS PRESENTATION","textPreview":"THESIS PROGRESS PRESENTATION","textChars":28,"textLines":1,"bbox":[42,42,620,30]}
+{"kind":"textbox","id":"sh/32xsf2do","slide":1,"text":"[THESIS TITLE]","textPreview":"[THESIS TITLE]","textChars":14,"textLines":1,"bbox":[42,205,1080,125]}
+{"kind":"shape","id":"sh/214b6xc3","slide":1,"bbox":[42,371,188,5]}
+{"kind":"textbox","id":"sh/dsfalcvq","slide":1,"text":"Research journey, current progress, and next study","textPreview":"Research journey, current progress, and next study","textChars":50,"textLines":1,"bbox":[42,414,850,65]}
+{"kind":"textbox","id":"sh/cr6tc7u5","slide":1,"text":"Name · Programme · Supervisor · August 2026","textPreview":"Name · Programme · Supervisor · August 2026","textChars":43,"textLines":1,"bbox":[42,588,760,28]}
+{"kind":"notes","id":"nt/y1guz2","slide":1,"text":"Replace the title and identity line when the final thesis wording is confirmed.\n\n[Sources]"}
+{"kind":"slide","id":"sl/3bg6ii","slide":2,"title":"01 · THE PROBLEM","textShapes":5}
+{"kind":"textbox","id":"sh/0zmpg7ip","slide":2,"text":"01 · THE PROBLEM","textPreview":"01 · THE PROBLEM","textChars":16,"textLines":1,"bbox":[42,35,330,24]}
+{"kind":"textbox","id":"sh/zyd87214","slide":2,"text":"02","textPreview":"02","textChars":2,"textLines":1,"bbox":[1180,665,58,20]}
+{"kind":"textbox","id":"sh/ex47ex0j","slide":2,"text":"Visual similarity creates a practical comparison problem","textPreview":"Visual similarity creates a practical comparison problem","textChars":56,"textLines":1,"bbox":[42,78,1196,110]}
+{"kind":"textbox","id":"sh/dwbq5cjy","slide":2,"text":"Large icon collections contain repeated shapes, subtle variations, and icons that may become difficult to distinguish. Manual inspection cannot consistently explain which visible properties make two icons appear close or different.","textPreview":"Large icon collections contain repeated shapes, subtle variations, and icons that may become difficult to distinguish. Manual inspection ...","textChars":231,"textLines":1,"bbox":[42,224,510,172]}
+{"kind":"textbox","id":"sh/sv2pc7it","slide":2,"text":"The thesis therefore needs an auditable bridge between visible pixels and later human judgments—without confusing visual similarity with semantic meaning.","textPreview":"The thesis therefore needs an auditable bridge between visible pixels and later human judgments—without confusing visual similarity with ...","textChars":154,"textLines":1,"bbox":[42,438,510,130]}
+{"kind":"shape","id":"sh/rut83218","slide":2,"bbox":[610,176,628,452]}
+{"kind":"image","id":"im/72hwfudw","slide":2,"name":"","alt":"Closest cross-set feature-similar icon pairs","bbox":[626,191,596,423]}
+{"kind":"notes","id":"nt/3bg6ii","slide":2,"text":"\n[Sources]\n- wiki/thesis-overview.md\n- icon_data/analysis/similarity/closest_cross_set_pairs_euclidean.png"}
+{"kind":"slide","id":"sl/ybedn1","slide":3,"title":"02–03 · AIM AND RESEARCH QUESTIONS","textShapes":10}
+{"kind":"textbox","id":"sh/bal8veto","slide":3,"text":"02–03 · AIM AND RESEARCH QUESTIONS","textPreview":"02–03 · AIM AND RESEARCH QUESTIONS","textChars":34,"textLines":1,"bbox":[42,35,330,24]}
+{"kind":"textbox","id":"sh/wbep4ja9","slide":3,"text":"03","textPreview":"03","textChars":2,"textLines":1,"bbox":[1180,665,58,20]}
+{"kind":"textbox","id":"sh/xcnqxobu","slide":3,"text":"The study connects computer measurements with human responses","textPreview":"The study connects computer measurements with human responses","textChars":61,"textLines":1,"bbox":[42,78,1196,84]}
+{"kind":"textbox","id":"sh/ydw76tsz","slide":3,"text":"Working aim: organize literature-supported visible icon properties into measurable feature families, then test where those measurements agree—or disagree—with human identification and perception.","textPreview":"Working aim: organize literature-supported visible icon properties into measurable feature families, then test where those measurements a...","textChars":195,"textLines":1,"bbox":[42,171,1138,83]}
+{"kind":"textbox","id":"sh/je58zytk","slide":3,"text":"RQ1","textPreview":"RQ1","textChars":3,"textLines":1,"bbox":[42,295,100,42]}
+{"kind":"textbox","id":"sh/kzep83a5","slide":3,"text":"Which visible properties can be measured consistently from normalized icon images?","textPreview":"Which visible properties can be measured consistently from normalized icon images?","textChars":82,"textLines":1,"bbox":[168,294,1000,58]}
+{"kind":"shape","id":"sh/l0nq18rq","slide":3,"bbox":[42,371,1196,1]}
+{"kind":"textbox","id":"sh/61w7atsb","slide":3,"text":"RQ2","textPreview":"RQ2","textChars":3,"textLines":1,"bbox":[42,402,100,42]}
+{"kind":"textbox","id":"sh/72p83y9w","slide":3,"text":"How can those measurements describe similarity, distance, and potential confusability?","textPreview":"How can those measurements describe similarity, distance, and potential confusability?","textChars":86,"textLines":1,"bbox":[168,401,1000,58]}
+{"kind":"shape","id":"sh/vqd4nel4","slide":3,"bbox":[42,478,1196,1]}
+{"kind":"textbox","id":"sh/a543e94j","slide":3,"text":"RQ3","textPreview":"RQ3","textChars":3,"textLines":1,"bbox":[42,509,100,42]}
+{"kind":"textbox","id":"sh/xsvmpo3a","slide":3,"text":"How well do computer-side measurements correspond to human identification and similarity judgments?","textPreview":"How well do computer-side measurements correspond to human identification and similarity judgments?","textChars":99,"textLines":1,"bbox":[168,508,1000,58]}
+{"kind":"notes","id":"nt/ybedn1","slide":3,"text":"\n[Sources]\n- wiki/thesis-overview.md\n- wiki/evaluation-and-human-study.md"}
+{"kind":"slide","id":"sl/822ubm","slide":4,"title":"04 · LITERATURE REVIEW","textShapes":16}
+{"kind":"textbox","id":"sh/w32dsz61","slide":4,"text":"04 · LITERATURE REVIEW","textPreview":"04 · LITERATURE REVIEW","textChars":22,"textLines":1,"bbox":[42,35,330,24]}
+{"kind":"textbox","id":"sh/v2tcju5g","slide":4,"text":"04","textPreview":"04","textChars":2,"textLines":1,"bbox":[1180,665,58,20]}
+{"kind":"textbox","id":"sh/a1kvq9ov","slide":4,"text":"Seven papers define four parts of the thesis","textPreview":"Seven papers define four parts of the thesis","textChars":44,"textLines":1,"bbox":[42,78,1196,76]}
+{"kind":"textbox","id":"sh/90buh4nq","slide":4,"text":"The literature does not provide one complete model. Instead, it contributes complementary evidence for measurement, perceptual design, distinguishability, and evaluation.","textPreview":"The literature does not provide one complete model. Instead, it contributes complementary evidence for measurement, perceptual design, di...","textChars":170,"textLines":1,"bbox":[42,162,1120,70]}
+{"kind":"textbox","id":"sh/8z2doz65","slide":4,"text":"MEASUREMENT","textPreview":"MEASUREMENT","textChars":11,"textLines":1,"bbox":[42,270,236,23]}
+{"kind":"textbox","id":"sh/nytcfu5k","slide":4,"text":"Forsythe · Garcia","textPreview":"Forsythe · Garcia","textChars":17,"textLines":1,"bbox":[292,268,380,30]}
+{"kind":"textbox","id":"sh/mxkvmpoz","slide":4,"text":"Complexity, structure, abstractness, and the boundary between pixels and context.","textPreview":"Complexity, structure, abstractness, and the boundary between pixels and context.","textChars":81,"textLines":1,"bbox":[700,267,500,47]}
+{"kind":"shape","id":"sh/twfetonu","slide":4,"bbox":[42,330,1196,1]}
+{"kind":"textbox","id":"sh/svmd0jm9","slide":4,"text":"VISUAL FOUNDATIONS","textPreview":"VISUAL FOUNDATIONS","textChars":18,"textLines":1,"bbox":[42,359,236,23]}
+{"kind":"textbox","id":"sh/uhsj2h8b","slide":4,"text":"Borgo et al.","textPreview":"Borgo et al.","textChars":12,"textLines":1,"bbox":[292,357,380,30]}
+{"kind":"textbox","id":"sh/vi1kbm9w","slide":4,"text":"Visual channels, Gestalt organization, and task-dependent glyph design.","textPreview":"Visual channels, Gestalt organization, and task-dependent glyph design.","textChars":71,"textLines":1,"bbox":[700,356,500,47]}
+{"kind":"shape","id":"sh/gja14rq1","slide":4,"bbox":[42,419,1196,1]}
+{"kind":"textbox","id":"sh/hk32dwrm","slide":4,"text":"DISTINGUISHABILITY","textPreview":"DISTINGUISHABILITY","textChars":18,"textLines":1,"bbox":[42,448,236,23]}
+{"kind":"textbox","id":"sh/mdsjyh8z","slide":4,"text":"Legg et al. · Fuchs et al. (contour)","textPreview":"Legg et al. · Fuchs et al. (contour)","textChars":36,"textLines":1,"bbox":[292,446,380,30]}
+{"kind":"textbox","id":"sh/7e1k7m9k","slide":4,"text":"Distance across channels, contour, closure, and similarity strategy.","textPreview":"Distance across channels, contour, closure, and similarity strategy.","textChars":68,"textLines":1,"bbox":[700,445,500,47]}
+{"kind":"shape","id":"sh/8fa10rq5","slide":4,"bbox":[42,508,1196,1]}
+{"kind":"textbox","id":"sh/tgj29crq","slide":4,"text":"DESIGN & EVALUATION","textPreview":"DESIGN & EVALUATION","textChars":19,"textLines":1,"bbox":[42,537,236,23]}
+{"kind":"textbox","id":"sh/q9c3a18j","slide":4,"text":"Maguire et al. · Fuchs et al. (review)","textPreview":"Maguire et al. · Fuchs et al. (review)","textChars":38,"textLines":1,"bbox":[292,535,380,30]}
+{"kind":"textbox","id":"sh/ralkj6p4","slide":4,"text":"Systematic glyph design and evidence-based user-study planning.","textPreview":"Systematic glyph design and evidence-based user-study planning.","textChars":63,"textLines":1,"bbox":[700,534,500,47]}
+{"kind":"notes","id":"nt/822ubm","slide":4,"text":"\n[Sources]\n- wiki/literature-and-evidence.md\n- notes/paper_feature_review.md\n- papers/extracted_text/README.md"}
+{"kind":"slide","id":"sl/sl2824","slide":5,"title":"04 · LITERATURE REVIEW","textShapes":12}
+{"kind":"textbox","id":"sh/3650j6lg","slide":5,"text":"04 · LITERATURE REVIEW","textPreview":"04 · LITERATURE REVIEW","textChars":22,"textLines":1,"bbox":[42,35,330,24]}
+{"kind":"textbox","id":"sh/47y1cb21","slide":5,"text":"05","textPreview":"05","textChars":2,"textLines":1,"bbox":[1180,665,58,20]}
+{"kind":"textbox","id":"sh/p87ilg36","slide":5,"text":"Measuring icon complexity automatically","textPreview":"Measuring icon complexity automatically","textChars":39,"textLines":1,"bbox":[42,70,1196,74]}
+{"kind":"textbox","id":"sh/u1wj61kj","slide":5,"text":"Forsythe, Sheehy & Sawey · 2003","textPreview":"Forsythe, Sheehy & Sawey · 2003","textChars":31,"textLines":1,"bbox":[42,143,1180,30]}
+{"kind":"shape","id":"sh/f250f6l4","slide":5,"bbox":[820,188,418,438]}
+{"kind":"textbox","id":"sh/h4nihg3a","slide":5,"text":"PURPOSE","textPreview":"PURPOSE","textChars":7,"textLines":1,"bbox":[42,190,718,24]}
+{"kind":"textbox","id":"sh/exgji5k3","slide":5,"text":"Test whether image-processing measurements can estimate human judgments of icon complexity.","textPreview":"Test whether image-processing measurements can estimate human judgments of icon complexity.","textChars":91,"textLines":1,"bbox":[42,219,718,72]}
+{"kind":"textbox","id":"sh/zy9krqlo","slide":5,"text":"METHOD","textPreview":"METHOD","textChars":6,"textLines":1,"bbox":[42,298,718,24]}
+{"kind":"textbox","id":"sh/radgbq5g","slide":5,"text":"Six pixel-derived properties were correlated with established human complexity ratings for a random sample of 68 icons.","textPreview":"Six pixel-derived properties were correlated with established human complexity ratings for a random sample of 68 icons.","textChars":119,"textLines":1,"bbox":[42,327,718,72]}
+{"kind":"textbox","id":"sh/q9kf2l4v","slide":5,"text":"MAIN FINDING","textPreview":"MAIN FINDING","textChars":12,"textLines":1,"bbox":[42,406,718,24]}
+{"kind":"textbox","id":"sh/dcvyd0nm","slide":5,"text":"Structural variability and edge information showed the strongest relationships with perceived complexity (ρ = .65 and .64).","textPreview":"Structural variability and edge information showed the strongest relationships with perceived complexity (ρ = .65 and .64).","textChars":123,"textLines":1,"bbox":[42,435,718,72]}
+{"kind":"shape","id":"sh/sbmx4vm1","slide":5,"bbox":[42,529,718,97]}
+{"kind":"textbox","id":"sh/fedgfalc","slide":5,"text":"WHY IT MATTERS HERE","textPreview":"WHY IT MATTERS HERE","textChars":19,"textLines":1,"bbox":[62,546,678,20]}
+{"kind":"textbox","id":"sh/ed4f654r","slide":5,"text":"Provides the strongest direct basis for edge density and structural variability as computational complexity proxies.","textPreview":"Provides the strongest direct basis for edge density and structural variability as computational complexity proxies.","textChars":116,"textLines":1,"bbox":[62,573,678,42]}
+{"kind":"image","id":"im/d8relczu","slide":5,"name":"","alt":"First page of Measuring icon complexity automatically","bbox":[838,202,382,410]}
+{"kind":"notes","id":"nt/sl2824","slide":5,"text":"Keep the claim narrow: the paper supports complexity estimation, not semantic understanding.\n\n[Sources]\n- papers/Forsythe-Measuring_cion_complexity_automated.pdf, pp. 1–9"}
+{"kind":"slide","id":"sl/rqjf16","slide":6,"title":"04 · LITERATURE REVIEW","textShapes":12}
+{"kind":"textbox","id":"sh/87i9kvix","slide":6,"text":"04 · LITERATURE REVIEW","textPreview":"04 · LITERATURE REVIEW","textChars":22,"textLines":1,"bbox":[42,35,330,24]}
+{"kind":"textbox","id":"sh/769srahc","slide":6,"text":"06","textPreview":"06","textChars":2,"textLines":1,"bbox":[1180,665,58,20]}
+{"kind":"textbox","id":"sh/m50ri50r","slide":6,"text":"Abstractness affects identification","textPreview":"Abstractness affects identification","textChars":35,"textLines":1,"bbox":[42,70,1196,74]}
+{"kind":"textbox","id":"sh/l4rqp0z6","slide":6,"text":"Garcia, Badre & Stasko · 1994","textPreview":"Garcia, Badre & Stasko · 1994","textChars":29,"textLines":1,"bbox":[42,143,1180,30]}
+{"kind":"shape","id":"sh/k3i9gvi1","slide":6,"bbox":[42,188,418,438]}
+{"kind":"textbox","id":"sh/y1grel0v","slide":6,"text":"PURPOSE","textPreview":"PURPOSE","textChars":7,"textLines":1,"bbox":[478,190,718,24]}
+{"kind":"textbox","id":"sh/x07qlgza","slide":6,"text":"Develop a quantitative abstractness–concreteness metric and test whether it matches users’ judgments and task performance.","textPreview":"Develop a quantitative abstractness–concreteness metric and test whether it matches users’ judgments and task performance.","textChars":122,"textLines":1,"bbox":[478,219,718,72]}
+{"kind":"textbox","id":"sh/czy9cbip","slide":6,"text":"METHOD","textPreview":"METHOD","textChars":6,"textLines":1,"bbox":[478,298,718,24]}
+{"kind":"textbox","id":"sh/etc3yhgn","slide":6,"text":"Different participant groups ranked abstract and concrete icon sets, matched icons to Pascal constructs, and completed context conditions.","textPreview":"Different participant groups ranked abstract and concrete icon sets, matched icons to Pascal constructs, and completed context conditions.","textChars":138,"textLines":1,"bbox":[478,327,718,72]}
+{"kind":"textbox","id":"sh/felkrmh8","slide":6,"text":"MAIN FINDING","textPreview":"MAIN FINDING","textChars":12,"textLines":1,"bbox":[478,406,718,24]}
+{"kind":"textbox","id":"sh/0ful07yt","slide":6,"text":"The metric aligned with subjective judgments; concrete icons were identified better, and context changed identification performance.","textPreview":"The metric aligned with subjective judgments; concrete icons were identified better, and context changed identification performance.","textChars":132,"textLines":1,"bbox":[478,435,718,72]}
+{"kind":"shape","id":"sh/1g3mtcze","slide":6,"bbox":[478,529,718,97]}
+{"kind":"textbox","id":"sh/qps3uxgr","slide":6,"text":"WHY IT MATTERS HERE","textPreview":"WHY IT MATTERS HERE","textChars":19,"textLines":1,"bbox":[498,546,678,20]}
+{"kind":"textbox","id":"sh/rq1kn2hw","slide":6,"text":"Shows that measurable structure matters, but meaning and context cannot be inferred reliably from pixels alone.","textPreview":"Shows that measurable structure matters, but meaning and context cannot be inferred reliably from pixels alone.","textChars":111,"textLines":1,"bbox":[498,573,678,42]}
+{"kind":"image","id":"im/6tw7mxg7","slide":6,"name":"","alt":"First page of Abstractness affects identification","bbox":[60,202,382,410]}
+{"kind":"notes","id":"nt/rqjf16","slide":6,"text":"This paper combines a structural metric with subjective ranking and identification tasks.\n\n[Sources]\n- papers/Garcia-Development_validation_icons_abstractness.pdf, pp. 1–21"}
+{"kind":"slide","id":"sl/83ebdd","slide":7,"title":"04 · LITERATURE REVIEW","textShapes":12}
+{"kind":"textbox","id":"sh/8nyp07uh","slide":7,"text":"04 · LITERATURE REVIEW","textPreview":"04 · LITERATURE REVIEW","textChars":22,"textLines":1,"bbox":[42,35,330,24]}
+{"kind":"textbox","id":"sh/7mpo72tw","slide":7,"text":"07","textPreview":"07","textChars":2,"textLines":1,"bbox":[1180,665,58,20]}
+{"kind":"textbox","id":"sh/6lg7yxcb","slide":7,"text":"Glyph design needs perceptual foundations","textPreview":"Glyph design needs perceptual foundations","textChars":41,"textLines":1,"bbox":[42,70,1196,74]}
+{"kind":"textbox","id":"sh/lk765sb6","slide":7,"text":"Borgo et al. · 2013","textPreview":"Borgo et al. · 2013","textChars":19,"textLines":1,"bbox":[42,143,1180,30]}
+{"kind":"shape","id":"sh/kjepwnul","slide":7,"bbox":[820,188,418,438]}
+{"kind":"textbox","id":"sh/yhw7uxcf","slide":7,"text":"PURPOSE","textPreview":"PURPOSE","textChars":7,"textLines":1,"bbox":[42,190,718,24]}
+{"kind":"textbox","id":"sh/xgn61svu","slide":7,"text":"Connect glyph visualization to semiotics, perception, design guidelines, implementation techniques, and application practice.","textPreview":"Connect glyph visualization to semiotics, perception, design guidelines, implementation techniques, and application practice.","textChars":125,"textLines":1,"bbox":[42,219,718,72]}
+{"kind":"textbox","id":"sh/wfe5snu9","slide":7,"text":"METHOD","textPreview":"METHOD","textChars":6,"textLines":1,"bbox":[42,298,718,24]}
+{"kind":"textbox","id":"sh/6hs7id0f","slide":7,"text":"A state-of-the-art review synthesizing foundations and design knowledge across glyph-based visualization research.","textPreview":"A state-of-the-art review synthesizing foundations and design knowledge across glyph-based visualization research.","textChars":114,"textLines":1,"bbox":[42,327,718,72]}
+{"kind":"textbox","id":"sh/ri1obih0","slide":7,"text":"MAIN FINDING","textPreview":"MAIN FINDING","textChars":12,"textLines":1,"bbox":[42,406,718,24]}
+{"kind":"textbox","id":"sh/sjapk3yl","slide":7,"text":"Shape, colour, texture, size, orientation, curvature, and grouping act as visual channels whose effectiveness depends on task and context.","textPreview":"Shape, colour, texture, size, orientation, curvature, and grouping act as visual channels whose effectiveness depends on task and context.","textChars":138,"textLines":1,"bbox":[42,435,718,72]}
+{"kind":"shape","id":"sh/tkjqd8z6","slide":7,"bbox":[42,529,718,97]}
+{"kind":"textbox","id":"sh/it87et0j","slide":7,"text":"WHY IT MATTERS HERE","textPreview":"WHY IT MATTERS HERE","textChars":19,"textLines":1,"bbox":[62,546,678,20]}
+{"kind":"textbox","id":"sh/juho7yh4","slide":7,"text":"Provides the conceptual map for the thesis’s visual families while warning against treating feature distance as a complete perceptual model.","textPreview":"Provides the conceptual map for the thesis’s visual families while warning against treating feature distance as a complete perceptual model.","textChars":140,"textLines":1,"bbox":[62,573,678,42]}
+{"kind":"image","id":"im/et8zed4n","slide":7,"name":"","alt":"First page of Glyph design needs perceptual foundations","bbox":[838,202,382,410]}
+{"kind":"notes","id":"nt/83ebdd","slide":7,"text":"This is a review and design synthesis, not a single controlled participant experiment.\n\n[Sources]\n- papers/Glyph-based_Visualization_Foundations_Design_Guidelines_Techniques_Applications.pdf, pp. 1–26"}
+{"kind":"slide","id":"sl/96te73","slide":8,"title":"04 · LITERATURE REVIEW","textShapes":12}
+{"kind":"textbox","id":"sh/s3at8n2h","slide":8,"text":"04 · LITERATURE REVIEW","textPreview":"04 · LITERATURE REVIEW","textChars":22,"textLines":1,"bbox":[42,35,330,24]}
+{"kind":"textbox","id":"sh/721czi1c","slide":8,"text":"08","textPreview":"08","textChars":2,"textLines":1,"bbox":[1180,665,58,20]}
+{"kind":"textbox","id":"sh/61sb6dkr","slide":8,"text":"Channel distance can reduce glyph confusion","textPreview":"Channel distance can reduce glyph confusion","textChars":43,"textLines":1,"bbox":[42,70,1196,74]}
+{"kind":"textbox","id":"sh/hs3u5sje","slide":8,"text":"Legg, Maguire, Walton & Chen · 2016","textPreview":"Legg, Maguire, Walton & Chen · 2016","textChars":35,"textLines":1,"bbox":[42,143,1180,30]}
+{"kind":"shape","id":"sh/grudcnit","slide":8,"bbox":[42,188,418,438]}
+{"kind":"textbox","id":"sh/u5sbax0n","slide":8,"text":"PURPOSE","textPreview":"PURPOSE","textChars":7,"textLines":1,"bbox":[478,190,718,24]}
+{"kind":"textbox","id":"sh/pw3u9cja","slide":8,"text":"Adapt Hamming distance to glyph design so visually separable glyph sets can be designed more systematically.","textPreview":"Adapt Hamming distance to glyph design so visually separable glyph sets can be designed more systematically.","textChars":108,"textLines":1,"bbox":[478,219,718,72]}
+{"kind":"textbox","id":"sh/4vudg7ip","slide":8,"text":"METHOD","textPreview":"METHOD","textChars":6,"textLines":1,"bbox":[478,298,718,24]}
+{"kind":"textbox","id":"sh/ypo3i9c7","slide":8,"text":"The authors define quasi-Hamming distance, estimate channel separability with a 20-participant survey, and demonstrate it in a file-event glyph system.","textPreview":"The authors define quasi-Hamming distance, estimate channel separability with a 20-participant survey, and demonstrate it in a file-event...","textChars":151,"textLines":1,"bbox":[478,327,718,72]}
+{"kind":"textbox","id":"sh/zqx4betc","slide":8,"text":"MAIN FINDING","textPreview":"MAIN FINDING","textChars":12,"textLines":1,"bbox":[478,406,718,24]}
+{"kind":"textbox","id":"sh/0r6lkjax","slide":8,"text":"Increasing differences across visual channels can reduce vulnerability to perceptual errors, although separability varies by channel.","textPreview":"Increasing differences across visual channels can reduce vulnerability to perceptual errors, although separability varies by channel.","textChars":133,"textLines":1,"bbox":[478,435,718,72]}
+{"kind":"shape","id":"sh/lcfmd4bi","slide":8,"bbox":[478,529,718,97]}
+{"kind":"textbox","id":"sh/mdonm9s3","slide":8,"text":"WHY IT MATTERS HERE","textPreview":"WHY IT MATTERS HERE","textChars":19,"textLines":1,"bbox":[498,546,678,20]}
+{"kind":"textbox","id":"sh/nex4feto","slide":8,"text":"Motivates pairwise distinguishability and family-wise distance, but does not validate the thesis’s exact continuous feature formulas.","textPreview":"Motivates pairwise distinguishability and family-wise distance, but does not validate the thesis’s exact continuous feature formulas.","textChars":133,"textLines":1,"bbox":[498,573,678,42]}
+{"kind":"image","id":"im/iho7m1sf","slide":8,"name":"","alt":"First page of Channel distance can reduce glyph confusion","bbox":[60,202,382,410]}
+{"kind":"notes","id":"nt/96te73","slide":8,"text":"Present quasi-Hamming distance as an inspiration for set-relative distinguishability, not as the implemented metric itself.\n\n[Sources]\n- papers/Glyph_Visualization_A_Fail-Safe_Design_Scheme_Based_on_Quasi-Hamming_Distances.pdf, pp. 1–11"}
+{"kind":"slide","id":"sl/v2lnht","slide":9,"title":"04 · LITERATURE REVIEW","textShapes":12}
+{"kind":"textbox","id":"sh/0bydovyx","slide":9,"text":"04 · LITERATURE REVIEW","textPreview":"04 · LITERATURE REVIEW","textChars":22,"textLines":1,"bbox":[42,35,330,24]}
+{"kind":"textbox","id":"sh/za5cvqhs","slide":9,"text":"09","textPreview":"09","textChars":2,"textLines":1,"bbox":[1180,665,58,20]}
+{"kind":"textbox","id":"sh/e9wbmlg7","slide":9,"text":"A taxonomy can guide scalable glyph design","textPreview":"A taxonomy can guide scalable glyph design","textChars":42,"textLines":1,"bbox":[42,70,1196,74]}
+{"kind":"textbox","id":"sh/d8nutgzm","slide":9,"text":"Maguire et al. · 2012","textPreview":"Maguire et al. · 2012","textChars":21,"textLines":1,"bbox":[42,143,1180,30]}
+{"kind":"shape","id":"sh/c7etkby1","slide":9,"bbox":[820,188,418,438]}
+{"kind":"textbox","id":"sh/q5wbi1gv","slide":9,"text":"PURPOSE","textPreview":"PURPOSE","textChars":7,"textLines":1,"bbox":[42,190,718,24]}
+{"kind":"textbox","id":"sh/p4nupwza","slide":9,"text":"Replace ad-hoc glyph creation with a systematic process that scales to many domain concepts.","textPreview":"Replace ad-hoc glyph creation with a systematic process that scales to many domain concepts.","textChars":92,"textLines":1,"bbox":[42,219,718,72]}
+{"kind":"textbox","id":"sh/4jutgry5","slide":9,"text":"METHOD","textPreview":"METHOD","textChars":6,"textLines":1,"bbox":[42,298,718,24]}
+{"kind":"textbox","id":"sh/y9gnexsv","slide":9,"text":"A design methodology combines a concept taxonomy, a hierarchy of visual channels, and a biological-workflow case study.","textPreview":"A design methodology combines a concept taxonomy, a hierarchy of visual channels, and a biological-workflow case study.","textChars":119,"textLines":1,"bbox":[42,327,718,72]}
+{"kind":"textbox","id":"sh/japo72tg","slide":9,"text":"MAIN FINDING","textPreview":"MAIN FINDING","textChars":12,"textLines":1,"bbox":[42,406,718,24]}
+{"kind":"textbox","id":"sh/kby5gna1","slide":9,"text":"Structured categorization and deliberate visual-channel assignment can produce a more scalable, application-specific glyph language.","textPreview":"Structured categorization and deliberate visual-channel assignment can produce a more scalable, application-specific glyph language.","textChars":132,"textLines":1,"bbox":[42,435,718,72]}
+{"kind":"shape","id":"sh/lc769sbm","slide":9,"bbox":[42,529,718,97]}
+{"kind":"textbox","id":"sh/a5wnadsz","slide":9,"text":"WHY IT MATTERS HERE","textPreview":"WHY IT MATTERS HERE","textChars":19,"textLines":1,"bbox":[62,546,678,20]}
+{"kind":"textbox","id":"sh/b65o3itk","slide":9,"text":"Supports organizing semantic categories as metadata and design context—not claiming that low-level image features recover meaning.","textPreview":"Supports organizing semantic categories as metadata and design context—not claiming that low-level image features recover meaning.","textChars":130,"textLines":1,"bbox":[62,573,678,42]}
+{"kind":"image","id":"im/qpw76hsv","slide":9,"name":"","alt":"First page of A taxonomy can guide scalable glyph design","bbox":[838,202,382,410]}
+{"kind":"notes","id":"nt/v2lnht","slide":9,"text":"Keep taxonomy and semantic mapping outside the computer-vision feature families.\n\n[Sources]\n- papers/Taxonomy-Based_Glyph_Designwith_a_Case_Study_on_Visualizing_Workflows_of_Biological_Experiments.pdf, pp. 1–10"}
+{"kind":"slide","id":"sl/poknlv","slide":10,"title":"04 · LITERATURE REVIEW","textShapes":12}
+{"kind":"textbox","id":"sh/g7uds7il","slide":10,"text":"04 · LITERATURE REVIEW","textPreview":"04 · LITERATURE REVIEW","textChars":22,"textLines":1,"bbox":[42,35,330,24]}
+{"kind":"textbox","id":"sh/v61wj2h0","slide":10,"text":"10","textPreview":"10","textChars":2,"textLines":1,"bbox":[1180,665,58,20]}
+{"kind":"textbox","id":"sh/ulsvqx0f","slide":10,"text":"Contours shift perceived similarity","textPreview":"Contours shift perceived similarity","textChars":35,"textLines":1,"bbox":[42,70,1196,74]}
+{"kind":"textbox","id":"sh/tkjehszu","slide":10,"text":"Fuchs et al. · 2014","textPreview":"Fuchs et al. · 2014","textChars":19,"textLines":1,"bbox":[42,143,1180,30]}
+{"kind":"shape","id":"sh/8jadonip","slide":10,"bbox":[42,188,418,438]}
+{"kind":"textbox","id":"sh/6hsvmx0j","slide":10,"text":"PURPOSE","textPreview":"PURPOSE","textChars":7,"textLines":1,"bbox":[478,190,718,24]}
+{"kind":"textbox","id":"sh/dgnetwze","slide":10,"text":"Test how contour, fill, and reference structures influence similarity judgments for star glyphs.","textPreview":"Test how contour, fill, and reference structures influence similarity judgments for star glyphs.","textChars":96,"textLines":1,"bbox":[478,219,718,72]}
+{"kind":"textbox","id":"sh/sfed0ryt","slide":10,"text":"METHOD","textPreview":"METHOD","textChars":6,"textLines":1,"bbox":[478,298,718,24]}
+{"kind":"textbox","id":"sh/ahkb2lc7","slide":10,"text":"Three experiments compared experts, trained novices, and online participants using target-plus-alternative similarity-selection tasks.","textPreview":"Three experiments compared experts, trained novices, and online participants using target-plus-alternative similarity-selection tasks.","textChars":134,"textLines":1,"bbox":[478,327,718,72]}
+{"kind":"textbox","id":"sh/bidcvqds","slide":10,"text":"MAIN FINDING","textPreview":"MAIN FINDING","textChars":12,"textLines":1,"bbox":[478,406,718,24]}
+{"kind":"textbox","id":"sh/cjmt4vux","slide":10,"text":"Simple star glyphs without contours best supported data similarity; contours could shift attention toward overall shape instead.","textPreview":"Simple star glyphs without contours best supported data similarity; contours could shift attention toward overall shape instead.","textChars":128,"textLines":1,"bbox":[478,435,718,72]}
+{"kind":"shape","id":"sh/xkvux0vi","slide":10,"bbox":[478,529,718,97]}
+{"kind":"textbox","id":"sh/2dkbylcv","slide":10,"text":"WHY IT MATTERS HERE","textPreview":"WHY IT MATTERS HERE","textChars":19,"textLines":1,"bbox":[498,546,678,20]}
+{"kind":"textbox","id":"sh/netcr6dg","slide":10,"text":"Justifies contour and enclosure features while showing that similarity is task-dependent and cannot be reduced to one universal distance.","textPreview":"Justifies contour and enclosure features while showing that similarity is task-dependent and cannot be reduced to one universal distance.","textChars":137,"textLines":1,"bbox":[498,573,678,42]}
+{"kind":"image","id":"im/i1kzuxor","slide":10,"name":"","alt":"First page of Contours shift perceived similarity","bbox":[60,202,382,410]}
+{"kind":"notes","id":"nt/poknlv","slide":10,"text":"Experiment 1 included 12 novices and 12 experts; Experiment 2 retained 36 online participants after controls.\n\n[Sources]\n- papers/The_Influence_of_Contour_on_Similarity_Perception_of_Star_Glyphs.pdf, pp. 1–11"}
+{"kind":"slide","id":"sl/id06a0","slide":11,"title":"04 · LITERATURE REVIEW","textShapes":12}
+{"kind":"textbox","id":"sh/obu5kfah","slide":11,"text":"04 · LITERATURE REVIEW","textPreview":"04 · LITERATURE REVIEW","textChars":22,"textLines":1,"bbox":[42,35,330,24]}
+{"kind":"textbox","id":"sh/3aloratc","slide":11,"text":"11","textPreview":"11","textChars":2,"textLines":1,"bbox":[1180,665,58,20]}
+{"kind":"textbox","id":"sh/29cni5sr","slide":11,"text":"Glyph evaluation is strongly task-dependent","textPreview":"Glyph evaluation is strongly task-dependent","textChars":43,"textLines":1,"bbox":[42,70,1196,74]}
+{"kind":"textbox","id":"sh/1836p0b6","slide":11,"text":"Fuchs, Isenberg, Bezerianos & Keim · 2017","textPreview":"Fuchs, Isenberg, Bezerianos & Keim · 2017","textChars":41,"textLines":1,"bbox":[42,143,1180,30]}
+{"kind":"shape","id":"sh/g7u5gval","slide":11,"bbox":[820,188,418,438]}
+{"kind":"textbox","id":"sh/e5sne5sf","slide":11,"text":"PURPOSE","textPreview":"PURPOSE","textChars":7,"textLines":1,"bbox":[42,190,718,24]}
+{"kind":"textbox","id":"sh/t4j6l0bu","slide":11,"text":"Organize what controlled glyph studies tested, which tasks they used, and what design conclusions can be drawn.","textPreview":"Organize what controlled glyph studies tested, which tasks they used, and what design conclusions can be drawn.","textChars":111,"textLines":1,"bbox":[42,219,718,72]}
+{"kind":"textbox","id":"sh/s3a5cvap","slide":11,"text":"METHOD","textPreview":"METHOD","textChars":6,"textLines":1,"bbox":[42,298,718,24]}
+{"kind":"textbox","id":"sh/a54jyxsz","slide":11,"text":"A systematic review and meta-analysis of 64 quantitative controlled user-study papers spanning roughly six decades.","textPreview":"A systematic review and meta-analysis of 64 quantitative controlled user-study papers spanning roughly six decades.","textChars":115,"textLines":1,"bbox":[42,327,718,72]}
+{"kind":"textbox","id":"sh/v6dkr29k","slide":11,"text":"MAIN FINDING","textPreview":"MAIN FINDING","textChars":12,"textLines":1,"bbox":[42,406,718,24]}
+{"kind":"textbox","id":"sh/w7m107a5","slide":11,"text":"Glyph performance depends on design, task, presentation setting, and data; the review identifies evidence patterns and open research gaps.","textPreview":"Glyph performance depends on design, task, presentation setting, and data; the review identifies evidence patterns and open research gaps.","textChars":138,"textLines":1,"bbox":[42,435,718,72]}
+{"kind":"shape","id":"sh/x8v2tcrq","slide":11,"bbox":[42,529,718,97]}
+{"kind":"textbox","id":"sh/m1kjuds3","slide":11,"text":"WHY IT MATTERS HERE","textPreview":"WHY IT MATTERS HERE","textChars":19,"textLines":1,"bbox":[62,546,678,20]}
+{"kind":"textbox","id":"sh/n2tkni9o","slide":11,"text":"Supports a quantitative human study and helps separate identification, similarity, confusability, accuracy, and response time as different outcomes.","textPreview":"Supports a quantitative human study and helps separate identification, similarity, confusability, accuracy, and response time as differen...","textChars":148,"textLines":1,"bbox":[62,573,678,42]}
+{"kind":"image","id":"im/m1cz25cf","slide":11,"name":"","alt":"First page of Glyph evaluation is strongly task-dependent","bbox":[838,202,382,410]}
+{"kind":"notes","id":"nt/id06a0","slide":11,"text":"Use this paper to justify the study-design layer rather than an individual image-feature formula.\n\n[Sources]\n- papers/A_Systematic_Review_of_Experimental_Studies_on_Data_Glyphs.pdf, pp. 1–17"}
+{"kind":"slide","id":"sl/jremf6","slide":12,"title":"05 · RESEARCH JOURNEY","textShapes":17}
+{"kind":"textbox","id":"sh/8ba147yt","slide":12,"text":"05 · RESEARCH JOURNEY","textPreview":"05 · RESEARCH JOURNEY","textChars":21,"textLines":1,"bbox":[42,35,330,24]}
+{"kind":"textbox","id":"sh/na1kv2x8","slide":12,"text":"12","textPreview":"12","textChars":2,"textLines":1,"bbox":[1180,665,58,20]}
+{"kind":"textbox","id":"sh/m9sj2xgn","slide":12,"text":"From corpus building to interpretable comparison","textPreview":"From corpus building to interpretable comparison","textChars":48,"textLines":1,"bbox":[42,78,1196,74]}
+{"kind":"textbox","id":"sh/xg321wfa","slide":12,"text":"Each stage solved a different research problem—and exposed the next one.","textPreview":"Each stage solved a different research problem—and exposed the next one.","textChars":72,"textLines":1,"bbox":[42,158,1050,36]}
+{"kind":"shape","id":"sh/wful8ryp","slide":12,"bbox":[118,351,1034,5]}
+{"kind":"shape","id":"sh/velkzmx4","slide":12,"bbox":[115,328,48,48]}
+{"kind":"textbox","id":"sh/ads36hgj","slide":12,"text":"JUNE","textPreview":"JUNE","textChars":4,"textLines":1,"bbox":[54,244,170,28]}
+{"kind":"textbox","id":"sh/dkz2psf6","slide":12,"text":"Corpus + first pipeline","textPreview":"Corpus + first pipeline","textChars":23,"textLines":1,"bbox":[54,278,170,47]}
+{"kind":"textbox","id":"sh/cjq1wnyl","slide":12,"text":"Collected heterogeneous icon sets, normalized images, and built the first extraction and dashboard workflow.","textPreview":"Collected heterogeneous icon sets, normalized images, and built the first extraction and dashboard workflow.","textChars":108,"textLines":1,"bbox":[54,405,170,137]}
+{"kind":"shape","id":"sh/ql0ze1cb","slide":12,"bbox":[418,328,48,48]}
+{"kind":"textbox","id":"sh/rm9gn6dw","slide":12,"text":"JULY","textPreview":"JULY","textChars":4,"textLines":1,"bbox":[357,244,170,28]}
+{"kind":"textbox","id":"sh/cnihgbuh","slide":12,"text":"Feature repair","textPreview":"Feature repair","textChars":14,"textLines":1,"bbox":[357,278,170,47]}
+{"kind":"textbox","id":"sh/dorypgv2","slide":12,"text":"Corrected measurement semantics, introduced schema v2, and aligned families through a shared registry.","textPreview":"Corrected measurement semantics, introduced schema v2, and aligned families through a shared registry.","textChars":102,"textLines":1,"bbox":[357,405,170,137]}
+{"kind":"shape","id":"sh/epkzilcn","slide":12,"bbox":[721,328,48,48]}
+{"kind":"textbox","id":"sh/zqtgrqd8","slide":12,"text":"EARLY AUG","textPreview":"EARLY AUG","textChars":9,"textLines":1,"bbox":[660,244,170,28]}
+{"kind":"textbox","id":"sh/0r2hkvud","slide":12,"text":"Comparable exploration","textPreview":"Comparable exploration","textChars":22,"textLines":1,"bbox":[660,278,170,47]}
+{"kind":"textbox","id":"sh/1sbytgvy","slide":12,"text":"Added balanced feature sampling, saved AI runs, and side-by-side representation comparison.","textPreview":"Added balanced feature sampling, saved AI runs, and side-by-side representation comparison.","textChars":91,"textLines":1,"bbox":[660,405,170,137]}
+{"kind":"shape","id":"sh/mtkzmlcj","slide":12,"bbox":[1024,328,48,48]}
+{"kind":"textbox","id":"sh/nutgvqd4","slide":12,"text":"10 AUG","textPreview":"10 AUG","textChars":6,"textLines":1,"bbox":[963,244,170,28]}
+{"kind":"textbox","id":"sh/jidgjq9c","slide":12,"text":"Interpretability","textPreview":"Interpretability","textChars":16,"textLines":1,"bbox":[963,278,170,47]}
+{"kind":"textbox","id":"sh/yx4falsr","slide":12,"text":"Added lasso selection, cluster summaries, and post-hoc measured feature profiles.","textPreview":"Added lasso selection, cluster summaries, and post-hoc measured feature profiles.","textChars":81,"textLines":1,"bbox":[963,405,170,137]}
+{"kind":"textbox","id":"sh/lkvyl0ri","slide":12,"text":"Result: an inspectable computer-side system—not yet a validated model of human perception.","textPreview":"Result: an inspectable computer-side system—not yet a validated model of human perception.","textChars":90,"textLines":1,"bbox":[178,590,924,43]}
+{"kind":"notes","id":"nt/jremf6","slide":12,"text":"\n[Sources]\n- Git history: 4e5d7d64a (2026-06-01), c9616aed2 (2026-07-21), 31e075b7b (2026-07-28), fce7512f1 (2026-08-10)\n- wiki/README.md\n- wiki/dashboard-implementation.md"}
+{"kind":"slide","id":"sl/jhudbh","slide":13,"title":"06 · IMPLEMENTATION","textShapes":22}
+{"kind":"textbox","id":"sh/pwve5ora","slide":13,"text":"06 · IMPLEMENTATION","textPreview":"06 · IMPLEMENTATION","textChars":19,"textLines":1,"bbox":[42,35,330,24]}
+{"kind":"textbox","id":"sh/2t4fatsz","slide":13,"text":"13","textPreview":"13","textChars":2,"textLines":1,"bbox":[1180,665,58,20]}
+{"kind":"textbox","id":"sh/nudw3e94","slide":13,"text":"The corpus became a reproducible analysis pipeline","textPreview":"The corpus became a reproducible analysis pipeline","textChars":50,"textLines":1,"bbox":[42,78,1196,82]}
+{"kind":"textbox","id":"sh/07md8jat","slide":13,"text":"13","textPreview":"13","textChars":2,"textLines":1,"bbox":[42,185,250,58]}
+{"kind":"textbox","id":"sh/1sve1ore","slide":13,"text":"source sets","textPreview":"source sets","textChars":11,"textLines":1,"bbox":[42,247,250,30]}
+{"kind":"textbox","id":"sh/e5kv69sn","slide":13,"text":"28,749","textPreview":"28,749","textChars":6,"textLines":1,"bbox":[344,185,250,58]}
+{"kind":"textbox","id":"sh/f6dwze98","slide":13,"text":"canonical icon rows","textPreview":"canonical icon rows","textChars":19,"textLines":1,"bbox":[344,247,250,30]}
+{"kind":"textbox","id":"sh/kn6xk3qx","slide":13,"text":"256 × 256","textPreview":"256 × 256","textChars":9,"textLines":1,"bbox":[646,185,250,58]}
+{"kind":"textbox","id":"sh/lofed8ri","slide":13,"text":"normalized PNG images","textPreview":"normalized PNG images","textChars":21,"textLines":1,"bbox":[646,247,250,30]}
+{"kind":"textbox","id":"sh/h07ilony","slide":13,"text":"81","textPreview":"81","textChars":2,"textLines":1,"bbox":[948,185,250,58]}
+{"kind":"textbox","id":"sh/gzyhsjmt","slide":13,"text":"active visual features","textPreview":"active visual features","textChars":22,"textLines":1,"bbox":[948,247,250,30]}
+{"kind":"shape","id":"sh/fep0je58","slide":13,"bbox":[100,425,1050,4]}
+{"kind":"shape","id":"sh/udgzq94n","slide":13,"bbox":[42,379,82,82]}
+{"kind":"textbox","id":"sh/tc7ihon2","slide":13,"text":"01","textPreview":"01","textChars":2,"textLines":1,"bbox":[42,397,82,32]}
+{"kind":"textbox","id":"sh/sbyhojmh","slide":13,"text":"Source sets","textPreview":"Source sets","textChars":11,"textLines":1,"bbox":[42,484,175,56]}
+{"kind":"shape","id":"sh/7a50fe5w","slide":13,"bbox":[283,379,82,82]}
+{"kind":"textbox","id":"sh/69wzm94b","slide":13,"text":"02","textPreview":"02","textChars":2,"textLines":1,"bbox":[283,397,82,32]}
+{"kind":"textbox","id":"sh/d8rit836","slide":13,"text":"Normalized images","textPreview":"Normalized images","textChars":17,"textLines":1,"bbox":[283,484,175,56]}
+{"kind":"shape","id":"sh/c7ih03ml","slide":13,"bbox":[524,379,82,82]}
+{"kind":"textbox","id":"sh/wnatcby9","slide":13,"text":"03","textPreview":"03","textChars":2,"textLines":1,"bbox":[524,397,82,32]}
+{"kind":"textbox","id":"sh/xojalgfu","slide":13,"text":"Feature extraction","textPreview":"Feature extraction","textChars":18,"textLines":1,"bbox":[524,484,175,56]}
+{"kind":"shape","id":"sh/alsba1g3","slide":13,"bbox":[765,379,82,82]}
+{"kind":"textbox","id":"sh/vm1sj6xo","slide":13,"text":"04","textPreview":"04","textChars":2,"textLines":1,"bbox":[765,397,82,32]}
+{"kind":"textbox","id":"sh/8jat8byx","slide":13,"text":"Similarity + clustering","textPreview":"Similarity + clustering","textChars":23,"textLines":1,"bbox":[765,484,175,56]}
+{"kind":"shape","id":"sh/9kjahwfi","slide":13,"bbox":[1006,379,82,82]}
+{"kind":"textbox","id":"sh/mh8b61g7","slide":13,"text":"05","textPreview":"05","textChars":2,"textLines":1,"bbox":[1006,397,82,32]}
+{"kind":"textbox","id":"sh/nihsf6xs","slide":13,"text":"Interactive review","textPreview":"Interactive review","textChars":18,"textLines":1,"bbox":[1006,484,175,56]}
+{"kind":"shape","id":"sh/0vqt4ry1","slide":13,"bbox":[42,586,1196,56]}
+{"kind":"textbox","id":"sh/lwzadwfm","slide":13,"text":"Stable icon IDs carry each record from source data to later study responses.","textPreview":"Stable icon IDs carry each record from source data to later study responses.","textChars":76,"textLines":1,"bbox":[64,602,1152,28]}
+{"kind":"notes","id":"nt/jhudbh","slide":13,"text":"\n[Sources]\n- wiki/README.md\n- wiki/pipeline.md\n- wiki/datasets-and-provenance.md"}
+{"kind":"slide","id":"sl/rjuojw","slide":14,"title":"06 · IMPLEMENTATION","textShapes":20}
+{"kind":"textbox","id":"sh/jedgfmlg","slide":14,"text":"06 · IMPLEMENTATION","textPreview":"06 · IMPLEMENTATION","textChars":19,"textLines":1,"bbox":[42,35,330,24]}
+{"kind":"textbox","id":"sh/kfmhorm1","slide":14,"text":"14","textPreview":"14","textChars":2,"textLines":1,"bbox":[1180,665,58,20]}
+{"kind":"textbox","id":"sh/lgfihw36","slide":14,"text":"Seven feature families operationalize the literature","textPreview":"Seven feature families operationalize the literature","textChars":52,"textLines":1,"bbox":[42,78,1196,74]}
+{"kind":"textbox","id":"sh/6hozq14r","slide":14,"text":"The representative metric is fixed for each family so the dashboard and later study exports remain comparable.","textPreview":"The representative metric is fixed for each family so the dashboard and later study exports remain comparable.","textChars":110,"textLines":1,"bbox":[42,158,1140,55]}
+{"kind":"textbox","id":"sh/7ix0jmlc","slide":14,"text":"COMPLEXITY","textPreview":"COMPLEXITY","textChars":10,"textLines":1,"bbox":[42,256,190,24]}
+{"kind":"textbox","id":"sh/8j6hsrmx","slide":14,"text":"Canny edge density","textPreview":"Canny edge density","textChars":18,"textLines":1,"bbox":[252,254,350,34]}
+{"kind":"shape","id":"sh/tkfilw3i","slide":14,"bbox":[42,304,555,1]}
+{"kind":"textbox","id":"sh/ulozu143","slide":14,"text":"SHAPE","textPreview":"SHAPE","textChars":5,"textLines":1,"bbox":[42,344,190,24]}
+{"kind":"textbox","id":"sh/vmx0n6lo","slide":14,"text":"Enclosure score v2","textPreview":"Enclosure score v2","textChars":18,"textLines":1,"bbox":[252,342,350,34]}
+{"kind":"shape","id":"sh/zu1gbapk","slide":14,"bbox":[42,392,555,1]}
+{"kind":"textbox","id":"sh/etszi58z","slide":14,"text":"STROKE","textPreview":"STROKE","textChars":6,"textLines":1,"bbox":[42,432,190,24]}
+{"kind":"textbox","id":"sh/1wjyd07q","slide":14,"text":"Principal-axis orientation v2","textPreview":"Principal-axis orientation v2","textChars":29,"textLines":1,"bbox":[252,430,350,34]}
+{"kind":"shape","id":"sh/0vahkvq5","slide":14,"bbox":[42,480,555,1]}
+{"kind":"textbox","id":"sh/rqhg7q98","slide":14,"text":"DENSITY / FILL","textPreview":"DENSITY / FILL","textChars":14,"textLines":1,"bbox":[42,520,190,24]}
+{"kind":"textbox","id":"sh/qp8fel8n","slide":14,"text":"Solid fill ratio v2","textPreview":"Solid fill ratio v2","textChars":19,"textLines":1,"bbox":[252,518,350,34]}
+{"kind":"shape","id":"sh/dsjy907e","slide":14,"bbox":[42,568,555,1]}
+{"kind":"textbox","id":"sh/crahgvqt","slide":14,"text":"BALANCE","textPreview":"BALANCE","textChars":7,"textLines":1,"bbox":[638,256,190,24]}
+{"kind":"textbox","id":"sh/bmlgjups","slide":14,"text":"Horizontal symmetry v2","textPreview":"Horizontal symmetry v2","textChars":22,"textLines":1,"bbox":[848,254,350,34]}
+{"kind":"shape","id":"sh/alczqp87","slide":14,"bbox":[638,304,555,1]}
+{"kind":"textbox","id":"sh/6hwjitsf","slide":14,"text":"COLOR","textPreview":"COLOR","textChars":5,"textLines":1,"bbox":[638,344,190,24]}
+{"kind":"textbox","id":"sh/7ipkbe90","slide":14,"text":"Mean saturation v2","textPreview":"Mean saturation v2","textChars":18,"textLines":1,"bbox":[848,342,350,34]}
+{"kind":"shape","id":"sh/8jy1kjal","slide":14,"bbox":[638,392,555,1]}
+{"kind":"textbox","id":"sh/tk72dorq","slide":14,"text":"TEXTURE","textPreview":"TEXTURE","textChars":7,"textLines":1,"bbox":[638,432,190,24]}
+{"kind":"textbox","id":"sh/ulgjmtsb","slide":14,"text":"Local texture variation v2","textPreview":"Local texture variation v2","textChars":26,"textLines":1,"bbox":[848,430,350,34]}
+{"kind":"shape","id":"sh/vmpkfy9w","slide":14,"bbox":[638,480,555,1]}
+{"kind":"shape","id":"sh/gny1o3ah","slide":14,"bbox":[638,510,555,112]}
+{"kind":"textbox","id":"sh/h872h8r2","slide":14,"text":"Important boundary","textPreview":"Important boundary","textChars":18,"textLines":1,"bbox":[658,527,180,24]}
+{"kind":"textbox","id":"sh/apcja9s7","slide":14,"text":"These values describe visible structure; they do not recover an icon’s meaning.","textPreview":"These values describe visible structure; they do not recover an icon’s meaning.","textChars":79,"textLines":1,"bbox":[658,558,505,52]}
+{"kind":"notes","id":"nt/rjuojw","slide":14,"text":"\n[Sources]\n- code/thesis_pipeline/features/registry.py\n- wiki/features-and-metrics.md\n- wiki/literature-and-evidence.md"}
+{"kind":"slide","id":"sl/xpvhsk","slide":15,"title":"06 · IMPLEMENTATION","textShapes":13}
+{"kind":"textbox","id":"sh/m5c7218b","slide":15,"text":"06 · IMPLEMENTATION","textPreview":"06 · IMPLEMENTATION","textChars":19,"textLines":1,"bbox":[42,35,330,24]}
+{"kind":"textbox","id":"sh/98nqxgrm","slide":15,"text":"15","textPreview":"15","textChars":2,"textLines":1,"bbox":[1180,665,58,20]}
+{"kind":"textbox","id":"sh/o7up4bqh","slide":15,"text":"Measurement repair made the features auditable","textPreview":"Measurement repair made the features auditable","textChars":46,"textLines":1,"bbox":[42,78,1196,82]}
+{"kind":"textbox","id":"sh/zilor69k","slide":15,"text":"The second feature schema made image assumptions explicit and separated reliable values from uncertain cases.","textPreview":"The second feature schema made image assumptions explicit and separated reliable values from uncertain cases.","textChars":109,"textLines":1,"bbox":[42,166,1120,53]}
+{"kind":"shape","id":"sh/ehc7y1sz","slide":15,"bbox":[42,248,500,300]}
+{"kind":"textbox","id":"sh/03up0ba5","slide":15,"text":"Example: original icon and accepted foreground mask","textPreview":"Example: original icon and accepted foreground mask","textChars":51,"textLines":1,"bbox":[64,558,460,29]}
+{"kind":"textbox","id":"sh/je583q94","slide":15,"text":"MASK QUALITY","textPreview":"MASK QUALITY","textChars":12,"textLines":1,"bbox":[600,245,200,23]}
+{"kind":"textbox","id":"sh/ydw7al8j","slide":15,"text":"489 uncertain masks excluded from quality-sensitive feature sampling","textPreview":"489 uncertain masks excluded from quality-sensitive feature sampling","textChars":68,"textLines":1,"bbox":[600,273,594,51]}
+{"kind":"textbox","id":"sh/8rmpsfax","slide":15,"text":"TRUE ZEROS","textPreview":"TRUE ZEROS","textChars":10,"textLines":1,"bbox":[600,340,200,23]}
+{"kind":"textbox","id":"sh/tsv61kri","slide":15,"text":"Valid zero measurements are retained rather than treated as missing","textPreview":"Valid zero measurements are retained rather than treated as missing","textChars":67,"textLines":1,"bbox":[600,368,594,51]}
+{"kind":"textbox","id":"sh/6pk7q5sr","slide":15,"text":"ORIENTATION","textPreview":"ORIENTATION","textChars":11,"textLines":1,"bbox":[600,435,200,23]}
+{"kind":"textbox","id":"sh/7qdoza9c","slide":15,"text":"Undefined directions are excluded using confidence and anisotropy checks","textPreview":"Undefined directions are excluded using confidence and anisotropy checks","textChars":72,"textLines":1,"bbox":[600,463,594,51]}
+{"kind":"textbox","id":"sh/kn25ofa1","slide":15,"text":"RELEASE GATE","textPreview":"RELEASE GATE","textChars":12,"textLines":1,"bbox":[600,530,200,23]}
+{"kind":"textbox","id":"sh/lob6x0bm","slide":15,"text":"A frozen two-rater benchmark remains pending before feature-v2 release","textPreview":"A frozen two-rater benchmark remains pending before feature-v2 release","textChars":70,"textLines":1,"bbox":[600,558,594,51]}
+{"kind":"image","id":"im/8r2xs3il","slide":15,"name":"","alt":"Foreground mask quality overlay","bbox":[64,271,456,256]}
+{"kind":"notes","id":"nt/xpvhsk","slide":15,"text":"\n[Sources]\n- wiki/README.md\n- wiki/features-and-metrics.md\n- wiki/evaluation-and-human-study.md\n- icon_data/analysis/feature_v2_mask_overlays/082c5e659f3a2ac9.png"}
+{"kind":"slide","id":"sl/1e3bol","slide":16,"title":"07 · CURRENT SYSTEM","textShapes":4}
+{"kind":"textbox","id":"sh/qtc761cr","slide":16,"text":"07 · CURRENT SYSTEM","textPreview":"07 · CURRENT SYSTEM","textChars":19,"textLines":1,"bbox":[42,35,330,24]}
+{"kind":"textbox","id":"sh/dw3q1gv2","slide":16,"text":"16","textPreview":"16","textChars":2,"textLines":1,"bbox":[1180,665,58,20]}
+{"kind":"textbox","id":"sh/cvu98buh","slide":16,"text":"The dashboard became the research instrument","textPreview":"The dashboard became the research instrument","textChars":44,"textLines":1,"bbox":[42,78,1196,82]}
+{"kind":"textbox","id":"sh/zy583qd8","slide":16,"text":"One interface now supports sampling, value inspection, clustering, lasso selection, and export on the same icon IDs.","textPreview":"One interface now supports sampling, value inspection, clustering, lasso selection, and export on the same icon IDs.","textChars":116,"textLines":1,"bbox":[42,163,1140,52]}
+{"kind":"shape","id":"sh/excralcn","slide":16,"bbox":[42,237,1196,390]}
+{"kind":"image","id":"im/wji90zy5","slide":16,"name":"","alt":"Current image clustering dashboard","bbox":[54,249,1172,366]}
+{"kind":"notes","id":"nt/1e3bol","slide":16,"text":"\n[Sources]\n- icon_data/analysis/analysis_dashboard/index.html (served and browser-verified 2026-08-13)\n- code/build_analysis_dashboard.py\n- wiki/dashboard-ui.md"}
+{"kind":"slide","id":"sl/cdqole","slide":17,"title":"07 · CURRENT SYSTEM","textShapes":5}
+{"kind":"textbox","id":"sh/6d0baxof","slide":17,"text":"07 · CURRENT SYSTEM","textPreview":"07 · CURRENT SYSTEM","textChars":19,"textLines":1,"bbox":[42,35,330,24]}
+{"kind":"textbox","id":"sh/tgbalc76","slide":17,"text":"17","textPreview":"17","textChars":2,"textLines":1,"bbox":[1180,665,58,20]}
+{"kind":"textbox","id":"sh/sfitc76l","slide":17,"text":"Feature review reveals examples and redundancy","textPreview":"Feature review reveals examples and redundancy","textChars":46,"textLines":1,"bbox":[42,78,1196,74]}
+{"kind":"textbox","id":"sh/ja9sf2p4","slide":17,"text":"The value table exposes what a metric selects; the review view shows where families may overlap.","textPreview":"The value table exposes what a metric selects; the review view shows where families may overlap.","textChars":96,"textLines":1,"bbox":[42,158,1120,45]}
+{"kind":"shape","id":"sh/i90b6xoj","slide":17,"bbox":[42,235,573,358]}
+{"kind":"shape","id":"sh/5crahs7u","slide":17,"bbox":[638,235,600,358]}
+{"kind":"textbox","id":"sh/ulgr2do7","slide":17,"text":"Current review: 7 feature families · 0 high-redundancy pairs · 2 moderate pairs","textPreview":"Current review: 7 feature families · 0 high-redundancy pairs · 2 moderate pairs","textChars":79,"textLines":1,"bbox":[42,617,1196,30]}
+{"kind":"image","id":"im/dgf2l47i","slide":17,"name":"","alt":"Feature values and example icons","bbox":[52,245,553,338]}
+{"kind":"image","id":"im/yhojup83","slide":17,"name":"","alt":"Feature redundancy review","bbox":[648,245,580,338]}
+{"kind":"notes","id":"nt/cdqole","slide":17,"text":"\n[Sources]\n- icon_data/analysis/analysis_dashboard/index.html (served and browser-verified 2026-08-13)\n- icon_data/analysis/analysis_dashboard/dashboard_data.json"}
+{"kind":"slide","id":"sl/r6gtet","slide":18,"title":"07 · CURRENT SYSTEM","textShapes":5}
+{"kind":"textbox","id":"sh/kna1gb6x","slide":18,"text":"07 · CURRENT SYSTEM","textPreview":"07 · CURRENT SYSTEM","textChars":19,"textLines":1,"bbox":[42,35,330,24]}
+{"kind":"textbox","id":"sh/jm10nqpc","slide":18,"text":"18","textPreview":"18","textChars":2,"textLines":1,"bbox":[1180,665,58,20]}
+{"kind":"textbox","id":"sh/ilszelor","slide":18,"text":"Clustering compares representations—not truth","textPreview":"Clustering compares representations—not truth","textChars":45,"textLines":1,"bbox":[42,78,1196,74]}
+{"kind":"textbox","id":"sh/xkjilg76","slide":18,"text":"The same 140-icon sample can be grouped by measured features or by multimodal embeddings, then compared icon by icon.","textPreview":"The same 140-icon sample can be grouped by measured features or by multimodal embeddings, then compared icon by icon.","textChars":117,"textLines":1,"bbox":[42,158,1140,52]}
+{"kind":"shape","id":"sh/wzahcb61","slide":18,"bbox":[42,219,1196,376]}
+{"kind":"shape","id":"sh/ax8zq1ov","slide":18,"bbox":[130,607,1020,48]}
+{"kind":"textbox","id":"sh/hg3ix07q","slide":18,"text":"Pairwise agreement = 0.783 here—but agreement is diagnostic, not evidence of perceptual correctness.","textPreview":"Pairwise agreement = 0.783 here—but agreement is diagnostic, not evidence of perceptual correctness.","textChars":100,"textLines":1,"bbox":[154,618,972,29]}
+{"kind":"image","id":"im/m10vql43","slide":18,"name":"","alt":"Feature-based and AI embedding clustering comparison","bbox":[54,231,1172,352]}
+{"kind":"notes","id":"nt/r6gtet","slide":18,"text":"\n[Sources]\n- icon_data/analysis/analysis_dashboard/index.html (served and browser-verified 2026-08-13)\n- wiki/dashboard-ui.md\n- wiki/limitations-and-backlog.md"}
+{"kind":"slide","id":"sl/jvkg5c","slide":19,"title":"08 · CURRENT PROGRESS","textShapes":22}
+{"kind":"textbox","id":"sh/ob2dojml","slide":19,"text":"08 · CURRENT PROGRESS","textPreview":"08 · CURRENT PROGRESS","textChars":21,"textLines":1,"bbox":[42,35,330,24]}
+{"kind":"textbox","id":"sh/nqtcfel0","slide":19,"text":"19","textPreview":"19","textChars":2,"textLines":1,"bbox":[1180,665,58,20]}
+{"kind":"textbox","id":"sh/2pkbm94f","slide":19,"text":"Computer analysis complete; human validation pending","textPreview":"Computer analysis complete; human validation pending","textChars":52,"textLines":1,"bbox":[42,78,1196,74]}
+{"kind":"textbox","id":"sh/1obud43u","slide":19,"text":"BUILT AND WORKING","textPreview":"BUILT AND WORKING","textChars":17,"textLines":1,"bbox":[42,193,450,28]}
+{"kind":"textbox","id":"sh/0nitkjm9","slide":19,"text":"NEXT EVIDENCE NEEDED","textPreview":"NEXT EVIDENCE NEEDED","textChars":20,"textLines":1,"bbox":[665,193,450,28]}
+{"kind":"shape","id":"sh/fm9cbelo","slide":19,"bbox":[626,185,2,397]}
+{"kind":"textbox","id":"sh/el0bi943","slide":19,"text":"✓","textPreview":"✓","textChars":1,"textLines":1,"bbox":[42,251,38,30]}
+{"kind":"textbox","id":"sh/dkru943i","slide":19,"text":"Icon corpus and normalization","textPreview":"Icon corpus and normalization","textChars":29,"textLines":1,"bbox":[92,252,470,36]}
+{"kind":"textbox","id":"sh/sjitgzmd","slide":19,"text":"✓","textPreview":"✓","textChars":1,"textLines":1,"bbox":[42,330,38,30]}
+{"kind":"textbox","id":"sh/exk3e103","slide":19,"text":"Feature extraction and registry","textPreview":"Feature extraction and registry","textChars":31,"textLines":1,"bbox":[92,331,470,36]}
+{"kind":"textbox","id":"sh/fytk76h8","slide":19,"text":"✓","textPreview":"✓","textChars":1,"textLines":1,"bbox":[42,409,38,30]}
+{"kind":"textbox","id":"sh/gz2lgbit","slide":19,"text":"Similarity and cluster diagnostics","textPreview":"Similarity and cluster diagnostics","textChars":34,"textLines":1,"bbox":[92,410,470,36]}
+{"kind":"textbox","id":"sh/10b29gze","slide":19,"text":"✓","textPreview":"✓","textChars":1,"textLines":1,"bbox":[42,488,38,30]}
+{"kind":"textbox","id":"sh/6t03ah0r","slide":19,"text":"Interactive review and stable-ID exports","textPreview":"Interactive review and stable-ID exports","textChars":40,"textLines":1,"bbox":[92,489,470,36]}
+{"kind":"textbox","id":"sh/ru9k3mhc","slide":19,"text":"01","textPreview":"01","textChars":2,"textLines":1,"bbox":[665,251,46,28]}
+{"kind":"textbox","id":"sh/sv2lcrix","slide":19,"text":"Two-rater feature benchmark","textPreview":"Two-rater feature benchmark","textChars":27,"textLines":1,"bbox":[729,252,460,48]}
+{"kind":"textbox","id":"sh/twb25wzi","slide":19,"text":"02","textPreview":"02","textChars":2,"textLines":1,"bbox":[665,330,46,28]}
+{"kind":"textbox","id":"sh/i5036h0v","slide":19,"text":"Controlled stimulus set and pilot","textPreview":"Controlled stimulus set and pilot","textChars":33,"textLines":1,"bbox":[729,331,460,48]}
+{"kind":"textbox","id":"sh/j69kzmhg","slide":19,"text":"03","textPreview":"03","textChars":2,"textLines":1,"bbox":[665,409,46,28]}
+{"kind":"textbox","id":"sh/7a507ix8","slide":19,"text":"Participant-response dataset","textPreview":"Participant-response dataset","textChars":28,"textLines":1,"bbox":[729,410,460,48]}
+{"kind":"textbox","id":"sh/m9wzydgn","slide":19,"text":"04","textPreview":"04","textChars":2,"textLines":1,"bbox":[665,488,46,28]}
+{"kind":"textbox","id":"sh/9c7i9sfy","slide":19,"text":"Computer–human agreement analysis","textPreview":"Computer–human agreement analysis","textChars":33,"textLines":1,"bbox":[729,489,460,48]}
+{"kind":"textbox","id":"sh/8byh0nyd","slide":19,"text":"No participant-response dataset exists yet, so RQ3 remains open.","textPreview":"No participant-response dataset exists yet, so RQ3 remains open.","textChars":64,"textLines":1,"bbox":[42,611,1196,34]}
+{"kind":"notes","id":"nt/jvkg5c","slide":19,"text":"\n[Sources]\n- wiki/README.md\n- wiki/evaluation-and-human-study.md\n- wiki/limitations-and-backlog.md"}
+{"kind":"slide","id":"sl/x6k8oq","slide":20,"title":"09 · NEXT PHASE","textShapes":20}
+{"kind":"textbox","id":"sh/lkfq5c76","slide":20,"text":"09 · NEXT PHASE","textPreview":"09 · NEXT PHASE","textChars":15,"textLines":1,"bbox":[42,35,330,24]}
+{"kind":"textbox","id":"sh/yho7axov","slide":20,"text":"20","textPreview":"20","textChars":2,"textLines":1,"bbox":[1180,665,58,20]}
+{"kind":"textbox","id":"sh/zix832pg","slide":20,"text":"The next phase is a controlled user study","textPreview":"The next phase is a controlled user study","textChars":41,"textLines":1,"bbox":[42,78,1196,82]}
+{"kind":"textbox","id":"sh/cvmp8n6p","slide":20,"text":"Proposed pilot: ordinary participants complete distinct identification and similarity/confusability tasks.","textPreview":"Proposed pilot: ordinary participants complete distinct identification and similarity/confusability tasks.","textChars":106,"textLines":1,"bbox":[42,164,1150,50]}
+{"kind":"shape","id":"sh/xwfq1s7a","slide":20,"bbox":[117,345,1047,5]}
+{"kind":"shape","id":"sh/at476xoj","slide":20,"bbox":[90,309,78,78]}
+{"kind":"textbox","id":"sh/bud8z2p4","slide":20,"text":"01","textPreview":"01","textChars":2,"textLines":1,"bbox":[90,327,78,30]}
+{"kind":"textbox","id":"sh/wrq9kr6t","slide":20,"text":"Select","textPreview":"Select","textChars":6,"textLines":1,"bbox":[42,415,174,33]}
+{"kind":"textbox","id":"sh/hszqdw7e","slide":20,"text":"Matched icons and pairs; exclude uncertain measurements","textPreview":"Matched icons and pairs; exclude uncertain measurements","textChars":55,"textLines":1,"bbox":[42,459,174,110]}
+{"kind":"shape","id":"sh/h8zi9obu","slide":20,"bbox":[331,309,78,78]}
+{"kind":"textbox","id":"sh/w7q1gja9","slide":20,"text":"02","textPreview":"02","textChars":2,"textLines":1,"bbox":[331,327,78,30]}
+{"kind":"textbox","id":"sh/v6h07eto","slide":20,"text":"Design","textPreview":"Design","textChars":6,"textLines":1,"bbox":[283,415,174,33]}
+{"kind":"textbox","id":"sh/u58ze9s3","slide":20,"text":"Labels, confidence, timing, and similarity choices","textPreview":"Labels, confidence, timing, and similarity choices","textChars":50,"textLines":1,"bbox":[283,459,174,110]}
+{"kind":"shape","id":"sh/94zi54bi","slide":20,"bbox":[572,309,78,78]}
+{"kind":"textbox","id":"sh/836hczax","slide":20,"text":"03","textPreview":"03","textChars":2,"textLines":1,"bbox":[572,327,78,30]}
+{"kind":"textbox","id":"sh/72x03utc","slide":20,"text":"Pilot","textPreview":"Pilot","textChars":5,"textLines":1,"bbox":[524,415,174,33]}
+{"kind":"textbox","id":"sh/m1ozaps7","slide":20,"text":"Check clarity, duration, and trial difficulty","textPreview":"Check clarity, duration, and trial difficulty","textChars":45,"textLines":1,"bbox":[524,459,174,110]}
+{"kind":"shape","id":"sh/t0jih8bm","slide":20,"bbox":[813,309,78,78]}
+{"kind":"textbox","id":"sh/sza1o3ah","slide":20,"text":"04","textPreview":"04","textChars":2,"textLines":1,"bbox":[813,327,78,30]}
+{"kind":"textbox","id":"sh/cf2t0bmp","slide":20,"text":"Collect","textPreview":"Collect","textChars":7,"textLines":1,"bbox":[765,415,174,33]}
+{"kind":"textbox","id":"sh/xgbu9w3a","slide":20,"text":"Consent, responses, and stable icon/pair IDs","textPreview":"Consent, responses, and stable icon/pair IDs","textChars":44,"textLines":1,"bbox":[765,459,174,110]}
+{"kind":"shape","id":"sh/atkby14j","slide":20,"bbox":[1054,309,78,78]}
+{"kind":"textbox","id":"sh/betc76l4","slide":20,"text":"05","textPreview":"05","textChars":2,"textLines":1,"bbox":[1054,327,78,30]}
+{"kind":"textbox","id":"sh/oritwrmt","slide":20,"text":"Compare","textPreview":"Compare","textChars":7,"textLines":1,"bbox":[1006,415,174,33]}
+{"kind":"textbox","id":"sh/psbu5w3y","slide":20,"text":"Agreement, mismatch, and qualitative explanations","textPreview":"Agreement, mismatch, and qualitative explanations","textChars":49,"textLines":1,"bbox":[1006,459,174,110]}
+{"kind":"shape","id":"sh/2p0buh4n","slide":20,"bbox":[159,592,962,55]}
+{"kind":"textbox","id":"sh/nq9c3ml8","slide":20,"text":"Immediate decision: freeze the feature benchmark, then lock the pilot stimuli and protocol.","textPreview":"Immediate decision: freeze the feature benchmark, then lock the pilot stimuli and protocol.","textChars":91,"textLines":1,"bbox":[179,608,922,27]}
+{"kind":"notes","id":"nt/x6k8oq","slide":20,"text":"This is a proposed next-step design, not a completed or approved protocol.\n\n[Sources]\n- wiki/evaluation-and-human-study.md\n- wiki/literature-and-evidence.md\n- papers/A_Systematic_Review_of_Experimental_Studies_on_Data_Glyphs.pdf\n- papers/The_Influence_of_Contour_on_Similarity_Perception_of_Star_Glyphs.pdf"}
+{"kind":"slide","id":"sl/fpd0by","slide":21,"title":"10 · CONCLUSION","textShapes":10}
+{"kind":"textbox","id":"sh/vix0v6tw","slide":21,"text":"10 · CONCLUSION","textPreview":"10 · CONCLUSION","textChars":15,"textLines":1,"bbox":[42,35,330,24]}
+{"kind":"textbox","id":"sh/wj614bah","slide":21,"text":"21","textPreview":"21","textChars":2,"textLines":1,"bbox":[1180,665,58,20]}
+{"kind":"textbox","id":"sh/hkzixgb2","slide":21,"text":"A clear computer-side foundation and validation path","textPreview":"A clear computer-side foundation and validation path","textChars":52,"textLines":1,"bbox":[42,92,1196,86]}
+{"kind":"shape","id":"sh/mtojy1cf","slide":21,"bbox":[42,259,188,5]}
+{"kind":"textbox","id":"sh/7ux0r6t0","slide":21,"text":"01","textPreview":"01","textChars":2,"textLines":1,"bbox":[42,324,68,30]}
+{"kind":"textbox","id":"sh/8v610rul","slide":21,"text":"Literature-defined visual concepts are now measurable and traceable.","textPreview":"Literature-defined visual concepts are now measurable and traceable.","textChars":68,"textLines":1,"bbox":[128,322,1050,47]}
+{"kind":"textbox","id":"sh/9wfitwbq","slide":21,"text":"02","textPreview":"02","textChars":2,"textLines":1,"bbox":[42,410,68,30]}
+{"kind":"textbox","id":"sh/6p8jalsj","slide":21,"text":"The dashboard makes values, examples, clusters, and limitations visible.","textPreview":"The dashboard makes values, examples, clusters, and limitations visible.","textChars":72,"textLines":1,"bbox":[128,408,1050,47]}
+{"kind":"textbox","id":"sh/rqhk3qt4","slide":21,"text":"03","textPreview":"03","textChars":2,"textLines":1,"bbox":[42,496,68,30]}
+{"kind":"textbox","id":"sh/re5wnetg","slide":21,"text":"The user study will test where those measurements match real human responses.","textPreview":"The user study will test where those measurements match real human responses.","textChars":77,"textLines":1,"bbox":[128,494,1050,47]}
+{"kind":"textbox","id":"sh/qdwve9sv","slide":21,"text":"Next milestone · approved pilot design and frozen stimulus set","textPreview":"Next milestone · approved pilot design and frozen stimulus set","textChars":62,"textLines":1,"bbox":[42,620,760,29]}
+{"kind":"notes","id":"nt/fpd0by","slide":21,"text":"\n[Sources]\n- wiki/thesis-overview.md\n- wiki/evaluation-and-human-study.md\n- wiki/limitations-and-backlog.md"}

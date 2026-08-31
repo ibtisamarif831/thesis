@@ -14,7 +14,17 @@ Release requires weighted κ ≥ 0.60 for ordinal judgments, held-out Spearman �
 
 The evaluation layer is specified but not implemented end to end. No participant-response dataset has been collected, and no statistical human-computer comparison has been completed.
 
-The current computer pipeline supplies candidate predictors and diagnostic views. The human study is the missing validation layer.
+The current computer pipeline supplies candidate predictors and diagnostic views. The size-controlled human study is the missing primary evidence layer.
+
+## Literature-Backed User-Study Distinctions
+
+The presentation's literature review separates outcomes that must not be treated as interchangeable:
+
+- Fuchs et al. (2014), Experiment 2, used a forced-choice similarity task with ordinary online participants. Of 62 accepted Amazon Mechanical Turk workers, 36 were retained after control questions; each completed 48 trials by choosing the most similar glyph from a highlighted target and eight alternatives.
+- Legg et al. (2017 issue; copyright 2016) recruited 20 Oxford students or employees and analysed 19 responses. Participants rated 104 glyph pairs on a 0-10 differentiation scale; 96 non-reference pairs were randomized, while eight reference pairs remained fixed. This produced a perceived-distance judgment rather than an identification score.
+- Fuchs et al. (2017) reviewed 64 quantitative controlled data-glyph user-study papers. Accuracy appeared in 63 studies, completion time in 42, and qualitative feedback in 19; the review also reports that preference did not always match performance.
+
+These studies support similarity choice, pairwise differentiation, and task-performance measures. They do not directly establish semantic identification or reduced-size discernibility thresholds for heterogeneous icon sets; that remains the thesis's human-evaluation gap.
 
 ## Evaluation Layers
 
@@ -27,7 +37,7 @@ Possible measures:
 - wrong-label confusion choice;
 - confidence;
 - response time, if collected;
-- minimum identifiable size, if scale is tested.
+- minimum identifiable size across the required size conditions.
 
 ### Perceived Similarity and Confusability
 
@@ -54,7 +64,7 @@ Candidate measures:
 
 ### Scale/Display Conditions
 
-Scale is an evaluation condition, not a new feature family. Proposed sizes are 16, 24, 32, 48, 64, 128, and 256 pixels. Outcomes can include accuracy, confidence, confusions, minimum identifiable size, and computer-side stability.
+Scale is the primary experimental condition, not a new feature family. Candidate pilot sizes are 16, 24, 32, 48, 64, 128, and 256 pixels; the final set must be fixed through pilot testing. Outcomes can include accuracy, confidence, confusions, response time, and the smallest size at which a glyph set remains reliably discernible.
 
 ### Human-Computer Agreement
 
@@ -67,10 +77,11 @@ flowchart LR
     A["Select representative family features"] --> B["Browse candidate icons"]
     B --> C["Export per-icon and pair scores"]
     C --> D["Choose controlled groups and pairs"]
-    D --> E["Write and pilot protocol"]
-    E --> F["Collect participant responses"]
-    F --> G["Join on stable icon/pair IDs"]
-    G --> H["Agreement and mismatch analysis"]
+    D --> E["Render fixed decreasing sizes"]
+    E --> F["Write and pilot protocol"]
+    F --> G["Collect participant responses"]
+    G --> H["Estimate discernibility thresholds"]
+    H --> I["Join with computer-side predictors"]
 ```
 
 ## Current Ticket Sequence
@@ -97,7 +108,7 @@ These are design targets, not current artifacts.
 | `participant_id` | Pseudonymous participant key. |
 | `trial_id` | Unique randomized trial key. |
 | `icon_id` | Join to canonical/computer-side scores. |
-| `render_size` | Display condition if scale is tested. |
+| `render_size` | Required display-size condition in pixels. |
 | `prompt_version` | Protocol traceability. |
 | `chosen_label` / `free_label` | Identification response. |
 | `correct` | Scored identification outcome. |

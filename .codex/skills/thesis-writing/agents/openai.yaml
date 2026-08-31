@@ -1,0 +1,7 @@
+interface:
+  display_name: "Thesis Writing"
+  short_description: "Write this thesis with verified evidence"
+  default_prompt: "Use $thesis-writing to draft or revise thesis content with evidence, citations, and Overleaf-safe LaTeX changes."
+
+policy:
+  allow_implicit_invocation: true

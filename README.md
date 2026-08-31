@@ -8,6 +8,8 @@ For AI-agent rules, read [AGENTS.md](AGENTS.md) first, followed by the detailed 
 
 The separate LaTeX/Overleaf project and its current unpushed source state are documented in [the thesis document handoff](THESIS_DOCUMENT_HANDOFF.md).
 
+The repository-local thesis-writing skill is at [.codex/skills/thesis-writing/SKILL.md](.codex/skills/thesis-writing/SKILL.md).
+
 ## Run the Dashboard
 
 From the repository root:

@@ -28,17 +28,19 @@ Computer-side scores come from active visual feature families. Human-side scores
 - Similarity math now handles circular orientation and hue correctly.
 - Project README/guide files were aligned with the current thesis direction.
 - Evaluation layers were documented in `code/evaluation/evaluation_layers.md`.
-- Feature Groups now has one literature-backed representative per family, with selection rationale and citation; the 81-feature analytical registry remains unchanged.
+- Feature Groups now has one literature-backed representative per family, with selection rationale and citation; the same seven measurements define thesis analysis.
 - Schema-v2 replacements, strict-red pixel classification, mask diagnostics, confidence-aware orientation, and frozen benchmark tooling are implemented. Human ratings are still required; the all-family pilot gate is blocked until they pass.
+- The dashboard source universe is reduced to AIGA/DOT, OCHA, Universal Symbols Healthcare Webfont, ISO 7010, and ISO 15223 without deleting the complete 13-set canonical corpus.
 
 ## Immediate Next Tasks
 
 The meeting-note implementation backlog is captured in [`tasks/tickets/`](tickets/README.md), with the Feature Groups work first and the human-study work following stimulus selection.
 
 1. Select the human-study stimulus subset.
-   - Choose a manageable set of icons with good coverage across active visual families.
+   - Choose a manageable set of icons from the five retained dashboard sources, with good coverage across active visual families.
    - Include visually close pairs and visually distant pairs.
    - Avoid relying on semantic category as the main sampling logic.
+   - The live internal reviewer workspace now collects exactly 20 nominations per source and stores structured submissions; distribute the shared access code, collect independent reviews, and agree on the final consensus set.
 
 2. Define human-study scores.
    - Identification accuracy or label choice.

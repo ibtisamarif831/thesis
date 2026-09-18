@@ -20,6 +20,7 @@ The wiki explains the system; it does not replace generated metadata or executab
 | Use or test every dashboard view | [Dashboard UI](dashboard-ui.md) |
 | Change dashboard generation or its JSON/CSV contract | [Dashboard implementation](dashboard-implementation.md) |
 | Trace claims to the local papers and research notes | [Literature and evidence](literature-and-evidence.md) |
+| Locate the live presentation and its verified claim boundaries | [Progress presentation](progress-presentation.md) |
 | Understand the planned human study and comparison | [Evaluation and human study](evaluation-and-human-study.md) |
 | Review the working path from glyph selection to study design | [Current state and user-study plan](../user%20studio/current-state-and-user-study-plan.md) |
 | Find runnable commands and script parameters | [Commands and scripts](commands-and-scripts.md) |
@@ -51,30 +52,33 @@ flowchart LR
 
 ## Current Snapshot
 
-Verified on **2026-08-11** from the current CSV/JSON artifacts and served dashboard behavior:
+Verified on **2026-09-18** from the current CSV/JSON artifacts and dashboard/public-bundle generators:
 
 | Item | Current value |
 |---|---:|
 | Icon sets | 13 |
 | Canonical dataset rows | 28,749 |
+| Dashboard source scope | 5 sets / 649 canonical rows: AIGA/DOT, OCHA, Universal Symbols Healthcare Webfont, ISO 7010, ISO 15223 |
 | Normalized image size | 256 × 256 PNG |
 | Feature-corpus rows | 28,749 |
 | Feature CSV columns | 133 total: 23 metadata + 110 raw numeric features (schema v2) |
-| Active visual features | 81 |
+| Thesis analysis features | 7 representative measurements |
 | Active visual families | 7 |
 | Feature Groups representatives | 7 fixed configured representatives, one per family; no alternate registry features are exposed in the dashboard |
-| Complexity representative | Canny edge density; grayscale quadtree remains an active secondary feature |
+| Complexity representative | Canny edge density; grayscale quadtree is retained only as a raw traceability column |
 | Feature Values features | The 7 configured Feature Groups representatives |
 | Feature-v2 release gate | Blocked pending completion of the frozen two-rater benchmark |
-| Feature Groups pilot sample | 10 equal-width bins across each eligible representative range, with up to 2 random icons per bin from 28,260 quality-eligible rows; 489 uncertain masks are excluded, missing/non-finite representatives would be excluded, and meaningful zeros remain valid |
-| Image Clustering sample | Unique seven-family composite from 28,260 quality-eligible rows, up to 20 stratified icons per family; 489 uncertain masks are excluded, while valid low/zero values remain; verified as 140 icons for the default All cohort; hover/click values and lasso medians are compared with this sample's distribution; a compact sidebar lists every cluster and opens one-cluster fullscreen details with a complete seven-value icon table |
+| Feature Groups pilot sample | 10 equal-width bins across each eligible representative range, with up to 2 random icons per bin from 397 quality-eligible selected-source rows; 252 uncertain masks are excluded, missing/non-finite representatives would be excluded, and meaningful zeros remain valid |
+| Image Clustering sample | Unique seven-family composite from the 397-row eligible pool, up to 20 stratified icons per family; hover/click values and lasso medians are compared with the current composite sample's distribution |
 | Feature Groups comparison | Exactly 3 selected sample icons; all 7 representative values in a separate fullscreen modal |
-| Generated dashboard rows | 129 for Metadata/Combined projections |
-| Generated dashboard sampling | Up to 10 random icons per set, seed 42 |
+| Generated dashboard rows | 50 for Metadata/Combined projections |
+| Generated dashboard sampling | Up to 10 random icons per included set, seed 42 |
+| Public dashboard | Live at `https://glyph-perception-dashboard.pages.dev/`; 649 normalized images, five source sets, attribution/licenses, read-only AI, and an access-controlled 5 × 20 study-stimulus selection workflow backed by EU-jurisdiction D1 |
 | AI Clustering experiment | Exact shared Feature Groups sample; explicit OpenRouter image-embedding run; inspectable AI plot with collapsible analysis sidebar, descriptive cluster entries, actual embedding-space contribution, modal post-hoc heatmap/per-cluster details, complete seven-value icon tables, modal feature-vs-AI comparison, and tracked SQLite cache/history |
 | Dashboard variants | Image, metadata, combined |
 | Dashboard cluster values | 3, 5, 7, 10 |
 | Human-response dataset | Not implemented yet |
+| Stimulus-selection submissions | Implemented for internal reviewers; exactly 20 icons per set, 100 total, with pseudonymous reviewer code and protected CSV export. This is not participant-response collection. |
 
 Recheck these values with the recipes in [Verification and troubleshooting](verification-and-troubleshooting.md) before making current-state claims.
 

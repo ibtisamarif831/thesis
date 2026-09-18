@@ -20,7 +20,7 @@ The current computer pipeline supplies candidate predictors and diagnostic views
 
 The presentation's literature review separates outcomes that must not be treated as interchangeable:
 
-- Fuchs et al. (2014), Experiment 2, used a forced-choice similarity task with ordinary online participants. Of 62 accepted Amazon Mechanical Turk workers, 36 were retained after control questions; each completed 48 trials by choosing the most similar glyph from a highlighted target and eight alternatives.
+- Fuchs et al. (2014), Experiment 2, used a forced-choice similarity task with ordinary online participants. Of 62 accepted Amazon Mechanical Turk workers, 36 were retained after three control questions; they chose the most similar glyph from a highlighted target and eight alternatives. The original PDF p. 6 prints “48 trials per participant,” but its between-subjects fill design implies 3 contour variations × 2 dimensionalities × 4 repetitions = 24 experimental trials per person, consistent with 864 total trials / 36 participants. Treat this as a source inconsistency: omit an unqualified per-person trial count rather than silently asserting either number. Similarity choice had no objectively correct target outside the control questions.
 - Legg et al. (2017 issue; copyright 2016) recruited 20 Oxford students or employees and analysed 19 responses. Participants rated 104 glyph pairs on a 0-10 differentiation scale; 96 non-reference pairs were randomized, while eight reference pairs remained fixed. This produced a perceived-distance judgment rather than an identification score.
 - Fuchs et al. (2017) reviewed 64 quantitative controlled data-glyph user-study papers. Accuracy appeared in 63 studies, completion time in 42, and qualitative feedback in 19; the review also reports that preference did not always match performance.
 
@@ -89,7 +89,7 @@ flowchart LR
 | Ticket | Goal | Status |
 |---|---|---|
 | T-001 | Add black/white/red/other foreground-color cohorts to Feature Groups. | In progress; current brief implements All/B/W/Red/Colored, while the older five-cohort pixel-classification criteria remain unresolved. |
-| T-002 | Select representative family features and browse about 20 candidates. | In progress; seven representatives selected and documented, candidate browsing remains. |
+| T-002 | Select representative family features and browse about 20 candidates. | In progress; seven representatives are documented and the live internal reviewer UI now collects exactly 20 choices per each of five sets. Final consensus stimuli remain pending. |
 | T-003 | Export per-icon family summaries and pairwise family distances. | Todo; depends on T-002 |
 | T-004 | Select controlled icon groups and matched close/distant pairs. | Todo; depends on T-002 and T-003 |
 | T-005 | Design a pilot identification/similarity/confusability study. | Todo; depends on T-004 |
@@ -129,6 +129,8 @@ These are design targets, not current artifacts.
 | `confidence`, `response_time_ms`, `explanation` | Supporting outcomes. |
 
 Before collection, define allowable values, missing-response codes, exclusion rules, trial randomization, consent/privacy handling, and how correctness is scored for ambiguous labels.
+
+The current `study-selection.html` workflow must not be confused with this participant-response schema. It collects research-group stimulus nominations only. Its outputs decide which icons may enter a later approved and piloted study; they do not measure identification, similarity, confidence, or discernibility.
 
 ## Computer-Side Exports Needed
 

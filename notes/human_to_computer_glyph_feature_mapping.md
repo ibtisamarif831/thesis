@@ -29,7 +29,7 @@ These families are used by the dashboard, feature review, feature explorer, clus
 
 ## Excluded Raw Channels
 
-The extractor still stores 100 raw numeric image-feature columns for traceability, but the active visual-family set uses 81 columns.
+The extractor stores 110 raw numeric image-feature columns for traceability, while thesis analysis uses seven representative measurements, one per visual family.
 
 Excluded from active mapping:
 

@@ -36,16 +36,20 @@ Boundary for future work:
 |---|---|---|
 | Full repository orientation and workflows | `wiki/README.md` | Relevant topic page, then the linked script/artifact |
 | Thesis framing, research questions, current progress | `THESIS_STATUS.md`, `agent.md`, `THESIS_CHECKLIST.md` | `tasks/current-thesis-next-steps.md`, `papers/` |
+| Thesis/Overleaf document writing | `THESIS_DOCUMENT_HANDOFF.md`, `.codex/skills/thesis-writing/SKILL.md` | Separate nested repository `6a8416f0e3507a1361793e2c/` |
 | Which icon sets exist locally | `icon_data/MANIFEST.md` | `icon_data/iconsets/README.md`, `data/10 icons.md` |
 | Canonical icon dataset rows | `icon_data/analysis/dataset.csv` | `code/build_icon_dataset.py` |
 | Normalized image generation | `code/build_icon_dataset.py` | `icon_data/analysis/README.md`, `icon_data/normalized_256/` |
 | Visual feature/family definitions | `code/thesis_pipeline/features/registry.py` | `wiki/feature-system.md`, then the consuming script |
+| Page-specific evidence for the seven representative features | `feature_proof.md` | `wiki/literature-and-evidence.md`, then the original PDFs in `papers/` |
+| Current thesis presentation and review record | `wiki/progress-presentation.md` | Live Google Slides `Progress Presentation`; local PPTX files may predate native edits |
 | Visual feature extraction | `code/extract_icon_features.py` | `icon_data/analysis/features.csv`, `features_metadata.json`, `feature_failures.json` |
 | Similarity / nearest-neighbor analysis | `code/compute_icon_similarity.py` | `icon_data/analysis/similarity/` |
 | Thesis evaluation layers | `code/evaluation/evaluation_layers.md` | `tasks/current-thesis-next-steps.md`, `THESIS_STATUS.md` |
 | Feature visual reports | `code/visualize_icon_features.py` | `icon_data/analysis/visualizations/` if present |
 | Metadata enrichment for clustering | `code/build_clustering_metadata_sample.py` | `icon_data/analysis/clustering_metadata_sample.csv`, `clustering_metadata_missing_report.json` |
 | Interactive analytics dashboard | `code/build_analysis_dashboard.py` | `icon_data/analysis/analysis_dashboard/README.md`, `index.html`, `dashboard_data.json` |
+| Public dashboard and internal stimulus selection | `code/build_public_dashboard.py`, `functions/api/`, `web/study-selection/` | ignored `dist/dashboard/`, D1 `glyph-study-selections`, `deployment_manifest.json` |
 | Local AI clustering experiment | `code/serve_analysis_dashboard.py`, `code/thesis_pipeline/ai_clustering/` | `icon_data/analysis/ai_clustering/ai_clustering.sqlite3` |
 | McDougall extracted ratings | `icon_data/iconsets/01_mcdougall_symbol_icon_set/metadata/mcdougall_ratings.csv` | `code/extract_mcdougall_metadata.py` |
 | McDougall extracted icons | `icon_data/iconsets/01_mcdougall_symbol_icon_set/extracted_icons_png/` | `code/extract_mcdougall_icons.py` |
@@ -61,34 +65,37 @@ Boundary for future work:
 - Current dataset size: **28,749** canonical rows in `dataset.csv`.
 - Normalized PNGs are generated under `icon_data/normalized_256/`; this directory is large/generated and may be ignored by git.
 - Canonical dataset metadata contains non-ASCII labels; keep JSON/CSV reads and writes explicitly UTF-8. Serialize repository-relative paths with POSIX `/` separators before hashing so `icon_id` values remain stable across Windows and macOS/Linux.
-- Current visual-feature corpus: **28,749** rows in `icon_data/analysis/features.csv`, with **110 raw numeric image-feature columns** plus 23 metadata columns under feature schema v2. The active literature-mapped visual family set remains **81** columns: seven legacy representatives are retained but inactive and replaced one-for-one by v2 measurements. The two-rater release gate is still pending, so the pilot is blocked.
+- Current visual-feature corpus: **28,749** rows in `icon_data/analysis/features.csv`, with **110 raw numeric image-feature columns** plus 23 metadata columns under feature schema v2. Thesis analysis uses **seven representative measurements**, one per literature-informed family. The other extractor columns remain only for traceability and reproducibility. The two-rater release gate is still pending, so the pilot is blocked.
 - Current feature extraction failures: `[]` in `icon_data/analysis/feature_failures.json`.
-- Current Feature Groups Complexity representative: `canny_edge_density`. Grayscale quadtree variability remains active for broader analysis but is not the one-feature representative after cross-source visual-audit failures.
+- Current Feature Groups Complexity representative: `canny_edge_density`. Grayscale quadtree variability remains in the raw export for traceability but is not part of thesis analysis after cross-source visual-audit failures.
 - The interactive dashboard is generated under `icon_data/analysis/analysis_dashboard/`.
-- Current dashboard sample: **129** rows in `icon_data/analysis/analysis_dashboard/dashboard_data.json`.
-- As of the latest dashboard change, the dashboard sample is **up to 10 random icons from each dataset**, using fixed `RANDOM_SEED = 42` in `code/build_analysis_dashboard.py`.
+- The deployable edition is generated under ignored `dist/dashboard/`; it contains only the five scoped sets, keeps AI/provider execution disabled, and must be rebuilt before upload to `https://glyph-perception-dashboard.pages.dev/`. Its separate access-controlled Study Icon Selection workflow stores pseudonymous 5 × 20 internal reviewer nominations in EU-jurisdiction D1; do not call these participant responses.
+- Current dashboard source scope: **5 sets / 649 canonical icons** — AIGA/DOT Symbol Signs, OCHA Humanitarian Icons, Universal Symbols Healthcare Webfont, ISO 7010 Safety Signs, and ISO 15223 Medical Device Symbols. The canonical 13-set corpus is unchanged.
+- Current generated Metadata/Combined dashboard sample: **50** rows in `icon_data/analysis/analysis_dashboard/dashboard_data.json`, up to 10 random icons from each included set using fixed `RANDOM_SEED = 42`.
+- Feature Groups and Image/AI Clustering draw from **397 quality-eligible rows** within those five sets; 252 of their 649 feature rows are excluded for uncertain foreground masks. Feature Review correlation data and Feature Values use all 649 selected-source feature rows.
 - The dashboard currently supports:
-  - five views: Clustering, Feature Groups, Feature Values, Feature Review, and AI Clustering;
+  - four visible views: Clustering, Feature Groups, Feature Values, and AI Clustering; Feature Review remains hidden while its correlation data is retained for Feature Values;
   - image, metadata, and combined feature variants;
   - k-means and hierarchical clustering;
   - k/cut values 3, 5, 7, and 10;
   - a Color By selector for cluster, set, or numeric image feature, although the current image-overlay renderer does not visibly apply the selected color;
   - filtering by icon set;
   - a collapsible left Clustering controls sidebar and compact right-side cluster information: **Show heatmap** plus one entry per assigned cluster; each cluster entry opens a dedicated fullscreen modal with cluster statistics and a complete seven-representative icon-value table;
-  - distribution-aware icon inspection in manual and AI plots: hover and clicked-icon detail compare each representative value with the current 140-icon sample median, middle 50% range, percentile, and min–max position; lasso detail compares the selected-group median with the same full-sample baseline for all seven representatives;
-  - a fullscreen Feature Groups detail workflow with one configured literature-backed representative per family, per-icon values, the average of the shown scores, and All/B/W/Red/Colored cohorts; a reproducible technical-quality gate excludes uncertain masks and any row lacking identity/path or a finite representative, writes `feature_group_quality_audit.json`, and keeps valid low/zero values; configured defaults divide each eligible representative-value range into 10 equal-width bins and randomly draw up to two icons per bin, flag low-information cohorts, sort low-to-high by the representative value, and can be refreshed with **Randomize icons**; Image and AI Clustering use the unique composite of all seven family samples, normally 140 icons for All, and Randomize replaces only the active family's contribution; selecting exactly three current-sample icons opens a separate fullscreen comparison modal across all seven representatives; the 81-feature registry remains available, while the default code-only analysis preset uses these seven representatives;
+  - distribution-aware icon inspection in manual and AI plots: hover and clicked-icon detail compare each representative value with the current shared-sample median, middle 50% range, percentile, and min–max position; lasso detail compares the selected-group median with the same shared-sample baseline for all seven representatives;
+  - a fullscreen Feature Groups detail workflow with one configured literature-backed representative per family, per-icon values, the average of the shown scores, and All/B/W/Red/Colored cohorts; a reproducible technical-quality gate excludes uncertain masks and any row lacking identity/path or a finite representative, writes `feature_group_quality_audit.json`, and keeps valid low/zero values; configured defaults divide each eligible representative-value range into 10 equal-width bins and randomly draw up to two icons per bin, flag low-information cohorts, sort low-to-high by the representative value, and can be refreshed with **Randomize icons**; Image and AI Clustering use the unique composite of all seven family samples, up to 140 icons for All, and Randomize replaces only the active family's contribution; selecting exactly three current-sample icons opens a separate fullscreen comparison modal across all seven representatives;
   - a Feature Values tab restricted to the seven configured Feature Groups representative features, one per visual family, with searchable low/mean-nearest/high examples and correlation context.
-  - a strict seven-feature dashboard allow-list: Feature Groups shows the configured representative for each family as read-only, and Clustering controls, Color-by choices, selected-icon details, Feature Values, Feature Review, and browser payloads expose only those seven representatives. The broader 81-feature registry remains available for offline extraction and analysis, not as dashboard choices.
+  - a strict seven-feature dashboard allow-list: Feature Groups shows the configured representative for each family as read-only, and Clustering controls, Color-by choices, selected-icon details, Feature Values, retained correlation data, and browser payloads expose only those seven representatives. Other raw extractor columns are retained for reproducibility and are not an alternate thesis analysis profile.
   - explicit OpenRouter image-embedding clustering for the exact shared family/cohort sample, with side-by-side plots, agreement metrics, hash-keyed embedding cache, and saved run history. The server-only default model is `voyageai/voyage-multimodal-3.5`.
   - manual-style AI Clustering inspection with synchronized method/k controls, a collapsible analysis sidebar, selected-icon seven-feature detail, modal heatmap/per-cluster details, and a post-hoc seven-feature between-cluster separation ranking; every AI cluster opens the same statistics-and-icon-value table used by Image Clustering. The paired feature-vs-AI plots and agreement cross-table open from a dedicated fullscreen comparison button. The ranking is descriptive and must not be called model attribution because image embeddings receive pixels only.
   - interpretable cluster profiles in both Image and AI Clustering: neutral high/low labels, signed-z heatmaps, size-weighted between-cluster variance contribution, and size-independent separation strength. Manual metrics use selected feature space directly; AI reports actual full-embedding metrics separately from post-hoc seven-feature metrics. Old saved AI runs are enriched from hash-matched cached embeddings without provider calls or database writes.
   - expanded cluster statistics in both modes: full-cluster/sample/filter-visible icon counts and set composition, plus raw per-feature `N`, mean, median, population standard deviation, minimum, maximum, overall mean, and signed standardized difference. Manual Image uses its selected features; AI always profiles the seven current representatives post hoc. Metadata/Combined expose icon statistics only.
   - one shared 5.5%-of-axis-span image scale for manual Image, primary AI, and modal feature-versus-AI plots, keeping icon density visually comparable across clustering views.
 - Existing similarity outputs in `icon_data/analysis/similarity/` remain based on the earlier 1,038-row pilot. Do not run the current quadratic pairwise implementation directly on all 28,749 rows without a scalable rewrite.
-- Extraction, similarity, and evaluation benchmark generation share the typed authority in `code/thesis_pipeline/features/registry.py`. `ANALYSIS_FEATURE_PRESET = "representatives"` selects the current seven features for generated analysis and similarity. The dashboard additionally enforces those seven configured family representatives as its public UI/data contract; the broader 81-feature registry is retained for offline analysis and is not exposed by switching browser controls. Excluded raw channels are never used.
+- Extraction, similarity, and evaluation benchmark generation share the typed authority in `code/thesis_pipeline/features/registry.py`. `ANALYSIS_FEATURE_PRESET = "representatives"` selects the seven thesis measurements for generated analysis and similarity. The dashboard enforces the same seven configured family representatives as its public UI/data contract. Other raw extractor columns are retained for traceability, not as a selectable analysis profile; excluded raw channels are never used.
 - The 7 thesis PDFs have extracted page-marked text under `papers/extracted_text/`; regenerate with `code/extract_paper_text.py`.
 - Static feature visualizations under `icon_data/analysis/visualizations/` are summary-only when `matplotlib` is unavailable in the runtime. The interactive Plotly dashboard is the stronger current visual interface.
 - Treat `THESIS_STATUS.md`, `icon_data/analysis/README.md`, generated metadata JSON files, and current scripts as the source of truth for current state.
+- The LaTeX thesis is a separate nested repository. Its current KOMA/`titlesec` template rejects ordinary `\section` commands; use content-level KOMA `\minisec` headings for chapter drafts unless a separately authorized template repair changes that behavior.
 - AI Clustering uses the official OpenRouter Python SDK; install `requirements-ai-clustering.txt` and place the key in the ignored repository-root `.env` file or the server environment.
 - `source.md` is tracked historically but may be deleted in the working tree. Do not restore it unless explicitly asked; use `git show HEAD:source.md` for its last committed content.
 
@@ -248,10 +255,10 @@ Important files:
 
 Current dashboard sample:
 
-- Up to 10 random icons per dataset.
+- Up to 10 random icons per included dashboard set.
 - Fixed seed: `RANDOM_SEED = 42`.
-- Change the per-dataset sample size in `PER_SET_SAMPLE_SIZE` inside `code/build_analysis_dashboard.py`, then regenerate.
-- The generated 129-row sample supplies Metadata/Combined projections only. Default Image Clustering uses a seven-family composite: up to 20 unique equal-width-stratified icons per family, normally 140 for All. A family's draw excludes icons already assigned to the other cached family draws. Cohort changes rebuild the composite for that cohort, and **Randomize icons** replaces only the active family's contribution. Valid zeros remain eligible; missing/non-finite values do not become zeros, and low-information cohorts are labeled in the UI.
+- Change source membership in `DASHBOARD_SETS` or the per-set sample size in `PER_SET_SAMPLE_SIZE` inside `code/build_analysis_dashboard.py`, then regenerate.
+- The generated 50-row sample supplies Metadata/Combined projections only. Default Image Clustering uses a seven-family composite: up to 20 unique equal-width-stratified icons per family and up to 140 for All. A family's draw excludes icons already assigned to the other cached family draws. Cohort changes rebuild the composite for that cohort, and **Randomize icons** replaces only the active family's contribution. Valid zeros remain eligible; missing/non-finite values do not become zeros, and low-information cohorts are labeled in the UI.
 
 ## Script Map
 
@@ -273,15 +280,17 @@ Current dashboard sample:
 
 ## Feature Set
 
-The extractor stores 110 raw numeric image-feature columns for traceability. The active thesis mapping currently uses 81 of those columns, grouped into literature-aligned visual feature families:
+The extractor stores 110 raw numeric image-feature columns for traceability. The thesis analysis uses seven representative measurements, one for each literature-informed visual family:
 
-- Complexity.
-- Shape/silhouette.
-- Stroke/structure.
-- Density/fill.
-- Balance/layout.
-- Color/contrast.
-- Texture.
+- Complexity — `canny_edge_density`.
+- Shape/silhouette — `enclosure_score_v2`.
+- Stroke/structure — `principal_axis_orientation_v2`.
+- Density/fill — `solid_fill_ratio_v2`.
+- Balance/layout — `horizontal_symmetry_v2`.
+- Color/contrast — `mean_saturation_v2`.
+- Texture — `local_texture_variation_v2`.
+
+Do not describe the remaining raw extractor columns as a second active feature set. They are implementation data retained for traceability and reproducibility.
 
 Excluded raw channels are retained in exports but not used as active visual-family evidence: Hu moments, local binary pattern bins, `text_or_letter_presence`, and `crush_test_stability`.
 

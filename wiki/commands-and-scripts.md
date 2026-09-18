@@ -90,6 +90,30 @@ python code/build_analysis_dashboard.py
 
 The builder currently has no command-line options. Sample size, seed, cluster counts, and paths are module constants.
 
+Build the read-only public deployment folder after regenerating the dashboard:
+
+```powershell
+python code/build_public_dashboard.py
+python -m http.server 8877 --directory dist/dashboard
+```
+
+Open `http://127.0.0.1:8877/` for static UI verification. Deploy the configured Cloudflare Pages project, including its Functions bundle and D1 binding, with `npx wrangler pages deploy`. The live URL is `https://glyph-perception-dashboard.pages.dev/`. The public folder is ignored by Git and must be rebuilt locally before each deployment.
+
+Apply the study-selection schema and refresh its server-side icon allow-list after an intentional dataset-scope change:
+
+```powershell
+npx wrangler d1 migrations apply glyph-study-selections --remote
+npx wrangler d1 execute glyph-study-selections --remote --file tmp/study_selection_icons.sql
+```
+
+Export current reviewer selections without exposing them publicly:
+
+```powershell
+curl -fsS -H "Authorization: Bearer $STUDY_ADMIN_KEY" https://glyph-perception-dashboard.pages.dev/api/study-results -o tmp/glyph-study-selections.csv
+```
+
+Keep `STUDY_SUBMIT_KEY` and `STUDY_ADMIN_KEY` in Cloudflare Pages secrets and a password manager, never in repository files. Rotate them with `npx wrangler pages secret put <NAME> --project-name glyph-perception-dashboard`.
+
 Serve it with:
 
 ```powershell
@@ -129,7 +153,7 @@ Before refreshing a dataset, record the reason, inspect its README/source note, 
 
 ```powershell
 python -m pytest code/tests
-python -m py_compile code/build_icon_dataset.py code/extract_icon_features.py code/compute_icon_similarity.py code/build_analysis_dashboard.py code/visualize_icon_features.py
+python -m py_compile code/build_icon_dataset.py code/extract_icon_features.py code/compute_icon_similarity.py code/build_analysis_dashboard.py code/build_public_dashboard.py code/visualize_icon_features.py
 ```
 
 If `pytest` is unavailable, install/use the configured project runtime or run the focused test through a compatible environment. Syntax success does not replace generator and browser verification.

@@ -53,6 +53,18 @@ K_VALUES = (3, 5, 7, 10)
 PRIMARY_K = 7
 RANDOM_SEED = 42
 
+# Human-study dashboard scope agreed after the thesis review meeting. Keep the
+# canonical dataset and feature corpus intact; only dashboard-facing rows are
+# restricted to these five coherent, safety/health/wayfinding-oriented sets.
+DASHBOARD_SETS = (
+    ("02_aiga_dot_symbol_signs", "AIGA/DOT Symbol Signs"),
+    ("04_ocha_humanitarian_icons", "OCHA Humanitarian Icons"),
+    ("09_universal_symbols_healthcare_webfont", "Universal Symbols Healthcare Webfont"),
+    ("11_iso_7010_safety_signs", "ISO 7010 Safety Signs"),
+    ("12_iso_15223_medical_device_symbols", "ISO 15223 Medical Device Symbols"),
+)
+DASHBOARD_SET_IDS = frozenset(set_id for set_id, _ in DASHBOARD_SETS)
+
 METADATA_COLUMNS = [
     "icon_id",
     "set_id",
@@ -143,6 +155,12 @@ def active_image_feature_groups() -> list[list[str]]:
 def read_csv(path: Path) -> list[dict[str, str]]:
     with path.open(newline="", encoding="utf-8") as handle:
         return list(csv.DictReader(handle))
+
+
+def filter_dashboard_sets(rows: list[dict]) -> list[dict]:
+    """Return rows belonging to the five human-study dashboard sources."""
+
+    return [row for row in rows if row.get("set_id") in DASHBOARD_SET_IDS]
 
 
 def write_rows(path: Path, rows: list[dict]) -> None:
@@ -353,7 +371,7 @@ def feature_metadata_by_id() -> dict[str, dict[str, str]]:
 
 def feature_review_source_rows(feature_by_id: dict[str, dict]) -> tuple[list[dict], str]:
     if FEATURES_PATH.exists():
-        rows = read_csv(FEATURES_PATH)
+        rows = filter_dashboard_sets(read_csv(FEATURES_PATH))
         if rows and all(column in rows[0] for column in IMAGE_FEATURE_COLUMNS):
             return rows, FEATURES_PATH.relative_to(ROOT).as_posix()
     return list(feature_by_id.values()), "analysis_dashboard_sample"
@@ -459,7 +477,7 @@ def build_feature_review(feature_by_id: dict[str, dict]) -> dict:
 
 def feature_explorer_source_rows(records: list[dict], feature_by_id: dict[str, dict]) -> tuple[list[dict], str]:
     if FEATURES_PATH.exists():
-        rows = read_csv(FEATURES_PATH)
+        rows = filter_dashboard_sets(read_csv(FEATURES_PATH))
         if rows and all(column in rows[0] for column in IMAGE_FEATURE_COLUMNS):
             return rows, FEATURES_PATH.relative_to(ROOT).as_posix()
 
@@ -1026,6 +1044,8 @@ def write_dashboard_data(rows: list[dict], feature_by_id: dict[str, dict], matri
             "analysis_feature_preset": feature_registry.ANALYSIS_FEATURE_PRESET,
             "orientation_confidence_threshold": feature_registry.ORIENTATION_CONFIDENCE_THRESHOLD,
             "generated_from": DATASET_PATH.relative_to(ROOT).as_posix(),
+            "included_set_ids": [set_id for set_id, _ in DASHBOARD_SETS],
+            "included_set_names": [set_name for _, set_name in DASHBOARD_SETS],
             "row_count": len(records),
             "per_set_sample_size": PER_SET_SAMPLE_SIZE,
             "feature_group_sample_size": FEATURE_GROUP_SAMPLE_SIZE,
@@ -1472,7 +1492,9 @@ def write_index_html() -> None:
       <button type="button" class="active" data-view="clustering">Clustering</button>
       <button type="button" data-view="featureGroups">Feature Groups</button>
       <button type="button" data-view="featureExplorer">Feature Values</button>
+      <!-- Feature Review is intentionally hidden. Keep this markup and its implementation below for future restoration.
       <button type="button" data-view="featureReview">Feature Review</button>
+      -->
       <button type="button" data-view="aiClustering">AI Clustering</button>
     </nav>
   </header>
@@ -1526,6 +1548,7 @@ def write_index_html() -> None:
       </section>
     </aside>
   </main>
+  <!-- Feature Review is intentionally hidden. Keep this markup and its implementation below for future restoration.
   <section id="featureReviewView" class="view feature-review">
     <div class="review-toolbar">
       <label>Feature ranking<select id="featureReviewSort">
@@ -1552,6 +1575,7 @@ def write_index_html() -> None:
       </aside>
     </div>
   </section>
+  -->
   <section id="featureGroupsView" class="view feature-groups">
     <div class="feature-groups-header">
       <h2>Feature Groups</h2>
@@ -1714,7 +1738,7 @@ def write_index_html() -> None:
 
     function initializeControls() {{
       document.getElementById("datasetSummary").textContent =
-        `${{dashboard.metadata.row_count}} icons, ${{dashboard.metadata.per_set_sample_size}} random per dataset`;
+        `${{dashboard.metadata.row_count}} icons, ${{dashboard.metadata.per_set_sample_size}} random per included dataset`;
 
       installViewTabs();
       fillSelect("variantSelect", dashboard.metadata.feature_variants.map(v => [v, title(v)]), state.variant);
@@ -1723,7 +1747,8 @@ def write_index_html() -> None:
       renderMethodNote();
 
       renderFeatureControls();
-      initializeFeatureReviewControls();
+      // Feature Review is intentionally hidden; retain its controls for future restoration.
+      // initializeFeatureReviewControls();
       initializeFeatureExplorerControls();
       initializeFamilyDetailControls();
       initializeClusterModalControls();
@@ -1757,7 +1782,8 @@ def write_index_html() -> None:
       document.getElementById("resetFilters").addEventListener("click", resetFilters);
       renderFilterPills();
       renderFeatureGroups();
-      renderFeatureReview();
+      // Feature Review is intentionally hidden; retain its renderer for future restoration.
+      // renderFeatureReview();
       renderFeatureExplorer();
     }}
 
@@ -1772,13 +1798,15 @@ def write_index_html() -> None:
       document.querySelectorAll(".tab-nav button").forEach(item => item.classList.toggle("active", item.dataset.view === view));
       document.getElementById("clusteringView").classList.toggle("active", view === "clustering");
       document.getElementById("featureGroupsView").classList.toggle("active", view === "featureGroups");
-      document.getElementById("featureReviewView").classList.toggle("active", view === "featureReview");
+      // Feature Review is intentionally hidden; retain its activation hook for future restoration.
+      // document.getElementById("featureReviewView").classList.toggle("active", view === "featureReview");
       document.getElementById("featureExplorerView").classList.toggle("active", view === "featureExplorer");
       document.getElementById("aiClusteringView").classList.toggle("active", view === "aiClustering");
       hideHoverPreview();
       if (view === "clustering") render();
       if (view === "featureGroups") renderFeatureGroups();
-      if (view === "featureReview") renderFeatureReview();
+      // Feature Review is intentionally hidden; retain its activation hook for future restoration.
+      // if (view === "featureReview") renderFeatureReview();
       if (view === "featureExplorer") renderFeatureExplorer();
       if (view === "aiClustering") renderAiClustering();
     }}
@@ -2804,7 +2832,7 @@ def write_index_html() -> None:
       const records = clusteringRecords();
       document.getElementById("datasetSummary").textContent = state.variant === "image"
         ? `${{records.length}} shared icons · ${{visibleFeatureSections().length}} feature families · ${{title(sharedSampleColorMode)}}`
-        : `${{dashboard.metadata.row_count}} icons, ${{dashboard.metadata.per_set_sample_size}} random per dataset`;
+        : `${{dashboard.metadata.row_count}} icons, ${{dashboard.metadata.per_set_sample_size}} random per included dataset`;
       const projection = getProjection();
       const labels = projection.labels;
       const coords = projection.coords;
@@ -2928,15 +2956,38 @@ def write_index_html() -> None:
         if (event.key === "Escape" && comparisonModal.classList.contains("open")) closeAiComparison();
       }});
       try {{
-        const response = await fetch("/api/ai-clustering/status", {{cache: "no-store"}});
-        if (!response.ok) throw new Error("Local AI service is unavailable.");
-        aiState.service = await response.json();
-        await refreshAiRuns();
+        if (document.querySelector('meta[name="dashboard-mode"]')?.content === "public-static") {{
+          const archive = await loadStaticAiArchive();
+          aiState.service = archive.status;
+          aiState.recentRuns = archive.runs || [];
+        }} else {{
+          const response = await fetch("/api/ai-clustering/status", {{cache: "no-store"}});
+          if (!response.ok) throw new Error("Local AI service is unavailable.");
+          aiState.service = await response.json();
+          await refreshAiRuns();
+        }}
       }} catch (error) {{
-        aiState.service = {{configured: false, model_id: "Unavailable", message: "Start code/serve_analysis_dashboard.py to enable this experiment."}};
-        aiState.error = error.message;
+        try {{
+          const archive = await loadStaticAiArchive();
+          aiState.service = archive.status;
+          aiState.recentRuns = archive.runs || [];
+          aiState.error = null;
+        }} catch (_) {{
+          aiState.service = {{configured: false, model_id: "Unavailable", message: "Start code/serve_analysis_dashboard.py to enable this experiment."}};
+          aiState.error = error.message;
+        }}
       }}
       renderAiClustering();
+    }}
+
+    let aiStaticArchive = null;
+
+    async function loadStaticAiArchive() {{
+      if (aiStaticArchive) return aiStaticArchive;
+      const response = await fetch("public_data/ai_clustering.json", {{cache: "no-store"}});
+      if (!response.ok) throw new Error("Static AI archive is unavailable.");
+      aiStaticArchive = await response.json();
+      return aiStaticArchive;
     }}
 
     function markAiClusteringStale() {{
@@ -3005,16 +3056,28 @@ def write_index_html() -> None:
     }}
 
     async function refreshAiRuns() {{
-      const response = await fetch("/api/ai-clustering/runs?limit=20", {{cache: "no-store"}});
-      if (!response.ok) throw new Error("Recent AI runs could not be loaded.");
-      aiState.recentRuns = (await response.json()).runs || [];
+      try {{
+        const response = await fetch("/api/ai-clustering/runs?limit=20", {{cache: "no-store"}});
+        if (!response.ok) throw new Error("Recent AI runs could not be loaded.");
+        aiState.recentRuns = (await response.json()).runs || [];
+      }} catch (error) {{
+        const archive = await loadStaticAiArchive();
+        aiState.recentRuns = archive.runs || [];
+      }}
     }}
 
     async function loadAiRun(runId) {{
       try {{
-        const response = await fetch(`/api/ai-clustering/runs/${{encodeURIComponent(runId)}}`, {{cache: "no-store"}});
-        const run = await response.json();
-        if (!response.ok) throw new Error(run.error || "Run could not be loaded.");
+        let run;
+        try {{
+          const response = await fetch(`/api/ai-clustering/runs/${{encodeURIComponent(runId)}}`, {{cache: "no-store"}});
+          run = await response.json();
+          if (!response.ok) throw new Error(run.error || "Run could not be loaded.");
+        }} catch (_) {{
+          const archive = await loadStaticAiArchive();
+          run = archive.run_details?.[runId];
+          if (!run) throw new Error("Run could not be loaded.");
+        }}
         aiState.currentRun = run;
         aiState.stale = true;
         aiState.error = null;
@@ -3030,7 +3093,7 @@ def write_index_html() -> None:
       const canRun = Boolean(service?.configured && records.length && selectedFeatureIds().length && !aiState.running);
       const runButton = document.getElementById("aiRunButton");
       runButton.disabled = !canRun;
-      runButton.textContent = aiState.running ? "Running..." : "Run AI Clustering";
+      runButton.textContent = aiState.running ? "Running..." : service?.public_read_only ? "Read-only public edition" : "Run AI Clustering";
       document.getElementById("aiComparisonOpen").disabled = aiState.currentRun?.status !== "completed";
       let status = service?.message || "Checking the local AI service...";
       let kind = "ready";
@@ -3053,7 +3116,10 @@ def write_index_html() -> None:
     }}
 
     function renderEmptyAiPlots(records) {{
-      Plotly.react("aiEmbeddingScatter", [], {{annotations: [{{text: "Run AI Clustering to compute image embeddings.", x: .5, y: .5, xref: "paper", yref: "paper", showarrow: false}}], xaxis: {{visible: false}}, yaxis: {{visible: false}}}}, {{responsive: true}});
+      const emptyMessage = aiState.service?.public_read_only
+        ? "No compatible saved AI run is available for this public dataset scope."
+        : "Run AI Clustering to compute image embeddings.";
+      Plotly.react("aiEmbeddingScatter", [], {{annotations: [{{text: emptyMessage, x: .5, y: .5, xref: "paper", yref: "paper", showarrow: false}}], xaxis: {{visible: false}}, yaxis: {{visible: false}}}}, {{responsive: true}});
       aiSelectedIconId = null;
       document.getElementById("aiIconDetail").innerHTML = '<span class="muted">Run or load AI clustering, then click an icon.</span>';
       document.getElementById("aiFeatureContributions").innerHTML = '<span class="muted">Run or load AI clustering to calculate the ranking.</span>';
@@ -4165,7 +4231,14 @@ def write_plotly_placeholder_if_missing() -> None:
 
 def main() -> None:
     OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
-    all_rows = read_csv(DATASET_PATH)
+    all_rows = filter_dashboard_sets(read_csv(DATASET_PATH))
+    present_set_ids = {row.get("set_id") for row in all_rows}
+    missing_set_ids = DASHBOARD_SET_IDS - present_set_ids
+    if missing_set_ids:
+        raise ValueError(
+            "Dashboard source sets are missing from dataset.csv: "
+            + ", ".join(sorted(missing_set_ids))
+        )
     sampled_source_rows = sample_random_rows_per_set(all_rows, PER_SET_SAMPLE_SIZE, RANDOM_SEED)
     metadata_rows = enrich_metadata_rows(sampled_source_rows)
     write_rows(OUTPUT_DIR / "sample_metadata.csv", metadata_rows)

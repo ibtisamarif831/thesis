@@ -17,9 +17,11 @@ The project has a working computer-side pipeline:
 - Weak/non-interpretable raw channels have been removed from active feature-family analysis.
 - Similarity outputs are rebuilt using the active visual families.
 - Evaluation layers are specified in `code/evaluation/evaluation_layers.md`.
-- Feature Groups exposes one literature-backed representative for each of the seven families, with evidence citations and an independent, randomizable 10-icon pilot sample drawn from the complete corpus; each sample shows its arithmetic mean, is sorted low-to-high, and supports exact-three icon comparison across all seven representatives while preserving all 81 active analytical features.
-- Feature Values uses the same seven representatives as Feature Groups and shows full-corpus low, mean-nearest, and high examples with correlation context.
-- Feature schema v2 repairs foreground masking and six current representative measurements while retaining legacy measurements. Complexity now uses Canny edge density after the visual audit found source-rendering inflation in grayscale quadtree variability; quadtree remains active as a secondary analytical feature. Scalar families use arithmetic means; orientation uses confidence-aware angular ordering and an axial circular mean; Red is pixel-derived. The engineering pipeline is complete, but the pilot remains blocked until the rebuilt two-rater benchmark passes every release gate.
+- The dashboard is now scoped to five human-study source sets: AIGA/DOT, OCHA, Universal Symbols Healthcare Webfont, ISO 7010, and ISO 15223. The complete 13-set canonical corpus remains preserved outside the dashboard.
+- The public dashboard now includes an access-controlled internal stimulus-selection workspace: each reviewer nominates exactly 20 icons from each of the five sets, and submissions are stored pseudonymously in an EU-jurisdiction D1 database for consensus review. This is stimulus preparation, not participant-response evidence.
+- Feature Groups exposes one literature-backed representative for each of the seven families, with evidence citations and independent randomizable samples drawn from the 397 quality-eligible icons in the five-set scope; each sample shows its arithmetic mean, is sorted low-to-high, and supports exact-three icon comparison across all seven representatives.
+- Feature Values uses the same seven representatives as Feature Groups and shows selected-source low, mean-nearest, and high examples with correlation context across all 649 scoped feature rows.
+- Feature schema v2 repairs foreground masking and six current representative measurements while retaining legacy measurements. Complexity now uses Canny edge density after the visual audit found source-rendering inflation in grayscale quadtree variability; quadtree is retained only as a raw traceability column. Scalar families use arithmetic means; orientation uses confidence-aware angular ordering and an axial circular mean; Red is pixel-derived. The engineering pipeline is complete, but the pilot remains blocked until the rebuilt two-rater benchmark passes every release gate.
 - README/guide files now describe the current thesis direction.
 
 ## Active Visual Families
@@ -32,7 +34,7 @@ The project has a working computer-side pipeline:
 - Color/contrast
 - Texture
 
-Raw extracted columns are retained for traceability, but the active mapped family set uses 81 visual features.
+The thesis analysis uses seven representative measurements, one per family. Other raw extracted columns are retained only for traceability and reproducibility.
 
 ## Excluded From Active Mapping
 

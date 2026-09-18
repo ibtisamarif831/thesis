@@ -10,39 +10,40 @@ The thesis writing project is a separate Git repository at:
 
 Its remote is `origin/main`. Do not treat this directory as an ordinary folder of the analysis repository, and do not merge it into the outer repository. Push thesis-source changes from inside that directory only when explicitly requested.
 
-## Current unpushed source change
+## Current unpushed source changes
 
-The nested repository is synchronized with its remote at its last commit and has this uncommitted source change in `main.tex`:
+The nested repository is synchronized with `origin/main` at commit `89fd744` and currently has these uncommitted source changes:
 
-- Title changed from `Title of the Thesis` to `Perception of Glyphs`.
-- Subtitle changed from `Optional Subtitle of the Thesis` to `When do glyph sets stop being discernible as size is reduced?`.
-- A final newline was added at the end of the file.
+- `main.tex` contains user metadata changes that predate the introduction draft; this task did not alter them.
+- `text-source/introduction.tex` now contains a 1,496-word evidence-grounded first draft. It covers the motivation, literature-defined gap, aim and scope, computational foundation, planned comparison, contribution, and claim boundaries.
+- `vr-thesis-template.bib` now contains verified entries for the six sources cited by the introduction. The `Kulik2011` sample entry is retained temporarily because the untouched Related Work placeholder still cites it.
+- Final research questions and the thesis-structure roadmap remain source comments until the supervisor approves the meaning of discernibility, the participant task, and the later chapter structure.
 
 The nested repository currently reports:
 
 ```text
  M main.tex
-?? main.aux
-?? main.fdb_latexmk
-?? main.fls
-?? main.log
+ M text-source/introduction.tex
+ M vr-thesis-template.bib
+?? .DS_Store
+?? .gitignore
+?? .vscode/
 ```
 
-The `.aux`, `.fdb_latexmk`, `.fls`, and `.log` files are local LaTeX build outputs, not thesis source. Review them for diagnostics, but do not commit them unless the project’s repository policy explicitly changes.
+The untracked `.DS_Store`, `.gitignore`, and `.vscode/` entries also predate the introduction task and must be reviewed separately before any commit. Generated LaTeX files are kept under the ignored `build/` directory.
 
-## Template placeholders still present
+## Remaining metadata placeholder
 
-The title page still contains template/example values that must be replaced with user-confirmed facts before submission:
+The submission date in `main.tex` remains the template value `01st January 2000`. The other title-page fields currently contain non-template values from earlier user work. Do not infer a replacement submission date; change it only after the user confirms the correct value.
 
-- Author: `John Doe`
-- Matriculation number: `123456`
-- Birth date: `01st January 1900`
-- Birthplace: `Atlantis`
-- First referee: `Prof. Dr. Bernd Fröhlich`
-- Second referee: `Prof. Dr. Elvin Gadd`
-- Submission date: `01st January 2000`
+## Current chapter status
 
-Do not invent or infer these values. Ask the user and change only the fields they confirm.
+- `text-source/introduction.tex` — evidence-grounded first draft complete; rendered as five pages in the current template.
+- `text-source/related-work.tex` — template placeholder with one sample citation.
+- `text-source/abstract.tex`, `conclusion.tex`, and `appendix.tex` — template placeholders.
+- `main.tex` — currently includes only Introduction, Related Work, Conclusion and Future Work, and Appendix as content chapters. Methodology, study, results, and discussion chapters have not yet been added or approved.
+
+The current build command is `latexmk -pdf -interaction=nonstopmode -halt-on-error -outdir=build main.tex`. The verified build produced `build/main.pdf` with 13 pages and no unresolved citations or references. The template still emits pre-existing KOMA/`titlesec`, duplicate page-destination, declaration underfull-box, and long Conclusion heading warnings. Ordinary `\section` commands currently fail because of the template's KOMA/`titlesec` combination, so the introduction uses content-level KOMA `\minisec` headings without modifying the immutable template.
 
 ## What the thesis project contains
 
@@ -68,12 +69,12 @@ The human-study layer is still planned, not completed. Do not claim that partici
 ## Recommended continuation order
 
 1. Inspect `main.tex` and all files under `text-source/` before editing.
-2. Replace placeholder prose in the chapter source files, beginning with the introduction, while preserving the existing chapter structure.
-3. Ground literature claims in the local papers, extracted text, and bibliography; distinguish literature evidence from project methods, computed results, interpretations, limitations, and future plans.
-4. Replace title-page personal metadata only from user-confirmed facts.
-5. Compile from the nested repository with `latexmk -pdf main.tex`.
-6. Review the generated PDF for missing references, unresolved citations, overfull boxes, and obvious layout problems.
-7. Run `git diff --check`, inspect the final diff, and commit only intentional source/artifact changes.
+2. Review the introduction with the supervisor and approve the meaning of discernibility and the primary participant task before adding final research questions or hypotheses.
+3. Confirm the full chapter structure before adding the introduction roadmap or changing `main.tex`.
+4. Replace the Related Work and remaining chapter placeholders while grounding literature claims in the local papers and verified bibliography.
+5. Replace the submission-date placeholder only after the user confirms the factual value.
+6. Compile from the nested repository with the verified `latexmk` command above and inspect the rendered PDF.
+7. Run `git diff --check`, inspect the final diff, and commit only intentional source changes.
 8. Push the nested repository to `origin/main` only after the user explicitly asks for that external update.
 
 ## Main analysis-repository references

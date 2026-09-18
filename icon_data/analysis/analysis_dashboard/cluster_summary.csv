@@ -1,151 +1,151 @@
 method,variant,k,cluster,size,top_sets,representative_icon_ids
-kmeans,image,3,0,75,"[[""ISO 7010 Safety Signs"", 10], [""ISO 15223 Medical Device Symbols"", 10], [""Mapbox Maki"", 9], [""USP Pictograms"", 9], [""Universal Symbols Healthcare Webfont"", 8]]",7e81760c1b53d064 e6e2d33ceb0e83af e0760c68f28e0892 4e6eb33dee2b707c 017f18f80c2b6bb0 969d2464f703154e b8d532b96649ad9b 3ae85d1803f6fd0e
-kmeans,image,3,1,42,"[[""Blissymbolics"", 9], [""AIGA/DOT Symbol Signs"", 6], [""Mulberry Symbols"", 6], [""OpenMoji"", 5], [""McDougall Symbol/Icon Set"", 4]]",9099811c08fecfa1 59f7cf4b24c41dc4 34ba5b6f56c34d2d da1cc0b972f266c1 39719b9e379a0e17 276e0f48b2aecf30 a51195a2d92d9ff2 bbdb16044679062a
-kmeans,image,3,2,12,"[[""GHS Hazard Pictograms"", 8], [""ARASAAC Pictograms"", 4]]",a2d4a495cac2adae e6a519ba8dd89268 77256bc1bfc6a972 65ab556300024c0b 832f13e7c3d03100 9fc96269778b3b35 6bfd058b52069703 4de8ea4a98e350d2
-kmeans,image,5,0,11,"[[""GHS Hazard Pictograms"", 8], [""ARASAAC Pictograms"", 3]]",a2d4a495cac2adae e6a519ba8dd89268 77256bc1bfc6a972 65ab556300024c0b 832f13e7c3d03100 9fc96269778b3b35 6bfd058b52069703 4de8ea4a98e350d2
-kmeans,image,5,1,12,"[[""Blissymbolics"", 8], [""McDougall Symbol/Icon Set"", 3], [""Mulberry Symbols"", 1]]",121de65a284465c5 f1dbaaccf91a93c6 7f0b8a0a616b25e4 067dab84101e4d40 9c32fad280ea8306 c7f27f7fd0d5d77b 9b513da0bbf6fec5 60fafea65eec88ff
-kmeans,image,5,2,55,"[[""ISO 15223 Medical Device Symbols"", 10], [""Universal Symbols Healthcare Webfont"", 8], [""ISO 7010 Safety Signs"", 8], [""Mapbox Maki"", 7], [""McDougall Symbol/Icon Set"", 5]]",e0760c68f28e0892 4e6eb33dee2b707c 7e81760c1b53d064 e6e2d33ceb0e83af ab05a4526c352168 6cd75929d0d2a3f0 7cb54d2ffd287b95 c0b01f650a9f3047
-kmeans,image,5,3,29,"[[""AIGA/DOT Symbol Signs"", 7], [""OCHA Humanitarian Icons"", 5], [""OpenMoji"", 5], [""Mulberry Symbols"", 4], [""Mapbox Maki"", 3]]",7ab893955ce53d32 da1cc0b972f266c1 a51195a2d92d9ff2 39719b9e379a0e17 bbdb16044679062a b6aae574e74b8cfe af8efb82a3eaf250 453de2a0ac7e4646
-kmeans,image,5,4,22,"[[""USP Pictograms"", 9], [""ARASAAC Pictograms"", 6], [""Mulberry Symbols"", 3], [""ISO 7010 Safety Signs"", 2], [""Universal Symbols Healthcare Webfont"", 1]]",67facd157d491218 35be32b4253e6b7e 0f0ba10ef3a52533 651ed6b48d4e4ce0 e93973679234ed81 4ca95e3d476453ba db7e3477d2e2096c 3fc360c5c4e56a82
-kmeans,image,7,0,14,"[[""OpenMoji"", 6], [""Mulberry Symbols"", 5], [""ARASAAC Pictograms"", 2], [""GHS Hazard Pictograms"", 1]]",8419e26eaf8a2ed7 960c8c87ff30f1bf 6d73856e7180fb8d f3b6090794574209 520986b8f519cbf8 0b97f051d6187ce8 709929ff886fee1d 8ccac8fbcc5ef442
-kmeans,image,7,1,15,"[[""ARASAAC Pictograms"", 6], [""USP Pictograms"", 6], [""Mulberry Symbols"", 2], [""Universal Symbols Healthcare Webfont"", 1]]",67facd157d491218 e93973679234ed81 35be32b4253e6b7e 0f0ba10ef3a52533 651ed6b48d4e4ce0 4345ee093157bb2b 34ba5b6f56c34d2d 8025a575373cd6a9
-kmeans,image,7,2,23,"[[""AIGA/DOT Symbol Signs"", 8], [""Mapbox Maki"", 5], [""OCHA Humanitarian Icons"", 5], [""McDougall Symbol/Icon Set"", 2], [""Universal Symbols Healthcare Webfont"", 2]]",7ab893955ce53d32 b6aae574e74b8cfe ce5351620f2eb860 af8efb82a3eaf250 39719b9e379a0e17 bbdb16044679062a 26246a410ab5f5fc 951be4fa343dfcc3
-kmeans,image,7,3,33,"[[""Universal Symbols Healthcare Webfont"", 6], [""ISO 7010 Safety Signs"", 6], [""ISO 15223 Medical Device Symbols"", 6], [""McDougall Symbol/Icon Set"", 4], [""Mapbox Maki"", 4]]",e6e2d33ceb0e83af e0760c68f28e0892 ab45fc2620cc66ce 7e81760c1b53d064 4e6eb33dee2b707c 6cd75929d0d2a3f0 bd7774dcad9acd79 ab05a4526c352168
-kmeans,image,7,4,9,"[[""GHS Hazard Pictograms"", 8], [""ARASAAC Pictograms"", 1]]",e6a519ba8dd89268 77256bc1bfc6a972 a2d4a495cac2adae 65ab556300024c0b 832f13e7c3d03100 9fc96269778b3b35 6bfd058b52069703 4de8ea4a98e350d2
-kmeans,image,7,5,18,"[[""Blissymbolics"", 9], [""McDougall Symbol/Icon Set"", 3], [""Mulberry Symbols"", 3], [""OpenMoji"", 2], [""AIGA/DOT Symbol Signs"", 1]]",067dab84101e4d40 9099811c08fecfa1 f1dbaaccf91a93c6 60fafea65eec88ff 121de65a284465c5 276e0f48b2aecf30 7f0b8a0a616b25e4 9c32fad280ea8306
-kmeans,image,7,6,17,"[[""ISO 7010 Safety Signs"", 4], [""ISO 15223 Medical Device Symbols"", 4], [""USP Pictograms"", 4], [""McDougall Symbol/Icon Set"", 1], [""Mapbox Maki"", 1]]",0db27129c0b71a97 cad61736ae362480 672c5ac5c05045ac 4ce46f5f8d9a06ef d176e3613fd2e8ca 786becad40b24f1e 395681962a31584b c2a7cdc53f4dd23f
-kmeans,image,10,0,25,"[[""ISO 7010 Safety Signs"", 7], [""Mapbox Maki"", 6], [""OCHA Humanitarian Icons"", 4], [""AIGA/DOT Symbol Signs"", 3], [""Universal Symbols Healthcare Webfont"", 3]]",ab05a4526c352168 633d125136da3e33 6cd75929d0d2a3f0 4e6eb33dee2b707c c3af4581e34e912a 26246a410ab5f5fc 017f18f80c2b6bb0 951be4fa343dfcc3
-kmeans,image,10,1,3,"[[""GHS Hazard Pictograms"", 3]]",6bfd058b52069703 832f13e7c3d03100 9fc96269778b3b35
-kmeans,image,10,2,10,"[[""Blissymbolics"", 7], [""Mulberry Symbols"", 2], [""McDougall Symbol/Icon Set"", 1]]",f1dbaaccf91a93c6 c7f27f7fd0d5d77b 9c32fad280ea8306 121de65a284465c5 067dab84101e4d40 7f0b8a0a616b25e4 60fafea65eec88ff 9b513da0bbf6fec5
-kmeans,image,10,3,6,"[[""GHS Hazard Pictograms"", 5], [""ARASAAC Pictograms"", 1]]",a2d4a495cac2adae e6a519ba8dd89268 77256bc1bfc6a972 65ab556300024c0b 4de8ea4a98e350d2 92617f40c2c43b99
-kmeans,image,10,4,13,"[[""ARASAAC Pictograms"", 5], [""USP Pictograms"", 5], [""Mulberry Symbols"", 2], [""Universal Symbols Healthcare Webfont"", 1]]",e93973679234ed81 67facd157d491218 35be32b4253e6b7e 651ed6b48d4e4ce0 0f0ba10ef3a52533 34ba5b6f56c34d2d 4345ee093157bb2b 8025a575373cd6a9
-kmeans,image,10,5,17,"[[""ISO 15223 Medical Device Symbols"", 6], [""Universal Symbols Healthcare Webfont"", 4], [""Mapbox Maki"", 2], [""McDougall Symbol/Icon Set"", 1], [""AIGA/DOT Symbol Signs"", 1]]",ab45fc2620cc66ce bd7774dcad9acd79 0dbe74d0ea5067c3 f1c82e0e3033e0f2 e6e2d33ceb0e83af 80b2d92acb1f6d71 a1b878174fb512f0 397929e89a5a2bf0
-kmeans,image,10,6,18,"[[""USP Pictograms"", 5], [""ISO 15223 Medical Device Symbols"", 4], [""McDougall Symbol/Icon Set"", 3], [""ISO 7010 Safety Signs"", 2], [""Blissymbolics"", 1]]",cad61736ae362480 6a09c26401d7753b 0db27129c0b71a97 7e81760c1b53d064 786becad40b24f1e c0b01f650a9f3047 2b5b06037a00ac7f 09f287549c50a508
-kmeans,image,10,7,1,"[[""McDougall Symbol/Icon Set"", 1]]",38fcc454e8b76e8a
-kmeans,image,10,8,14,"[[""OpenMoji"", 6], [""Mulberry Symbols"", 5], [""ARASAAC Pictograms"", 2], [""GHS Hazard Pictograms"", 1]]",8419e26eaf8a2ed7 960c8c87ff30f1bf 6d73856e7180fb8d f3b6090794574209 520986b8f519cbf8 0b97f051d6187ce8 709929ff886fee1d 8ccac8fbcc5ef442
-kmeans,image,10,9,22,"[[""AIGA/DOT Symbol Signs"", 6], [""OCHA Humanitarian Icons"", 5], [""McDougall Symbol/Icon Set"", 2], [""Mapbox Maki"", 2], [""Blissymbolics"", 2]]",da1cc0b972f266c1 7ab893955ce53d32 453de2a0ac7e4646 a51195a2d92d9ff2 e0d2e112cc0df560 5cea9f126476238d b6aae574e74b8cfe cfb5182dc1998eb7
-hierarchical,image,3,0,1,"[[""McDougall Symbol/Icon Set"", 1]]",38fcc454e8b76e8a
-hierarchical,image,3,1,127,"[[""AIGA/DOT Symbol Signs"", 10], [""Mapbox Maki"", 10], [""OCHA Humanitarian Icons"", 10], [""Mulberry Symbols"", 10], [""Blissymbolics"", 10]]",017f18f80c2b6bb0 969d2464f703154e b8d532b96649ad9b 3ae85d1803f6fd0e 9198bbcd6bccdff0 66cc7c6ebe473f7b af8efb82a3eaf250 b6aae574e74b8cfe
-hierarchical,image,3,2,1,"[[""ARASAAC Pictograms"", 1]]",52c97289f9c9f6dc
-hierarchical,image,5,0,1,"[[""McDougall Symbol/Icon Set"", 1]]",38fcc454e8b76e8a
-hierarchical,image,5,1,118,"[[""Mapbox Maki"", 10], [""OCHA Humanitarian Icons"", 10], [""Mulberry Symbols"", 10], [""Blissymbolics"", 10], [""Universal Symbols Healthcare Webfont"", 10]]",017f18f80c2b6bb0 969d2464f703154e b8d532b96649ad9b 3ae85d1803f6fd0e 9198bbcd6bccdff0 af8efb82a3eaf250 66cc7c6ebe473f7b e6e2d33ceb0e83af
-hierarchical,image,5,2,1,"[[""AIGA/DOT Symbol Signs"", 1]]",22dd7014ca4e0926
-hierarchical,image,5,3,1,"[[""ARASAAC Pictograms"", 1]]",52c97289f9c9f6dc
-hierarchical,image,5,4,8,"[[""GHS Hazard Pictograms"", 8]]",e6a519ba8dd89268 77256bc1bfc6a972 a2d4a495cac2adae 65ab556300024c0b 832f13e7c3d03100 9fc96269778b3b35 6bfd058b52069703 4de8ea4a98e350d2
-hierarchical,image,7,0,1,"[[""McDougall Symbol/Icon Set"", 1]]",38fcc454e8b76e8a
-hierarchical,image,7,1,115,"[[""Mapbox Maki"", 10], [""OCHA Humanitarian Icons"", 10], [""Mulberry Symbols"", 10], [""Blissymbolics"", 10], [""Universal Symbols Healthcare Webfont"", 10]]",017f18f80c2b6bb0 969d2464f703154e 3ae85d1803f6fd0e b8d532b96649ad9b 9198bbcd6bccdff0 af8efb82a3eaf250 66cc7c6ebe473f7b b6aae574e74b8cfe
-hierarchical,image,7,2,1,"[[""AIGA/DOT Symbol Signs"", 1]]",22dd7014ca4e0926
-hierarchical,image,7,3,2,"[[""ARASAAC Pictograms"", 2]]",ab4c6a5c76f157ea 255623028b70fd39
-hierarchical,image,7,4,1,"[[""ARASAAC Pictograms"", 1]]",92617f40c2c43b99
-hierarchical,image,7,5,1,"[[""ARASAAC Pictograms"", 1]]",52c97289f9c9f6dc
-hierarchical,image,7,6,8,"[[""GHS Hazard Pictograms"", 8]]",e6a519ba8dd89268 77256bc1bfc6a972 a2d4a495cac2adae 65ab556300024c0b 832f13e7c3d03100 9fc96269778b3b35 6bfd058b52069703 4de8ea4a98e350d2
-hierarchical,image,10,0,1,"[[""McDougall Symbol/Icon Set"", 1]]",38fcc454e8b76e8a
-hierarchical,image,10,1,104,"[[""Mapbox Maki"", 10], [""OCHA Humanitarian Icons"", 10], [""Mulberry Symbols"", 10], [""Universal Symbols Healthcare Webfont"", 10], [""OpenMoji"", 10]]",017f18f80c2b6bb0 969d2464f703154e b8d532b96649ad9b 3ae85d1803f6fd0e 9198bbcd6bccdff0 e6e2d33ceb0e83af 66cc7c6ebe473f7b ab05a4526c352168
-hierarchical,image,10,2,9,"[[""Blissymbolics"", 7], [""McDougall Symbol/Icon Set"", 2]]",7f0b8a0a616b25e4 9c32fad280ea8306 f1dbaaccf91a93c6 067dab84101e4d40 121de65a284465c5 3167ff62be4a1ae7 e0bee5c0b0d5a7d6 9b513da0bbf6fec5
-hierarchical,image,10,3,1,"[[""AIGA/DOT Symbol Signs"", 1]]",22dd7014ca4e0926
-hierarchical,image,10,4,1,"[[""AIGA/DOT Symbol Signs"", 1]]",a775dde68401f18c
-hierarchical,image,10,5,1,"[[""Blissymbolics"", 1]]",c7f27f7fd0d5d77b
-hierarchical,image,10,6,2,"[[""ARASAAC Pictograms"", 2]]",ab4c6a5c76f157ea 255623028b70fd39
-hierarchical,image,10,7,1,"[[""ARASAAC Pictograms"", 1]]",92617f40c2c43b99
-hierarchical,image,10,8,1,"[[""ARASAAC Pictograms"", 1]]",52c97289f9c9f6dc
-hierarchical,image,10,9,8,"[[""GHS Hazard Pictograms"", 8]]",e6a519ba8dd89268 77256bc1bfc6a972 a2d4a495cac2adae 65ab556300024c0b 832f13e7c3d03100 9fc96269778b3b35 6bfd058b52069703 4de8ea4a98e350d2
-kmeans,metadata,3,0,10,"[[""ISO 15223 Medical Device Symbols"", 10]]",f1c82e0e3033e0f2 4ce46f5f8d9a06ef 0db27129c0b71a97 cad61736ae362480 e6e2d33ceb0e83af 0dbe74d0ea5067c3 397929e89a5a2bf0 9875309b29ecca62
-kmeans,metadata,3,1,90,"[[""McDougall Symbol/Icon Set"", 10], [""AIGA/DOT Symbol Signs"", 10], [""Mapbox Maki"", 10], [""OCHA Humanitarian Icons"", 10], [""Mulberry Symbols"", 10]]",520986b8f519cbf8 8419e26eaf8a2ed7 a6380f9f07fe0748 0a8d3ea6a14b7694 34ba5b6f56c34d2d 8ccac8fbcc5ef442 60fafea65eec88ff f81f3d24abe2590e
-kmeans,metadata,3,2,29,"[[""ARASAAC Pictograms"", 10], [""USP Pictograms"", 10], [""GHS Hazard Pictograms"", 9]]",6a09c26401d7753b db7e3477d2e2096c e93973679234ed81 67facd157d491218 35be32b4253e6b7e 2b5b06037a00ac7f 09f287549c50a508 786becad40b24f1e
-kmeans,metadata,5,0,6,"[[""OpenMoji"", 6]]",f0a0fb220faa1075 f3b6090794574209 960c8c87ff30f1bf 6d73856e7180fb8d 0b97f051d6187ce8 709929ff886fee1d
-kmeans,metadata,5,1,10,"[[""Blissymbolics"", 10]]",7f0b8a0a616b25e4 067dab84101e4d40 9c32fad280ea8306 d688ea743859b0af c7f27f7fd0d5d77b e0bee5c0b0d5a7d6 f3ac148d14f99a51 9b513da0bbf6fec5
-kmeans,metadata,5,2,4,"[[""OpenMoji"", 4]]",7e81760c1b53d064 9099811c08fecfa1 d35e50aec0a064c5 a1b878174fb512f0
-kmeans,metadata,5,3,10,"[[""McDougall Symbol/Icon Set"", 10]]",c0b01f650a9f3047 38fcc454e8b76e8a 2dfb8baa45944a16 3167ff62be4a1ae7 276e0f48b2aecf30 671222e19754e444 b5c1200b37f8968d af8efb82a3eaf250
-kmeans,metadata,5,4,99,"[[""AIGA/DOT Symbol Signs"", 10], [""Mapbox Maki"", 10], [""OCHA Humanitarian Icons"", 10], [""Mulberry Symbols"", 10], [""ARASAAC Pictograms"", 10]]",f81f3d24abe2590e 60fafea65eec88ff 8ccac8fbcc5ef442 520986b8f519cbf8 34ba5b6f56c34d2d 0a8d3ea6a14b7694 a6380f9f07fe0748 8419e26eaf8a2ed7
-kmeans,metadata,7,0,70,"[[""AIGA/DOT Symbol Signs"", 10], [""Mapbox Maki"", 10], [""OCHA Humanitarian Icons"", 10], [""Mulberry Symbols"", 10], [""Universal Symbols Healthcare Webfont"", 10]]",520986b8f519cbf8 8419e26eaf8a2ed7 a6380f9f07fe0748 0a8d3ea6a14b7694 34ba5b6f56c34d2d 8ccac8fbcc5ef442 60fafea65eec88ff f81f3d24abe2590e
-kmeans,metadata,7,1,10,"[[""ARASAAC Pictograms"", 10]]",ab4c6a5c76f157ea 255623028b70fd39 92617f40c2c43b99 8025a575373cd6a9 a51195a2d92d9ff2 97bbfcfc069b7629 52c97289f9c9f6dc 4ca95e3d476453ba
-kmeans,metadata,7,2,10,"[[""McDougall Symbol/Icon Set"", 10]]",c0b01f650a9f3047 38fcc454e8b76e8a 2dfb8baa45944a16 3167ff62be4a1ae7 276e0f48b2aecf30 671222e19754e444 b5c1200b37f8968d af8efb82a3eaf250
-kmeans,metadata,7,3,10,"[[""ISO 7010 Safety Signs"", 10]]",017f18f80c2b6bb0 3ae85d1803f6fd0e b8d532b96649ad9b 3fc360c5c4e56a82 672c5ac5c05045ac 969d2464f703154e 9198bbcd6bccdff0 8eb2ae5e436bf3d9
-kmeans,metadata,7,4,9,"[[""GHS Hazard Pictograms"", 9]]",6bfd058b52069703 cddd255cbebb9d8e 65ab556300024c0b 832f13e7c3d03100 e6a519ba8dd89268 77256bc1bfc6a972 9fc96269778b3b35 a2d4a495cac2adae
-kmeans,metadata,7,5,10,"[[""Blissymbolics"", 10]]",7f0b8a0a616b25e4 067dab84101e4d40 9c32fad280ea8306 d688ea743859b0af c7f27f7fd0d5d77b e0bee5c0b0d5a7d6 f3ac148d14f99a51 9b513da0bbf6fec5
-kmeans,metadata,7,6,10,"[[""USP Pictograms"", 10]]",09f287549c50a508 2b5b06037a00ac7f 35be32b4253e6b7e 67facd157d491218 e93973679234ed81 db7e3477d2e2096c 786becad40b24f1e 6a09c26401d7753b
-kmeans,metadata,10,0,20,"[[""AIGA/DOT Symbol Signs"", 10], [""ISO 7010 Safety Signs"", 10]]",80b2d92acb1f6d71 8eb2ae5e436bf3d9 9198bbcd6bccdff0 969d2464f703154e 672c5ac5c05045ac 3fc360c5c4e56a82 b8d532b96649ad9b 3ae85d1803f6fd0e
-kmeans,metadata,10,1,9,"[[""GHS Hazard Pictograms"", 9]]",6bfd058b52069703 cddd255cbebb9d8e 65ab556300024c0b 832f13e7c3d03100 e6a519ba8dd89268 77256bc1bfc6a972 9fc96269778b3b35 a2d4a495cac2adae
-kmeans,metadata,10,2,10,"[[""Blissymbolics"", 10]]",7f0b8a0a616b25e4 067dab84101e4d40 9c32fad280ea8306 d688ea743859b0af c7f27f7fd0d5d77b e0bee5c0b0d5a7d6 f3ac148d14f99a51 9b513da0bbf6fec5
-kmeans,metadata,10,3,10,"[[""USP Pictograms"", 10]]",09f287549c50a508 2b5b06037a00ac7f 35be32b4253e6b7e 67facd157d491218 e93973679234ed81 db7e3477d2e2096c 786becad40b24f1e 6a09c26401d7753b
-kmeans,metadata,10,4,10,"[[""ARASAAC Pictograms"", 10]]",ab4c6a5c76f157ea 255623028b70fd39 92617f40c2c43b99 8025a575373cd6a9 a51195a2d92d9ff2 97bbfcfc069b7629 52c97289f9c9f6dc 4ca95e3d476453ba
-kmeans,metadata,10,5,10,"[[""ISO 15223 Medical Device Symbols"", 10]]",f1c82e0e3033e0f2 4ce46f5f8d9a06ef 0db27129c0b71a97 cad61736ae362480 e6e2d33ceb0e83af 0dbe74d0ea5067c3 397929e89a5a2bf0 9875309b29ecca62
-kmeans,metadata,10,6,20,"[[""Mapbox Maki"", 10], [""OpenMoji"", 10]]",26246a410ab5f5fc 9099811c08fecfa1 7e81760c1b53d064 d35e50aec0a064c5 c4317c54e3675826 6cd75929d0d2a3f0 bbdb16044679062a 70c66f7df237db99
-kmeans,metadata,10,7,10,"[[""McDougall Symbol/Icon Set"", 10]]",c0b01f650a9f3047 38fcc454e8b76e8a 2dfb8baa45944a16 3167ff62be4a1ae7 276e0f48b2aecf30 671222e19754e444 b5c1200b37f8968d af8efb82a3eaf250
-kmeans,metadata,10,8,20,"[[""Mulberry Symbols"", 10], [""Universal Symbols Healthcare Webfont"", 10]]",59f7cf4b24c41dc4 e0760c68f28e0892 ab45fc2620cc66ce 4e6eb33dee2b707c 31f94ec85b9130e2 39719b9e379a0e17 66cc7c6ebe473f7b bd7774dcad9acd79
-kmeans,metadata,10,9,10,"[[""OCHA Humanitarian Icons"", 10]]",47e3bd73efa382ae ccaf59c0ceb35dab 5cea9f126476238d 714e0ea28c0b44d6 d2908bcd850fab66 946f5783ecc3c3d3 8b56c33a174b9ce3 13c91a98bdfe97db
-hierarchical,metadata,3,0,9,"[[""McDougall Symbol/Icon Set"", 9]]",c0b01f650a9f3047 38fcc454e8b76e8a 276e0f48b2aecf30 3167ff62be4a1ae7 671222e19754e444 2dfb8baa45944a16 b5c1200b37f8968d 121de65a284465c5
-hierarchical,metadata,3,1,1,"[[""McDougall Symbol/Icon Set"", 1]]",7cb54d2ffd287b95
-hierarchical,metadata,3,2,119,"[[""AIGA/DOT Symbol Signs"", 10], [""Mapbox Maki"", 10], [""OCHA Humanitarian Icons"", 10], [""Mulberry Symbols"", 10], [""Blissymbolics"", 10]]",f81f3d24abe2590e 60fafea65eec88ff 8ccac8fbcc5ef442 520986b8f519cbf8 34ba5b6f56c34d2d 0a8d3ea6a14b7694 a6380f9f07fe0748 8419e26eaf8a2ed7
-hierarchical,metadata,5,0,6,"[[""McDougall Symbol/Icon Set"", 6]]",671222e19754e444 276e0f48b2aecf30 38fcc454e8b76e8a c0b01f650a9f3047 3167ff62be4a1ae7 121de65a284465c5
-hierarchical,metadata,5,1,1,"[[""McDougall Symbol/Icon Set"", 1]]",7cb54d2ffd287b95
-hierarchical,metadata,5,2,2,"[[""McDougall Symbol/Icon Set"", 2]]",af8efb82a3eaf250 2dfb8baa45944a16
-hierarchical,metadata,5,3,1,"[[""McDougall Symbol/Icon Set"", 1]]",b5c1200b37f8968d
-hierarchical,metadata,5,4,119,"[[""AIGA/DOT Symbol Signs"", 10], [""Mapbox Maki"", 10], [""OCHA Humanitarian Icons"", 10], [""Mulberry Symbols"", 10], [""Blissymbolics"", 10]]",f81f3d24abe2590e 60fafea65eec88ff 8ccac8fbcc5ef442 520986b8f519cbf8 34ba5b6f56c34d2d 0a8d3ea6a14b7694 a6380f9f07fe0748 8419e26eaf8a2ed7
-hierarchical,metadata,7,0,1,"[[""McDougall Symbol/Icon Set"", 1]]",38fcc454e8b76e8a
-hierarchical,metadata,7,1,4,"[[""McDougall Symbol/Icon Set"", 4]]",671222e19754e444 276e0f48b2aecf30 121de65a284465c5 c0b01f650a9f3047
-hierarchical,metadata,7,2,1,"[[""McDougall Symbol/Icon Set"", 1]]",3167ff62be4a1ae7
-hierarchical,metadata,7,3,1,"[[""McDougall Symbol/Icon Set"", 1]]",7cb54d2ffd287b95
-hierarchical,metadata,7,4,2,"[[""McDougall Symbol/Icon Set"", 2]]",af8efb82a3eaf250 2dfb8baa45944a16
-hierarchical,metadata,7,5,1,"[[""McDougall Symbol/Icon Set"", 1]]",b5c1200b37f8968d
-hierarchical,metadata,7,6,119,"[[""AIGA/DOT Symbol Signs"", 10], [""Mapbox Maki"", 10], [""OCHA Humanitarian Icons"", 10], [""Mulberry Symbols"", 10], [""Blissymbolics"", 10]]",f81f3d24abe2590e 60fafea65eec88ff 8ccac8fbcc5ef442 520986b8f519cbf8 34ba5b6f56c34d2d 0a8d3ea6a14b7694 a6380f9f07fe0748 8419e26eaf8a2ed7
-hierarchical,metadata,10,0,1,"[[""McDougall Symbol/Icon Set"", 1]]",38fcc454e8b76e8a
-hierarchical,metadata,10,1,2,"[[""McDougall Symbol/Icon Set"", 2]]",671222e19754e444 121de65a284465c5
-hierarchical,metadata,10,2,1,"[[""McDougall Symbol/Icon Set"", 1]]",3167ff62be4a1ae7
-hierarchical,metadata,10,3,1,"[[""McDougall Symbol/Icon Set"", 1]]",7cb54d2ffd287b95
-hierarchical,metadata,10,4,1,"[[""McDougall Symbol/Icon Set"", 1]]",c0b01f650a9f3047
-hierarchical,metadata,10,5,1,"[[""McDougall Symbol/Icon Set"", 1]]",af8efb82a3eaf250
-hierarchical,metadata,10,6,1,"[[""McDougall Symbol/Icon Set"", 1]]",276e0f48b2aecf30
-hierarchical,metadata,10,7,1,"[[""McDougall Symbol/Icon Set"", 1]]",b5c1200b37f8968d
-hierarchical,metadata,10,8,1,"[[""McDougall Symbol/Icon Set"", 1]]",2dfb8baa45944a16
-hierarchical,metadata,10,9,119,"[[""AIGA/DOT Symbol Signs"", 10], [""Mapbox Maki"", 10], [""OCHA Humanitarian Icons"", 10], [""Mulberry Symbols"", 10], [""Blissymbolics"", 10]]",f81f3d24abe2590e 60fafea65eec88ff 8ccac8fbcc5ef442 520986b8f519cbf8 34ba5b6f56c34d2d 0a8d3ea6a14b7694 a6380f9f07fe0748 8419e26eaf8a2ed7
-kmeans,combined,3,0,104,"[[""AIGA/DOT Symbol Signs"", 10], [""Mapbox Maki"", 10], [""OCHA Humanitarian Icons"", 10], [""Mulberry Symbols"", 10], [""Blissymbolics"", 10]]",26246a410ab5f5fc ce5351620f2eb860 017f18f80c2b6bb0 969d2464f703154e b8d532b96649ad9b 3ae85d1803f6fd0e 9198bbcd6bccdff0 34ba5b6f56c34d2d
-kmeans,combined,3,1,10,"[[""McDougall Symbol/Icon Set"", 10]]",c0b01f650a9f3047 2dfb8baa45944a16 3167ff62be4a1ae7 276e0f48b2aecf30 38fcc454e8b76e8a 671222e19754e444 af8efb82a3eaf250 b5c1200b37f8968d
-kmeans,combined,3,2,15,"[[""GHS Hazard Pictograms"", 8], [""ARASAAC Pictograms"", 7]]",e6a519ba8dd89268 a2d4a495cac2adae 77256bc1bfc6a972 97bbfcfc069b7629 832f13e7c3d03100 65ab556300024c0b 6bfd058b52069703 9fc96269778b3b35
-kmeans,combined,5,0,9,"[[""OpenMoji"", 7], [""Mulberry Symbols"", 2]]",6d73856e7180fb8d 960c8c87ff30f1bf 0b97f051d6187ce8 f3b6090794574209 709929ff886fee1d f0a0fb220faa1075 9099811c08fecfa1 a6380f9f07fe0748
-kmeans,combined,5,1,10,"[[""McDougall Symbol/Icon Set"", 10]]",c0b01f650a9f3047 2dfb8baa45944a16 3167ff62be4a1ae7 276e0f48b2aecf30 38fcc454e8b76e8a 671222e19754e444 af8efb82a3eaf250 b5c1200b37f8968d
-kmeans,combined,5,2,37,"[[""ISO 15223 Medical Device Symbols"", 10], [""Universal Symbols Healthcare Webfont"", 8], [""Mapbox Maki"", 7], [""OCHA Humanitarian Icons"", 6], [""AIGA/DOT Symbol Signs"", 2]]",6cd75929d0d2a3f0 e0760c68f28e0892 4e6eb33dee2b707c e6e2d33ceb0e83af 6ff9dd295e18ba9b ab45fc2620cc66ce bcc9cc12c88e11a7 633d125136da3e33
-kmeans,combined,5,3,44,"[[""Blissymbolics"", 10], [""ISO 7010 Safety Signs"", 10], [""AIGA/DOT Symbol Signs"", 8], [""Mulberry Symbols"", 5], [""OCHA Humanitarian Icons"", 4]]",bbdb16044679062a 59f7cf4b24c41dc4 34ba5b6f56c34d2d da1cc0b972f266c1 ce5351620f2eb860 a51195a2d92d9ff2 81cdfb4479630d2b 39719b9e379a0e17
-kmeans,combined,5,4,29,"[[""ARASAAC Pictograms"", 9], [""GHS Hazard Pictograms"", 9], [""USP Pictograms"", 8], [""Mulberry Symbols"", 3]]",97bbfcfc069b7629 cddd255cbebb9d8e 8025a575373cd6a9 255623028b70fd39 8419e26eaf8a2ed7 0f0ba10ef3a52533 4ca95e3d476453ba 35be32b4253e6b7e
-kmeans,combined,7,0,19,"[[""Mulberry Symbols"", 10], [""OpenMoji"", 8], [""ARASAAC Pictograms"", 1]]",8419e26eaf8a2ed7 0a8d3ea6a14b7694 34ba5b6f56c34d2d 651ed6b48d4e4ce0 8ccac8fbcc5ef442 9099811c08fecfa1 a6380f9f07fe0748 520986b8f519cbf8
-kmeans,combined,7,1,17,"[[""USP Pictograms"", 10], [""ARASAAC Pictograms"", 7]]",67facd157d491218 35be32b4253e6b7e db7e3477d2e2096c e93973679234ed81 4ca95e3d476453ba 0f0ba10ef3a52533 2b5b06037a00ac7f 4345ee093157bb2b
-kmeans,combined,7,2,10,"[[""McDougall Symbol/Icon Set"", 10]]",c0b01f650a9f3047 2dfb8baa45944a16 3167ff62be4a1ae7 276e0f48b2aecf30 38fcc454e8b76e8a 671222e19754e444 af8efb82a3eaf250 b5c1200b37f8968d
-kmeans,combined,7,3,42,"[[""Mapbox Maki"", 10], [""OCHA Humanitarian Icons"", 10], [""ISO 7010 Safety Signs"", 10], [""AIGA/DOT Symbol Signs"", 9], [""ARASAAC Pictograms"", 1]]",26246a410ab5f5fc 633d125136da3e33 ce5351620f2eb860 b6aae574e74b8cfe 6cd75929d0d2a3f0 ab05a4526c352168 c4317c54e3675826 017f18f80c2b6bb0
-kmeans,combined,7,4,9,"[[""GHS Hazard Pictograms"", 8], [""ARASAAC Pictograms"", 1]]",e6a519ba8dd89268 77256bc1bfc6a972 65ab556300024c0b a2d4a495cac2adae 832f13e7c3d03100 9fc96269778b3b35 6bfd058b52069703 4de8ea4a98e350d2
-kmeans,combined,7,5,11,"[[""Blissymbolics"", 10], [""AIGA/DOT Symbol Signs"", 1]]",9c32fad280ea8306 7f0b8a0a616b25e4 f1dbaaccf91a93c6 067dab84101e4d40 c7f27f7fd0d5d77b e0bee5c0b0d5a7d6 f3ac148d14f99a51 d688ea743859b0af
-kmeans,combined,7,6,21,"[[""ISO 15223 Medical Device Symbols"", 10], [""Universal Symbols Healthcare Webfont"", 9], [""OpenMoji"", 2]]",e0760c68f28e0892 e6e2d33ceb0e83af bcc9cc12c88e11a7 ab45fc2620cc66ce 4e6eb33dee2b707c 6ff9dd295e18ba9b cad61736ae362480 0dbe74d0ea5067c3
-kmeans,combined,10,0,20,"[[""ISO 7010 Safety Signs"", 10], [""AIGA/DOT Symbol Signs"", 9], [""Universal Symbols Healthcare Webfont"", 1]]",017f18f80c2b6bb0 969d2464f703154e b8d532b96649ad9b 3ae85d1803f6fd0e 9198bbcd6bccdff0 672c5ac5c05045ac 7ab893955ce53d32 395681962a31584b
-kmeans,combined,10,1,3,"[[""GHS Hazard Pictograms"", 3]]",6bfd058b52069703 832f13e7c3d03100 9fc96269778b3b35
-kmeans,combined,10,2,9,"[[""Blissymbolics"", 9]]",f1dbaaccf91a93c6 9c32fad280ea8306 7f0b8a0a616b25e4 067dab84101e4d40 c7f27f7fd0d5d77b e0bee5c0b0d5a7d6 9b513da0bbf6fec5 f3ac148d14f99a51
-kmeans,combined,10,3,5,"[[""GHS Hazard Pictograms"", 5]]",e6a519ba8dd89268 77256bc1bfc6a972 65ab556300024c0b a2d4a495cac2adae 4de8ea4a98e350d2
-kmeans,combined,10,4,18,"[[""ARASAAC Pictograms"", 9], [""Mulberry Symbols"", 8], [""GHS Hazard Pictograms"", 1]]",8025a575373cd6a9 34ba5b6f56c34d2d 8419e26eaf8a2ed7 0a8d3ea6a14b7694 651ed6b48d4e4ce0 255623028b70fd39 97bbfcfc069b7629 a51195a2d92d9ff2
-kmeans,combined,10,5,10,"[[""ISO 15223 Medical Device Symbols"", 10]]",e6e2d33ceb0e83af 397929e89a5a2bf0 cad61736ae362480 f1c82e0e3033e0f2 0dbe74d0ea5067c3 9875309b29ecca62 b566cf363514b2ce 0db27129c0b71a97
-kmeans,combined,10,6,21,"[[""USP Pictograms"", 10], [""Universal Symbols Healthcare Webfont"", 8], [""Blissymbolics"", 1], [""ARASAAC Pictograms"", 1], [""OpenMoji"", 1]]",6a09c26401d7753b 2b5b06037a00ac7f 35be32b4253e6b7e 67facd157d491218 db7e3477d2e2096c 0f0ba10ef3a52533 786becad40b24f1e e0760c68f28e0892
-kmeans,combined,10,7,10,"[[""McDougall Symbol/Icon Set"", 10]]",c0b01f650a9f3047 2dfb8baa45944a16 3167ff62be4a1ae7 276e0f48b2aecf30 38fcc454e8b76e8a 671222e19754e444 af8efb82a3eaf250 b5c1200b37f8968d
-kmeans,combined,10,8,10,"[[""OpenMoji"", 8], [""Mulberry Symbols"", 2]]",6d73856e7180fb8d 960c8c87ff30f1bf 0b97f051d6187ce8 f3b6090794574209 9099811c08fecfa1 f0a0fb220faa1075 709929ff886fee1d a6380f9f07fe0748
-kmeans,combined,10,9,23,"[[""Mapbox Maki"", 10], [""OCHA Humanitarian Icons"", 10], [""AIGA/DOT Symbol Signs"", 1], [""Universal Symbols Healthcare Webfont"", 1], [""OpenMoji"", 1]]",633d125136da3e33 c4317c54e3675826 6cd75929d0d2a3f0 26246a410ab5f5fc b6aae574e74b8cfe ab05a4526c352168 13c91a98bdfe97db c3af4581e34e912a
-hierarchical,combined,3,0,9,"[[""McDougall Symbol/Icon Set"", 9]]",c0b01f650a9f3047 2dfb8baa45944a16 3167ff62be4a1ae7 38fcc454e8b76e8a 276e0f48b2aecf30 671222e19754e444 af8efb82a3eaf250 121de65a284465c5
-hierarchical,combined,3,1,1,"[[""McDougall Symbol/Icon Set"", 1]]",b5c1200b37f8968d
-hierarchical,combined,3,2,119,"[[""AIGA/DOT Symbol Signs"", 10], [""Mapbox Maki"", 10], [""OCHA Humanitarian Icons"", 10], [""Mulberry Symbols"", 10], [""Blissymbolics"", 10]]",34ba5b6f56c34d2d ce5351620f2eb860 26246a410ab5f5fc 017f18f80c2b6bb0 969d2464f703154e b8d532b96649ad9b cddd255cbebb9d8e 3ae85d1803f6fd0e
-hierarchical,combined,5,0,1,"[[""McDougall Symbol/Icon Set"", 1]]",38fcc454e8b76e8a
-hierarchical,combined,5,1,7,"[[""McDougall Symbol/Icon Set"", 7]]",c0b01f650a9f3047 3167ff62be4a1ae7 671222e19754e444 276e0f48b2aecf30 2dfb8baa45944a16 121de65a284465c5 af8efb82a3eaf250
-hierarchical,combined,5,2,1,"[[""McDougall Symbol/Icon Set"", 1]]",7cb54d2ffd287b95
-hierarchical,combined,5,3,1,"[[""McDougall Symbol/Icon Set"", 1]]",b5c1200b37f8968d
-hierarchical,combined,5,4,119,"[[""AIGA/DOT Symbol Signs"", 10], [""Mapbox Maki"", 10], [""OCHA Humanitarian Icons"", 10], [""Mulberry Symbols"", 10], [""Blissymbolics"", 10]]",34ba5b6f56c34d2d ce5351620f2eb860 26246a410ab5f5fc 017f18f80c2b6bb0 969d2464f703154e b8d532b96649ad9b cddd255cbebb9d8e 3ae85d1803f6fd0e
-hierarchical,combined,7,0,1,"[[""McDougall Symbol/Icon Set"", 1]]",38fcc454e8b76e8a
-hierarchical,combined,7,1,3,"[[""McDougall Symbol/Icon Set"", 3]]",c0b01f650a9f3047 671222e19754e444 3167ff62be4a1ae7
-hierarchical,combined,7,2,1,"[[""McDougall Symbol/Icon Set"", 1]]",7cb54d2ffd287b95
-hierarchical,combined,7,3,2,"[[""McDougall Symbol/Icon Set"", 2]]",af8efb82a3eaf250 2dfb8baa45944a16
-hierarchical,combined,7,4,2,"[[""McDougall Symbol/Icon Set"", 2]]",121de65a284465c5 276e0f48b2aecf30
-hierarchical,combined,7,5,1,"[[""McDougall Symbol/Icon Set"", 1]]",b5c1200b37f8968d
-hierarchical,combined,7,6,119,"[[""AIGA/DOT Symbol Signs"", 10], [""Mapbox Maki"", 10], [""OCHA Humanitarian Icons"", 10], [""Mulberry Symbols"", 10], [""Blissymbolics"", 10]]",34ba5b6f56c34d2d ce5351620f2eb860 26246a410ab5f5fc 017f18f80c2b6bb0 969d2464f703154e b8d532b96649ad9b cddd255cbebb9d8e 3ae85d1803f6fd0e
-hierarchical,combined,10,0,1,"[[""McDougall Symbol/Icon Set"", 1]]",38fcc454e8b76e8a
-hierarchical,combined,10,1,2,"[[""McDougall Symbol/Icon Set"", 2]]",c0b01f650a9f3047 671222e19754e444
-hierarchical,combined,10,2,1,"[[""McDougall Symbol/Icon Set"", 1]]",3167ff62be4a1ae7
-hierarchical,combined,10,3,1,"[[""McDougall Symbol/Icon Set"", 1]]",7cb54d2ffd287b95
-hierarchical,combined,10,4,1,"[[""McDougall Symbol/Icon Set"", 1]]",af8efb82a3eaf250
-hierarchical,combined,10,5,1,"[[""McDougall Symbol/Icon Set"", 1]]",121de65a284465c5
-hierarchical,combined,10,6,1,"[[""McDougall Symbol/Icon Set"", 1]]",276e0f48b2aecf30
-hierarchical,combined,10,7,1,"[[""McDougall Symbol/Icon Set"", 1]]",b5c1200b37f8968d
-hierarchical,combined,10,8,1,"[[""McDougall Symbol/Icon Set"", 1]]",2dfb8baa45944a16
-hierarchical,combined,10,9,119,"[[""AIGA/DOT Symbol Signs"", 10], [""Mapbox Maki"", 10], [""OCHA Humanitarian Icons"", 10], [""Mulberry Symbols"", 10], [""Blissymbolics"", 10]]",34ba5b6f56c34d2d ce5351620f2eb860 26246a410ab5f5fc 017f18f80c2b6bb0 969d2464f703154e b8d532b96649ad9b cddd255cbebb9d8e 3ae85d1803f6fd0e
+kmeans,image,3,0,13,"[[""OCHA Humanitarian Icons"", 4], [""ISO 15223 Medical Device Symbols"", 4], [""AIGA/DOT Symbol Signs"", 3], [""Universal Symbols Healthcare Webfont"", 2]]",f5e1b09d6e19a856 a08d214801605fdc d4240d07a1e75756 e64d4e32ce5a8902 0b785ca3d631c636 9379e0b95c9e1e64 7616bb30c75b6877 62cb4e396fd4e927
+kmeans,image,3,1,16,"[[""ISO 7010 Safety Signs"", 10], [""ISO 15223 Medical Device Symbols"", 4], [""Universal Symbols Healthcare Webfont"", 2]]",d7c62f4eefad9e5d dc00f37fcd3db2aa 32563da2888cb9c8 9198bbcd6bccdff0 2663a2a83e8e54b1 c76f1030330c1010 b8d532b96649ad9b 672c5ac5c05045ac
+kmeans,image,3,2,21,"[[""AIGA/DOT Symbol Signs"", 7], [""OCHA Humanitarian Icons"", 6], [""Universal Symbols Healthcare Webfont"", 6], [""ISO 15223 Medical Device Symbols"", 2]]",439873b50eed4285 0826fa8294b38c15 40e393bed618cc42 7356c61eeb1541c5 bf9857071daccae9 30e917dd0fe86d77 3e0b873f1a5b26ca 13ce3bf4ead47832
+kmeans,image,5,0,10,"[[""ISO 7010 Safety Signs"", 7], [""Universal Symbols Healthcare Webfont"", 2], [""ISO 15223 Medical Device Symbols"", 1]]",d7c62f4eefad9e5d 2663a2a83e8e54b1 9198bbcd6bccdff0 b8d532b96649ad9b 32563da2888cb9c8 c76f1030330c1010 dc00f37fcd3db2aa 672c5ac5c05045ac
+kmeans,image,5,1,18,"[[""Universal Symbols Healthcare Webfont"", 6], [""OCHA Humanitarian Icons"", 5], [""AIGA/DOT Symbol Signs"", 4], [""ISO 15223 Medical Device Symbols"", 3]]",439873b50eed4285 0826fa8294b38c15 7356c61eeb1541c5 13ce3bf4ead47832 30e917dd0fe86d77 bf9857071daccae9 3e0b873f1a5b26ca 0dbe74d0ea5067c3
+kmeans,image,5,2,4,"[[""ISO 7010 Safety Signs"", 3], [""ISO 15223 Medical Device Symbols"", 1]]",1e157882b7150c13 d8b035da8f412942 dc257e448d984cff 0f8cade296175730
+kmeans,image,5,3,10,"[[""AIGA/DOT Symbol Signs"", 5], [""OCHA Humanitarian Icons"", 3], [""Universal Symbols Healthcare Webfont"", 1], [""ISO 15223 Medical Device Symbols"", 1]]",f5e1b09d6e19a856 9bb28ee6b951a5e8 dbacbbee1b8418a3 40e393bed618cc42 e64d4e32ce5a8902 20975ff5f9cc4caf 7616bb30c75b6877 d4240d07a1e75756
+kmeans,image,5,4,8,"[[""ISO 15223 Medical Device Symbols"", 4], [""OCHA Humanitarian Icons"", 2], [""AIGA/DOT Symbol Signs"", 1], [""Universal Symbols Healthcare Webfont"", 1]]",62cb4e396fd4e927 a08d214801605fdc 0b785ca3d631c636 cb84e329bdddd496 e0d2e112cc0df560 9379e0b95c9e1e64 f6aa07dce193fa26 1b8210d261f93090
+kmeans,image,7,0,9,"[[""OCHA Humanitarian Icons"", 4], [""Universal Symbols Healthcare Webfont"", 3], [""AIGA/DOT Symbol Signs"", 1], [""ISO 15223 Medical Device Symbols"", 1]]",439873b50eed4285 0826fa8294b38c15 7356c61eeb1541c5 3e0b873f1a5b26ca bf9857071daccae9 13ce3bf4ead47832 30e917dd0fe86d77 e0c216d6fdfd0cb4
+kmeans,image,7,1,11,"[[""ISO 7010 Safety Signs"", 7], [""ISO 15223 Medical Device Symbols"", 3], [""Universal Symbols Healthcare Webfont"", 1]]",dc00f37fcd3db2aa d7c62f4eefad9e5d 9198bbcd6bccdff0 2663a2a83e8e54b1 c76f1030330c1010 32563da2888cb9c8 b8d532b96649ad9b 0f8cade296175730
+kmeans,image,7,2,2,"[[""AIGA/DOT Symbol Signs"", 2]]",9b352ee9d3ea7f71 15f1b4324f271e4f
+kmeans,image,7,3,4,"[[""ISO 7010 Safety Signs"", 3], [""ISO 15223 Medical Device Symbols"", 1]]",1e157882b7150c13 d8b035da8f412942 dc257e448d984cff 672c5ac5c05045ac
+kmeans,image,7,4,5,"[[""Universal Symbols Healthcare Webfont"", 3], [""OCHA Humanitarian Icons"", 1], [""ISO 15223 Medical Device Symbols"", 1]]",15b4d245c50fdb61 4a8c039921c3bd7d 70f46d8c5056c65d ccf98772a3e0d4b8 e56869f80c3514ce
+kmeans,image,7,5,12,"[[""OCHA Humanitarian Icons"", 4], [""AIGA/DOT Symbol Signs"", 3], [""ISO 15223 Medical Device Symbols"", 3], [""Universal Symbols Healthcare Webfont"", 2]]",f5e1b09d6e19a856 a08d214801605fdc e64d4e32ce5a8902 d4240d07a1e75756 0b785ca3d631c636 7616bb30c75b6877 e0d2e112cc0df560 9379e0b95c9e1e64
+kmeans,image,7,6,7,"[[""AIGA/DOT Symbol Signs"", 4], [""OCHA Humanitarian Icons"", 1], [""Universal Symbols Healthcare Webfont"", 1], [""ISO 15223 Medical Device Symbols"", 1]]",40e393bed618cc42 9bb28ee6b951a5e8 306ad85560fbabc4 32d08149ef2bc303 20975ff5f9cc4caf dbacbbee1b8418a3 01b3d2f16631c2ed
+kmeans,image,10,0,1,"[[""ISO 7010 Safety Signs"", 1]]",0f8cade296175730
+kmeans,image,10,1,1,"[[""ISO 15223 Medical Device Symbols"", 1]]",e56869f80c3514ce
+kmeans,image,10,2,5,"[[""ISO 15223 Medical Device Symbols"", 3], [""OCHA Humanitarian Icons"", 1], [""Universal Symbols Healthcare Webfont"", 1]]",0dbe74d0ea5067c3 4a8c039921c3bd7d 0368ddb907e94299 b566cf363514b2ce ccf98772a3e0d4b8
+kmeans,image,10,3,7,"[[""ISO 7010 Safety Signs"", 6], [""Universal Symbols Healthcare Webfont"", 1]]",2663a2a83e8e54b1 9198bbcd6bccdff0 b8d532b96649ad9b c76f1030330c1010 32563da2888cb9c8 d7c62f4eefad9e5d dc00f37fcd3db2aa
+kmeans,image,10,4,7,"[[""AIGA/DOT Symbol Signs"", 2], [""OCHA Humanitarian Icons"", 2], [""ISO 15223 Medical Device Symbols"", 2], [""Universal Symbols Healthcare Webfont"", 1]]",f5e1b09d6e19a856 d4240d07a1e75756 e64d4e32ce5a8902 7616bb30c75b6877 9379e0b95c9e1e64 5786f314791a3349 1b8210d261f93090
+kmeans,image,10,5,4,"[[""ISO 7010 Safety Signs"", 3], [""ISO 15223 Medical Device Symbols"", 1]]",1e157882b7150c13 d8b035da8f412942 dc257e448d984cff 672c5ac5c05045ac
+kmeans,image,10,6,2,"[[""Universal Symbols Healthcare Webfont"", 2]]",70f46d8c5056c65d 15b4d245c50fdb61
+kmeans,image,10,7,2,"[[""AIGA/DOT Symbol Signs"", 2]]",9b352ee9d3ea7f71 15f1b4324f271e4f
+kmeans,image,10,8,15,"[[""AIGA/DOT Symbol Signs"", 5], [""OCHA Humanitarian Icons"", 5], [""Universal Symbols Healthcare Webfont"", 4], [""ISO 15223 Medical Device Symbols"", 1]]",40e393bed618cc42 439873b50eed4285 bf9857071daccae9 0826fa8294b38c15 3e0b873f1a5b26ca 20975ff5f9cc4caf 32d08149ef2bc303 e0c216d6fdfd0cb4
+kmeans,image,10,9,6,"[[""OCHA Humanitarian Icons"", 2], [""ISO 15223 Medical Device Symbols"", 2], [""AIGA/DOT Symbol Signs"", 1], [""Universal Symbols Healthcare Webfont"", 1]]",0b785ca3d631c636 cb84e329bdddd496 e0d2e112cc0df560 a08d214801605fdc 62cb4e396fd4e927 f6aa07dce193fa26
+hierarchical,image,3,0,2,"[[""AIGA/DOT Symbol Signs"", 2]]",9b352ee9d3ea7f71 15f1b4324f271e4f
+hierarchical,image,3,1,47,"[[""OCHA Humanitarian Icons"", 10], [""Universal Symbols Healthcare Webfont"", 10], [""ISO 7010 Safety Signs"", 10], [""ISO 15223 Medical Device Symbols"", 9], [""AIGA/DOT Symbol Signs"", 8]]",dc00f37fcd3db2aa 9bb28ee6b951a5e8 d7c62f4eefad9e5d dbacbbee1b8418a3 40e393bed618cc42 f5e1b09d6e19a856 30e917dd0fe86d77 20975ff5f9cc4caf
+hierarchical,image,3,2,1,"[[""ISO 15223 Medical Device Symbols"", 1]]",1b8210d261f93090
+hierarchical,image,5,0,2,"[[""AIGA/DOT Symbol Signs"", 2]]",9b352ee9d3ea7f71 15f1b4324f271e4f
+hierarchical,image,5,1,45,"[[""OCHA Humanitarian Icons"", 10], [""Universal Symbols Healthcare Webfont"", 10], [""ISO 7010 Safety Signs"", 10], [""AIGA/DOT Symbol Signs"", 8], [""ISO 15223 Medical Device Symbols"", 7]]",dc00f37fcd3db2aa 9bb28ee6b951a5e8 d7c62f4eefad9e5d dbacbbee1b8418a3 40e393bed618cc42 30e917dd0fe86d77 0826fa8294b38c15 f5e1b09d6e19a856
+hierarchical,image,5,2,1,"[[""ISO 15223 Medical Device Symbols"", 1]]",f6aa07dce193fa26
+hierarchical,image,5,3,1,"[[""ISO 15223 Medical Device Symbols"", 1]]",1b8210d261f93090
+hierarchical,image,5,4,1,"[[""ISO 15223 Medical Device Symbols"", 1]]",9379e0b95c9e1e64
+hierarchical,image,7,0,2,"[[""AIGA/DOT Symbol Signs"", 2]]",9b352ee9d3ea7f71 15f1b4324f271e4f
+hierarchical,image,7,1,43,"[[""Universal Symbols Healthcare Webfont"", 10], [""ISO 7010 Safety Signs"", 10], [""OCHA Humanitarian Icons"", 9], [""AIGA/DOT Symbol Signs"", 8], [""ISO 15223 Medical Device Symbols"", 6]]",dc00f37fcd3db2aa 9bb28ee6b951a5e8 d7c62f4eefad9e5d dbacbbee1b8418a3 40e393bed618cc42 30e917dd0fe86d77 0826fa8294b38c15 32d08149ef2bc303
+hierarchical,image,7,2,1,"[[""OCHA Humanitarian Icons"", 1]]",5786f314791a3349
+hierarchical,image,7,3,1,"[[""ISO 15223 Medical Device Symbols"", 1]]",f6aa07dce193fa26
+hierarchical,image,7,4,1,"[[""ISO 15223 Medical Device Symbols"", 1]]",1b8210d261f93090
+hierarchical,image,7,5,1,"[[""ISO 15223 Medical Device Symbols"", 1]]",e56869f80c3514ce
+hierarchical,image,7,6,1,"[[""ISO 15223 Medical Device Symbols"", 1]]",9379e0b95c9e1e64
+hierarchical,image,10,0,2,"[[""AIGA/DOT Symbol Signs"", 2]]",9b352ee9d3ea7f71 15f1b4324f271e4f
+hierarchical,image,10,1,37,"[[""Universal Symbols Healthcare Webfont"", 9], [""ISO 7010 Safety Signs"", 9], [""AIGA/DOT Symbol Signs"", 7], [""OCHA Humanitarian Icons"", 7], [""ISO 15223 Medical Device Symbols"", 5]]",dc00f37fcd3db2aa 9bb28ee6b951a5e8 d7c62f4eefad9e5d 40e393bed618cc42 dbacbbee1b8418a3 0826fa8294b38c15 20975ff5f9cc4caf 32563da2888cb9c8
+hierarchical,image,10,2,4,"[[""OCHA Humanitarian Icons"", 2], [""AIGA/DOT Symbol Signs"", 1], [""Universal Symbols Healthcare Webfont"", 1]]",e0d2e112cc0df560 cb84e329bdddd496 a08d214801605fdc 0b785ca3d631c636
+hierarchical,image,10,3,1,"[[""OCHA Humanitarian Icons"", 1]]",5786f314791a3349
+hierarchical,image,10,4,1,"[[""ISO 7010 Safety Signs"", 1]]",0f8cade296175730
+hierarchical,image,10,5,1,"[[""ISO 15223 Medical Device Symbols"", 1]]",f6aa07dce193fa26
+hierarchical,image,10,6,1,"[[""ISO 15223 Medical Device Symbols"", 1]]",1b8210d261f93090
+hierarchical,image,10,7,1,"[[""ISO 15223 Medical Device Symbols"", 1]]",e56869f80c3514ce
+hierarchical,image,10,8,1,"[[""ISO 15223 Medical Device Symbols"", 1]]",62cb4e396fd4e927
+hierarchical,image,10,9,1,"[[""ISO 15223 Medical Device Symbols"", 1]]",9379e0b95c9e1e64
+kmeans,metadata,3,0,10,"[[""ISO 15223 Medical Device Symbols"", 10]]",e56869f80c3514ce 306ad85560fbabc4 0dbe74d0ea5067c3 1b8210d261f93090 dc257e448d984cff f6aa07dce193fa26 62cb4e396fd4e927 0368ddb907e94299
+kmeans,metadata,3,1,30,"[[""AIGA/DOT Symbol Signs"", 10], [""OCHA Humanitarian Icons"", 10], [""ISO 7010 Safety Signs"", 10]]",1e157882b7150c13 32563da2888cb9c8 d8b035da8f412942 d7c62f4eefad9e5d b8d532b96649ad9b 2663a2a83e8e54b1 e64d4e32ce5a8902 c76f1030330c1010
+kmeans,metadata,3,2,10,"[[""Universal Symbols Healthcare Webfont"", 10]]",bf9857071daccae9 15b4d245c50fdb61 3e0b873f1a5b26ca e0c216d6fdfd0cb4 dc00f37fcd3db2aa 4a8c039921c3bd7d 70f46d8c5056c65d 01b3d2f16631c2ed
+kmeans,metadata,5,0,20,"[[""OCHA Humanitarian Icons"", 10], [""ISO 15223 Medical Device Symbols"", 10]]",0dbe74d0ea5067c3 306ad85560fbabc4 e56869f80c3514ce 1b8210d261f93090 9bb28ee6b951a5e8 13ce3bf4ead47832 dc257e448d984cff f6aa07dce193fa26
+kmeans,metadata,5,1,9,"[[""Universal Symbols Healthcare Webfont"", 9]]",bf9857071daccae9 dc00f37fcd3db2aa 15b4d245c50fdb61 3e0b873f1a5b26ca e0c216d6fdfd0cb4 4a8c039921c3bd7d 70f46d8c5056c65d 01b3d2f16631c2ed
+kmeans,metadata,5,2,10,"[[""ISO 7010 Safety Signs"", 10]]",c76f1030330c1010 32563da2888cb9c8 d7c62f4eefad9e5d b8d532b96649ad9b 2663a2a83e8e54b1 672c5ac5c05045ac 9198bbcd6bccdff0 0f8cade296175730
+kmeans,metadata,5,3,10,"[[""AIGA/DOT Symbol Signs"", 10]]",40e393bed618cc42 7616bb30c75b6877 dbacbbee1b8418a3 32d08149ef2bc303 7356c61eeb1541c5 e64d4e32ce5a8902 9b352ee9d3ea7f71 15f1b4324f271e4f
+kmeans,metadata,5,4,1,"[[""Universal Symbols Healthcare Webfont"", 1]]",a08d214801605fdc
+kmeans,metadata,7,0,9,"[[""OCHA Humanitarian Icons"", 9]]",9bb28ee6b951a5e8 13ce3bf4ead47832 5786f314791a3349 30e917dd0fe86d77 ccf98772a3e0d4b8 0826fa8294b38c15 439873b50eed4285 0b785ca3d631c636
+kmeans,metadata,7,1,10,"[[""ISO 15223 Medical Device Symbols"", 10]]",e56869f80c3514ce 306ad85560fbabc4 0dbe74d0ea5067c3 1b8210d261f93090 dc257e448d984cff f6aa07dce193fa26 62cb4e396fd4e927 0368ddb907e94299
+kmeans,metadata,7,2,1,"[[""AIGA/DOT Symbol Signs"", 1]]",15f1b4324f271e4f
+kmeans,metadata,7,3,10,"[[""ISO 7010 Safety Signs"", 10]]",c76f1030330c1010 32563da2888cb9c8 d7c62f4eefad9e5d b8d532b96649ad9b 2663a2a83e8e54b1 672c5ac5c05045ac 9198bbcd6bccdff0 0f8cade296175730
+kmeans,metadata,7,4,10,"[[""Universal Symbols Healthcare Webfont"", 10]]",bf9857071daccae9 15b4d245c50fdb61 3e0b873f1a5b26ca e0c216d6fdfd0cb4 dc00f37fcd3db2aa 4a8c039921c3bd7d 70f46d8c5056c65d 01b3d2f16631c2ed
+kmeans,metadata,7,5,1,"[[""OCHA Humanitarian Icons"", 1]]",f5e1b09d6e19a856
+kmeans,metadata,7,6,9,"[[""AIGA/DOT Symbol Signs"", 9]]",40e393bed618cc42 7616bb30c75b6877 dbacbbee1b8418a3 32d08149ef2bc303 7356c61eeb1541c5 e64d4e32ce5a8902 9b352ee9d3ea7f71 cb84e329bdddd496
+kmeans,metadata,10,0,9,"[[""ISO 7010 Safety Signs"", 9]]",c76f1030330c1010 32563da2888cb9c8 d7c62f4eefad9e5d b8d532b96649ad9b 2663a2a83e8e54b1 672c5ac5c05045ac 9198bbcd6bccdff0 0f8cade296175730
+kmeans,metadata,10,1,8,"[[""ISO 15223 Medical Device Symbols"", 8]]",e56869f80c3514ce 306ad85560fbabc4 0dbe74d0ea5067c3 dc257e448d984cff f6aa07dce193fa26 1b8210d261f93090 62cb4e396fd4e927 9379e0b95c9e1e64
+kmeans,metadata,10,2,3,"[[""Universal Symbols Healthcare Webfont"", 3]]",4a8c039921c3bd7d 70f46d8c5056c65d 01b3d2f16631c2ed
+kmeans,metadata,10,3,6,"[[""Universal Symbols Healthcare Webfont"", 6]]",bf9857071daccae9 dc00f37fcd3db2aa 3e0b873f1a5b26ca e0c216d6fdfd0cb4 d4240d07a1e75756 a08d214801605fdc
+kmeans,metadata,10,4,2,"[[""ISO 15223 Medical Device Symbols"", 2]]",0368ddb907e94299 b566cf363514b2ce
+kmeans,metadata,10,5,1,"[[""ISO 7010 Safety Signs"", 1]]",1e157882b7150c13
+kmeans,metadata,10,6,1,"[[""Universal Symbols Healthcare Webfont"", 1]]",15b4d245c50fdb61
+kmeans,metadata,10,7,10,"[[""AIGA/DOT Symbol Signs"", 10]]",40e393bed618cc42 7616bb30c75b6877 dbacbbee1b8418a3 32d08149ef2bc303 7356c61eeb1541c5 e64d4e32ce5a8902 9b352ee9d3ea7f71 15f1b4324f271e4f
+kmeans,metadata,10,8,9,"[[""OCHA Humanitarian Icons"", 9]]",9bb28ee6b951a5e8 13ce3bf4ead47832 5786f314791a3349 30e917dd0fe86d77 ccf98772a3e0d4b8 0826fa8294b38c15 439873b50eed4285 0b785ca3d631c636
+kmeans,metadata,10,9,1,"[[""OCHA Humanitarian Icons"", 1]]",e0d2e112cc0df560
+hierarchical,metadata,3,0,20,"[[""AIGA/DOT Symbol Signs"", 10], [""ISO 7010 Safety Signs"", 10]]",e64d4e32ce5a8902 0f8cade296175730 9198bbcd6bccdff0 672c5ac5c05045ac 2663a2a83e8e54b1 d7c62f4eefad9e5d 32563da2888cb9c8 c76f1030330c1010
+hierarchical,metadata,3,1,10,"[[""OCHA Humanitarian Icons"", 10]]",9bb28ee6b951a5e8 13ce3bf4ead47832 5786f314791a3349 30e917dd0fe86d77 ccf98772a3e0d4b8 0826fa8294b38c15 439873b50eed4285 0b785ca3d631c636
+hierarchical,metadata,3,2,20,"[[""Universal Symbols Healthcare Webfont"", 10], [""ISO 15223 Medical Device Symbols"", 10]]",0dbe74d0ea5067c3 306ad85560fbabc4 e56869f80c3514ce bf9857071daccae9 1b8210d261f93090 dc00f37fcd3db2aa f6aa07dce193fa26 15b4d245c50fdb61
+hierarchical,metadata,5,0,10,"[[""AIGA/DOT Symbol Signs"", 10]]",40e393bed618cc42 7616bb30c75b6877 dbacbbee1b8418a3 32d08149ef2bc303 7356c61eeb1541c5 e64d4e32ce5a8902 9b352ee9d3ea7f71 15f1b4324f271e4f
+hierarchical,metadata,5,1,10,"[[""OCHA Humanitarian Icons"", 10]]",9bb28ee6b951a5e8 13ce3bf4ead47832 5786f314791a3349 30e917dd0fe86d77 ccf98772a3e0d4b8 0826fa8294b38c15 439873b50eed4285 0b785ca3d631c636
+hierarchical,metadata,5,2,10,"[[""Universal Symbols Healthcare Webfont"", 10]]",bf9857071daccae9 15b4d245c50fdb61 3e0b873f1a5b26ca e0c216d6fdfd0cb4 dc00f37fcd3db2aa 4a8c039921c3bd7d 70f46d8c5056c65d 01b3d2f16631c2ed
+hierarchical,metadata,5,3,10,"[[""ISO 7010 Safety Signs"", 10]]",c76f1030330c1010 32563da2888cb9c8 d7c62f4eefad9e5d b8d532b96649ad9b 2663a2a83e8e54b1 672c5ac5c05045ac 9198bbcd6bccdff0 0f8cade296175730
+hierarchical,metadata,5,4,10,"[[""ISO 15223 Medical Device Symbols"", 10]]",e56869f80c3514ce 306ad85560fbabc4 0dbe74d0ea5067c3 1b8210d261f93090 dc257e448d984cff f6aa07dce193fa26 62cb4e396fd4e927 0368ddb907e94299
+hierarchical,metadata,7,0,10,"[[""AIGA/DOT Symbol Signs"", 10]]",40e393bed618cc42 7616bb30c75b6877 dbacbbee1b8418a3 32d08149ef2bc303 7356c61eeb1541c5 e64d4e32ce5a8902 9b352ee9d3ea7f71 15f1b4324f271e4f
+hierarchical,metadata,7,1,8,"[[""OCHA Humanitarian Icons"", 8]]",9bb28ee6b951a5e8 13ce3bf4ead47832 5786f314791a3349 30e917dd0fe86d77 ccf98772a3e0d4b8 0826fa8294b38c15 439873b50eed4285 0b785ca3d631c636
+hierarchical,metadata,7,2,1,"[[""OCHA Humanitarian Icons"", 1]]",e0d2e112cc0df560
+hierarchical,metadata,7,3,1,"[[""OCHA Humanitarian Icons"", 1]]",f5e1b09d6e19a856
+hierarchical,metadata,7,4,10,"[[""Universal Symbols Healthcare Webfont"", 10]]",bf9857071daccae9 15b4d245c50fdb61 3e0b873f1a5b26ca e0c216d6fdfd0cb4 dc00f37fcd3db2aa 4a8c039921c3bd7d 70f46d8c5056c65d 01b3d2f16631c2ed
+hierarchical,metadata,7,5,10,"[[""ISO 7010 Safety Signs"", 10]]",c76f1030330c1010 32563da2888cb9c8 d7c62f4eefad9e5d b8d532b96649ad9b 2663a2a83e8e54b1 672c5ac5c05045ac 9198bbcd6bccdff0 0f8cade296175730
+hierarchical,metadata,7,6,10,"[[""ISO 15223 Medical Device Symbols"", 10]]",e56869f80c3514ce 306ad85560fbabc4 0dbe74d0ea5067c3 1b8210d261f93090 dc257e448d984cff f6aa07dce193fa26 62cb4e396fd4e927 0368ddb907e94299
+hierarchical,metadata,10,0,10,"[[""AIGA/DOT Symbol Signs"", 10]]",40e393bed618cc42 7616bb30c75b6877 dbacbbee1b8418a3 32d08149ef2bc303 7356c61eeb1541c5 e64d4e32ce5a8902 9b352ee9d3ea7f71 15f1b4324f271e4f
+hierarchical,metadata,10,1,8,"[[""OCHA Humanitarian Icons"", 8]]",9bb28ee6b951a5e8 13ce3bf4ead47832 5786f314791a3349 30e917dd0fe86d77 ccf98772a3e0d4b8 0826fa8294b38c15 439873b50eed4285 0b785ca3d631c636
+hierarchical,metadata,10,2,1,"[[""OCHA Humanitarian Icons"", 1]]",e0d2e112cc0df560
+hierarchical,metadata,10,3,1,"[[""OCHA Humanitarian Icons"", 1]]",f5e1b09d6e19a856
+hierarchical,metadata,10,4,5,"[[""Universal Symbols Healthcare Webfont"", 5]]",dc00f37fcd3db2aa 15b4d245c50fdb61 bf9857071daccae9 3e0b873f1a5b26ca e0c216d6fdfd0cb4
+hierarchical,metadata,10,5,3,"[[""Universal Symbols Healthcare Webfont"", 3]]",4a8c039921c3bd7d 70f46d8c5056c65d 01b3d2f16631c2ed
+hierarchical,metadata,10,6,1,"[[""Universal Symbols Healthcare Webfont"", 1]]",d4240d07a1e75756
+hierarchical,metadata,10,7,1,"[[""Universal Symbols Healthcare Webfont"", 1]]",a08d214801605fdc
+hierarchical,metadata,10,8,10,"[[""ISO 7010 Safety Signs"", 10]]",c76f1030330c1010 32563da2888cb9c8 d7c62f4eefad9e5d b8d532b96649ad9b 2663a2a83e8e54b1 672c5ac5c05045ac 9198bbcd6bccdff0 0f8cade296175730
+hierarchical,metadata,10,9,10,"[[""ISO 15223 Medical Device Symbols"", 10]]",e56869f80c3514ce 306ad85560fbabc4 0dbe74d0ea5067c3 1b8210d261f93090 dc257e448d984cff f6aa07dce193fa26 62cb4e396fd4e927 0368ddb907e94299
+kmeans,combined,3,0,13,"[[""OCHA Humanitarian Icons"", 4], [""ISO 15223 Medical Device Symbols"", 4], [""AIGA/DOT Symbol Signs"", 3], [""Universal Symbols Healthcare Webfont"", 2]]",f5e1b09d6e19a856 e64d4e32ce5a8902 a08d214801605fdc 0b785ca3d631c636 d4240d07a1e75756 9379e0b95c9e1e64 7616bb30c75b6877 62cb4e396fd4e927
+kmeans,combined,3,1,14,"[[""ISO 7010 Safety Signs"", 10], [""ISO 15223 Medical Device Symbols"", 4]]",d7c62f4eefad9e5d 32563da2888cb9c8 9198bbcd6bccdff0 2663a2a83e8e54b1 c76f1030330c1010 b8d532b96649ad9b 672c5ac5c05045ac 1e157882b7150c13
+kmeans,combined,3,2,23,"[[""Universal Symbols Healthcare Webfont"", 8], [""AIGA/DOT Symbol Signs"", 7], [""OCHA Humanitarian Icons"", 6], [""ISO 15223 Medical Device Symbols"", 2]]",40e393bed618cc42 bf9857071daccae9 7356c61eeb1541c5 3e0b873f1a5b26ca 439873b50eed4285 0826fa8294b38c15 9bb28ee6b951a5e8 13ce3bf4ead47832
+kmeans,combined,5,0,8,"[[""ISO 7010 Safety Signs"", 8]]",9198bbcd6bccdff0 2663a2a83e8e54b1 32563da2888cb9c8 b8d532b96649ad9b c76f1030330c1010 d7c62f4eefad9e5d 672c5ac5c05045ac 0f8cade296175730
+kmeans,combined,5,1,17,"[[""Universal Symbols Healthcare Webfont"", 8], [""OCHA Humanitarian Icons"", 6], [""ISO 15223 Medical Device Symbols"", 3]]",15b4d245c50fdb61 3e0b873f1a5b26ca dc00f37fcd3db2aa 4a8c039921c3bd7d bf9857071daccae9 439873b50eed4285 0826fa8294b38c15 e0c216d6fdfd0cb4
+kmeans,combined,5,2,5,"[[""ISO 15223 Medical Device Symbols"", 3], [""ISO 7010 Safety Signs"", 2]]",dc257e448d984cff d8b035da8f412942 1e157882b7150c13 306ad85560fbabc4 e56869f80c3514ce
+kmeans,combined,5,3,10,"[[""AIGA/DOT Symbol Signs"", 10]]",40e393bed618cc42 dbacbbee1b8418a3 32d08149ef2bc303 20975ff5f9cc4caf 7356c61eeb1541c5 7616bb30c75b6877 e64d4e32ce5a8902 cb84e329bdddd496
+kmeans,combined,5,4,10,"[[""OCHA Humanitarian Icons"", 4], [""ISO 15223 Medical Device Symbols"", 4], [""Universal Symbols Healthcare Webfont"", 2]]",f5e1b09d6e19a856 0b785ca3d631c636 9379e0b95c9e1e64 a08d214801605fdc d4240d07a1e75756 62cb4e396fd4e927 f6aa07dce193fa26 e0d2e112cc0df560
+kmeans,combined,7,0,6,"[[""OCHA Humanitarian Icons"", 6]]",0826fa8294b38c15 13ce3bf4ead47832 30e917dd0fe86d77 439873b50eed4285 ccf98772a3e0d4b8 9bb28ee6b951a5e8
+kmeans,combined,7,1,10,"[[""ISO 15223 Medical Device Symbols"", 6], [""Universal Symbols Healthcare Webfont"", 4]]",dc00f37fcd3db2aa 0dbe74d0ea5067c3 70f46d8c5056c65d e56869f80c3514ce 0368ddb907e94299 b566cf363514b2ce d4240d07a1e75756 9379e0b95c9e1e64
+kmeans,combined,7,2,2,"[[""AIGA/DOT Symbol Signs"", 2]]",9b352ee9d3ea7f71 15f1b4324f271e4f
+kmeans,combined,7,3,11,"[[""ISO 7010 Safety Signs"", 10], [""ISO 15223 Medical Device Symbols"", 1]]",32563da2888cb9c8 9198bbcd6bccdff0 2663a2a83e8e54b1 672c5ac5c05045ac b8d532b96649ad9b c76f1030330c1010 d7c62f4eefad9e5d 1e157882b7150c13
+kmeans,combined,7,4,7,"[[""Universal Symbols Healthcare Webfont"", 6], [""ISO 15223 Medical Device Symbols"", 1]]",bf9857071daccae9 3e0b873f1a5b26ca e0c216d6fdfd0cb4 01b3d2f16631c2ed 15b4d245c50fdb61 4a8c039921c3bd7d 306ad85560fbabc4
+kmeans,combined,7,5,6,"[[""OCHA Humanitarian Icons"", 4], [""ISO 15223 Medical Device Symbols"", 2]]",f5e1b09d6e19a856 0b785ca3d631c636 e0d2e112cc0df560 f6aa07dce193fa26 62cb4e396fd4e927 5786f314791a3349
+kmeans,combined,7,6,8,"[[""AIGA/DOT Symbol Signs"", 8]]",dbacbbee1b8418a3 40e393bed618cc42 32d08149ef2bc303 20975ff5f9cc4caf 7616bb30c75b6877 e64d4e32ce5a8902 7356c61eeb1541c5 cb84e329bdddd496
+kmeans,combined,10,0,7,"[[""ISO 7010 Safety Signs"", 7]]",9198bbcd6bccdff0 2663a2a83e8e54b1 32563da2888cb9c8 b8d532b96649ad9b c76f1030330c1010 d7c62f4eefad9e5d 0f8cade296175730
+kmeans,combined,10,1,6,"[[""ISO 15223 Medical Device Symbols"", 6]]",0dbe74d0ea5067c3 0368ddb907e94299 b566cf363514b2ce e56869f80c3514ce 306ad85560fbabc4 1b8210d261f93090
+kmeans,combined,10,2,1,"[[""Universal Symbols Healthcare Webfont"", 1]]",4a8c039921c3bd7d
+kmeans,combined,10,3,5,"[[""AIGA/DOT Symbol Signs"", 3], [""OCHA Humanitarian Icons"", 1], [""ISO 15223 Medical Device Symbols"", 1]]",7616bb30c75b6877 e64d4e32ce5a8902 dbacbbee1b8418a3 5786f314791a3349 9379e0b95c9e1e64
+kmeans,combined,10,4,4,"[[""Universal Symbols Healthcare Webfont"", 4]]",70f46d8c5056c65d d4240d07a1e75756 dc00f37fcd3db2aa a08d214801605fdc
+kmeans,combined,10,5,4,"[[""ISO 7010 Safety Signs"", 3], [""ISO 15223 Medical Device Symbols"", 1]]",1e157882b7150c13 d8b035da8f412942 672c5ac5c05045ac dc257e448d984cff
+kmeans,combined,10,6,5,"[[""Universal Symbols Healthcare Webfont"", 5]]",bf9857071daccae9 3e0b873f1a5b26ca e0c216d6fdfd0cb4 01b3d2f16631c2ed 15b4d245c50fdb61
+kmeans,combined,10,7,2,"[[""AIGA/DOT Symbol Signs"", 2]]",9b352ee9d3ea7f71 15f1b4324f271e4f
+kmeans,combined,10,8,10,"[[""OCHA Humanitarian Icons"", 6], [""AIGA/DOT Symbol Signs"", 4]]",13ce3bf4ead47832 0826fa8294b38c15 30e917dd0fe86d77 9bb28ee6b951a5e8 439873b50eed4285 7356c61eeb1541c5 40e393bed618cc42 ccf98772a3e0d4b8
+kmeans,combined,10,9,6,"[[""OCHA Humanitarian Icons"", 3], [""ISO 15223 Medical Device Symbols"", 2], [""AIGA/DOT Symbol Signs"", 1]]",0b785ca3d631c636 e0d2e112cc0df560 f5e1b09d6e19a856 62cb4e396fd4e927 f6aa07dce193fa26 cb84e329bdddd496
+hierarchical,combined,3,0,2,"[[""AIGA/DOT Symbol Signs"", 2]]",9b352ee9d3ea7f71 15f1b4324f271e4f
+hierarchical,combined,3,1,47,"[[""OCHA Humanitarian Icons"", 10], [""Universal Symbols Healthcare Webfont"", 10], [""ISO 7010 Safety Signs"", 10], [""ISO 15223 Medical Device Symbols"", 10], [""AIGA/DOT Symbol Signs"", 7]]",9bb28ee6b951a5e8 dc00f37fcd3db2aa d7c62f4eefad9e5d 32563da2888cb9c8 dbacbbee1b8418a3 40e393bed618cc42 306ad85560fbabc4 30e917dd0fe86d77
+hierarchical,combined,3,2,1,"[[""AIGA/DOT Symbol Signs"", 1]]",cb84e329bdddd496
+hierarchical,combined,5,0,2,"[[""AIGA/DOT Symbol Signs"", 2]]",9b352ee9d3ea7f71 15f1b4324f271e4f
+hierarchical,combined,5,1,17,"[[""OCHA Humanitarian Icons"", 10], [""AIGA/DOT Symbol Signs"", 7]]",9bb28ee6b951a5e8 30e917dd0fe86d77 40e393bed618cc42 dbacbbee1b8418a3 0826fa8294b38c15 20975ff5f9cc4caf f5e1b09d6e19a856 439873b50eed4285
+hierarchical,combined,5,2,1,"[[""AIGA/DOT Symbol Signs"", 1]]",cb84e329bdddd496
+hierarchical,combined,5,3,29,"[[""Universal Symbols Healthcare Webfont"", 10], [""ISO 7010 Safety Signs"", 10], [""ISO 15223 Medical Device Symbols"", 9]]",dc00f37fcd3db2aa d7c62f4eefad9e5d 32563da2888cb9c8 9198bbcd6bccdff0 2663a2a83e8e54b1 15b4d245c50fdb61 e56869f80c3514ce 70f46d8c5056c65d
+hierarchical,combined,5,4,1,"[[""ISO 15223 Medical Device Symbols"", 1]]",1b8210d261f93090
+hierarchical,combined,7,0,2,"[[""AIGA/DOT Symbol Signs"", 2]]",9b352ee9d3ea7f71 15f1b4324f271e4f
+hierarchical,combined,7,1,7,"[[""AIGA/DOT Symbol Signs"", 7]]",dbacbbee1b8418a3 40e393bed618cc42 20975ff5f9cc4caf 32d08149ef2bc303 7616bb30c75b6877 e64d4e32ce5a8902 7356c61eeb1541c5
+hierarchical,combined,7,2,1,"[[""AIGA/DOT Symbol Signs"", 1]]",cb84e329bdddd496
+hierarchical,combined,7,3,10,"[[""OCHA Humanitarian Icons"", 10]]",9bb28ee6b951a5e8 30e917dd0fe86d77 0826fa8294b38c15 439873b50eed4285 13ce3bf4ead47832 ccf98772a3e0d4b8 f5e1b09d6e19a856 e0d2e112cc0df560
+hierarchical,combined,7,4,10,"[[""Universal Symbols Healthcare Webfont"", 10]]",15b4d245c50fdb61 dc00f37fcd3db2aa 70f46d8c5056c65d bf9857071daccae9 3e0b873f1a5b26ca 4a8c039921c3bd7d e0c216d6fdfd0cb4 01b3d2f16631c2ed
+hierarchical,combined,7,5,19,"[[""ISO 7010 Safety Signs"", 10], [""ISO 15223 Medical Device Symbols"", 9]]",d7c62f4eefad9e5d 32563da2888cb9c8 9198bbcd6bccdff0 2663a2a83e8e54b1 b8d532b96649ad9b c76f1030330c1010 672c5ac5c05045ac 1e157882b7150c13
+hierarchical,combined,7,6,1,"[[""ISO 15223 Medical Device Symbols"", 1]]",1b8210d261f93090
+hierarchical,combined,10,0,2,"[[""AIGA/DOT Symbol Signs"", 2]]",9b352ee9d3ea7f71 15f1b4324f271e4f
+hierarchical,combined,10,1,7,"[[""AIGA/DOT Symbol Signs"", 7]]",dbacbbee1b8418a3 40e393bed618cc42 20975ff5f9cc4caf 32d08149ef2bc303 7616bb30c75b6877 e64d4e32ce5a8902 7356c61eeb1541c5
+hierarchical,combined,10,2,1,"[[""AIGA/DOT Symbol Signs"", 1]]",cb84e329bdddd496
+hierarchical,combined,10,3,1,"[[""OCHA Humanitarian Icons"", 1]]",5786f314791a3349
+hierarchical,combined,10,4,9,"[[""OCHA Humanitarian Icons"", 9]]",30e917dd0fe86d77 0826fa8294b38c15 9bb28ee6b951a5e8 13ce3bf4ead47832 439873b50eed4285 ccf98772a3e0d4b8 e0d2e112cc0df560 f5e1b09d6e19a856
+hierarchical,combined,10,5,10,"[[""Universal Symbols Healthcare Webfont"", 10]]",15b4d245c50fdb61 dc00f37fcd3db2aa 70f46d8c5056c65d bf9857071daccae9 3e0b873f1a5b26ca 4a8c039921c3bd7d e0c216d6fdfd0cb4 01b3d2f16631c2ed
+hierarchical,combined,10,6,10,"[[""ISO 7010 Safety Signs"", 10]]",32563da2888cb9c8 9198bbcd6bccdff0 2663a2a83e8e54b1 b8d532b96649ad9b c76f1030330c1010 d7c62f4eefad9e5d 672c5ac5c05045ac 1e157882b7150c13
+hierarchical,combined,10,7,8,"[[""ISO 15223 Medical Device Symbols"", 8]]",0dbe74d0ea5067c3 e56869f80c3514ce 306ad85560fbabc4 9379e0b95c9e1e64 dc257e448d984cff 0368ddb907e94299 b566cf363514b2ce 62cb4e396fd4e927
+hierarchical,combined,10,8,1,"[[""ISO 15223 Medical Device Symbols"", 1]]",f6aa07dce193fa26
+hierarchical,combined,10,9,1,"[[""ISO 15223 Medical Device Symbols"", 1]]",1b8210d261f93090

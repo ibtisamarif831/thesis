@@ -2,9 +2,10 @@
 
 ## Purpose
 
-This pass audits all 81 active schema-v2 features against the seven-paper local literature corpus. It
-adds page-level evidence to the typed feature registry without claiming that broad visual-channel
-research validates every extraction formula.
+This historical pass audited the broad schema-v2 measurement registry against the seven-paper local
+literature corpus. It added page-level provenance without claiming that broad visual-channel research
+validates every extraction formula. Current thesis analysis uses only the seven representatives; this
+note must not be used to reintroduce a broad-feature analysis profile.
 
 The registry records three evidence scopes:
 
@@ -14,20 +15,20 @@ The registry records three evidence scopes:
 - `cautionary`: the paper studies the measure or construct but reports limitations that materially
   constrain its interpretation.
 
-Non-active auxiliary, deprecated, and excluded columns retain `none`: the pass concerns the current
-81-feature analytical mapping.
+Auxiliary, deprecated, and excluded columns retain `none`. These classifications describe the
+historical audit, not the current seven-measurement thesis analysis layer.
 
 ## Outcome
 
-| Evidence scope | Active features | Interpretation |
-|---|---:|---|
-| Direct | 1 | `canny_edge_density` has close measure-level evidence against subjective complexity ratings. |
-| Construct | 77 | The literature supports the visible channel or primitive, not the exact implementation. |
-| Cautionary | 3 | `foreground_area_ratio`, `connected_components`, and `holes_count` have explicit source limitations. |
+| Evidence scope | Interpretation |
+|---|---|
+| Direct | `canny_edge_density` has close measure-level evidence against subjective complexity ratings. |
+| Construct | The literature supports the visible channel or primitive, not the exact implementation. |
+| Cautionary | Some raw measures have explicit source limitations and are not thesis representatives. |
 
-Every active `FeatureSpec` now carries `evidence_scope`, `evidence`, and `citation`. Registry
-validation requires exactly one non-empty evidence entry and citation for every active feature. The
-dashboard metadata adapter serializes these fields for each feature.
+Every historically audited `FeatureSpec` carries `evidence_scope`, `evidence`, and `citation`.
+Registry validation preserves those entries, while the dashboard metadata adapter serializes the
+fields only for the seven thesis representatives.
 
 ## Page-Level Mapping
 
@@ -63,6 +64,6 @@ PDF before verbatim quotation.
 
 ## Boundary
 
-The result establishes literature provenance for the active feature constructs. It does not establish
-that all 81 metrics predict identification, similarity, or confusability in this icon corpus. That
-requires the planned human study and feature-outcome analysis.
+The result establishes literature provenance for raw feature constructs. It does not establish that
+the seven selected measurements predict identification, similarity, or confusability in this icon
+corpus. That requires the planned human study and feature-outcome analysis.

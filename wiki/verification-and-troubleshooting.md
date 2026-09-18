@@ -29,9 +29,9 @@ python -c "import csv; r=list(csv.DictReader(open('icon_data/analysis/features.c
 python -c "import json; x=json.load(open('icon_data/analysis/analysis_dashboard/dashboard_data.json',encoding='utf-8')); m=x['metadata']; print('rows',m['row_count'],'active',len(m['image_feature_columns']),'families',len(m['image_feature_sections'])); print('review',x['feature_review']['summary']); print('explorer',x['feature_explorer']['metadata'])"
 ```
 
-Expected for the current schema-v2 snapshot: 28,749 canonical rows, 13 sets, 28,749 feature rows, 133 feature-table columns, 129 dashboard rows, 81 active registry features, seven selected analysis features under the `representatives` preset, seven families, and seven Feature Values explorer features matching the Feature Groups representatives.
+Expected for the current schema-v2 snapshot: 28,749 canonical rows, 13 sets, 28,749 feature rows, 133 feature-table columns, 50 Metadata/Combined dashboard rows, seven selected analysis features under the `representatives` preset, seven families, and seven Feature Values explorer features matching the Feature Groups representatives.
 
-For schema v2, expect 28,749 feature rows, 133 columns (23 metadata + 110 numeric), `feature_schema_version == 2`, ten finite `_v2` columns, and zero feature failures. Also verify mask modes/flags, `strict_red_flag_v2` is binary, orientation confidence lies in 0–1, and the active registry remains exactly 81.
+For schema v2, expect 28,749 feature rows, 133 columns (23 metadata + 110 numeric), `feature_schema_version == 2`, ten finite `_v2` columns, and zero feature failures. Also verify mask modes/flags, `strict_red_flag_v2` is binary, orientation confidence lies in 0–1, and the analysis selection remains exactly seven representatives.
 
 Run the benchmark tooling after extraction:
 
@@ -79,6 +79,10 @@ Verify:
 - the Color By control is recorded as a known gap until rendering actually uses it.
 
 Opening `index.html` with a filesystem URL can trigger fetch/CORS/path failures and is not sufficient verification.
+
+For the deployable static edition, run `python code/build_public_dashboard.py`, serve `dist/dashboard/`, and additionally verify: exactly 649 PNGs; only the five included source IDs in all JSON records/examples; no `../` normalized paths; `credits.html` and each available full license return HTTP 200; the AI run button reads **Read-only public edition** and is disabled; the status reports no compatible saved run in the current snapshot; and the browser console has no API, asset, or favicon errors. Inspect `deployment_manifest.json` before upload. The bundle must not contain `.env`, SQLite files, source-resolution images, or excluded-set paths.
+
+For Study Icon Selection, verify the public catalog counts are 80, 359, 144, 37, and 29; selection stops at 20 in every tab; total completion requires 100; drafts survive reload without storing the access code; wrong access returns HTTP 401; valid submission creates 100 D1 selection rows; resubmitting the same reviewer code replaces rather than duplicates; unprivileged CSV export returns HTTP 401; privileged export contains stable icon IDs and five set IDs; and test submissions are removed afterward. Never use a real participant identity during testing.
 
 ## Failure Reports
 
@@ -128,7 +132,7 @@ This is a current implementation gap: visible icons are layout images and the se
 
 ### Counts Differ Between Views
 
-Image and AI Clustering use the unique composite of all seven Feature Groups samples for the active cohort, while Metadata/Combined use the generated 129-row sample. Feature Groups draws from the 28,260 rows that pass the technical-quality gate. Verify `feature_group_excludes_uncertain_masks == true`, `feature_group_requires_finite_representatives == true`, that no `feature_group_records` item has an uncertain mask or a null representative, and that `feature_group_quality_audit.json` reports 489 uncertain-mask exclusions and zero low-value exclusions. Each family sample must contain no more than two records in each of the 10 equal-width bins computed from its eligible family/cohort range. For the default All cohort, verify 20 unique icons per family and 140 unique composite IDs; sparse cohorts can correctly produce fewer because empty bins are not backfilled. Feature Review/Values use the complete corpus directly. This distinction is intentional and should remain explicit in labels and verification.
+Image and AI Clustering use the unique composite of all seven Feature Groups samples for the active cohort, while Metadata/Combined use the generated 50-row sample. First verify that `metadata.included_set_ids`, `records`, `feature_group_records`, and all Feature Values examples contain only the five configured dashboard sets. Feature Groups draws from the 397 selected-source rows that pass the technical-quality gate. Verify `feature_group_excludes_uncertain_masks == true`, `feature_group_requires_finite_representatives == true`, that no `feature_group_records` item has an uncertain mask or a null representative, and that `feature_group_quality_audit.json` reports 252 uncertain-mask exclusions and zero low-value exclusions. Each family sample must contain no more than two records in each of the 10 equal-width bins computed from its eligible family/cohort range. For the default All cohort, verify up to 20 unique icons per family and up to 140 unique composite IDs; sparse bins or cohorts can correctly produce fewer because empty bins are not backfilled. Retained Feature Review data and Feature Values use all 649 selected-source rows directly. This distinction is intentional and should remain explicit in labels and verification.
 
 ### AI Comparison Does Not Match the Current Feature Selection
 

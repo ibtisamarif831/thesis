@@ -24,21 +24,37 @@ http://127.0.0.1:8765/
 
 The generated dashboard is a Plotly application. The repository service serves its JSON and normalized icons and enables the optional local AI API. Opening `index.html` directly remains unreliable.
 
+The separately generated `dist/dashboard/` public edition is live at `https://glyph-perception-dashboard.pages.dev/`. It contains all 649 normalized images from the five scoped source sets plus attribution/license material, but no provider API key, SQLite file, or raw corpus. The AI area is read-only and the current bundle has no compatible saved runs. A separate **Select study icons** link opens the database-backed reviewer workflow described below.
+
+## Study Icon Selection
+
+This workspace implements the meeting homework for research-group stimulus selection. It is not the final participant task. Reviewers:
+
+1. open each of the five dataset tabs;
+2. select exactly 20 icons per dataset;
+3. optionally search or show only selected cards;
+4. review all 100 choices;
+5. enter a pseudonymous reviewer code, the shared access code, and optional rationale;
+6. submit once all five tabs are complete.
+
+The browser keeps an unfinished draft locally. The shared access code is not persisted. A reviewer may correct a submission by using the same reviewer code again; the backend replaces the earlier selection rather than creating duplicate analysis rows. The prompt mentions both visual-range coverage and visually close/confusable icons because the meeting did not finalize one exclusive sampling criterion. The group must compare submissions and explicitly agree on the final 20 per set before a pilot.
+
 ## Views
 
-The header contains five views:
+The header contains four visible views:
 
 1. **Clustering** — interactive PCA layout, feature selection, clustering, filtering, icon inspection, and cluster summaries.
 2. **Feature Groups** — concise mapping from human-facing categories to computer feature families.
 3. **Feature Values** — low/medium/high examples for the same seven representatives used by Feature Groups.
-4. **Feature Review** — feature variance and Spearman redundancy analysis.
-5. **AI Clustering** — explicit feature-versus-image-embedding comparison for the current shared sample.
+4. **AI Clustering** — explicit feature-versus-image-embedding comparison for the current shared sample.
+
+Feature Review is currently hidden from navigation. Its generated correlation data remains available internally because Feature Values uses it for correlation context; the UI markup and activation hooks remain commented out for future restoration.
 
 ## Clustering View
 
 ### Initial State
 
-The default variant is Image, method is K-means, cluster count is the configured primary value, and all seven family representatives are selected. Its icon population is the unique composite of the seven cached equal-width-stratified family samples for the active cohort: up to 20 icons per family and 140 for the default All cohort. The header reports the shared icon count, seven families, and cohort.
+The default variant is Image, method is K-means, cluster count is the configured primary value, and all seven family representatives are selected. Its icon population is the unique composite of the seven cached equal-width-stratified family samples for the active cohort: up to 20 icons per family and up to 140 for All. Empty bins and cross-family duplicate exclusion can reduce the total; the verified 2026-09-17 browser load contained 125. The header reports the shared icon count, seven families, and cohort.
 
 ### Feature Variant
 
@@ -60,7 +76,7 @@ Current implementation caveat: icons are rendered as Plotly layout images over n
 
 ### Image Features
 
-The sidebar exposes one current representative per family. It starts with the seven code-selected IDs in `metadata.image_feature_columns`, all checked. Choosing another representative in Feature Groups replaces that family's sidebar checkbox and, if the previous representative was checked, keeps the replacement checked. Browser-side PCA and clustering then recompute with the current representative set. The 81-feature registry remains available to the Feature Groups selectors, but only the seven current representatives can be enabled in Clustering at one time. Available actions:
+The sidebar exposes one fixed representative per family. It starts with the seven code-selected IDs in `metadata.image_feature_columns`, all checked. Feature Groups does not provide alternate representatives. Browser-side PCA and clustering recompute from whichever of the seven measurements are checked. Available actions:
 
 - **All** preset;
 - one preset per visual family;
@@ -88,7 +104,7 @@ Each icon is displayed at its PCA coordinates as the normalized image itself, wi
 - Plot axes: PCA 1 and PCA 2 for the current projection.
 - Icon scale: each image occupies 5.5% of the displayed PCA span on both axes. Manual Image and AI plots use this same scale so visual density is directly comparable.
 
-The left controls sidebar can be collapsed with **Hide sidebar** and restored with **Show sidebar** from the chart toolbar; the plot resizes to use the released width. The selected-icon panel shows the icon, label, set, cluster, and a compact value/comparison bar for each of the seven representatives, plus McDougall ratings when present and metadata tokens. It intentionally omits the repeated family description, human-perception, Low, High, percentile, quartile, range-label, and legend prose; the detailed family interpretation remains available in Feature Groups. The dark and colored markers still compare against the complete current clustering sample—140 icons for the default All Image/AI cohort—not the 28,749-row feature corpus and not only the currently icon-set-filtered subset. Principal-axis orientation remains **Undefined** when its confidence is too low and is excluded from orientation-specific sampling and summaries rather than reinterpreted as 0°. A lasso selection additionally reports its icon count and leading source sets and exposes every selected icon as an inspectable thumbnail; its seven group-median comparisons use the same compact bars. Changing the projection inputs, clustering method/count, shared sample, or icon-set filter clears a stale lasso selection automatically.
+The left controls sidebar can be collapsed with **Hide sidebar** and restored with **Show sidebar** from the chart toolbar; the plot resizes to use the released width. The selected-icon panel shows the icon, label, set, cluster, and a compact value/comparison bar for each of the seven representatives, plus McDougall ratings when present and metadata tokens. It intentionally omits the repeated family description, human-perception, Low, High, percentile, quartile, range-label, and legend prose; the detailed family interpretation remains available in Feature Groups. The dark and colored markers compare against the complete current shared clustering sample—not the 28,749-row feature corpus and not only the currently icon-set-filtered subset. Principal-axis orientation remains **Undefined** when its confidence is too low and is excluded from orientation-specific sampling and summaries rather than reinterpreted as 0°. A lasso selection additionally reports its icon count and leading source sets and exposes every selected icon as an inspectable thumbnail; its seven group-median comparisons use the same compact bars. Changing the projection inputs, clustering method/count, shared sample, or icon-set filter clears a stale lasso selection automatically.
 
 The right cluster-summary panel lists every assigned cluster as a compact button. Each entry shows its descriptive profile, full icon count, current filter-visible count when different, and variance contribution. Selecting a cluster opens a dedicated fullscreen modal for that cluster only; the sidebar never expands large statistics inline and there is no combined all-cluster detail view. Each arbitrary numeric cluster ID receives a neutral descriptive suffix from its two largest absolute deviations, such as **High Mean saturation / Low Local texture variation**. These are measured visual profiles, not semantic class names.
 
@@ -102,22 +118,22 @@ Each per-cluster modal lists the cluster metrics, icon statistics, feature stati
 
 ## Feature Groups View
 
-The main view stays concise. It presents the seven human-facing categories and the fixed configured representative for each family. These mappings are read-only in the browser: alternate registry features are not offered as Feature Groups, Clustering, Color-by, detail, Feature Values, or Feature Review choices. Each family row has a **View details** button that opens a full-viewport detail workspace containing:
+The main view stays concise. It presents the seven human-facing categories and the fixed configured representative for each family. These mappings are read-only in the browser: alternate registry features are not offered as Feature Groups, Clustering, Color-by, detail, or Feature Values choices. Each family row has a **View details** button that opens a full-viewport detail workspace containing:
 
 - the one selected feature and its feature ID;
 - how to interpret it and why it is active; configured defaults also show their supporting evidence and page-level literature citation;
-- up to 20 icons drawn independently for that family from the 28,260 icons with a certain foreground mask, using 10 equal-width value bins and up to two random icons per bin;
+- up to 20 icons drawn independently for that family from the 397 selected-source icons with a certain foreground mask, using 10 equal-width value bins and up to two random icons per bin;
 - **All**, **B/W**, **Red**, and **Colored** icon-treatment filters with live counts.
 - a **Randomize icons** action that replaces the active family's sample;
 - a three-icon comparison: select exactly three cards to open a separate fullscreen modal containing their representative measurements across all seven feature families.
 
-Each family/color-treatment combination keeps its own transient stratified random sample. The browser finds the eligible representative feature's minimum and maximum, divides that numeric range into 10 equal-width bins, and randomly selects up to two unique icons from each bin. Empty bins contribute no icons and one-record bins contribute one; the sampler does not backfill from neighboring bins, so a sparse cohort may show fewer than 20 icons. If all eligible values are identical, they form one degenerate bin and up to two icons are sampled. Dataset membership has no role in the bins. For the principal-axis orientation representative, eligibility additionally requires orientation confidence of at least 0.20 before the minimum, maximum, and bins are calculated. Before drawing a family, icons already cached for the other six families in that cohort are excluded, so the seven samples form a unique composite. The selected icons are sorted from low to high by the selected feature, and every icon card shows its raw value. Image and AI Clustering use the concatenated seven-family composite; **Randomize icons** replaces only the active family's portion and invalidates both projections. The selected representatives are Canny edge density, enclosure score v2, principal-axis orientation v2, solid-fill ratio v2, horizontal symmetry v2, foreground mean saturation v2, and local texture variation v2. The full 81-feature registry remains available, while these seven are also the current code-selected default analysis preset.
+Each family/color-treatment combination keeps its own transient stratified random sample. The browser finds the eligible representative feature's minimum and maximum, divides that numeric range into 10 equal-width bins, and randomly selects up to two unique icons from each bin. Empty bins contribute no icons and one-record bins contribute one; the sampler does not backfill from neighboring bins, so a sparse cohort may show fewer than 20 icons. If all eligible values are identical, they form one degenerate bin and up to two icons are sampled. Dataset membership has no role in the bins. For the principal-axis orientation representative, eligibility additionally requires orientation confidence of at least 0.20 before the minimum, maximum, and bins are calculated. Before drawing a family, icons already cached for the other six families in that cohort are excluded, so the seven samples form a unique composite. The selected icons are sorted from low to high by the selected feature, and every icon card shows its raw value. Image and AI Clustering use the concatenated seven-family composite; **Randomize icons** replaces only the active family's portion and invalidates both projections. The selected representatives are Canny edge density, enclosure score v2, principal-axis orientation v2, solid-fill ratio v2, horizontal symmetry v2, foreground mean saturation v2, and local texture variation v2. These seven define the thesis analysis layer.
 
 The detail view computes a cohort-level information profile without altering the underlying values. Normalized scalar representatives use 0.001 display-resolution bins and the robust spread between the 10th and 90th percentiles. Orientation uses one-degree axial bins plus doubled-angle circular dispersion, so 0° and 180° are treated as the same horizontal direction. A cohort is labeled **Low information in this cohort** when it has fewer than three rounded levels or falls below the corresponding scalar/circular spread threshold. This is a display warning, not a deletion rule: meaningful zero edge density, horizontal orientation, zero saturation, or zero texture remains in the population, sample, and average.
 
-The 28,260-row Feature Groups payload remains compact and carries the seven configured representative values. It is the sole source for family galleries and the three-icon comparison; no 81-feature browser fallback or representative override exists. The literature rationale and citation remain attached to each fixed configured representative.
+The 397-row Feature Groups payload remains compact and carries the seven configured representative values. It is the sole source for family galleries and the three-icon comparison; no broad-feature browser fallback or representative override exists. The literature rationale and citation remain attached to each fixed configured representative.
 
-Immediately above the ordered icons, **Average of shown icons** reports the arithmetic mean of scalar representative-feature values for the currently visible icons. Orientation uses an axial circular mean over defined values instead. It is not the mean of either the full 28,749-icon corpus or the 28,260-icon certain-mask population, and recalculates after Randomize or a color-treatment change.
+Immediately above the ordered icons, **Average of shown icons** reports the arithmetic mean of scalar representative-feature values for the currently visible icons. Orientation uses an axial circular mean over defined values instead. It is not the mean of either the complete 28,749-icon corpus or the 397-icon selected-source eligible population, and recalculates after Randomize or a color-treatment change.
 
 The B/W filter uses the extractor's `is_monochrome` value. Red uses only the pixel-derived `strict_red_flag_v2`; dataset names and labels do not classify an icon as red. The current pool contains only 10 strict-red records, and the no-backfill bin rule means a Red family sample may contain fewer than 10 when multiple records share a bin or some bins are empty. Colored contains the remaining non-monochrome icons. Color treatment is an icon-level viewing filter and does not change which measurements belong to the selected feature family. The selected treatment persists while moving among the seven family details, so choosing **Red** constrains every subsequently opened family to that cohort while still giving each family its own stratified draw.
 
@@ -129,7 +145,7 @@ Use it when explaining the thesis organization or checking that a proposed measu
 
 ## Feature Values View
 
-This view uses the complete 28,749-row feature corpus rather than the 129-row clustering sample.
+This view uses all 649 feature rows from the five included sources rather than the 50-row Metadata/Combined sample. Excluded datasets cannot appear in its examples or correlation context.
 
 Controls:
 
@@ -148,26 +164,15 @@ For the selected feature the page shows:
 
 The current selection contains exactly seven features: the one representative used by Feature Groups for each family. Medium means nearest to the overall mean, not the middle quantile.
 
-## Feature Review View
+## Retained Feature Review Data
 
-This view also uses the complete 28,749-row feature corpus.
-
-Controls:
-
-- **Feature ranking:** strongest redundancy, group, or feature name.
-- **Pair threshold:** high only, moderate and high, or all pairs.
-
-Summary cards show selected analysis-feature count, high-redundancy pair count, moderate pair count, and source rows.
-
-The ranking table shows each feature's family, redundancy band, strongest absolute correlation, strongest partner, standard deviation, and missing count. Selecting a feature opens its details and top eight correlation partners.
-
-The pair table shows both features, redundancy band, signed Spearman rho, whether they share a family, and pairwise sample size.
+The Feature Review tab is hidden. Its variance and Spearman-redundancy calculations remain in the generated payload because Feature Values displays correlation context for each representative feature.
 
 ## Agent-Oriented UI Walkthrough
 
 For a basic browser verification:
 
-1. Confirm the Image dataset summary reports `140 shared icons · 7 feature families · All` and that switching to Metadata or Combined reports 129 generated icons.
+1. Confirm the dashboard contains only AIGA/DOT, OCHA, Universal Symbols Healthcare Webfont, ISO 7010, and ISO 15223. Confirm the Image dataset summary reports up to `140 shared icons · 7 feature families · All` and that switching to Metadata or Combined reports 50 generated icons.
 2. In Clustering, confirm exactly seven checked feature controls, seven numeric **Color by** choices, icon images, and both PCA axes appear without first selecting a preset.
 3. Switch between K-Means and Hierarchical, then between two cluster counts; confirm summaries change without console errors.
 4. Select one icon set and confirm the plot and cluster counts shrink; remove its pill and confirm all icons return.
@@ -175,12 +180,11 @@ For a basic browser verification:
 6. Open Feature Groups and confirm seven representative-feature mappings and seven **View details** buttons appear.
 7. Open every family and confirm exactly one selected-feature panel, an evidence citation, and per-icon values appear; confirm the feature matches the representative table in [Feature system](feature-system.md#current-one-feature-representatives).
 8. Confirm Feature Groups contains no representative dropdowns and that alternate registry names such as Quadtree leaf count, bounding-box ratios, grid cells, and vertical symmetry do not appear in any dashboard feature control or selected-icon detail.
-9. With All selected, confirm each family gallery is ordered from low to high, contains no more than two icons from each of the 10 equal-width bins, and that none has `mask_is_uncertain == true`. Independently calculate its arithmetic mean to confirm **Average of shown icons**. Confirm the seven family samples have unique icon IDs and their composite contains 140 icons. Click **Randomize icons** in one family, confirm only that 20-icon portion changes, and return to Clustering to confirm the composite remains unique and contains the replacement IDs.
-10. Inspect `feature_group_quality_audit.json`: confirm 28,260 eligible rows, 489 uncertain-mask exclusions, no low-value exclusions, bottom-1% diagnostic thresholds, and the 35-row extreme visual-review set. Confirm malformed representative values are excluded by the builder and are never rendered as zero.
+9. With All selected, confirm each family gallery is ordered from low to high, contains no more than two icons from each of the 10 equal-width bins, and that none has `mask_is_uncertain == true`. Independently calculate its arithmetic mean to confirm **Average of shown icons**. Confirm the seven family samples have unique icon IDs and their composite contains no more than 140 icons; the 2026-09-17 verification contained 125. Click **Randomize icons** in one family, confirm only that family's portion changes, and return to Clustering to confirm the composite remains unique and contains the replacement IDs.
+10. Inspect `feature_group_quality_audit.json`: confirm 397 eligible rows, 252 uncertain-mask exclusions, no low-value exclusions, bottom-1% diagnostic thresholds, and the 4-row extreme visual-review set. Confirm malformed representative values are excluded by the builder and are never rendered as zero.
 10. Select three icons and confirm a separate fullscreen comparison modal opens with three images and seven representative-feature rows. Close it with **Escape**, confirm focus returns to the selected card, and reopen it with **View fullscreen comparison**. Confirm a fourth icon cannot be selected; deselect one and confirm another becomes selectable.
 11. Switch among B/W, Red, and Colored, and confirm the population count, gallery, comparison selection, and shared Image Clustering population reset together. For Red, confirm the population remains 10 but the gallery can contain fewer records under the no-backfill equal-width bin rule. Leave Red selected, close with **Escape**, and open another family; confirm Red remains selected, the family has its own draw, and Clustering follows that draw. Confirm focus returns to the originating button after each close.
 12. Open Feature Values and confirm the selector contains exactly the seven configured Feature Groups representatives. Search for “saturation,” select Mean saturation, and confirm low/medium/high cards load.
-13. Open Feature Review, change sort and threshold, select a feature, and confirm details update.
 14. Record the Color By limitation if testing current behavior; do not mark visible recoloring as verified.
 15. In Image Clustering, collapse and restore the left sidebar and confirm the plot resizes. Confirm the right sidebar contains **Show heatmap** plus one entry for every assigned cluster. Open the heatmap and verify one row per cluster and one column per selected feature. Open one cluster entry and confirm only that cluster appears, with variance contribution, separation strength, six icon statistics, one feature-statistics row per selected feature, and an icon table whose row count equals the full cluster size and whose columns include all seven representatives. Apply an icon-set filter and confirm every cluster entry remains present, only the visible counts change, and the modal table still contains every assigned cluster icon.
 16. In AI Clustering, collapse and restore the analysis sidebar and confirm the embedding plot resizes. Load a saved run without clicking **Run AI Clustering**. Confirm its cluster-summary section contains **Show heatmap** plus one entry per AI cluster. Confirm the heatmap has seven representative columns and an individual cluster modal reports separate embedding and measured contribution/strength values, six icon statistics, seven feature-statistics rows, and a seven-value row for every cluster icon. Both contribution columns should total approximately 100% across the sidebar entries/modals, and no provider request should occur. For an intentionally cache-missing old run, confirm embedding metrics say **Unavailable** rather than falling back to two-dimensional PCA.

@@ -2,7 +2,7 @@
 
 ## Schema-v2 payload contract
 
-`dashboard_data.json.metadata` includes `feature_schema_version`, `analysis_feature_preset`, `orientation_confidence_threshold`, and `feature_group_excludes_uncertain_masks`. The dashboard contract exposes exactly seven configured family representatives: each `image_feature_sections` section contains only its representative, and generated dashboard records contain those seven values plus the four auxiliary classification/orientation fields required by the UI. The broader 81-feature registry and raw feature corpus remain available for offline extraction and analysis but are not serialized as dashboard choices. Each compact `feature_group_records` item carries the seven v2 representative values, `orientation_confidence_v2`, `red_pixel_ratio_v2`, `strict_red_flag_v2`, and certain-mask diagnostics. Rows with `mask_is_uncertain == true` are omitted while the complete feature corpus remains unchanged.
+`dashboard_data.json.metadata` includes `feature_schema_version`, `analysis_feature_preset`, `orientation_confidence_threshold`, `feature_group_excludes_uncertain_masks`, `included_set_ids`, and `included_set_names`. The dashboard contract exposes exactly seven configured family representatives and exactly five source sets: AIGA/DOT, OCHA, Universal Symbols Healthcare Webfont, ISO 7010, and ISO 15223. Each `image_feature_sections` section contains only its representative, and generated dashboard records contain those seven values plus the four auxiliary classification/orientation fields required by the UI. Other raw extractor columns and the complete 13-set corpus remain available for reproducibility but are not serialized into the dashboard scope. Each compact `feature_group_records` item carries the seven v2 representative values, `orientation_confidence_v2`, `red_pixel_ratio_v2`, `strict_red_flag_v2`, and certain-mask diagnostics. Rows with `mask_is_uncertain == true` are omitted while the complete feature corpus remains unchanged.
 
 Client behavior derives Red solely from `strict_red_flag_v2`, computes scalar arithmetic means, computes orientation with a doubled-angle axial mean, and excludes confidence-undefined records before building an orientation-family sample. Missing/non-finite representative values serialize as `null` instead of being coerced to zero. The shared feature registry is authoritative for feature/family definitions; the generator remains authoritative for dashboard assembly. Regenerate `index.html` and `dashboard_data.json` after changes.
 
@@ -14,12 +14,26 @@ Client behavior derives Red solely from `strict_red_flag_v2`, computes scalar ar
 
 Do not edit the generated `index.html` alone. Change the generator, run it, and commit both source and intended generated outputs.
 
+## Public Edition
+
+`code/build_public_dashboard.py` converts the current generated dashboard into the ignored deployment directory `dist/dashboard/`. It validates the exact five-set allow-list and the expected 649 canonical scoped rows, copies only their normalized 256 x 256 PNGs, rewrites dashboard-relative image paths for a standalone web root, adds Cloudflare Pages cache headers, and generates `credits.html`, copied license texts, `study-selection.html`, `study_selection_data.json`, and `deployment_manifest.json`.
+
+The public AI build is deliberately read-only. It never includes `.env`, API keys, the SQLite database, raw source collections, or the full 13-set corpus. The AI tab reads `public_data/ai_clustering.json`; provider requests are disabled. A saved completed run is exported only when every run item belongs to the current quality-eligible five-set Feature Groups pool. The 2026-09-18 build excludes all seven existing runs because none satisfies that condition, so the public UI reports that no compatible saved run is available.
+
+### Study Icon Selection
+
+The public header links to `study-selection.html`. This is an internal stimulus-selection tool derived from the meeting action item, not the human experiment itself. Each reviewer independently selects exactly 20 icons from every included set (100 total), using both representative coverage and visually close/confusable candidates as non-exclusive guidance. Draft choices and the anonymous reviewer code stay in browser `localStorage`; the shared access code is never stored there.
+
+`functions/api/study-selections.js` accepts same-origin POST requests only, requires the `STUDY_SUBMIT_KEY` Pages secret, validates all 100 stable icon IDs against the D1 catalog and their claimed source sets, and stores no name, email, IP address, or user-agent field. Reusing a reviewer code replaces that reviewer's previous 100 choices. `functions/api/study-results.js` exposes analysis-ready CSV only with the separate `STUDY_ADMIN_KEY` bearer secret. The remote database `glyph-study-selections` is restricted to the EU jurisdiction and bound as `STUDY_SELECTION_DB`; `migrations/0001_study_icon_selection.sql` defines the catalog, submission, and selection tables.
+
+The production Cloudflare Pages project is `glyph-perception-dashboard`, with production URL `https://glyph-perception-dashboard.pages.dev/`. It was created by direct upload on 2026-09-18. Current Wrangler initially delegates a new Pages project to Workers; the one-time creation required `wrangler pages deploy --force`. Now that the Pages project exists, `npx wrangler pages deploy` reads `wrangler.jsonc`, uploads the static directory and Functions bundle, and applies the D1 binding.
+
 ## Generation Sequence
 
 The builder:
 
-1. reads `icon_data/analysis/dataset.csv`;
-2. randomly samples up to 10 rows per set with seed 42;
+1. reads `icon_data/analysis/dataset.csv` and filters it through `DASHBOARD_SETS`;
+2. randomly samples up to 10 rows per included set with seed 42;
 3. enriches metadata and McDougall ratings;
 4. extracts visual features for the sampled normalized images;
 5. drops rows whose extraction failed;
@@ -27,7 +41,7 @@ The builder:
 7. writes feature tables;
 8. computes K-means and hierarchical labels for 3, 5, 7, and 10 clusters;
 9. writes assignments and summaries;
-10. builds feature-review and feature-explorer payloads from the complete 28,749-row `features.csv` corpus;
+10. filters `features.csv` to the same five sources and builds retained Feature Review correlation data and the Feature Values payload from those 649 rows;
 11. writes `dashboard_data.json` and generated HTML;
 12. ensures a local Plotly asset placeholder exists if the real bundle is missing.
 
@@ -35,13 +49,13 @@ The builder:
 
 | Dashboard component | Source | Current rows |
 |---|---|---:|
-| Image Clustering records and browser projection | Active cached Feature Groups family/cohort sample | Up to 20; can be lower for sparse bins |
-| Metadata/Combined records and precomputed projections | Random per-set sample from `dataset.csv` | 129 |
-| Feature Groups sampling pool | Certain-mask identity/path/color/representative-feature payload from `features.csv` | 28,260 |
-| Feature Review correlations | Complete `features.csv` corpus | 28,749 |
-| Feature Values examples/statistics | Complete `features.csv` corpus | 28,749 |
+| Image Clustering records and browser projection | Unique composite of seven active cached Feature Groups family/cohort samples | Up to 140; can be lower for sparse bins or cross-family duplicate exclusion |
+| Metadata/Combined records and precomputed projections | Random per-set sample from the five included sources | 50 |
+| Feature Groups sampling pool | Certain-mask identity/path/color/representative-feature payload from the five included sources | 397 |
+| Retained Feature Review correlations | All selected-source rows from `features.csv` | 649 |
+| Feature Values examples/statistics | All selected-source rows from `features.csv` | 649 |
 
-This distinction matters when reconciling example icons, summary counts, or correlations with clustering results. The 129 generated records are used only by Metadata and Combined projections; image-family interactions use the compact full-corpus payload and its fixed seven representatives.
+This distinction matters when reconciling example icons, summary counts, or correlations with clustering results. The 50 generated records are used only by Metadata and Combined projections; image-family interactions use the compact 397-row quality-eligible payload and its fixed seven representatives. No dashboard tab reads excluded-source rows.
 
 ## `dashboard_data.json` Contract
 
@@ -53,7 +67,7 @@ Top-level keys:
 | `records` | One dashboard-sample record per icon. |
 | `feature_group_records` | Compact certain-mask pool used to draw independent Feature Groups samples of up to 20 icons and populate three-icon comparisons. |
 | `clusters` | PCA coordinates and method/count labels for each variant. |
-| `feature_review` | Metadata, summary, per-feature redundancy statistics, and all pair correlations. |
+| `feature_review` | Retained metadata, summary, per-feature redundancy statistics, and all pair correlations used as Feature Values context. |
 | `feature_explorer` | Selection metadata and low/mean-nearest/high examples for the seven Feature Groups representatives. |
 
 Each `records` item contains:
@@ -70,7 +84,7 @@ The front end should access feature definitions through `metadata.image_feature_
 
 | File | Role |
 |---|---|
-| `sample_metadata.csv` | Enriched 129-row dashboard sample and path-coverage flags. |
+| `sample_metadata.csv` | Enriched 50-row dashboard sample and path-coverage flags. |
 | `features_image.csv` | Sample identity/context plus extracted image features. |
 | `features_metadata.csv` | Encoded metadata matrix used by the metadata variant. |
 | `features_combined.csv` | Concatenated image and metadata matrix. |
@@ -95,9 +109,9 @@ The generated browser application keeps these related state objects:
 - review state: active view, sort, threshold, and selected feature;
 - explorer state: search and selected feature.
 
-Image projections are cached by method, count, ordered selected-feature list, and the shared sample's ordered icon IDs. Any feature selection or shared-sample change clears the cache. Metadata and Combined projections always use the precomputed 129-row arrays.
+Image projections are cached by method, count, ordered selected-feature list, and the shared sample's ordered icon IDs. Any feature selection or shared-sample change clears the cache. Metadata and Combined projections always use the precomputed 50-row arrays.
 
-Clustering derives its seven-entry allow-list, sidebar sections, selected-feature order, presets, numeric Color-by choices, and selected-icon detail rows directly from the fixed representatives in `metadata.image_feature_sections`. No browser representative map or alternate-feature selector exists. Image Clustering initializes all seven Feature Groups draws for the active cohort and concatenates them into one composite. When a family sample is created or randomized, icons already present in the other six cached family samples are excluded before equal-width sampling, keeping the composite unique and normally at 140 icons for All. Randomize replaces only the active family's contribution. Image projection cache keys include the ordered composite icon IDs, ensuring any replacement draw recomputes PCA and labels. Metadata and Combined keep their generated 129-row matrices. Reloading discards transient samples and restores the configured representatives.
+Clustering derives its seven-entry allow-list, sidebar sections, selected-feature order, presets, numeric Color-by choices, and selected-icon detail rows directly from the fixed representatives in `metadata.image_feature_sections`. No browser representative map or alternate-feature selector exists. Image Clustering initializes all seven Feature Groups draws for the active cohort and concatenates them into one composite. When a family sample is created or randomized, icons already present in the other six cached family samples are excluded before equal-width sampling, keeping the composite unique and allowing up to 140 icons for All. Randomize replaces only the active family's contribution. Image projection cache keys include the ordered composite icon IDs, ensuring any replacement draw recomputes PCA and labels. Metadata and Combined keep their generated 50-row matrices. Reloading discards transient samples and restores the configured representatives.
 
 Before Feature Groups sampling, `build_feature_group_payload()` applies the documented quality gate: identity and normalized-path fields must be present, the foreground mask must not be uncertain, and all seven representative values must be finite. It writes `feature_group_quality_audit.json` with exclusion counts, bottom-1% diagnostic thresholds, and the narrower extreme visual-review set. Low values are not automatically removed. Browser-side image projection and cluster profiles use `requiredRepresentativeValue()` so a later malformed payload fails explicitly instead of silently converting missing data to zero.
 
@@ -125,13 +139,13 @@ The feature-based plot, embedding plot, pairwise agreement, cache counts, and cr
 
 ### Feature-family fullscreen detail
 
-The Feature Groups view derives each family row from `metadata.image_feature_sections`. Each row displays its configured `representative_feature` as a static label and ID; its one-item `features` array contains that representative only. Alternate members of the broader 81-feature registry are deliberately absent from dashboard runtime metadata and controls. The representative retains its documented interpretation, rationale, evidence, and citation. The dialog uses the full viewport (`100vw` by `100dvh`, with `100vh` fallback); its header and filter toolbar occupy fixed grid rows while only the detail body scrolls.
+The Feature Groups view derives each family row from `metadata.image_feature_sections`. Each row displays its configured `representative_feature` as a static label and ID; its one-item `features` array contains that representative only. Other raw extractor measurements are deliberately absent from dashboard runtime metadata and controls. The representative retains its documented interpretation, rationale, evidence, and citation. The dialog uses the full viewport (`100vw` by `100dvh`, with `100vh` fallback); its header and filter toolbar occupy fixed grid rows while only the detail body scrolls.
 
-The fullscreen gallery uses `feature_group_records`, a compact pool containing the 28,260 feature rows whose foreground mask is not flagged uncertain. The generator excludes all 489 uncertain-mask rows before writing the payload, so those icons cannot enter the gallery population, samples, displayed averages, or three-icon comparisons. It carries only icon identity, label/set, normalized path, monochrome status, certain-mask diagnostics, and the seven representative values. Missing or non-finite payload values remain `null`; the browser excludes those measurements without confusing them with genuine zero.
+The fullscreen gallery uses `feature_group_records`, a compact pool containing the 397 selected-source feature rows whose foreground mask is not flagged uncertain. The generator excludes all 252 uncertain-mask rows in the five-set scope before writing the payload, so those icons cannot enter the gallery population, samples, displayed averages, or three-icon comparisons. It carries only icon identity, label/set, normalized path, monochrome status, certain-mask diagnostics, and the seven representative values. Missing or non-finite payload values remain `null`; the browser excludes those measurements without confusing them with genuine zero.
 
 The browser keeps an independent stratified random sample for every family and color-treatment combination. It calculates the minimum and maximum eligible representative values, divides that range into 10 equal-width bins, and uses an in-place partial shuffle to choose up to two unique records from each bin. The maximum value is explicitly clamped into the tenth bin. Empty bins are not backfilled, bins containing one record contribute one, and an all-equal cohort is handled as a single degenerate bin, so the visible total can be below 20. Dataset membership has no role in this sampling rule. Repeated valid values, including zero, remain eligible. **Randomize icons** replaces only the active combination; a reload clears all transient samples. Its icon-treatment classification is computed in the browser:
 
-The compact full-corpus payload intentionally contains only the seven configured representatives and is the sole source for Feature Groups details and comparisons. There is no exploratory representative override or 129-row fallback.
+The compact selected-source payload intentionally contains only the seven configured representatives and is the sole source for Feature Groups details and comparisons. There is no exploratory representative override or 50-row fallback.
 
 - B/W: `image_features.is_monochrome >= 0.5`;
 - Red: records with `image_features.strict_red_flag_v2 >= 0.5`;
@@ -157,9 +171,9 @@ The browser image-view computation is intended for interactive diagnostics. The 
 
 The main clustering scatter starts in Plotly `lasso` drag mode and keeps rectangle zoom available through the visible chart toolbar and Plotly modebar. `plotly_selected` supplies the selected transparent interaction markers; the browser maps them back to icon IDs, sets `selectedpoints`, dims non-selected layout images, calculates padded ranges around the selected coordinates, and updates the right-side gallery/detail panel. Plotly retains transient lasso paths and selected-marker styling outside application state, so **Clear selection** and **Reset view** clear the application selection and rebuild the scatter from the authoritative projection instead of applying partial `restyle`/`relayout` updates. This reliably removes the boundary, marker styling, dimming, detail gallery, and zoom; Reset remains available after rectangle zoom even when no lasso selection exists. A context key covering variant, method, cluster count, selected features, icon-set filter, and ordered plotted icon IDs prevents a selection from leaking into a changed projection.
 
-## Feature Review Data
+## Retained Feature Review Data
 
-The generator computes summary variance/missingness and Spearman correlations for the code-selected analysis preset. With the current seven-feature preset this produces 21 pairs; `full_registry` produces the earlier 3,240-pair review. Bands separate high, moderate, and low redundancy. Feature Values takes its seven feature IDs directly from the Feature Groups representatives and adds correlation context from Feature Review; low-redundancy ranking no longer controls the Feature Values selection.
+The generator computes summary variance/missingness and Spearman correlations for the seven-feature analysis preset, producing 21 pairs. Bands separate high, moderate, and low redundancy. Feature Values takes its seven feature IDs directly from the Feature Groups representatives and adds correlation context from this retained data; low-redundancy ranking no longer controls the Feature Values selection. The Feature Review tab and its activation hooks are commented out in the generated dashboard, rather than deleted, so the view can be restored later without rebuilding this analysis layer.
 
 ## Asset and Path Rules
 
@@ -167,6 +181,7 @@ The generator computes summary variance/missingness and Spearman correlations fo
 - Paths in JSON are relative to the dashboard directory.
 - Normalized images are referenced under `../../normalized_256/...`.
 - Serve from the repository root so these relative paths resolve.
+- The public builder rewrites those paths to `normalized_256/...`, so `dist/dashboard/` is a self-contained static web root.
 - If the Plotly bundle is absent, the builder writes a throwing placeholder; a generated page can exist but still fail at runtime, so browser verification is required.
 
 ## Known Implementation Gaps

@@ -1,0 +1,13 @@
+{
+  "$schema": "./node_modules/wrangler/config-schema.json",
+  "name": "glyph-perception-dashboard",
+  "pages_build_output_dir": "./dist/dashboard",
+  "compatibility_date": "2026-09-18",
+  "d1_databases": [
+    {
+      "binding": "STUDY_SELECTION_DB",
+      "database_name": "glyph-study-selections",
+      "database_id": "9573db9f-5393-47a6-8fa9-7170ee730706"
+    }
+  ]
+}

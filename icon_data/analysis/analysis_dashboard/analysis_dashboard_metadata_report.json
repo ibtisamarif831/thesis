@@ -14,20 +14,12 @@
   "missing_normalized_paths": 0,
   "per_set_sample_size": 10,
   "random_seed": 42,
-  "rows": 129,
+  "rows": 50,
   "set_counts": {
-    "01_mcdougall_symbol_icon_set": 10,
     "02_aiga_dot_symbol_signs": 10,
-    "03_mapbox_maki_icons": 10,
     "04_ocha_humanitarian_icons": 10,
-    "05_mulberry_symbols": 10,
-    "06_blissymbolics": 10,
-    "07_arasaac_pictograms": 10,
-    "08_ghs_hazard_pictograms": 9,
     "09_universal_symbols_healthcare_webfont": 10,
-    "10_openmoji": 10,
     "11_iso_7010_safety_signs": 10,
-    "12_iso_15223_medical_device_symbols": 10,
-    "13_usp_pictograms_manual": 10
+    "12_iso_15223_medical_device_symbols": 10
   }
 }

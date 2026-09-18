@@ -2,7 +2,7 @@
 
 ## Feature Registry Contract
 
-`code/thesis_pipeline/features/registry.py` is the executable authority for the ordered 110 raw feature IDs, 81 active registry features, 29 non-active features, seven families, representatives, code-only analysis presets, exclusions, aliases, schema version, and orientation-confidence threshold. `code/tests/fixtures/feature_registry_v2.json` freezes that schema-v2 contract so consumer refactors cannot silently reorder or reclassify features.
+`code/thesis_pipeline/features/registry.py` is the executable authority for the ordered 110 raw feature IDs, seven thesis representatives, literature-informed families, exclusions, aliases, schema version, and orientation-confidence threshold. `code/tests/fixtures/feature_registry_v2.json` freezes the raw schema-v2 contract so consumer refactors cannot silently reorder or reclassify extractor outputs.
 
 ## Feature schema v2 artifacts
 
@@ -40,7 +40,7 @@ Breaking changes include altering canonical source selection, moving source file
 
 `features_metadata.json` records the last extraction configuration and extractor registry. `feature_failures.json` must exist even when it contains `[]`.
 
-Active-family membership is a separate contract: 81 raw feature columns are active, while 29 are retained but excluded. The current analysis preset is narrower: seven representatives. Never infer either membership or analysis selection merely from presence in the CSV.
+Analysis selection is a separate contract from raw-column presence: the current thesis profile contains seven representatives. Never infer thesis membership merely from presence in the CSV; all other numeric columns are retained extraction data.
 
 ## Similarity Contract
 
@@ -59,7 +59,7 @@ Distance-matrix row and column order must match the source feature-frame order. 
 
 ## Dashboard Contract
 
-`dashboard_data.json` is the runtime API for the static UI. Its top-level `metadata`, `records`, `clusters`, `feature_review`, and `feature_explorer` keys are documented in [Dashboard implementation](dashboard-implementation.md). `metadata.analysis_feature_preset` records the code-selected profile, while `metadata.image_feature_columns` records the seven resolved representatives. Each section under `metadata.image_feature_sections` contains only its configured representative, including registry-owned `evidence_scope`, `evidence`, and `citation` fields. Generated `records[].image_features` likewise contain only those seven representatives plus the auxiliary monochrome, orientation-confidence, red-ratio, and strict-red fields required by the UI; raw registry columns are not a browser API.
+`dashboard_data.json` is the runtime API for the static UI. Its top-level `metadata`, `records`, `clusters`, `feature_review`, and `feature_explorer` keys are documented in [Dashboard implementation](dashboard-implementation.md). `metadata.included_set_ids` and `metadata.included_set_names` record the five-source dashboard boundary without changing the canonical corpus. `metadata.analysis_feature_preset` records the code-selected profile, while `metadata.image_feature_columns` records the seven resolved representatives. Each section under `metadata.image_feature_sections` contains only its configured representative, including registry-owned `evidence_scope`, `evidence`, and `citation` fields. Generated `records[].image_features` likewise contain only those seven representatives plus the auxiliary monochrome, orientation-confidence, red-ratio, and strict-red fields required by the UI; raw registry columns are not a browser API.
 
 The dashboard folder also contains the exact CSV inputs/outputs used to audit the generated view. Do not assume all sections use the same sample size.
 
@@ -79,6 +79,7 @@ The dashboard folder also contains the exact CSV inputs/outputs used to audit th
 | `similarity/` | `compute_icon_similarity.py` |
 | `visualizations/` | `visualize_icon_features.py` |
 | `analysis_dashboard/` | `build_analysis_dashboard.py` |
+| `../../dist/dashboard/` | `build_public_dashboard.py` (ignored, deployable static bundle) |
 
 ### `papers/extracted_text/`
 
@@ -95,6 +96,14 @@ Read each dataset README/source note before regeneration.
 ## AI Clustering SQLite Contract
 
 `icon_data/analysis/ai_clustering/ai_clustering.sqlite3` is an intentionally tracked schema-versioned binary artifact. Version 1 contains `embeddings` (model ID, icon ID, image SHA-256, dimension, float32 vector, creation time), `runs` (status, configuration, JSON metrics including agreement and optional embedding cluster-variance profiles, usage, cache counts, warnings/errors), and `run_items` (ordered icon IDs, feature/AI labels, and both PCA coordinate pairs). The optional profile adds no columns or schema migration. Completed and failed valid runs are durable. Older completed runs can be enriched in the API response from hash-matched cached embeddings without modifying the database. The database contains neither `OPENROUTER_API_KEY` nor base64 payloads, uses rollback-journal mode, and must be closed before committing. Avoid concurrent writers and never add `-wal` or `-shm` sidecars.
+
+The public static bundle does not copy this database. Its generated `public_data/ai_clustering.json` contains only completed runs whose complete item set is allowed by the current five-set, quality-eligible dashboard pool. `deployment_manifest.json` records compatible and excluded run counts, image/file/byte counts, and the deployed dashboard-data hash.
+
+## Study Selection Contract
+
+`study_selection_data.json` contains the 649-icon public selection catalog grouped by the five configured set IDs, with only `icon_id`, label, and public normalized path. Its selection protocol identifier is `five-sets-20-v1` and it requires exactly 20 unique icons per set.
+
+The D1 schema stores one pseudonymous submission row and 100 ordered selection rows per reviewer code. `study_icons` is the authoritative server-side allow-list seeded from the same canonical rows. `study_submissions` records protocol version, optional rationale, and timestamps. `study_selections` records stable set/icon IDs and within-set selection order. These are internal stimulus-selection records, not participant responses and not evidence of human perception.
 
 ## Schema-Change Checklist
 

@@ -11,6 +11,61 @@ if str(CODE_DIR) not in sys.path:
 import build_analysis_dashboard as dashboard
 
 
+def test_dashboard_scope_keeps_only_selected_human_study_sets() -> None:
+    rows = [
+        {"set_id": "02_aiga_dot_symbol_signs", "icon_id": "keep-aiga"},
+        {"set_id": "04_ocha_humanitarian_icons", "icon_id": "keep-ocha"},
+        {
+            "set_id": "09_universal_symbols_healthcare_webfont",
+            "icon_id": "keep-healthcare",
+        },
+        {"set_id": "11_iso_7010_safety_signs", "icon_id": "keep-safety"},
+        {
+            "set_id": "12_iso_15223_medical_device_symbols",
+            "icon_id": "keep-medical",
+        },
+        {"set_id": "07_arasaac_pictograms", "icon_id": "exclude-arasaac"},
+    ]
+
+    filtered = dashboard.filter_dashboard_sets(rows)
+
+    assert [row["icon_id"] for row in filtered] == [
+        "keep-aiga",
+        "keep-ocha",
+        "keep-healthcare",
+        "keep-safety",
+        "keep-medical",
+    ]
+    assert dashboard.DASHBOARD_SET_IDS == {
+        "02_aiga_dot_symbol_signs",
+        "04_ocha_humanitarian_icons",
+        "09_universal_symbols_healthcare_webfont",
+        "11_iso_7010_safety_signs",
+        "12_iso_15223_medical_device_symbols",
+    }
+
+
+def test_complete_feature_views_filter_the_canonical_feature_corpus(
+    tmp_path, monkeypatch
+) -> None:
+    feature_path = tmp_path / "features.csv"
+    feature_path.write_text(
+        "set_id,icon_id,canny_edge_density\n"
+        "02_aiga_dot_symbol_signs,keep,0.1\n"
+        "07_arasaac_pictograms,exclude,0.2\n",
+        encoding="utf-8",
+    )
+    monkeypatch.setattr(dashboard, "ROOT", tmp_path)
+    monkeypatch.setattr(dashboard, "FEATURES_PATH", feature_path)
+    monkeypatch.setattr(dashboard, "IMAGE_FEATURE_COLUMNS", ["canny_edge_density"])
+
+    review_rows, _ = dashboard.feature_review_source_rows({})
+    explorer_rows, _ = dashboard.feature_explorer_source_rows([], {})
+
+    assert [row["icon_id"] for row in review_rows] == ["keep"]
+    assert [row["icon_id"] for row in explorer_rows] == ["keep"]
+
+
 def test_feature_group_payload_keeps_only_pilot_fields() -> None:
     row = {
         "icon_id": "example",

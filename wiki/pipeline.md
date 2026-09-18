@@ -76,7 +76,7 @@ Feature extraction defaults to a process pool because the feature registry is CP
 
 Stroke-width distance transforms add an explicit background border before measurement. This prevents infinite values when an icon's inferred foreground occupies the entire 256×256 canvas.
 
-The verified schema-v2 output has 28,749 rows, 23 metadata columns, and 110 raw numeric image-feature columns, with zero failures and no missing/non-finite numeric cells. Only 81 numeric features participate in the active literature-mapped family system.
+The verified schema-v2 output has 28,749 rows, 23 metadata columns, and 110 raw numeric image-feature columns, with zero failures and no missing/non-finite numeric cells. Thesis analysis uses seven representative measurements; the remaining numeric columns are retained extractor outputs.
 
 ## Stage 4: Enrich Context Metadata
 
@@ -110,9 +110,9 @@ When Matplotlib is available, the output can include distributions by set, a Spe
 python code/build_analysis_dashboard.py
 ```
 
-The dashboard builder performs its own deterministic random sampling from `dataset.csv`, extracts current features for those rows, creates image/metadata/combined matrices, computes clustering variants, prepares full-sample feature-review/explorer data from `features.csv`, and regenerates HTML/JSON/CSV outputs.
+The dashboard builder first filters `dataset.csv` and `features.csv` to the five sources declared in `DASHBOARD_SETS`. It performs deterministic random sampling from that source pool, extracts current features for those rows, creates image/metadata/combined matrices, computes clustering variants, prepares selected-source feature-review/explorer data, and regenerates HTML/JSON/CSV outputs. The canonical 13-set artifacts are not rewritten.
 
-The dashboard's generated 129-row sample supplies Metadata/Combined projections only. Feature Groups excludes uncertain foreground masks and receives a compact 28,260-row pool containing only the seven configured representatives and required auxiliary fields. In the browser, each family/cohort range is divided into 10 equal-width bins and up to two icons are randomly selected per bin. Image and AI Clustering concatenate all seven cached family draws and exclude cross-family duplicates, producing 140 unique icons for the default All cohort. Cohort changes select the corresponding seven draws, while Randomize replaces only the active family's contribution. Comparison remains limited to three icons from the active family sample. Feature Values examples and Feature Review statistics still use all 28,749 rows from `features.csv` but expose only the seven representatives.
+The dashboard's generated 50-row sample supplies Metadata/Combined projections only. Feature Groups excludes uncertain foreground masks and receives a compact 397-row pool containing only the seven configured representatives and required auxiliary fields. In the browser, each family/cohort range is divided into 10 equal-width bins and up to two icons are randomly selected per bin. Image and AI Clustering concatenate all seven cached family draws and exclude cross-family duplicates, allowing up to 140 unique icons for the default All cohort. Cohort changes select the corresponding seven draws, while Randomize replaces only the active family's contribution. Comparison remains limited to three icons from the active family sample. Feature Values examples and retained Feature Review statistics use all 649 selected-source rows from `features.csv` and expose only the seven representatives.
 
 ## Stage 8: Serve and Inspect
 

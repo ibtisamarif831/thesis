@@ -14,7 +14,7 @@ Similarity, PCA, k-means, and hierarchical labels describe relationships in a ch
 
 The checked-in similarity artifacts were generated from the earlier 1,038-row feature pilot and predate the seven-feature default preset; treat their recorded active columns as the contract for that historical run. `features.csv` now contains all 28,749 icons; do not run the current quadratic `code/compute_icon_similarity.py` implementation directly on that full file without replacing its dense all-pairs matrices with a scalable approach.
 
-Active family membership, feature order, exclusions, schema version, the orientation-confidence threshold, and the code-selected analysis preset come from `code/thesis_pipeline/features/registry.py`. The current `representatives` preset uses seven features; `full_registry` restores all 81. The similarity script no longer imports the dashboard generator; robust scaling, circular transformations, and family weighting remain local similarity behavior.
+Feature order, exclusions, schema version, the orientation-confidence threshold, and the code-selected analysis preset come from `code/thesis_pipeline/features/registry.py`. The supported `representatives` preset uses seven measurements. The similarity script no longer imports the dashboard generator; robust scaling, circular transformations, and family weighting remain local similarity behavior.
 
 Processing order:
 
@@ -73,7 +73,7 @@ Cluster numbers are arbitrary labels, not ordered scores. A cluster explanation 
 
 ## Feature Review Correlations
 
-Feature Review computes pairwise Spearman correlations for the selected analysis preset on the complete 28,749-row feature corpus. The current seven-feature preset produces 21 unique pairs. Switching the code preset to `full_registry` restores the 81-feature, 3,240-pair review.
+The dashboard's retained Feature Review data computes pairwise Spearman correlations for the seven thesis measurements on all 649 rows from the five included dashboard sources, producing 21 unique pairs. The complete 28,749-row feature corpus remains available for offline analysis.
 
 The view uses absolute correlation to rank redundancy while retaining the sign for interpretation. High correlation does not automatically justify deleting a feature: two features can be mathematically redundant yet differ in interpretability, robustness, or literature role.
 

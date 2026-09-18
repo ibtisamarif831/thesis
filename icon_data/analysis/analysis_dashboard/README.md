@@ -1,6 +1,6 @@
 # Analysis Dashboard
 
-Feature Groups consumes the current active feature registry and corrected foreground masks. Complexity now uses Canny edge density after the visual audit found raster and antialias inflation in grayscale quadtree variability; quadtree remains available as a secondary Complexity feature. Strict Red is pixel-derived, orientation has confidence-aware angular ordering and an axial mean, and uncertain masks are visibly flagged. The interface is available for engineering review, but pilot deployment remains blocked pending the rebuilt two-rater release gate.
+Feature Groups consumes the seven configured thesis representatives and corrected foreground masks. Complexity uses Canny edge density after the visual audit found raster and antialias inflation in grayscale quadtree variability; quadtree remains only in the raw export for traceability. Strict Red is pixel-derived, orientation has confidence-aware angular ordering and an axial mean, and uncertain masks are visibly flagged. The interface is available for engineering review, but pilot deployment remains blocked pending the rebuilt two-rater release gate.
 
 For the comprehensive agent- and contributor-oriented guides, see [Dashboard UI](../../../wiki/dashboard-ui.md) and [Dashboard implementation](../../../wiki/dashboard-implementation.md).
 
@@ -16,9 +16,11 @@ Thesis boundary:
 
 ## Current State
 
-- Sample size: up to 10 icons per dataset.
+- Dashboard source scope: AIGA/DOT Symbol Signs, OCHA Humanitarian Icons, Universal Symbols Healthcare Webfont, ISO 7010 Safety Signs, and ISO 15223 Medical Device Symbols.
+- Source-pool size: 649 icons; the complete 13-set canonical corpus remains unchanged.
+- Metadata/Combined sample size: 50 icons, up to 10 per included set.
 - Sampling rule: random sample within each icon set using the fixed dashboard seed.
-- Included icon sets in current sample: 13.
+- Included icon sets in current sample: 5.
 - Missing categories: 0.
 - Missing metadata tokens: 0.
 - Missing normalized image paths: 0.
@@ -54,6 +56,8 @@ http://127.0.0.1:8765/
 
 Opening `index.html` directly from the filesystem may work in some browsers, but using a local server is more reliable because the dashboard loads `dashboard_data.json`, `plotly.min.js`, and normalized icon images.
 
+For a public deployment, first regenerate this dashboard and then run `python3 code/build_public_dashboard.py`. The resulting ignored `dist/dashboard/` directory includes only the five scoped source sets and their 649 normalized images, adds attribution/license material, and disables live AI/provider requests. It does not include the SQLite database or raw source corpus. The current production deployment is `https://glyph-perception-dashboard.pages.dev/`; its **Select study icons** workspace collects access-controlled internal reviewer nominations in D1, exactly 20 per set.
+
 ## How The Dashboard Works
 
 The dashboard loads `dashboard_data.json` and renders a Plotly scatter plot.
@@ -62,12 +66,12 @@ Each point represents one icon and is displayed using the normalized icon image.
 
 The clustering chart starts in **Lasso select** mode. Draw freely around icons to isolate them: non-selected icons are dimmed, the chart zooms to the selected area, and the right sidebar shows a gallery and full details for the selected icons. **Rectangle zoom** keeps the earlier box-zoom workflow available. **Clear selection** removes every lasso artifact and returns to the complete chart; **Reset view** provides the same clean full-chart reset after either lasso selection or rectangle zoom.
 
-The header exposes five views:
+The header exposes four visible views:
 
 - **Clustering** for PCA, feature selection, clustering, filtering, and icon inspection.
-- **Feature Groups** for one fixed literature-backed representative per family, with rationale/citation, a fullscreen detail view, All/B/W/Red/Colored filters, and an independent randomizable stratified sample drawn from the 28,260 quality-eligible rows. The gate excludes the 489 uncertain-mask rows and would also exclude missing identity/path fields or a missing/non-finite representative value. For each family/cohort, the eligible feature range is divided into 10 equal-width bins and up to two icons are selected randomly from each bin; empty or undersized bins are not backfilled, so the sample can contain fewer than 20 icons. Genuine zeros and near-low measurements remain valid. Cohorts with too little robust variation receive a visible low-information warning. Each active sample shows the average of its visible scores, orders icons from low to high by the representative feature value, and allows exactly three icons to be compared across all seven representative features in a separate fullscreen modal. Alternate registry features are not exposed in Feature Groups, Clustering, Color-by, selected-icon details, Feature Values, or Feature Review.
+- **Feature Groups** for one fixed literature-backed representative per family, with rationale/citation, a fullscreen detail view, All/B/W/Red/Colored filters, and an independent randomizable stratified sample drawn from the 397 quality-eligible rows in the five-set dashboard scope. The gate excludes 252 uncertain-mask rows and would also exclude missing identity/path fields or a missing/non-finite representative value. For each family/cohort, the eligible feature range is divided into 10 equal-width bins and up to two icons are selected randomly from each bin; empty or undersized bins are not backfilled, so the sample can contain fewer than 20 icons. Genuine zeros and near-low measurements remain valid. Cohorts with too little robust variation receive a visible low-information warning. Each active sample shows the average of its visible scores, orders icons from low to high by the representative feature value, and allows exactly three icons to be compared across all seven representative features in a separate fullscreen modal. Alternate registry features are not exposed in Feature Groups, Clustering, Color-by, selected-icon details, or Feature Values.
 - **Feature Values** for low, mean-nearest, and high representative examples.
-- **Feature Review** for feature variance and Spearman redundancy analysis.
+- Feature Review is hidden from navigation. Its variance and Spearman correlation data remains available because Feature Values uses it for correlation context; its UI markup and activation hooks are commented out for future restoration.
 - **AI Clustering** for explicit OpenRouter image embeddings, interactive AI-cluster inspection with a collapsible analysis sidebar, actual embedding and post-hoc measured-feature cluster contributions, descriptive modal heatmaps, modal all-cluster icon and feature statistics, a button-triggered comparison modal, and saved run loading.
 
 The collapsible left sidebar controls the analysis view. Use **Hide sidebar** or **Show sidebar** in the chart toolbar to release or restore its space:
@@ -87,9 +91,9 @@ The right sidebar shows:
 - a compact cluster-analysis section with **Show heatmap** and one entry for every assigned cluster;
 - a dedicated fullscreen modal per cluster with its metrics, aggregate feature statistics, interpretation, and a table of every assigned icon with all seven representative values.
 
-Hover uses the same per-feature comparison cards in compact form. For the default Image/AI cohort, “all icons” means the current 140-icon seven-family composite. Lasso adds a seven-feature group comparison whose subject marker is the selected-group median and whose baseline remains the complete 140-icon sample.
+Hover uses the same per-feature comparison cards in compact form. For the default Image/AI cohort, “all icons” means the current seven-family composite, which can contain up to 140 icons and contained 125 in the verified 2026-09-17 browser load. Lasso adds a seven-feature group comparison whose subject marker is the selected-group median and whose baseline remains the complete current shared sample.
 
-The **Feature Values** tab contains exactly the same seven representative features used by Feature Groups, one from each active visual family. Feature Review's Spearman analysis still supplies correlation context for those representatives, but it no longer determines which features appear in Feature Values. For the selected representative, the tab shows its family, strongest absolute Spearman correlation, summary statistics, and representative icons in three value bands:
+The **Feature Values** tab contains exactly the same seven representative features used by Feature Groups, one from each active visual family. The retained Spearman analysis supplies correlation context for those representatives, but it no longer determines which features appear in Feature Values. For the selected representative, the tab shows its family, strongest absolute Spearman correlation, summary statistics, and representative icons in three value bands:
 
 - low values (smallest measurements);
 - medium values (measurements nearest the dataset mean);
@@ -176,5 +180,5 @@ The fifth tab uses `code/serve_analysis_dashboard.py` and the exact shared Featu
 - Hierarchical clustering currently uses precomputed cluster labels/cuts, not a full interactive tree.
 - The Color By selector is not currently applied to the visible icon-image overlays.
 - The current Clustering filter is icon-set-only.
-- Image and AI Clustering use a unique seven-family composite: up to 20 equal-width-stratified icons from each family, verified as 140 icons for the default All cohort. Feature Groups receives a compact pool covering the 28,260 certain-mask feature rows, makes 10 equal-width bins across each family range, and randomly selects up to two icons per bin; **Randomize icons** replaces only the active family's contribution. Metadata/Combined keep the generated 129-row projections, comparison selection is limited to three active-family icons, and Feature Review/Values use the complete feature corpus.
+- Image and AI Clustering use a unique seven-family composite of up to 20 equal-width-stratified icons from each family. Feature Groups receives the compact 397-row quality-eligible pool from the five retained sets, makes 10 equal-width bins across each family range, and randomly selects up to two icons per bin; **Randomize icons** replaces only the active family's contribution. Metadata/Combined use the generated 50-row projections, comparison selection is limited to three active-family icons, and the retained correlation calculation plus Feature Values use all 649 selected-source feature rows.
 - Human-study identification/perception scores are not included in this dashboard yet.

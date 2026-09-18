@@ -46,8 +46,8 @@ These are essential to the thesis objective. The existing computer pipeline and 
 
 ## Dashboard Limitations
 
-- Image and AI Clustering use the seven-family stratified composite, up to 20 unique icons per family and normally 140 for All; sparse color cohorts can produce fewer. Metadata/Combined remain limited to the generated 129-row sample.
-- Feature Review/Values use the complete 28,749-row corpus. Feature Groups excludes 489 uncertain-mask rows, then divides each eligible family/cohort feature range into 10 equal-width bins and randomly draws up to two icons per bin from the remaining 28,260-row compact pool. Empty or undersized bins are not backfilled, so individual family samples can contain fewer than 20 icons. It supports three-icon representative comparisons; Image and AI Clustering combine all seven family samples and exclude cross-family duplicates.
+- Image and AI Clustering use the seven-family stratified composite, up to 20 unique icons per family and up to 140 for All; sparse bins or color cohorts can produce fewer. Metadata/Combined remain limited to the generated 50-row sample.
+- Dashboard correlation data and Feature Values use all 649 rows from the five retained source sets, not the complete 28,749-row corpus. Feature Groups excludes 252 uncertain-mask rows, then divides each eligible family/cohort feature range into 10 equal-width bins and randomly draws up to two icons per bin from the remaining 397-row compact pool. Empty or undersized bins are not backfilled, so individual family samples can contain fewer than 20 icons. It supports three-icon representative comparisons; Image and AI Clustering combine all seven family samples and exclude cross-family duplicates.
 - Color By is present but not applied to the visible icon overlays.
 - Current filtering is by icon set only; category/style filters described in older docs are absent.
 - UI state is not shareable by URL and resets on reload.

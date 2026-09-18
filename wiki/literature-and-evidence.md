@@ -32,21 +32,21 @@ No single paper validates every implemented metric. The mapping is a reasoned op
 
 ## Feature-Level Evidence Registry
 
-The 2026-07-28 literature pass records evidence on every active `FeatureSpec` in
-`code/thesis_pipeline/features/registry.py`. Each of the 81 active features has:
+The 2026-07-28 literature pass records historical evidence metadata on raw `FeatureSpec` entries in
+`code/thesis_pipeline/features/registry.py`. For current thesis claims, use the seven representatives
+listed below; the broader audit is provenance, not an alternate analysis layer. Each audited entry has:
 
 - `evidence_scope`: `direct`, `construct`, or `cautionary`;
 - `evidence`: a claim-disciplined summary of what the source supports and what remains a project
   inference;
 - `citation`: the paper title and verified page range.
 
-The current distribution is one direct entry, 77 construct-level entries, and three cautionary
-entries. `canny_edge_density` is the direct entry. `foreground_area_ratio`,
-`connected_components`, and `holes_count` are cautionary because the source itself reports important
-limitations. Auxiliary, deprecated, and excluded raw columns use `none`.
+`canny_edge_density` has the only close measure-level evidence. Other entries generally document
+construct-level support or cautionary boundaries because the source does not validate the exact
+repository formula. Auxiliary, deprecated, and excluded raw columns use `none`.
 
-Registry validation requires complete evidence metadata for the active set. The dashboard serializes
-the same fields into each feature object under `metadata.image_feature_sections`, so consumers do not
+Registry validation preserves this provenance. The dashboard serializes the same fields for the seven
+representatives under `metadata.image_feature_sections`, so consumers do not
 need a separate evidence table. The frozen registry fixture records the scope assignment and a digest
 of the evidence/citation content.
 
@@ -64,10 +64,10 @@ The one-feature-per-family selection in Feature Groups applies the following evi
 
 Key decisions:
 
-- Forsythe et al. pages 5-6 describe Canny's connected dual-threshold edge detection as suppressing shading/noise and report Spearman ρ = .49 against McDougall human-rated complexity. The current project selects `canny_edge_density` after its visual audit exposed raster and antialias inflation in grayscale quadtree variability; quadtree remains an active secondary complexity feature.
+- Forsythe et al. pages 5-6 describe Canny's connected dual-threshold edge detection as suppressing shading/noise and report Spearman ρ = .49 against McDougall human-rated complexity. The current project selects `canny_edge_density` after its visual audit exposed raster and antialias inflation in grayscale quadtree variability; quadtree is retained only as a raw traceability measurement.
 - Fuchs et al. pages 5-8 support closure and fill as influential similarity-strategy factors, while warning that contour can reduce task accuracy in some conditions.
 - Legg et al. page 5 reports human quasi-Hamming averages of 3.0 for orientation and 2.2 for texture; these support the constructs represented by `principal_axis_orientation_v2` and `local_texture_variation_v2`, not the exact formulas.
-- Borgo et al. pages 7, 12, and 16 support symmetry as perceptual organization and performance-relevant glyph structure.
+- Borgo et al. pages 7, 12, and 15 support symmetry as perceptual organization and performance-relevant glyph structure.
 - Borgo et al. pages 7-10 describe color as a dominant pop-out channel. Mapping that construct to corrected-foreground `mean_saturation_v2` is a project inference chosen to avoid selecting one arbitrary hue bin.
 
 See [Feature system](feature-system.md#current-one-feature-representatives) for the complete seven-feature table. These choices must be re-evaluated after human-study data exists; they are evidence-backed starting predictors, not confirmed causal determinants for this corpus.
@@ -94,6 +94,8 @@ Particularly careful cases:
 
 The main human-authored syntheses are:
 
+- [`feature_proof.md`](../feature_proof.md) — page-specific evidence for the seven current
+  representatives and the boundary between literature support and thesis-defined formulas.
 - `notes/human_to_computer_glyph_feature_mapping.md` — current conceptual boundary.
 - `notes/feature_literature_evidence_pass_2026-07-28.md` — feature-level evidence scope, page mapping,
   and registry coverage.

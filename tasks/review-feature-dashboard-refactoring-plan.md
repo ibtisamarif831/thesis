@@ -31,9 +31,9 @@ Completed in the first behavior-preserving slice:
 Follow-on configuration change:
 
 - added the registry-owned, code-only `ANALYSIS_FEATURE_PRESET` switch;
-- selected the seven configured representatives by default for dashboard clustering, Feature Review,
-  and similarity while preserving the 81-feature active registry and the 110-column raw export;
-- retained `full_registry` as the validated one-line fallback and added no UI profile control.
+- selected the seven configured representatives for dashboard clustering, Feature Review, and
+  similarity while preserving the 110-column raw export for traceability;
+- removed the obsolete broad-feature fallback and kept the analysis profile code-only.
 - restricted the Clustering sidebar, initial checked state, family/all actions, Color-by feature options,
   and browser-side PCA/clustering inputs to the resolved preset columns;
 - separated exploratory Feature Groups representative changes from Clustering selection.

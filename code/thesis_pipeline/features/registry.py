@@ -1403,9 +1403,6 @@ _ANALYSIS_FEATURE_PRESETS = MappingProxyType(
         "representatives": tuple(
             family.representative_feature_id for family in FAMILY_SPECS
         ),
-        "full_registry": tuple(
-            feature_id for family in FAMILY_SPECS for feature_id in family.feature_ids
-        ),
     }
 )
 

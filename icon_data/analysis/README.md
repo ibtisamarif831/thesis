@@ -1,6 +1,6 @@
 # Icon Analysis Dataset
 
-Feature schema v2 adds robust foreground-mask diagnostics and ten versioned measurement channels while retaining all schema-v1 columns. The current engineering shape is 28,749 rows and 133 columns (23 metadata + 110 numeric); the active family registry remains 81. `feature_v2_benchmark.csv` and `feature_v2_release_gate.json` govern human validation, and the pilot remains blocked until two independent raters pass every gate.
+Feature schema v2 adds robust foreground-mask diagnostics and ten versioned measurement channels while retaining all schema-v1 columns. The current engineering shape is 28,749 rows and 133 columns (23 metadata + 110 numeric). Thesis analysis uses seven representative measurements, one per literature-informed family; all other numeric columns are retained for traceability. `feature_v2_benchmark.csv` and `feature_v2_release_gate.json` govern human validation, and the pilot remains blocked until two independent raters pass every gate.
 
 Generated: 2026-07-20
 
@@ -67,17 +67,17 @@ The extractor reads normalized 256x256 PNGs from `icon_data/normalized_256/` and
 
 OpenCV is used for Canny/contour helpers when available; the script keeps local NumPy/Pillow fallbacks for portability.
 
-Current active visual feature families:
+Current thesis representative measurements:
 
-- Complexity: edge density, quadtree structure, components, contours, holes, perimeter load, and corner count.
-- Shape/silhouette: aspect ratio, solidity, closure proxy, circularity, rectangularity, and curvature bins.
-- Stroke/structure: line orientation, principal-axis orientation, arrowheads, arcs, skeleton endpoints, and skeleton junctions.
-- Density/fill: foreground amount, bounding-box occupancy, filled/outline proxy, and stroke width.
-- Balance/layout: centroid offset, symmetry, bounding-box position/size, and 4x4 foreground grid layout.
-- Color/contrast: monochrome status, color count, saturation, colorfulness, foreground/background contrast, hue histogram, and dominant Lab colors.
-- Texture: foreground tonal entropy.
+- Complexity: `canny_edge_density`.
+- Shape/silhouette: `enclosure_score_v2`.
+- Stroke/structure: `principal_axis_orientation_v2`.
+- Density/fill: `solid_fill_ratio_v2`.
+- Balance/layout: `horizontal_symmetry_v2`.
+- Color/contrast: `mean_saturation_v2`.
+- Texture: `local_texture_variation_v2`.
 
-The raw extractor still preserves additional columns for traceability, but the active literature-mapped visual family set excludes weak or non-interpretable channels such as Hu moments, local binary pattern bins, text/letter heuristic scores, and crush-test stability.
+The extractor preserves additional columns for traceability, but they are not a second thesis feature set. Weak or non-interpretable channels such as Hu moments, local binary pattern bins, text/letter heuristic scores, and crush-test stability must not drive thesis analysis.
 
 The feature CSV also includes non-distance metadata identity columns:
 

@@ -47,9 +47,9 @@ Consequently, zero saturation remains valid grayscale evidence, 0° remains a va
 - Against all 239 currently extracted McDougall subjective-complexity ratings, Canny edge density reaches Spearman ρ = 0.556, compared with 0.382 for grayscale quadtree variability. The extracted ratings still require release-gate verification before this is treated as final validation.
 - Forsythe et al. report Spearman ρ = .49 for Canny against McDougall human complexity ratings and explain that the connected dual thresholds suppress shading and noise.
 
-### Why quadtree remains secondary
+### Why quadtree is retained only as raw data
 
-The quadtree measurement remains in the active 81-feature registry because it still describes grayscale structural subdivision. It is no longer used as the single human-facing Complexity representative because antialiasing, raster transitions, and color-to-luminance boundaries can dominate its value.
+The quadtree measurement remains in the raw export because it describes grayscale structural subdivision. It is not used as the thesis Complexity representative because antialiasing, raster transitions, and color-to-luminance boundaries can dominate its value.
 
 ### Recommended “How to read it”
 

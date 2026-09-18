@@ -8,7 +8,7 @@
 
 ## Schema v2 extraction repair (2026-07-20)
 
-`features.csv` now uses `feature_schema_version: 2` and retains every schema-v1 measurement for reproducibility. Seven legacy columns are deprecated and inactive; the active 81-feature registry replaces them one-for-one with:
+`features.csv` now uses `feature_schema_version: 2` and retains every schema-v1 measurement for reproducibility. Seven legacy representative columns are deprecated and replaced one-for-one with corrected measurements:
 
 | Family | Schema-v2 replacement column | Definition |
 |---|---|---|
@@ -20,7 +20,7 @@
 | Color/contrast | `mean_saturation_v2` | Mean HSV saturation over corrected foreground pixels. |
 | Texture | `local_texture_variation_v2` | Normalized 7×7 grayscale variation inside a two-pixel-eroded foreground. |
 
-Auxiliary v2 channels are `orientation_confidence_v2`, `red_pixel_ratio_v2`, and `strict_red_flag_v2`. Strict red requires hue 345°–15°, saturation at least 0.50, value at least 0.20, and at least 90% qualifying foreground pixels. These auxiliary channels do not increase active-family dimensionality.
+Auxiliary v2 channels are `orientation_confidence_v2`, `red_pixel_ratio_v2`, and `strict_red_flag_v2`. Strict red requires hue 345°–15°, saturation at least 0.50, value at least 0.20, and at least 90% qualifying foreground pixels. These auxiliary channels do not increase thesis-analysis dimensionality.
 
 Foreground masks use alpha greater than 0.05 for transparent images. Opaque images estimate the median border color in CIELAB and remove only border-connected pixels within ΔE76 10. Per-icon metadata records mode, coverage, border contact, confidence, and an uncertainty flag. Uncertain masks remain inspectable but must not be silently treated as validated evidence.
 
@@ -30,29 +30,24 @@ The frozen benchmark is `icon_data/analysis/feature_v2_benchmark.csv`: 50 exampl
 
 ## Feature Layers
 
-The repository distinguishes four different things:
+The repository distinguishes three different things:
 
 1. **Extractor output:** 110 raw numeric image-feature columns retained for traceability.
-2. **Active visual mapping:** 81 interpretable features organized into seven literature-mapped families.
-3. **Code-selected analysis layer:** a named preset chooses features for dashboard clustering, Feature Review, and similarity. The current preset contains seven features.
-4. **Metadata/identity fields:** 23 columns used for labels, joining, filtering, OCR/semantic context, and mask diagnostics; these are not visual-distance features.
+2. **Thesis analysis layer:** seven representative measurements, one per literature-informed family, used by dashboard clustering, Feature Review, and similarity.
+3. **Metadata/identity fields:** 23 columns used for labels, joining, filtering, OCR/semantic context, and mask diagnostics; these are not visual-distance features.
 
-Do not use “feature” without making the layer clear. In thesis claims, “active registry features” means the 81 image-derived features in the seven visual families; “analysis features” means the code-selected preset, which contains seven features by default.
+Do not use “feature” without making the layer clear. In thesis claims, “analysis features” means the seven representatives. Other numeric columns in `features.csv` are raw extractor outputs retained for reproducibility, not an alternate thesis feature set.
 
 ## Code-Only Analysis Preset
 
-`ANALYSIS_FEATURE_PRESET` in `code/thesis_pipeline/features/registry.py` is the single switch for the
-default computational selection:
+`ANALYSIS_FEATURE_PRESET` in `code/thesis_pipeline/features/registry.py` records the computational selection:
 
-- `"representatives"` — the seven configured family representatives; current default;
-- `"full_registry"` — all 81 active registry features.
+- `"representatives"` — the seven configured family representatives and the only supported thesis analysis profile.
 
 `analysis_feature_ids()` and `analysis_feature_groups()` validate and expose the selected preset.
 Dashboard clustering, combined clustering, Feature Review, and pairwise similarity consume these
-queries. Raw extraction still writes all 110 columns, the active registry still contains 81 features,
-and feature metadata remains available for inspection. To add a different manual seven-feature set,
-add a named immutable tuple to `_ANALYSIS_FEATURE_PRESETS`, then change the one preset constant. No UI
-profile switch is provided.
+queries. Raw extraction still writes all 110 columns and their metadata remains available for
+inspection, but no broad-feature fallback or UI profile switch is provided.
 
 ## Image Loading and Foreground Detection
 
@@ -62,23 +57,23 @@ OpenCV is optional. When present, it is used for selected operations such as Can
 
 The extractor is plugin-style: every metric group subclasses `FeatureExtractor`, declares its output columns, and is registered in `FEATURE_EXTRACTORS`.
 
-## Active Families
+## Literature-Informed Families
 
-| Family | Active columns | Human-facing interpretation |
-|---|---:|---|
-| Complexity | 9 | Detail load, subdivisions, separate parts, contours, holes, perimeter load, corners. |
-| Shape/silhouette | 8 | Overall form, closure proxy, roundness, rectangularity, curvature. |
-| Stroke/structure | 9 raw columns | Directional lines, dominant axis, arrow/arc cues, skeleton endpoints and junctions. |
-| Density/fill | 5 | Foreground amount, occupancy, filled/outline behavior, stroke width. |
-| Balance/layout | 23 | Centering, symmetry, bounding-box position/size, and 4 × 4 spatial mass. |
-| Color/contrast | 26 | Monochrome/color, saturation, colorfulness, contrast, hue, dominant Lab colors. |
-| Texture | 1 | Local interior grayscale variation with the silhouette edge excluded. |
+| Family | Thesis representative | Human-facing interpretation |
+|---|---|---|
+| Complexity | `canny_edge_density` | Detail and edge load. |
+| Shape/silhouette | `enclosure_score_v2` | Overall closure and compactness of the silhouette. |
+| Stroke/structure | `principal_axis_orientation_v2` | Dominant global direction. |
+| Density/fill | `solid_fill_ratio_v2` | Filled-versus-outline treatment. |
+| Balance/layout | `horizontal_symmetry_v2` | Left-right balance and symmetry. |
+| Color/contrast | `mean_saturation_v2` | Strength of foreground color. |
+| Texture | `local_texture_variation_v2` | Local interior variation. |
 
-The active raw total is 81. In pairwise similarity, `principal_axis_orientation_v2` is replaced by confidence-scaled doubled-angle cosine/sine components, so the transformed matrix has one additional numeric channel while representing the same conceptual axis.
+In pairwise similarity, `principal_axis_orientation_v2` is replaced by confidence-scaled doubled-angle cosine/sine components, so the transformed matrix has eight numeric channels while still representing seven conceptual measurements.
 
 ## Current One-Feature Representatives
 
-Feature Groups currently exposes one literature-backed representative per family for stimulus review. Feature Values intentionally reuses exactly these seven representatives for low/mean-nearest/high examples. The 81-feature active registry remains intact, while the current code-only analysis preset deliberately uses these same seven features for clustering, similarity, and Feature Review.
+Feature Groups exposes one literature-backed representative per family for stimulus review. Feature Values intentionally reuses exactly these seven representatives for low/mean-nearest/high examples. Clustering, similarity, and Feature Review use the same seven measurements.
 
 | Family | Current representative | Selection basis |
 |---|---|---|
@@ -90,13 +85,12 @@ Feature Groups currently exposes one literature-backed representative per family
 | Color/contrast | `mean_saturation_v2` | Saturation over the corrected foreground. |
 | Texture | `local_texture_variation_v2` | Local interior variation rather than global tonal entropy. |
 
-These are the most defensible current representatives, not universal causal rankings. Complexity is the first family to move away from its schema-v2 replacement after full-corpus visual review; `quadtree_structural_variability_v2` remains active for analysis but is no longer the one-feature representative. The papers study different tasks and do not compare every implemented feature in one experiment. Each selection, rationale, evidence statement, and citation is defined in the shared registry and serialized into `metadata.image_feature_sections` within `dashboard_data.json`.
+These are the most defensible current representatives, not universal causal rankings. Complexity moved away from its schema-v2 candidate after full-corpus visual review; `quadtree_structural_variability_v2` remains a retained raw measurement but is not part of thesis analysis. The papers study different tasks and do not compare every implemented feature in one experiment. Each selection, rationale, evidence statement, and citation is defined in the shared registry and serialized into `metadata.image_feature_sections` within `dashboard_data.json`.
 
-The registry also carries evidence for every active feature, not only the seven representatives.
+The registry retains historical evidence metadata for raw measurements as well as the seven representatives.
 `FeatureSpec.evidence_scope` separates close measure-level evidence (`direct`) from support for the
 visual construct while the formula remains a project inference (`construct`) and source findings that
-constrain interpretation (`cautionary`). The 2026-07-28 pass yielded 1 direct, 77 construct, and 3
-cautionary entries. Each dashboard feature object includes `evidence_scope`, `evidence`, and
+constrain interpretation (`cautionary`). Each dashboard representative includes `evidence_scope`, `evidence`, and
 `citation`. See [Literature and evidence](literature-and-evidence.md#feature-level-evidence-registry)
 and `notes/feature_literature_evidence_pass_2026-07-28.md`.
 
@@ -210,7 +204,7 @@ They cannot be used as evidence that pixels alone produced semantic understandin
 
 ## Feature Metadata Artifact
 
-`icon_data/analysis/features_metadata.json` records the last extraction run: input/output paths, row count, per-set limit, dependency availability, metadata columns, and extractor grouping. `dashboard_data.json` serializes the registry's current active-family definitions and human-facing descriptions.
+`icon_data/analysis/features_metadata.json` records the last extraction run: input/output paths, row count, per-set limit, dependency availability, metadata columns, and extractor grouping. `dashboard_data.json` serializes the seven configured family representatives and their human-facing descriptions.
 
 Use both artifacts together:
 

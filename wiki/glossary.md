@@ -4,7 +4,8 @@
 
 | Term | Meaning in this repository |
 |---|---|
-| Active feature | One of 81 image-derived numeric columns included in the current literature-mapped thesis analysis. |
+| Analysis feature | One of seven representative measurements included in the current thesis analysis. |
+| Raw feature | Any numeric extractor column retained in `features.csv` for traceability; raw presence does not make it a thesis analysis feature. |
 | Active visual family | One of seven interpretable groups: Complexity, Shape/silhouette, Stroke/structure, Density/fill, Balance/layout, Color/contrast, Texture. |
 | Canonical icon | The one selected representation of a source stimulus that is allowed into `dataset.csv` after dataset-specific duplicate/helper filtering. |
 | Canonical dataset | `icon_data/analysis/dataset.csv`, the cross-source table of canonical icon rows. |
@@ -12,7 +13,8 @@
 | Combined variant | Dashboard matrix containing image and encoded metadata features; exploratory, not a pure visual space. |
 | Computer-side score | An image feature, family summary, or pairwise distance computed from active visual measurements. |
 | Confusability | Risk that two stimuli are mistaken for one another; currently predicted by visual distance and awaiting human validation. |
-| Dashboard sample | Current 129-row random per-set sample used by the Clustering view. |
+| Dashboard source scope | Five retained study-oriented sets containing 649 canonical icons: AIGA/DOT, OCHA, Universal Symbols Healthcare Webfont, ISO 7010, and ISO 15223. |
+| Dashboard sample | Current 50-row random per-set sample used by Metadata and Combined clustering; Image and AI use transient samples from the 397 quality-eligible selected-source rows. |
 | Distinguishability | Visual separation between icons, especially relative to competing icons in a set. |
 | Excluded raw channel | Numeric extractor output retained in `features.csv` but barred from active thesis analysis under the current mapping. |
 | Feature extractor | Registered code component that computes one or more numeric columns from a normalized image. |

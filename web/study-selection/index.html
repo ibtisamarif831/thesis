@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <link rel="icon" href="data:,">
+  <title>Study Icon Selection</title>
+  <link rel="stylesheet" href="study-selection.css">
+</head>
+<body>
+  <header class="site-header">
+    <div>
+      <a href="index.html" class="back-link">← Analysis dashboard</a>
+      <h1>Study Icon Selection</h1>
+      <p>Choose exactly 20 icons from each dataset for the first study pilot.</p>
+    </div>
+    <div class="overall-progress" aria-live="polite"><strong id="overallCount">0 / 100</strong><span>selected</span></div>
+  </header>
+
+  <section class="study-guidance">
+    <strong>Selection guidance</strong>
+    <p>Make an independent, educated selection. Consider both coverage of the dataset’s visual range and icons that appear visually close or potentially confusable. The research group will compare submissions and agree on the final stimulus set.</p>
+  </section>
+
+  <nav id="datasetTabs" class="dataset-tabs" aria-label="Icon datasets"></nav>
+
+  <main>
+    <section class="toolbar" aria-label="Icon controls">
+      <label>Find an icon <input id="searchInput" type="search" placeholder="Search label or ID"></label>
+      <label class="toggle"><input id="selectedOnly" type="checkbox"> Show selected only</label>
+      <button id="clearDataset" type="button" class="secondary">Clear this dataset</button>
+    </section>
+    <div id="datasetHeading" class="dataset-heading"></div>
+    <div id="iconGrid" class="icon-grid" aria-live="polite"></div>
+  </main>
+
+  <section class="submission-panel">
+    <div>
+      <h2>Review and submit</h2>
+      <p id="completionMessage">Select 20 icons in every dataset before submitting.</p>
+      <button id="reviewButton" type="button" class="secondary">Review selected icons</button>
+    </div>
+    <form id="submissionForm">
+      <label>Anonymous reviewer code
+        <input id="reviewerCode" name="reviewer_code" required minlength="3" maxlength="40" pattern="[A-Za-z0-9][A-Za-z0-9_-]{2,39}" placeholder="e.g. reviewer-01" autocomplete="off">
+      </label>
+      <label>Shared access code
+        <input id="accessCode" name="access_code" type="password" required autocomplete="off">
+      </label>
+      <label>Optional selection rationale
+        <textarea id="rationale" name="rationale" maxlength="2000" rows="3" placeholder="What guided your choices?"></textarea>
+      </label>
+      <button id="submitButton" type="submit" disabled>Submit 100 selections</button>
+      <p id="submitStatus" class="status" aria-live="polite"></p>
+    </form>
+  </section>
+
+  <dialog id="reviewDialog">
+    <div class="dialog-header"><h2>Your 100 selected icons</h2><button id="closeReview" type="button" class="secondary">Close</button></div>
+    <div id="reviewContent"></div>
+  </dialog>
+  <script src="study-selection.js"></script>
+</body>
+</html>

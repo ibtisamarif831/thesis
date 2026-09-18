@@ -93,16 +93,19 @@ def test_registry_invariants_and_extractor_order() -> None:
     )
 
     assert len(raw) == len(set(raw)) == 110
-    assert len(active) == len(set(active)) == 81
+    assert len(active) == len(set(active))
+    assert active == tuple(
+        feature_id
+        for family in registry.family_specs()
+        for feature_id in family.feature_ids
+    )
     assert len(excluded) == len(set(excluded)) == 29
     assert set(raw) == set(active) | set(excluded)
     assert set(active).isdisjoint(excluded)
-    assert statuses == {
-        registry.FeatureStatus.ACTIVE: 81,
-        registry.FeatureStatus.AUXILIARY: 3,
-        registry.FeatureStatus.DEPRECATED: 7,
-        registry.FeatureStatus.EXCLUDED: 19,
-    }
+    assert statuses[registry.FeatureStatus.ACTIVE] == len(active)
+    assert statuses[registry.FeatureStatus.AUXILIARY] == 3
+    assert statuses[registry.FeatureStatus.DEPRECATED] == 7
+    assert statuses[registry.FeatureStatus.EXCLUDED] == 19
     assert evidence_scopes == {
         registry.EvidenceScope.DIRECT: 1,
         registry.EvidenceScope.CONSTRUCT: 77,
@@ -112,7 +115,7 @@ def test_registry_invariants_and_extractor_order() -> None:
     assert set(registry.feature_citations()) == set(active)
     assert registry.analysis_feature_ids() == registry.representative_feature_ids()
     assert len(registry.analysis_feature_ids()) == 7
-    assert registry.analysis_feature_ids("full_registry") == active
+    assert tuple(registry.analysis_feature_presets()) == ("representatives",)
     assert registry.analysis_feature_groups() == tuple(
         (feature_id,) for feature_id in registry.representative_feature_ids()
     )
@@ -170,19 +173,6 @@ def test_dashboard_compatibility_adapter_matches_generated_contract() -> None:
         for section in payload["metadata"]["image_feature_sections"]
         for feature in section["features"]
     )
-
-
-def test_dashboard_allow_list_does_not_expand_with_analysis_preset(monkeypatch) -> None:
-    monkeypatch.setattr(registry, "ANALYSIS_FEATURE_PRESET", "full_registry")
-
-    assert len(registry.analysis_feature_ids()) == 81
-    assert dashboard.active_image_feature_columns() == list(
-        registry.representative_feature_ids()
-    )
-    assert dashboard.active_image_feature_groups() == [
-        [feature_id] for feature_id in registry.representative_feature_ids()
-    ]
-    assert all(len(section["features"]) == 1 for section in dashboard.image_feature_sections())
 
 
 def test_similarity_uses_registry_groups_and_preserves_transformed_order() -> None:

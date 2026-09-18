@@ -61,7 +61,7 @@ Keep outside the active image-feature family list:
 
 ## Current Improvements Already Applied
 
-- Active families reduced to 81 mapped visual features.
+- Thesis analysis narrowed to seven representative measurements, one per literature-informed family.
 - Weak/non-interpretable raw channels excluded from active dashboard, feature review, feature explorer, clustering, and similarity ranking.
 - Similarity now uses active visual families rather than extractor groups.
 - Principal-axis orientation is encoded circularly over 180 degrees.

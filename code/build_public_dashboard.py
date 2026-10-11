@@ -14,6 +14,7 @@ from collections import Counter
 from pathlib import Path
 
 import numpy as np
+from PIL import Image, __version__ as PILLOW_VERSION
 
 from build_analysis_dashboard import DASHBOARD_FEATURE_SECTIONS, DASHBOARD_SETS, DASHBOARD_SET_IDS
 from thesis_pipeline.clustering import pca_2d, standardize
@@ -187,6 +188,25 @@ def build_study_feature_layouts(rows: list[dict[str, str]]) -> dict[str, tuple[f
     return layouts
 
 
+IMAGE_CHECK_SPEC = {
+    "version": "white-rgb-lanczos-v1", "source_size": [256, 256],
+    "sizes": [6, 8, 10, 12, 14], "pillow_version": PILLOW_VERSION,
+    "rendering": "Decode RGBA; alpha composite onto opaque white; convert RGB; SHA-256 row-major RGB bytes; resize white RGB with Pillow LANCZOS",
+}
+
+
+def image_checks(path):
+    with Image.open(path) as source:
+        if source.size != (256, 256):
+            raise ValueError(f"Expected normalized 256 x 256 image: {path}")
+        rgba = source.convert("RGBA")
+        rgb = Image.alpha_composite(Image.new("RGBA", rgba.size, "white"), rgba).convert("RGB")
+    return {
+        "source_sha256": hashlib.sha256(rgb.tobytes()).hexdigest(),
+        "size_sha256": {str(size): hashlib.sha256(rgb.resize((size, size), Image.Resampling.LANCZOS).tobytes()).hexdigest() for size in IMAGE_CHECK_SPEC["sizes"]},
+    }
+
+
 def write_study_selection_assets(rows: list[dict[str, str]]) -> None:
     feature_layouts = build_study_feature_layouts(rows)
     scoped_ids = {row["icon_id"] for row in rows}
@@ -203,12 +223,14 @@ def write_study_selection_assets(rows: list[dict[str, str]]) -> None:
                 "label": row.get("label", ""),
                 "normalized_path": row["normalized_path"].removeprefix("icon_data/"),
                 "features": study_features[row["icon_id"]],
+                "image_checks": image_checks(ROOT / row["normalized_path"]),
                 "feature_x": feature_layouts[row["icon_id"]][0],
                 "feature_y": feature_layouts[row["icon_id"]][1],
             }
         )
     data = {
         "selection_version": "five-sets-up-to-20-v2",
+        "image_check_spec": IMAGE_CHECK_SPEC,
         "minimum_total": 1,
         "maximum_per_set": 20,
         "layout": {
@@ -327,6 +349,7 @@ def main() -> None:
         "excluded_incompatible_ai_runs": ai_archive["excluded_incompatible_run_count"],
         "study_selection": {
             "selection_version": "five-sets-up-to-20-v2",
+            "image_check_spec": IMAGE_CHECK_SPEC,
             "minimum_total": 1,
             "maximum_per_set": 20,
             "maximum_total": 100,

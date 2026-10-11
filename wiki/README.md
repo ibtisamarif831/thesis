@@ -94,6 +94,8 @@ Controlled-pilot source update on **2026-10-11**: five answer options, 6/8/10/12
 
 Full keyboard UI update verified on **2026-10-11**, deployment `b46388a7`: platform-specific keycap badges, Enter/Return lifecycle actions, 0 for unidentified, Ctrl/Command finish/end shortcuts and preserved reflection typing. Local and hosted-assets browser checks passed without production participant writes; see [pilot keyboard operations](icon-recognition-pilot.md).
 
+Local automatic-alternative refinement verified on **2026-10-11** (13 focused tests, Python image checks, combined isolated D1/browser suite and public build): new controlled pilots use seeded source-distinct selection (two near plus a uniform valid pair from original ranks 12–16), canonical pixel hashes and retained small-size collision diagnostics, balanced target positions and additive audit exports. Existing snapshots retain alternatives/schedules; unchecked legacy images display “not checked”. No deployment or production writes are included, and the historical production counts above are unchanged. See [exact rules and verification](icon-recognition-pilot.md#alternative-selection).
+
 Recheck these values with the recipes in [Verification and troubleshooting](verification-and-troubleshooting.md) before making current-state claims.
 
 ## Source-of-Truth Order

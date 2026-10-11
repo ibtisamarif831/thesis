@@ -41,7 +41,7 @@ export function onRequestPost({ request, env }) { return handle(async () => {
   const catalog = await assets.json(); const set = catalog.sets.find(s => s.set_id === data.set_id);
   const icons = rows.map(row => { const icon = set?.icons.find(i => i.icon_id === row.icon_id); if (!icon || !/^normalized_256\/[a-z0-9_]+\/[^/]+\.png$/.test(icon.normalized_path)) fail('Stimulus image missing from published catalog.'); return { ...row, features: icon.features, image: '/' + icon.normalized_path }; });
   const selectedCatalogIcons = rows.map(row => set.icons.find(i => i.icon_id === row.icon_id));
-  const selection = selectAlternatives(selectedCatalogIcons, catalog.layout?.feature_ids);
+  const selection = await selectAlternatives(selectedCatalogIcons, catalog.layout?.feature_ids, catalog.image_check_spec);
   const config = { ...selection, familiarity: "no-full-set-preview", protocol_version: PROTOCOL, icons, size_levels: data.size_levels, exposure_ms: 1500, target_px: 128,
     source: { set_id: data.set_id, submission_id: source.submission_id, reviewer_code: source.reviewer_code, selection_version: source.selection_version, updated_at: source.updated_at } };
   const pilot_id = crypto.randomUUID(), invitation = token(), created_at = new Date().toISOString();

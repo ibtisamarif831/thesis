@@ -14,6 +14,10 @@ export function onRequestGet({ request, env }) { return handle(async () => {
   const attempts = (await db.prepare('SELECT a.* FROM recognition_attempts a JOIN recognition_sessions s USING(session_id) WHERE s.pilot_id=? ORDER BY a.session_id,a.trial_index,a.started_at,a.attempt_id').bind(pilot.pilot_id).all()).results
     .map(({ grid_json, response_json, interruption_json, ...row }) => ({ ...row, grid: JSON.parse(grid_json), response: response_json ? JSON.parse(response_json) : null, interruption: interruption_json ? JSON.parse(interruption_json) : null }));
   const config = JSON.parse(pilot.config_json), controlled = isControlled(config);
+  const collisionsFor = a => {
+    const size = a.response?.assigned_size ?? sessions.find(s => s.session_id === a.session_id)?.schedule[a.trial_index]?.assigned_size;
+    return config.collision_diagnostics?.filter(c => c.target_id === a.target_id && c.size === size) ?? null;
+  };
   const by_size = {};
   const recorded = attempts.filter(a => a.phase === 'recorded' && a.state === 'answered');
   const clean = recorded.filter(a => !a.repeated_exposure);
@@ -23,6 +27,13 @@ export function onRequestGet({ request, env }) { return handle(async () => {
     unidentified: clean.filter(a => a.response.category === 'unidentified').length, size_label: controlled ? 'assigned icon size (CSS pixels)' : 'historical size chosen before answering',
     chosen_sizes: tally(clean, a => a.response.final_size), enlargement_counts: tally(clean, a => a.response.enlargements.length), confidence: tally(clean.filter(a => a.response.confidence !== null), a => a.response.confidence),
     confusion: tally(clean, a => `${a.target_id} → ${a.response.selected_id || '[unidentified]'}`) };
+  summary.selection_rule_version = config.selection_rule_version ?? 'legacy';
+  summary.schedule_rule_version = config.schedule_rule_version ?? 'legacy';
+  summary.collision_check_status = Array.isArray(config.collision_diagnostics) ? 'checked' : 'not checked';
+  summary.collision_label = 'standardized rendering collision diagnostics';
+  summary.collision_pair_count = config.collision_diagnostics?.length ?? null;
+  summary.collision_target_size_count = config.collision_diagnostics ? new Set(config.collision_diagnostics.map(c => `${c.target_id}:${c.size}`)).size : null;
+  summary.eligible_collision_answers = config.collision_diagnostics ? clean.filter(a => collisionsFor(a)?.length).length : null;
   if (controlled) {
     for (const size of config.size_levels) {
       const rows = clean.filter(a => a.response.assigned_size === size);
@@ -36,9 +47,9 @@ export function onRequestGet({ request, env }) { return handle(async () => {
     summary.chance_accuracy = 0.2;
   }
   if (query.get('format') === 'csv') {
-    const columns = ['session_id','attempt_id','phase','trial_index','target_id','protocol_version','set_id','assigned_size','selected_position','response_time_ms','choice_onset_ms','input_method','state','repeated_exposure','category','selected_id','correct','confidence','final_size','duration_ms','enlargements','interruption','grid','started_at','received_at'];
+    const columns = ['session_id','attempt_id','phase','trial_index','target_id','protocol_version','set_id','selection_rule_version','schedule_rule_version','collision_check_status','collision_pairs','target_collision','assigned_size','selected_position','response_time_ms','choice_onset_ms','input_method','state','repeated_exposure','category','selected_id','correct','confidence','final_size','duration_ms','enlargements','interruption','grid','started_at','received_at'];
     const lines = [columns.map(csvCell).join(',')];
-    for (const a of attempts) { const r = { ...a, ...a.response, protocol_version:config.protocol_version, set_id:config.source.set_id, assigned_size: a.response?.assigned_size ?? sessions.find(s => s.session_id === a.session_id)?.schedule[a.trial_index]?.assigned_size };  lines.push(columns.map(c => csvCell(r[c])).join(',')); }
+    for (const a of attempts) { const r = { ...a, ...a.response, selection_rule_version:summary.selection_rule_version, schedule_rule_version:summary.schedule_rule_version, collision_check_status:summary.collision_check_status, collision_pairs:collisionsFor(a), target_collision:collisionsFor(a)?.some(c => c.target_involved) ?? null, protocol_version:config.protocol_version, set_id:config.source.set_id, assigned_size: a.response?.assigned_size ?? sessions.find(s => s.session_id === a.session_id)?.schedule[a.trial_index]?.assigned_size };  lines.push(columns.map(c => csvCell(r[c])).join(',')); }
     return new Response(lines.join('\r\n') + '\r\n', { headers: { 'Content-Type': 'text/csv; charset=utf-8', 'Content-Disposition': 'attachment; filename="pilot-trials.csv"', 'Cache-Control': 'no-store', 'X-Content-Type-Options': 'nosniff' } });
   }
   const result = { pilot: { ...pilot, config: JSON.parse(pilot.config_json) }, summary };

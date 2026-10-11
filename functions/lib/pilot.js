@@ -38,7 +38,17 @@ export function shuffle(ids) {
 export function schedule(ids, config) {
   requireControlled(config);
   const trial = (target_id, assigned_size, phase) => ({target_id, assigned_size, phase, grid: shuffle([target_id, ...config.alternatives[target_id].similar, ...config.alternatives[target_id].dissimilar])});
-  return [...shuffle(ids).slice(0,3).map(id => trial(id, 14, 'practice')), ...shuffle(ids.flatMap(id => config.size_levels.map(size => trial(id, size, 'recorded'))))]
+  const recorded = ids.flatMap(id => {
+    if (!config.schedule_rule_version) return config.size_levels.map(size => trial(id, size, 'recorded'));
+    if (config.schedule_rule_version !== 'balanced-target-positions-v1') fail('Unsupported schedule rule.', 503);
+    const positions = shuffle([0,1,2,3,4]);
+    return config.size_levels.map((size, index) => {
+      const grid = shuffle([...config.alternatives[id].similar, ...config.alternatives[id].dissimilar]);
+      grid.splice(positions[index], 0, id);
+      return {target_id: id, assigned_size: size, phase: 'recorded', grid};
+    });
+  });
+  return [...shuffle(ids).slice(0,3).map(id => trial(id, 14, 'practice')), ...shuffle(recorded)]
     .map((t, trial_index) => ({...t, trial_index}));
 }
 export function validLevels(levels) { return JSON.stringify(levels) === JSON.stringify(FIXED_SIZES); }

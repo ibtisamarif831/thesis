@@ -2,7 +2,8 @@
 import assert from 'node:assert/strict';
 import { spawn, execFileSync } from 'node:child_process';
 import { readFileSync, writeFileSync, mkdirSync, symlinkSync, existsSync, cpSync, lstatSync, unlinkSync } from 'node:fs';
-const root = process.cwd(), base = process.env.PILOT_TEST_URL || 'http://127.0.0.1:8799';
+const port = process.env.PILOT_TEST_PORT || '8799';
+const root = process.cwd(), base = process.env.PILOT_TEST_URL || `http://127.0.0.1:${port}`;
 const args = ['--config','wrangler.pilot-test.jsonc'];
 const persist = root + '/tmp/controlled-pilot-integration-d1-' + crypto.randomUUID(); mkdirSync(root+'/tmp',{recursive:true});
 const wrangler = (...commands) => execFileSync(root+'/node_modules/.bin/wrangler',[...commands,...args],{cwd:root,encoding:'utf8',stdio:['ignore','pipe','pipe']});
@@ -27,7 +28,7 @@ const cfg = JSON.parse(readFileSync(root + '/wrangler.pilot-test.jsonc')); cfg.p
 writeFileSync(appDir + '/wrangler.jsonc',JSON.stringify(cfg));
 if (existsSync(appDir + '/functions') && lstatSync(appDir + '/functions').isSymbolicLink()) unlinkSync(appDir + '/functions');
 cpSync(root + '/functions',appDir + '/functions',{recursive:true});
-const server = process.env.PILOT_TEST_URL ? null : spawn(root+'/node_modules/.bin/wrangler',['pages','dev','--cwd',appDir,'--d1','STUDY_SELECTION_DB=STUDY_SELECTION_DB','--port','8799','--persist-to',persist,'--binding','STUDY_ADMIN_KEY=local-admin','--binding','STUDY_SUBMIT_KEY=local-submit'],{cwd:appDir,stdio:['ignore','pipe','pipe']});
+const server = process.env.PILOT_TEST_URL ? null : spawn(root+'/node_modules/.bin/wrangler',['pages','dev','--cwd',appDir,'--d1','STUDY_SELECTION_DB=STUDY_SELECTION_DB','--port',port,'--persist-to',persist,'--binding','STUDY_ADMIN_KEY=local-admin','--binding','STUDY_SUBMIT_KEY=local-submit'],{cwd:appDir,stdio:['ignore','pipe','pipe']});
 let serverOutput = ''; server?.stdout.on('data',b => {serverOutput+=b;}); server?.stderr.on('data',b=>{serverOutput+=b;});
 const sleep = ms => new Promise(r => setTimeout(r,ms));
 async function call(path, data, credential, status=200, origin=base) {
@@ -46,6 +47,13 @@ try {
   await call('pilot-sessions?pilot='+'1'.repeat(64),null,null,410);
   await call('pilots',{...source,protocol_version:'icon-recognition-usability-v1'},'local-admin',400);
   const pilot=await call('pilots',source,'local-admin',201);
+  assert.equal(pilot.config.selection_rule_version,'near-distinct-band-12-16-sha256-v1');
+  for(const v of Object.values(pilot.config.alternatives)) assert.ok(v.selected_ranks.dissimilar.every(r=>r>=12&&r<=16));
+  const legacyResult=await call('pilot-results?pilot_id=legacy-preserved',null,'local-admin'); assert.equal(legacyResult.summary.collision_check_status,'not checked');
+  if(process.env.PILOT_BROWSER_CHECKS) await new Promise((resolve,reject) => {
+    const browser = spawn(process.execPath,['code/tests/pilot/refinement-browser.mjs',base],{cwd:root,stdio:'inherit'});
+    browser.on('error',reject); browser.on('exit',code => code === 0 ? resolve() : reject(new Error('Browser checks failed: '+code)));
+  });
   const invite=await call('pilot-sessions?pilot='+pilot.invitation); assert.equal(invite.config.icons.length,20); assert.equal(invite.config.icons[0].label,undefined);
   sql(`UPDATE study_submissions SET updated_at='edited' WHERE submission_id='${submission}'; DELETE FROM study_selections WHERE submission_id='${submission}' AND selection_order=20;`);
   const frozen=await call('pilots?pilot_id='+pilot.pilot_id,null,'local-admin'); assert.equal(frozen.config.icons.length,20);
@@ -56,6 +64,8 @@ try {
   assert.equal(new Set(view.schedule.slice(3).map(t=>t.target_id)).size,20); assert.equal(new Set(view.schedule.slice(0,3).map(t=>t.target_id)).size,3);
   assert.equal(view.schedule.length,103); assert.equal(new Set(view.schedule.slice(3).map(t=>t.target_id+':'+t.assigned_size)).size,100);
   for (const t of view.schedule) { assert.equal(t.grid.length,5); assert.equal(new Set(t.grid).size,5); assert.ok(t.grid.includes(t.target_id)); }
+  for(const id of ids) assert.deepEqual(view.schedule.slice(3).filter(t=>t.target_id===id).map(t=>t.grid.indexOf(id)).sort(),[0,1,2,3,4]);
+  const resumed=await call('pilot-sessions?session_id='+s.session_id,null,s.credential); assert.deepEqual(resumed.schedule,view.schedule);
   await call('pilots',{action:'close',pilot_id:pilot.pilot_id},'local-admin');
   await call('pilot-sessions',{pilot:pilot.invitation,viewport:{width:1280,height:900,dpr:2}},null,410);
   await call('pilot-completion',{action:'complete',session_id:s.session_id},s.credential,409);
@@ -89,7 +99,7 @@ try {
   assert.equal(full.attempts.length,104); assert.equal(full.sessions[0].credential_hash,undefined); assert.equal(full.summary.correct,98);
   assert.equal(Object.values(full.summary.by_size).reduce((n,v)=>n+v.n,0),99);
   assert.equal(full.summary.by_size[6].median_response_time_ms,650);
-  const csv=await call('pilot-results?pilot_id='+pilot.pilot_id+'&format=csv',null,'local-admin'); assert.equal(csv.split('\r\n').length,106);
+  const csv=await call('pilot-results?pilot_id='+pilot.pilot_id+'&format=csv',null,'local-admin'); assert.equal(csv.split('\r\n').length,106);assert.ok(csv.includes('collision_check_status'));assert.ok(csv.includes(pilot.config.selection_rule_version));
   // Early end, independent credential boundary, and concurrent duplicate delivery.
   sql(`UPDATE study_submissions SET updated_at='fixture' WHERE submission_id='${submission}'; INSERT INTO study_selections VALUES('${submission}','${set.set_id}','${ids[19]}',20);`);
   const p2=await call('pilots',source,'local-admin',201);

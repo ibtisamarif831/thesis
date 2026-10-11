@@ -160,3 +160,5 @@ git diff -- wiki agent.md
 Generated folders can create large diffs. Confirm every changed artifact was intended and do not revert unrelated user work.
 
 Controlled production release `ec45d507` (2026-10-11) was checked against the live manifest/catalog, participant API saves/retries and a keyboard browser trial. Old results were deleted at the user’s request and temporary smoke records removed; reviewer nominations were byte-for-byte preserved. See the [production release record](icon-recognition-pilot.md#production-release-2026-10-11).
+
+For full keyboard interaction, run `code/tests/pilot/keyboard-study-browser.js` through Playwright CLI on the isolated local Pages server. It mocks participant APIs and a shortened schedule, testing Windows/Mac badges and every keyboard lifecycle transition without producing participant records. Check accessible confidence labels, normal multiline reflection typing, held keys, and Enter on focused buttons.

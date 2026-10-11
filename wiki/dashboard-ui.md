@@ -229,3 +229,5 @@ The global **Which measured feature separates these clusters most?** ranking sta
 - Low and high feature values are descriptive, not quality judgments.
 - Correlation is not causation and redundancy is not automatically a defect.
 - The dashboard does not yet include participant-response results.
+
+The participant pilot supports the full keyboard flow with keycap badges inside every button: Enter/Return for Begin/Ready/Continue/Retry, 1–5 for candidate/confidence, 0 for unidentified, Ctrl+Enter or Command+Return to finish, and Ctrl+Shift+X or Command+Shift+X to end. Platform-specific modifiers are detected at page load. Reflection typing and native Tab navigation are preserved; see the [pilot keyboard contract](icon-recognition-pilot.md).

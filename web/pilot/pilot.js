@@ -5,6 +5,19 @@ const storageKey = `recognition-pilot:${invitation}`;
 let local = {}, view, config, images = new Map(), mode = 'loading', timer, started = 0, enlargements = [], chosen, answerAt, busy = false, paused = false;
 let choiceOnset = 0, inputMethod = 'mouse', confidenceAt = 0;
 const heldKeys = new Set();
+const isMac = /mac/i.test(navigator.userAgentData?.platform || navigator.platform || '');
+const enterKey = isMac ? 'Return ↵' : 'Enter ↵';
+const finishKeys = isMac ? '⌘ ↵' : 'Ctrl ↵';
+const badge = key => `<kbd aria-hidden="true">${key}</kbd>`;
+function keyboardHints() {
+  const hints = {begin:['Enter',enterKey], ready:['Enter',enterKey], next:['Enter',enterKey], retry:['Enter',enterKey],
+    unknown:['0','0'], finish:[isMac ? 'Meta+Enter' : 'Control+Enter',finishKeys], end:[isMac ? 'Meta+Shift+X' : 'Control+Shift+X',isMac ? '⌘ ⇧ X' : 'Ctrl Shift X'], endPaused:[isMac ? 'Meta+Shift+X' : 'Control+Shift+X',isMac ? '⌘ ⇧ X' : 'Ctrl Shift X']};
+  for (const [id,[shortcut,label]] of Object.entries(hints)) {
+    const button = $(id); if (!button || button.querySelector('kbd')) continue;
+    button.setAttribute('aria-keyshortcuts',shortcut); button.insertAdjacentHTML('beforeend',' '+badge(label));
+  }
+  document.querySelectorAll('[data-confidence]').forEach(button => { if (!button.querySelector('kbd')) { button.setAttribute('aria-keyshortcuts',button.dataset.confidence); button.setAttribute('aria-label',button.dataset.confidence); button.innerHTML = badge(button.dataset.confidence); } });
+}
 const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;' }[c]));
 function persist() { sessionStorage.setItem(storageKey, JSON.stringify(local)); }
 function elapsed() { return started ? Math.min(86400000, Math.max(0, performance.now() - started)) : 0; }
@@ -19,8 +32,9 @@ async function preload() {
 async function loadView() { view = await api(`pilot-sessions?session_id=${encodeURIComponent(local.session_id)}`); config = view.config; document.body.classList.add("controlled"); }
 function next() { return view.schedule[view.next_trial]; }
 function errorScreen(error, retry) {
+  mode = 'retry';
   status(error.message, true); $('content').innerHTML = '<p>Your acknowledged responses remain saved. Keep this tab open to retry.</p><button id="retry">Retry</button>';
-  $('retry').onclick = retry;
+  $('retry').onclick = retry; keyboardHints();
 }
 async function boot() {
   try {
@@ -39,7 +53,8 @@ async function boot() {
     if (!info.open) { status('This invitation is closed to new sessions.'); return; }
     status('Preparing all 20 stimulus images…'); await preload();
     mode = 'intro'; document.body.classList.add('controlled'); status('All images are ready.');
-    $('content').innerHTML = `<h2>${esc(info.title)}</h2><p>You will see one icon for 1.5 seconds, then find it in a row of five icons. Click an option or press its number (1–5). After choosing, rate your confidence from 1 to 5. You can also choose “I cannot identify it”.</p><p>There are three practice trials and 100 recorded trials. Please use a desktop window large enough to show the complete row. Practice gives feedback; recorded trials do not.</p><p>Participation is voluntary. You can end at any time. We save an anonymous session, choices, confidence, assigned sizes, timings, input method, interruptions, and initial viewport/device-pixel ratio. We ask for no name or email. Optional comments follow the trials.</p><p class="muted">Each of the 20 targets appears at five assigned sizes (6–14 pixels). There are no enlargement controls. Press Ready when you want to continue; you can take a break between trials. This is a visual-matching pilot.</p><button class="primary" id="begin">Begin anonymous session</button>`;
+    $('content').innerHTML = `<h2>${esc(info.title)}</h2><p>You will see one icon for 1.5 seconds, then find it in a row of five icons. Click an option or press its number (1–5). After choosing, rate your confidence from 1 to 5. You can also choose “I cannot identify it”.</p><p>There are three practice trials and 100 recorded trials. Please use a desktop window large enough to show the complete row. Practice gives feedback; recorded trials do not.</p><p>Participation is voluntary. You can end at any time. We save an anonymous session, choices, confidence, assigned sizes, timings, input method, interruptions, and initial viewport/device-pixel ratio. We ask for no name or email. Optional comments follow the trials.</p><p class="muted">Each of the 20 targets appears at five assigned sizes (6–14 pixels). There are no enlargement controls. Press ${isMac ? 'Return' : 'Enter'} ↵ to begin, start each trial, or continue after practice. Use 0 if you cannot identify the icon. Press ${isMac ? 'Command' : 'Ctrl'} + Shift + X to end the session. Press Ready when you want to continue; you can take a break between trials. This is a visual-matching pilot.</p><button class="primary" id="begin">Begin anonymous session</button>`;
+    keyboardHints();
     $('begin').onclick = async () => { if (busy) return; busy = true; $('begin').disabled = true; try {
       const result = await api('pilot-sessions', { pilot:invitation, viewport:{width:innerWidth,height:innerHeight,dpr:devicePixelRatio} });
       local = { ...result }; persist(); await loadView(); resume();
@@ -58,7 +73,7 @@ function draw() {
   status(progress);
   let stage = '<p>When you are ready, press Ready.</p>';
   if (mode === 'target') stage = `<img class="target" src="${esc(images.get(trial.target_id).src)}" alt="Target icon">`;
-  if (['grid','confidence'].includes(mode)) stage = `<div class="grid">${trial.grid.map((id, i) => `<button type="button" data-id="${id}" aria-label="Candidate ${i+1}" ${mode === 'confidence' ? 'disabled' : ''} class="${id === chosen ? 'chosen' : ''}"><img src="${esc(images.get(id).src)}" alt="" style="width:${trial.assigned_size}px;height:${trial.assigned_size}px"><span class="option-number">${i+1}</span></button>`).join('')}</div>`;
+  if (['grid','confidence'].includes(mode)) stage = `<div class="grid">${trial.grid.map((id, i) => `<button type="button" data-id="${id}" aria-label="Candidate ${i+1}" aria-keyshortcuts="${i+1}" ${mode === 'confidence' ? 'disabled' : ''} class="${id === chosen ? 'chosen' : ''}"><img src="${esc(images.get(id).src)}" alt="" style="width:${trial.assigned_size}px;height:${trial.assigned_size}px"><span class="option-number">${badge(i+1)}</span></button>`).join('')}</div>`;
   let controls = '';
   if (mode === 'ready') controls = '<button class="primary" id="ready">Ready</button>';
   if (mode === 'target') controls = '<p>Remember this icon.</p>';
@@ -68,10 +83,10 @@ function draw() {
   $('content').innerHTML = `<div id="trial"><div class="stage">${stage}</div><div class="controls">${controls}</div><div class="buttons"><span class="muted">You may stop at any time.</span><button id="end">End session</button></div></div>`;
   if ($('ready')) $('ready').onclick = ready;
   if ($('next')) $('next').onclick = resume;
-  if ($('unknown')) $('unknown').onclick = () => choose(null, 'mouse');
-  document.querySelectorAll('[data-id]').forEach(button => button.onclick = () => choose(button.dataset.id, 'mouse'));
+  if ($('unknown')) $('unknown').onclick = event => choose(null, event.detail === 0 ? 'keyboard' : 'mouse');
+  document.querySelectorAll('[data-id]').forEach(button => button.onclick = event => choose(button.dataset.id, event.detail === 0 ? 'keyboard' : 'mouse'));
   document.querySelectorAll('[data-confidence]').forEach(button => button.onclick = () => { if (mode !== 'confidence' || paused || performance.now() - confidenceAt < 150) return; submit(Number(button.dataset.confidence)); });
-  $('end').onclick = end;
+  $('end').onclick = end; keyboardHints();
 }
 async function ready() {
   if (busy || paused || mode !== 'ready' || !fits()) return;
@@ -106,7 +121,7 @@ async function sendPending() {
 }
 function drawFeedback() {
   status('Practice response saved.'); $('content').innerHTML = `<div class="stage"><p>${local.feedback ? 'Correct.' : 'That was not the target.'}</p></div><button id="next" class="primary">Continue</button><button id="end">End session</button>`;
-  $('next').onclick = resume; $('end').onclick = end;
+  $('next').onclick = resume; $('end').onclick = end; keyboardHints();
 }
 function interrupt(reason) {
   if (!['target','grid','confidence'].includes(mode)) return;
@@ -121,13 +136,13 @@ function checkSpace() {
   if (paused) {
     const reason = document.hidden ? 'hidden' : !document.hasFocus() ? 'blur':'space'; interrupt(reason);
     if (!$('pause')) { const overlay = document.createElement('div'); overlay.id = 'pause'; overlay.className = 'overlay'; overlay.innerHTML = '<h2>Pilot paused</h2><p>Return to this tab and use a desktop window of at least 680 × 560 pixels so the complete row and controls fit without scrolling.</p><button id="endPaused">End session</button>'; document.body.append(overlay); $('endPaused').onclick = end; }
-    $('endPaused').disabled = Boolean(local.pending);
+    $('endPaused').disabled = Boolean(local.pending); keyboardHints();
   } else $('pause')?.remove();
 }
 function debrief() {
   mode = 'debrief'; $('pause')?.remove(); status('All trial responses are saved.');
   $('content').innerHTML = '<h2>Optional reflections</h2><label>How did you find the task and the pace?<textarea id="difficulty" maxlength="1000"></textarea></label><label>Did you forget any targets?<textarea id="forgot" maxlength="1000"></textarea></label><label>Which visual details helped you?<textarea id="details" maxlength="1000"></textarea></label><button class="primary" id="finish">Save and finish</button><button id="end">End session</button>';
-  $('finish').onclick = () => complete('complete'); $('end').onclick = end;
+  $('finish').onclick = () => complete('complete'); $('end').onclick = end; keyboardHints();
 }
 async function end() { if (local.pending || mode === 'starting' || mode === 'saving') return; clearTimeout(timer); await complete('end'); }
 async function complete(action) {
@@ -141,14 +156,36 @@ function choose(id, method) {
   mode = 'confidence'; confidenceAt = performance.now(); draw();
 }
 document.addEventListener('keydown', event => {
-  if (!/^[1-5]$/.test(event.key) || event.ctrlKey || event.metaKey || event.altKey || event.shiftKey || /^(INPUT|TEXTAREA|SELECT)$/.test(event.target.tagName)) return;
+  const editing = /^(INPUT|TEXTAREA|SELECT)$/.test(event.target.tagName) || event.target.isContentEditable;
+  const modifier = isMac ? event.metaKey && !event.ctrlKey : event.ctrlKey && !event.metaKey;
+  const finishShortcut = modifier && event.key === 'Enter' && !event.shiftKey && !event.altKey;
+  const endShortcut = modifier && event.shiftKey && event.key.toLowerCase() === 'x' && !event.altKey;
+  const plain = !event.ctrlKey && !event.metaKey && !event.altKey && !event.shiftKey;
+  const advance = plain && event.key === 'Enter' && !editing;
+  const numeric = plain && /^[0-5]$/.test(event.key) && !editing;
+  if (!finishShortcut && !endShortcut && !advance && !numeric) return;
   event.preventDefault();
-  if (event.repeat || heldKeys.has(event.code)) return;
-  heldKeys.add(event.code);
-  if (mode === 'grid' && !paused) choose(next().grid[Number(event.key)-1], 'keyboard');
-  else if (mode === 'confidence' && !paused && performance.now()-confidenceAt >= 150) submit(Number(event.key));
+  const key = event.code || event.key;
+  if (event.repeat || heldKeys.has(key)) return;
+  heldKeys.add(key);
+  if (endShortcut) {
+    const button = $('pause') ? $('endPaused') : $('end');
+    if (button && !button.disabled && !['saving','starting','done'].includes(mode)) button.click();
+    return;
+  }
+  if (finishShortcut) { if (mode === 'debrief' && !local.pending) $('finish')?.click(); return; }
+  if (advance) {
+    // Respect Tab navigation: Enter activates the focused button, otherwise the current primary action.
+    const focused = event.target.closest('button');
+    const button = $('pause') ? (focused?.id === 'endPaused' ? focused : null) : focused || ({intro:$('begin'),ready:$('ready'),feedback:$('next'),retry:$('retry'),debrief:$('finish')})[mode];
+    if (button && !button.disabled) button.click();
+    return;
+  }
+  if (paused) return;
+  if (mode === 'grid') choose(event.key === '0' ? null : next().grid[Number(event.key)-1], 'keyboard');
+  else if (mode === 'confidence' && event.key !== '0' && performance.now()-confidenceAt >= 150) submit(Number(event.key));
 });
-document.addEventListener('keyup', event => heldKeys.delete(event.code));
+document.addEventListener('keyup', event => heldKeys.delete(event.code || event.key));
 window.addEventListener('blur', () => heldKeys.clear());
 document.addEventListener('visibilitychange', checkSpace);
 window.addEventListener('blur', checkSpace); window.addEventListener('focus', checkSpace); window.addEventListener('resize', checkSpace);

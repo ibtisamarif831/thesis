@@ -103,3 +103,5 @@ The existing production administrator secret was preserved rather than rotated. 
 ## Full keyboard interaction update — 2026-10-11
 
 `code/tests/pilot/keyboard-study-browser.js` exercises a complete shortened mock schedule entirely through keys, for Windows and Mac platform detection: begin, held-Enter guard, Ready, candidate/confidence, unidentified, failed-save retry, practice continue, reflection typing, final save and early end. It creates no participant records. The actual server protocol remains 103 trials. This UI update requires no database migration.
+
+Published as production deployment [`b46388a7`](https://b46388a7.glyph-perception-dashboard.pages.dev), code commit `19b0c191e`. Live `pilot.js`/`pilot.css` exactly matched the tested build. The Windows/Mac keyboard browser flow also passed against hosted assets with participant APIs mocked, so no production sessions/results were created or changed.

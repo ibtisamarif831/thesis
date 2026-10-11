@@ -92,6 +92,8 @@ Pilot administration update verified on **2026-10-06** from the current API, UI 
 
 Controlled-pilot source update on **2026-10-11**: five answer options, 6/8/10/12/14 assigned CSS-pixel sizes, 1.5-second target exposure, three practice plus 100 randomized recorded trials and keyboard answers. The previous runnable workflow is removed; saved records remain exportable. Migration 0003 is required. Production deployment `ec45d507` now serves it. Old pilots/results were deleted at the user’s request, and temporary smoke records were removed. Final 2026-10-11 D1 verification: 649 catalog icons, three reviewer submissions, 280 nominations, zero pilots/sessions/attempts. The older snapshot table above remains historical; see [pilot release evidence](icon-recognition-pilot.md#production-release-2026-10-11).
 
+Full keyboard UI update verified on **2026-10-11**, deployment `b46388a7`: platform-specific keycap badges, Enter/Return lifecycle actions, 0 for unidentified, Ctrl/Command finish/end shortcuts and preserved reflection typing. Local and hosted-assets browser checks passed without production participant writes; see [pilot keyboard operations](icon-recognition-pilot.md).
+
 Recheck these values with the recipes in [Verification and troubleshooting](verification-and-troubleshooting.md) before making current-state claims.
 
 ## Source-of-Truth Order

@@ -401,4 +401,4 @@ git status --short
 
 ## Controlled pilot routing update — 2026-10-11
 
-Only `icon-recognition-controlled-v2` is runnable: five options, assigned 6/8/10/12/14 CSS px, 1.5-second large target, three practice + 100 recorded trials. Apply migration 0003 before serving it; production v1 pilots/results were explicitly deleted at the user’s request. Deployment `ec45d507` is live; final 2026-10-11 D1 counts are 649 icons, three submissions, 280 nominations and zero pilots/sessions/attempts. Protocol guards still reject legacy fixtures. See `wiki/icon-recognition-pilot.md`.
+Only `icon-recognition-controlled-v2` is runnable: five options, assigned 6/8/10/12/14 CSS px, 1.5-second large target, three practice + 100 recorded trials. Apply migration 0003 before serving it; production v1 pilots/results were explicitly deleted at the user’s request. Initial controlled release was `ec45d507`; full keyboard UI release `b46388a7` is now live; final 2026-10-11 D1 counts are 649 icons, three submissions, 280 nominations and zero pilots/sessions/attempts. Protocol guards still reject legacy fixtures. See `wiki/icon-recognition-pilot.md`.

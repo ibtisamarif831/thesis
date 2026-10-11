@@ -16,7 +16,7 @@ The final evaluation layer is specified but not implemented end to end. A separa
 
 The current computer pipeline supplies candidate predictors and diagnostic views. The size-controlled human study is the missing primary evidence layer.
 
-The current local controlled pilot uses a frozen 20-icon reviewer dataset, three practice trials and 100 randomized recorded icon-size combinations: five choices, assigned 6/8/10/12/14 CSS-pixel candidates, 1.5-second 128-pixel target exposure and keys 1–5. The former enlargement workflow is retired. It uses feature distances to select distractors but does not validate those measurements or satisfy the all-family benchmark gate. See the [pilot contract](icon-recognition-pilot.md).
+The deployed controlled pilot uses a frozen 20-icon reviewer dataset, three practice trials and 100 randomized recorded icon-size combinations: five choices, assigned 6/8/10/12/14 CSS-pixel candidates, 1.5-second 128-pixel target exposure and keys 1–5. The former enlargement workflow is retired. It uses feature distances to select distractors but does not validate those measurements or satisfy the all-family benchmark gate. See the [pilot contract](icon-recognition-pilot.md).
 
 ## Meeting decisions and current nominations
 

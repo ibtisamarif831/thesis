@@ -62,7 +62,7 @@ These are not deleted from raw exports, but they should not drive the thesis cla
 
 Production D1 was checked on 2026-09-29. The two supervisor-associated submissions contain 100 (`droa`) and 80 (`pr77`) nominations. `ibtisam` contains 100 algorithm-assisted nominations and must be compared separately from human reviews. Smaller `test*` entries contain 17 additional rows and remain unclassified. Nominations have not established consensus stimuli.
 
-The current local recognition pilot implements three practice and 100 randomized recorded trials: five options, assigned 6/8/10/12/14 CSS-pixel candidate sizes, 1.5-second 128-pixel target exposure, confidence, keyboard/mouse input, interruptions and protected exports. The previous enlargement workflow is retired; old invitations return 410 and stored records remain exportable. Migration 0003 is required before hosted release. This local implementation has not been deployed; the earlier production snapshot is historical. No research participant evidence or threshold estimate is established.
+The deployed recognition pilot implements three practice and 100 randomized recorded trials: five options, assigned 6/8/10/12/14 CSS-pixel candidate sizes, 1.5-second 128-pixel target exposure, confidence, keyboard/mouse input, interruptions and protected exports. The previous enlargement workflow is removed, and old production pilots/results were deleted at the user’s request. Migration 0003 is applied. Production deployment `ec45d507` was verified on 2026-10-11: 649 catalog icons, three reviewer submissions, 280 nominations, zero pilots/sessions/attempts after synthetic verification cleanup. No research participant evidence or threshold estimate is established.
 
 ## What Is Not Done Yet
 

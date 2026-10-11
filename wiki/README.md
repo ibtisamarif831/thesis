@@ -90,7 +90,7 @@ Verified on **2026-09-29** from the current CSV/JSON artifacts and dashboard/pub
 
 Pilot administration update verified on **2026-10-06** from the current API, UI and isolated D1 tests: closed pilots can be deleted with their sessions and responses, including unfinished sessions after an explicit warning; reviewer submissions are retained. The dated counts above remain the earlier snapshot.
 
-Controlled-pilot source update on **2026-10-11**: five answer options, 6/8/10/12/14 assigned CSS-pixel sizes, 1.5-second target exposure, three practice plus 100 randomized recorded trials and keyboard answers. The previous runnable workflow is removed; saved records remain exportable. Migration 0003 is required. This is a local implementation, not a refreshed production snapshot; see [pilot operations](icon-recognition-pilot.md).
+Controlled-pilot source update on **2026-10-11**: five answer options, 6/8/10/12/14 assigned CSS-pixel sizes, 1.5-second target exposure, three practice plus 100 randomized recorded trials and keyboard answers. The previous runnable workflow is removed; saved records remain exportable. Migration 0003 is required. Production deployment `ec45d507` now serves it. Old pilots/results were deleted at the user’s request, and temporary smoke records were removed. Final 2026-10-11 D1 verification: 649 catalog icons, three reviewer submissions, 280 nominations, zero pilots/sessions/attempts. The older snapshot table above remains historical; see [pilot release evidence](icon-recognition-pilot.md#production-release-2026-10-11).
 
 Recheck these values with the recipes in [Verification and troubleshooting](verification-and-troubleshooting.md) before making current-state claims.
 

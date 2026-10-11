@@ -4,15 +4,15 @@
 
 ## Current implementation — 2026-10-11
 
-The only runnable protocol is `icon-recognition-controlled-v2`. The former self-selected-enlargement workflow has been removed. Old invitations and old participant session credentials return HTTP 410 with a retirement message. Administrators can still inspect/export historical records and close/delete them through the existing protected workflow. No historical records are automatically deleted or converted.
+The only runnable protocol is `icon-recognition-controlled-v2`. The former self-selected-enlargement workflow has been removed. The user explicitly requested deletion of old results during release. Production v1 pilots, sessions and attempts were deleted after the record-preserving migration; their invitations now return 404. The protocol guard still returns 410 if a v1 snapshot exists in another environment. Reviewer nominations were preserved.
 
-This is visual target matching from memory, not semantic naming, human feature validation or an automatically estimated recognition threshold. The feature-v2 two-rater gate remains separate. Local implementation and synthetic checks do not establish participant evidence or production deployment.
+This is visual target matching from memory, not semantic naming, human feature validation or an automatically estimated recognition threshold. The feature-v2 two-rater gate remains separate. Synthetic checks do not establish research participant evidence. The controlled version is deployed as recorded below.
 
 ## Administration
 
 Open **Pilot Studio** → **Submitted icon sets**, authenticate and refresh submissions. Each saved reviewer dataset with exactly 20 valid icons offers **Create pilot**. The dialog shows the icons, accepts a title and explains the fixed protocol; there is no size editor or legacy protocol selector. Creation freezes the submission/version, set, icon IDs, images, seven feature values, distance specification and candidate rankings. A concurrent nomination edit rejects creation. An unavailable or non-finite feature catalog blocks creation rather than selecting random alternatives.
 
-Creating switches to **Pilot results**. Administrators can copy active-protocol invitations, inspect configuration, view summaries, export CSV/full JSON, close pilots and delete closed pilots after confirmation. Retired invitations have a disabled copy button. Close prevents new sessions while existing controlled sessions can finish. Deletion removes that pilot and its sessions/attempts atomically, including unfinished sessions, while retaining reviewer submissions. The key remains in memory only; participant invitations are random unlisted tokens.
+Creating switches to **Pilot results**. Administrators can copy invitations, inspect configuration, view summaries, export CSV/full JSON, close pilots and delete closed pilots after confirmation. Production contains no old pilots or results. Close prevents new sessions while existing controlled sessions can finish. Deletion removes that pilot and its sessions/attempts atomically, including unfinished sessions, while retaining reviewer submissions. The key remains in memory only; participant invitations are random unlisted tokens.
 
 ## Participant protocol
 
@@ -50,7 +50,7 @@ All APIs use `no-store`; POSTs require same-origin JSON and bound request size. 
 
 ## Results and interpretation
 
-Summaries exclude practice and repeated-exposure recorded responses while retaining them in exports. Unidentified answers remain in the accuracy denominator. Results show assigned-size counts, per-size eligible N/correct/accuracy/unidentified and median response time, confidence, confusion choices and session status. Five-choice chance accuracy is 20%. Empty size conditions have null accuracy/latency, displayed as a dash. CSV additionally includes protocol/set, assigned size, candidate order, selected position, input method and timing; interrupted/unanswered trials obtain assigned size from the saved schedule. Full JSON includes frozen feature/selection metadata and schedules, omitting credential hashes. Historical exports remain available with historical size labels.
+Summaries exclude practice and repeated-exposure recorded responses while retaining them in exports. Unidentified answers remain in the accuracy denominator. Results show assigned-size counts, per-size eligible N/correct/accuracy/unidentified and median response time, confidence, confusion choices and session status. Five-choice chance accuracy is 20%. Empty size conditions have null accuracy/latency, displayed as a dash. CSV additionally includes protocol/set, assigned size, candidate order, selected position, input method and timing; interrupted/unanswered trials obtain assigned size from the saved schedule. Full JSON includes frozen feature/selection metadata and schedules, omitting credential hashes. The exporter can read historical rows in isolated fixtures, but production historical results were deleted at the user’s request.
 
 No physical calibration is applied. CSS sizes, viewing distance, target-first memory effects, repeated-target learning, practice familiarity and feature-based distractor selection limit interpretation. This implementation defaults to no full-set preview and retains confidence; these working choices still need supervisor review. A threshold criterion, uncertainty analysis, institutional protocol/consent and the final study size remain open.
 
@@ -67,7 +67,17 @@ The HTTP suite uses `wrangler.pilot-test.jsonc`, explicit local D1 binding and a
 
 Verified locally on **2026-10-11**: eight focused tests pass; the real-D1 HTTP suite completes all 103 trials and reconciles size summaries, retries, completion, retirement and old-record retention. The administrator browser creates the fixed protocol and renders empty size summaries correctly. `code/tests/pilot/controlled-browser.js` verifies the single five-option row, fixed 112-pixel hit cells, practice at 14 px, keyboard/repeat guards, mouse input, offline answer + refresh retry, stable interrupted assignments, recorded feedback suppression, unidentified and paused early exit. Its stored results reconcile to three practice answers, two recorded answers and one repeated-exposure exclusion. Network errors from deliberately aborted answer saves are expected in this recovery test.
 
-For hosted release, preserve the existing production/preview binding isolation in `wrangler.jsonc`, apply migration 0003 with normal D1 migrations (after a backup), build, then deploy the public bundle and Functions together. Verify old-record counts before/after and new invitation flow. The controlled implementation has not been deployed by this task. Historical release IDs below refer to v1 only.
+For hosted release, preserve the existing production/preview binding isolation in `wrangler.jsonc`, apply migration 0003 with normal D1 migrations (after a backup), build, then deploy the public bundle and Functions together. Verify old-record counts before/after and new invitation flow. The controlled implementation is deployed as recorded below. Historical release IDs below refer to v1 only.
+
+## Production release 2026-10-11
+
+Deployed code commit `efd42f609` to Cloudflare Pages production (`master`), deployment [`ec45d507`](https://ec45d507.glyph-perception-dashboard.pages.dev). The [live Pilot Studio](https://glyph-perception-dashboard.pages.dev/pilot-studio.html) serves only the controlled experiment. Existing administrator secrets were preserved.
+
+A private D1 backup and exact row snapshots were captured before schema changes. Migration 0003 first retained every row in all six application tables. Wrangler's migration-list wrapper returned API code 7403 while direct queries/export succeeded; the tested file was applied with `wrangler d1 execute glyph-study-selections --remote --file migrations/0003_controlled_pilot_trials.sql`, the 0–102 bound was verified, and `0003_controlled_pilot_trials.sql` was recorded in `d1_migrations` alongside 0001/0002.
+
+At the user’s explicit request, both v1 pilots, their two sessions and three attempts were then deleted. Production smoke checks used a clearly marked temporary controlled pilot provisioned with an atomic nomination-snapshot guard. Live API checks verified the published catalog/manifest, 103-trial schedule, fixed-size save/retry, early end, missing old invitations and result authorization. The live browser verified five options, no enlargement, keyboard choice/confidence and saved early exit. Two synthetic practice answers were verified in D1; the temporary pilot and all its sessions/attempts were then removed.
+
+Final remote verification: **649 catalog icons, three reviewer submissions, 280 nominations; zero pilots, zero participant sessions and zero attempts**. Every catalog/submission/nomination row matched the pre-release snapshot exactly. The destructive catalog seed was not run. Create a fresh controlled pilot from a saved 20-icon reviewer set; no synthetic invitations remain live. The final research-design and two-rater validation gates remain open.
 
 ## Historical implementation and release evidence (v1)
 

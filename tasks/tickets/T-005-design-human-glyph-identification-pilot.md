@@ -10,7 +10,7 @@ Agree one primary size-dependent human outcome within coherent sets. Distinguish
 
 ## Current progress (2026-09-29)
 
-The [controlled recognition pilot](../../wiki/icon-recognition-pilot.md) now implements a 1.5-second 128-CSS-pixel target, then five candidates at assigned 6/8/10/12/14 sizes. Twenty targets × five sizes produce 100 randomized recorded trials, plus three practice. Keyboard/mouse input, confidence, recovery and exports are implemented locally. The previous runnable workflow is removed; historical records remain exportable. Final stimulus consensus, calibration/familiarity decisions, approval/consent and analysis remain open. This is not a production release.
+The [controlled recognition pilot](../../wiki/icon-recognition-pilot.md) now implements a 1.5-second 128-CSS-pixel target, then five candidates at assigned 6/8/10/12/14 sizes. Twenty targets × five sizes produce 100 randomized recorded trials, plus three practice. Keyboard/mouse input, confidence, recovery and exports are implemented and deployed. The previous runnable workflow is removed; old production pilots and results were deleted at the user’s request. Final stimulus consensus, calibration/familiarity decisions, approval/consent and analysis remain open. Production release `ec45d507` is verified; temporary synthetic records were removed.
 
 ## Acceptance criteria
 

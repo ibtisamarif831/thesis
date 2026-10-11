@@ -116,3 +116,6 @@ AI agents must begin with `AGENTS.md`, which makes wiki review and maintenance a
 The computer side measures visible properties of glyph images: complexity, shape/silhouette, stroke/structure, density/fill, balance/layout, color/contrast, and texture. Semantic meaning, familiarity, metaphor, cultural knowledge, and learnability are not image-derived visual feature families. They may be metadata, controls, prompts, or human-study outcomes.
 
 Clustering, PCA, and nearest-neighbor results are diagnostic tools. They support the eventual human-computer comparison; they are not the thesis contribution by themselves.
+
+
+Automatic-alternative production release verified on **2026-10-11**: implementation commit `aff060170`, deployment [`0a3e48c0`](https://0a3e48c0.glyph-perception-dashboard.pages.dev). The production assets match the tested build and existing frozen pilot configurations/session schedules are unchanged. Pre-release D1 operational snapshot: 649 icons, three submissions, 280 nominations, two pilots, three sessions and 32 attempts. No migrations, reseeding, participant test writes or deletions were performed. Earlier snapshot counts remain historical; see [release verification](icon-recognition-pilot.md#automatic-alternative-production-release--2026-10-11).

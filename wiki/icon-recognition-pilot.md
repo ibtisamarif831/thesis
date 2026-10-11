@@ -38,7 +38,7 @@ The public catalog decodes normalized 256 × 256 images to RGBA, composites onto
 
 All ten pairs in each five-option set are source-distinct. Matching small-size hashes remain in trials and are recorded by target, size, pair and target involvement as **standardized rendering collision diagnostics**. These do not establish identical output across browsers, displays or device-pixel ratios. Collision trials retain ID-based scoring and existing accuracy eligibility; no multiple-answer credit or automatic exclusion is applied. Admin summaries show pair/target-size counts and eligible flagged-answer counts separately. CSV adds rule versions, check status, collision pairs and target involvement; full JSON retains the complete audit record. Participant configuration contains no hashes, seed, rules or diagnostics.
 
-Existing frozen alternatives and saved session schedules remain unchanged. Controlled snapshots without schedule versions use legacy independent trial shuffles. Missing collision metadata displays **not checked**, rather than collision-free. The protocol remains `icon-recognition-controlled-v2`; this refinement requires no migration and has not been deployed.
+Existing frozen alternatives and saved session schedules remain unchanged. Controlled snapshots without schedule versions use legacy independent trial shuffles. Missing collision metadata displays **not checked**, rather than collision-free. The protocol remains `icon-recognition-controlled-v2`; this refinement requires no migration and is deployed in production as recorded below.
 
 ## Persistence and API contract
 
@@ -118,3 +118,12 @@ The existing production administrator secret was preserved rather than rotated. 
 `code/tests/pilot/keyboard-study-browser.js` exercises a complete shortened mock schedule entirely through keys, for Windows and Mac platform detection: begin, held-Enter guard, Ready, candidate/confidence, unidentified, failed-save retry, practice continue, reflection typing, final save and early end. It creates no participant records. The actual server protocol remains 103 trials. This UI update requires no database migration.
 
 Published as production deployment [`b46388a7`](https://b46388a7.glyph-perception-dashboard.pages.dev), code commit `19b0c191e`. Live `pilot.js`/`pilot.css` exactly matched the tested build. The Windows/Mac keyboard browser flow also passed against hosted assets with participant APIs mocked, so no production sessions/results were created or changed.
+
+
+## Automatic alternative production release — 2026-10-11
+
+Published implementation commit `aff060170` to Cloudflare Pages production (`master`), deployment [`0a3e48c0`](https://0a3e48c0.glyph-perception-dashboard.pages.dev). The [live Pilot Studio](https://glyph-perception-dashboard.pages.dev/pilot-studio.html) now serves source-distinct seeded ranks-12–16 alternatives, balanced target positions and rendering-collision audit exports for new pilots. Existing frozen configurations and schedules retain their saved behavior.
+
+Pre-release read-only D1 snapshot: **649 icons, three reviewer submissions, 280 nominations, two pilots, three sessions and 32 attempts**. Every existing pilot configuration and session schedule was compared before/after deployment and remained unchanged. No migration, catalog reseeding, participant test writes or data deletion occurred. These are operational counts, not evidence of research-participant validation.
+
+Release verification: 13 focused tests and Python image tests passed; the 649-image public build passed. The prior combined isolated D1/browser suite passed. Deployment-specific and production-domain catalog, admin JavaScript, participant JavaScript and CSS match the tested build byte-for-byte; Pilot Studio returns HTTP 200 and unauthenticated admin API access returns 401. Existing administrator secrets and production/preview D1 bindings were preserved.

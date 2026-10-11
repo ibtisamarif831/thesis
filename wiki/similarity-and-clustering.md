@@ -81,7 +81,7 @@ The view uses absolute correlation to rank redundancy while retaining the sign f
 
 Feature Values shows exactly the same seven representatives used by Feature Groups, one per family. Feature Review correlations remain visible as context, but redundancy ranking no longer determines which features appear in this tab.
 
-For each selected feature, examples come from the full 28,749-row feature corpus:
+For each selected feature, examples come from all 649 rows in the five-source dashboard scope (including rows excluded from Feature Groups for uncertain masks):
 
 - low: smallest raw values;
 - medium: values nearest the arithmetic mean;

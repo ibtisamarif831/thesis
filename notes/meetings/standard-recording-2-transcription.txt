@@ -1,0 +1,2396 @@
+--- PDF page 1 ---
+Standard recording 2 - Transcription
+Speaker 1 00:00
+
+They were all on the left side and then all the others were on the right side. But it's also only a two D layout. So it's always very diﬃ
+
+cult to have a layout that really nicely, cleanly separates families. What does it even mean to cleanly separate the icons? So I'm just
+
+wondering, um what's, ah so what's the exact?
+
+
+
+Speaker 1 00:28
+
+Of.
+
+
+
+Speaker 1 00:31
+
+The let's see, say the study, or what would be the result of your thesis? Where where do you see the main result of thesis? it's like t
+
+echnical work that you performed a lot so far. Ah amazing.
+
+
+
+Speaker 1 00:45
+
+Like so many icon datasets and and different measures and layouts and the dashboard and all that. But what do you see as a goo
+
+d outcome of your research? What would you like to show in the end?
+
+
+
+Speaker 1 01:00
+
+What is the result that you're aiming for?
+
+
+
+Speaker 2 01:03
+
+So for the results part, the, and the main aim is, ah we have the study, ah with the icons and we we see we can have some qualitati
+
+ve score in the qualitative skills, ah, um for the, ah icon's perception. So for example,
+
+
+
+Speaker 2 01:22
+
+maybe since we have seven feature families, maybe we can have some kind of ah, ah scoring for those feature families because a
+
+h in from the participants, like when the size is reduced at one point, which of the families get blur?
+
+
+
+Speaker 2 01:43
+
+Ah. Or more ah. Hard to ah. Ah identify or which familiesStand out more since these ﬁsh families are already in the literature and t
+
+hey have been um studies aroundThose.
+
+--- PDF page 2 ---
+Speaker 2 01:58
+
+But the gap, what I saw is there's no morein-depth qualitative part where we can see ah with, size reduction of course, the icon get
+
+s a bit weird but what.
+
+
+
+Speaker 2 02:11
+
+Families stand out ah around that with the proper qualitative score for with the participants so there's some kind of results um th
+
+at I'm hoping for along with the yeah technical part of course, but this,
+
+
+
+Speaker 2 02:29
+
+is the current current ah working area.
+
+
+
+Speaker 1 02:35
+
+So will you be using a certain icon set? Right? And then you um you have your measures, your seven um different like complexity a
+
+nd all these color and the measures you showed.
+
+
+
+Speaker 1 02:54
+
+But it's always going to be like a combination, I guess, right? Yeah. Um and.
+
+
+
+Speaker 1 03:03
+
+You will use one icon set or different I can set, but within an icon set you will present the icons at different scales. And then check,
+
+um.
+
+
+
+Speaker 1 03:17
+
+What kind of distance humans ah give to pairs of icons? Or will you will you just ask them is it the same or different? What is the g
+
+oal there in the in the study?
+
+
+
+Speaker 2 03:31
+
+So this is the current area that we have been talking as well. Ah the study quality qualitative study part. Um yes,
+
+
+
+Speaker 2 03:41
+
+we had this approach as well that maybe we can have a conﬁdence score along with the all feature families for the participants. A
+
+nd of the ah ah like these are theopen-ended questions that ah we have to work on as well but one.
+
+--- PDF page 3 ---
+Speaker 2 04:00
+
+Was very this conﬁdence score one ah for, all feature families around the icons and there. Since the users ah have might not have
+
+the semantic meaning of all iconsPossible soThis.
+
+
+
+Speaker 2 04:16
+
+Is one direction and the other direction we also ah discussed, around since we, have the clustering with the ah our, um, um, distanc
+
+es, with the computer vision part and the AI part maybe. We,
+
+
+
+Speaker 2 04:32
+
+can also have something similar ah with, the human ah part as well how to. Do they see the distances so ah? Yeah but these are t
+
+he current you can say approaches that um I'm currently working on to see how to ﬁnalize the quality of study for a good thesis re
+
+sult in the end.
+
+
+
+Speaker 1 05:05
+
+I think there are different directions where we can go and right now it's a little bit unclear what's what's the most useful one. I gues
+
+s the, of course, there is a, um the, we can test the discernibility concerning the size.
+
+
+
+Speaker 1 05:28
+
+We can um test discernability concerning the the shape or the the type of icons icons itself in principle, creating and and a new ne
+
+w feature that, ah with with the icons that we can add to the meshing features.
+
+
+
+Speaker 1 05:50
+
+Um and it's a little bit right now that for me at least, the bigQuestion, what's the most useful direction toGo?
+
+
+
+Speaker 1 06:02
+
+Or dora? Am I am I wrong here?
+
+
+
+Speaker 2 06:04
+
+Just tell me. No. No, you're ﬁne. Yeah. We are just at the Edge. We are at the Edge of deciding. Like, um well, our our work up till no
+
+w was aimed at ﬁnding good categories under which we can more or less ﬁnd good groups of icons.
+
+--- PDF page 4 ---
+Speaker 2 06:25
+
+That makes sense to compare. Yeah. So this was like the point until now. The question is, now that we kind of have that, um what
+
+kind of study do we want to do and how we want to do it? Ah asking a person given two items,
+
+
+
+Speaker 2 06:45
+
+how dissimilar these are diﬃcult.
+
+
+
+Speaker 2 06:49
+
+You can say are these the same or not? This is this is easy. Everybody can can give an answer to that. But how dissimilar things ar
+
+e?
+
+
+
+Speaker 2 07:00
+
+I don't think that we get a good kind of results out of that because everybody has a different scale in mind for that. And you can, it'
+
+s diﬃcult to match that. So um it would be like this is the same or not.
+
+
+
+Speaker 2 07:16
+
+And if it's like upscale, then of course it's always no. So it's really I don't know whether how we can do it. Another way than really s
+
+caling down as much until we have there's no difference left that people can perceive.
+
+
+
+Speaker 2 07:34
+
+And the thing that we can get out of this would be different things.
+
+
+
+Speaker 2 07:39
+
+Either. We could really get some kind of a weighted measure out of our seven families. Um that best matches what people, how p
+
+eople. Oh no. That best can simulate or model how people perceive those items.
+
+
+
+Speaker 2 07:58
+
+I can so that we can have an automatic measurement of whether two icons can be discerned, even if they'll be small, would be po
+
+ssible. And the other way is that we yeah compare it to the AI evolution, as at some said,
+
+
+
+Speaker 2 08:18
+
+and see who which of the AI um embeddings would be closest to what a person would say.
+
+--- PDF page 5 ---
+Speaker 1 08:27
+
+A combination of kind if you kind of ah if you can can ﬁnd stable weights ah with with when when calculating the other the comput
+
+er dimensions, that could be also the golden. Yeah       。
+
+Speaker 2 08:45
+
+Deﬁnitely. So these are the possibilities that we have there. But regarding with the task, that's the question. Um I mean, I don't see
+
+another way then with really showing two icons as small as possible and asking whether it's the same or not, or given a very small
+
+icon and a set of large icons telling which one is it.
+
+
+
+Speaker 3 09:10
+
+Okay. Yeah, yeah, yeah. Um and one issue is like selecting your representatives. If you don't have a very small icon set, then you nee
+
+d to select representatives right for that come from the clustering.
+
+
+
+Speaker 3 09:27
+
+The clustering uses a distance measure that is kind of given and which is not human calibrated. So the selection itself is an issue
+
+of the representatives of the different cluster nodes because the distance measure is not what humans would associate.
+
+
+
+Speaker 3 09:47
+
+So so so the the selection already biases this test to ACertain degree, obviously.Um.
+
+
+
+Speaker 3 09:56
+
+And then the other issue is also.
+
+
+
+Speaker 1 10:01
+
+Ah just downscaling the the pixel size. And maybe you could we could say that this is like the standard way of doing it and this is
+
+why we are doing it. But per se, it's not not the only way to downscale just, you know, ah.
+
+
+
+Speaker 1 10:23
+
+Putting some ﬁlter on it and and telling the downscaling algorithm, scale it down, right? You could emphasize edges or whatnot in
+
+the downscaling process. And we know that, for example, color, when I can get very small,
+
+--- PDF page 6 ---
+Speaker 1 10:41
+
+um that color is less discernible at some point, especially if it's not like red, green, and blue, like very bright ah colors. So these kin
+
+d of things interact. So yeah.
+
+
+
+Speaker 1 10:58
+
+Um I like the principal idea of last just showing two icons and and asking is it the same or not? Um about ah.
+
+
+
+Speaker 1 11:12
+
+It depends on the preselection of which icons use. If you have these huge icon sets, it's very diﬃcult. And then the problem is also
+
+my feeling is that um the aim to ﬁnd a global waiting.
+
+
+
+Speaker 1 11:33
+
+Across the different um distances. You know, I think seven distance families or distance measures or that this is not right. Ah that'
+
+s my, my my concern. Um if we have like a set of like faces, right?
+
+
+
+Speaker 1 11:51
+
+You have like twenty different faces and ah you would use your ah measure probably. And and and and the the weights for that m
+
+easure come from some study of other icons. it's not going to work um because all of them are browned,
+
+
+
+Speaker 1 12:12
+
+all of them are yellow. Or the ah the difference. The main differences are likeThe maybe the strokes of the mouth for the nose and
+
+for the eyes and the ears whatnot right inThere.
+
+
+
+Speaker 1 12:29
+
+Um and.
+
+
+
+Speaker 1 12:35
+
+I, my my feeling is that, and and then we have these icons that that are so different, right? Where we have like ah ﬁeld areas with lot
+
+s of details and then you have just some lines, right?
+
+
+
+Speaker 1 12:50
+
+And that like a global measure that just assigns constant weights to the different distance measures and then tries to create a gl
+
+--- PDF page 7 ---
+obal distance measure from those is not going to work. That's my general feeling.
+
+
+
+Speaker 1 13:07
+
+And we are seeing that already because you're doing this to perform the clustering. And if you look at theClusters   。
+
+Speaker 1 13:19
+
+In some areas you think, yeah and all those are dense and all those are lines that has worked well in other areas. You see here's a f
+
+ace, and there's a face and some that are really exact same shape, only slight difference in color are not very close together. They'r
+
+e at a certain distance, and so on. So   。
+
+Speaker 1 13:40
+
+I'm wondering if the aim for ﬁnding a set of global weights to weigh the different distance measures and put them together in her
+
+e is the measure for your eigenset. That's not the right goal.
+
+
+
+Speaker 1 13:58
+
+That's my feeling because it can't work. Because different I can sets up, need different measures. That's my, my, my general feelin
+
+g. I don't know if I'm right, but.
+
+
+
+Speaker 1 14:15
+
+I think I am because currently you ah I have seen that you have like sliders where you can set the weights for the different distance
+
+features. And depending on those weights,
+
+
+
+Speaker 1 14:30
+
+currently you get a certain map you know of the icon space, and with some weights it works better. Maybe for one I can set with
+
+other weights. it works better for another one. But these are also global weights. And somehow    。
+
+Speaker 1 14:52
+
+That makes me worry a little bit that.
+
+
+
+Speaker 1 14:57
+
+Global distances.
+
+--- PDF page 8 ---
+Speaker 1 15:01
+
+That are just computed in some rigid way might not work well in the end. So okay, enough of that. What do you think of that? Do y
+
+ou have hope that.
+
+
+
+Speaker 1 15:17
+
+This works. I mean the calibration approach is really good, but.
+
+
+
+Speaker 1 15:23
+
+What do we learn from the calibration approach?
+
+
+
+Speaker 1 15:30
+
+Is maybe maybe weights for these global feature distances, but.
+
+
+
+Speaker 1 15:37
+
+Is that it's kind of averaging over all kind of different glyphs and and so on. I'm I'm wondering if it's going to work, so please.
+
+
+
+Speaker 1 15:48
+
+Convince me that this is going to work.
+
+
+
+Speaker 2 16:00
+
+Yeah for for now, the blotting of the icons, glistering one, ah it's um one forty icons. So we're not plotting them. Ah we just picking
+
+them ah in a normalized way. You know with ah stratiﬁcation, ah randomization, ah and.
+
+
+
+Speaker 2 16:28
+
+From our justly gut, gut feeling it it looked good. And because initially when we did not have enough ﬁlters, and ah we were just doi
+
+ng all random. And ah it was quite it was in very bad formats compared to this one.
+
+
+
+Speaker 2 16:50
+
+So with small adjustments it visually it looked good. So maybe we we thought that, yes, it's it's now better than before. So for exa
+
+mple, if you see this speciﬁc area for the ﬂags, ah it's this one is anomaly,
+
+
+
+Speaker 2 17:11
+
+--- PDF page 9 ---
+but the ﬂags previously, we never got this kind of um icons together. So um butYeah, that's the only thing that comes in myMind.
+
+
+
+Speaker 3 17:32
+
+That's just a small comment. it looks like a very good map of stylistic similarity. But um from a design standpoint, I would say this
+
+is very nice to make. Um.
+
+
+
+Speaker 3 17:48
+
+Sets of icons that are good together. Um.
+
+
+
+Speaker 3 17:55
+
+But I think there are other factors. For example, the semantics, as as professor forge was saying, that's a very human factor that pl
+
+ays a big role in discernability. If I look like at the icons that are on the top right,
+
+
+
+Speaker 3 18:11
+
+they're very complex and very similar, but still very discernible into what they are. I guess in small sizes not. And then I see like the
+
+line icons on the on the bottom left.
+
+
+
+Speaker 3 18:26
+
+And I think that a user would have a lot of problems of discerning them because the meanings are not so straightforward, right? S
+
+o probably memorizing them and and recognizing that they are different doesn't work as well. Um so maybe considering.
+
+
+
+Speaker 3 18:45
+
+Or or kind of contrasting how discernible they are with like these types of measures. it's it's a way to go, like like taking two that ar
+
+e close together and trying to see how that compares to this distance in a way         。
+
+Speaker 3 19:09
+
+Is something worth exploring.
+
+
+
+Speaker 4 19:15
+
+Do you mean?
+
+
+
+Speaker 4 19:18
+
+--- PDF page 10 ---
+Like seeing when the or maybe I did I did and got it wrong. So discovering     。
+
+Speaker 3 19:26
+
+I know, this hidden factor of of discoverability that you can't just measure with computer vision. I mean    。
+
+Speaker 4 19:36
+
+What would be interesting if we if we reduce the size, ah letting the people decide so offer, ah which at which they crash. And you
+
+can't can no longer see what what it is. And then look at these icons.
+
+
+
+Speaker 4 19:59
+
+Um.
+
+
+
+Speaker 1 20:00
+
+How they previously have performed concerning the different measures.
+
+
+
+Speaker 1 20:07
+
+And then maybe we will ﬁnd that reduce it, that that items that have a certain proﬁle being quite high in one measure, um that may
+
+be one of these measures is good to good predictor of how fast or ah how fast they crash or how they how long you can see the
+
+m if they if you're making them small.
+
+
+
+Speaker 2 20:37
+
+I think rene made a good point. If you look at this, this is like a stylistic um clustering somehow, you know, that's what you said, rig
+
+ht? Like if you look at, especially at the bottom, there are some the stylistic similar and the ﬂags are stylistic similar, but it doesn't
+
+mean that the ﬂags are not.
+
+
+
+Speaker 2 21:04
+
+Easy to differentiate. They're probably very easy to differentiate, right? So should should should they be far apart or not? Right? So
+
+they are semantically, stylistically similar, right? But they are easy to discern, I guess,
+
+
+
+Speaker 2 21:21
+
+like the swedish ﬂag and the french ﬂag, I guess those are the two. Um what's the problem to differentiate even if they get smalle
+
+r and smaller and smaller and smaller? If you have a blue pixel, a white pixel,
+
+--- PDF page 11 ---
+Speaker 2 21:37
+
+and the red pixel, and then yellow and and blue is very easy to, um soThis, and then then we have on the bottom, um we have som
+
+e that have quite these two blobs,Right?
+
+
+
+Speaker 2 21:50
+
+The the light is it slightly greenish? I can't even say, ah have to make it larger. Yeah. Like this area. The the brown on the bottom, on
+
+the bottom, on the very bottom, the one that's very on the bottom. Yeah,
+
+
+
+Speaker 2 22:03
+
+this one where your crosses and the one on the further right down. Yeah, exactly. So there's this splash two splashes. They're iden
+
+tical in shape, right? And, um, their distance is not that small.
+
+
+
+Speaker 3 22:16
+
+Ah and ah 。
+
+Speaker 2 22:20
+
+They would be not discernible if they get too smaller because the colors are the the shape is the same, of course, right? The the o
+
+nly difference is the color here. And that gives it such a large distance. And then the red one.
+
+
+
+Speaker 2 22:38
+
+I see why it's in the same group. it the, um what is it called? Um like the and can not can but wasn't. What is geese can in english w
+
+atering? Watering can like,
+
+
+
+Speaker 2 22:52
+
+ah you know it it has ah the I don't know what that is called the the owskisa right there where you where the water comesOut.
+
+
+
+Speaker 2 23:03
+
+It's in the same direction as with the blobs where the something sticks out from the blob, right? That's probably why it's in the sa
+
+me group, but it's so discernible. it will be forever discernible to these color blobs on the bottom, right. So um.
+
+
+
+Speaker 3 23:23
+
+--- PDF page 12 ---
+Yeah, I know.
+
+
+
+Speaker 2 23:26
+
+I know. it's impossible almost right. And there are some areas where the clustering puts semantically similar things closer togeth
+
+er. And then there are some areas where, um.
+
+
+
+Speaker 2 23:42
+
+It it it it. Yeah but and and we have to see that these are high dimensional differences, right? And we have like a layout in two DA pr
+
+ojects to two d. And that's always but an issue by itself, right? As you know, so it's very hard.
+
+
+
+Speaker 2 24:02
+
+To consider these human.
+
+
+
+Speaker 2 24:07
+
+To take samples of this, right and and use it in the study and um.
+
+
+
+Speaker 2 24:15
+
+To discern them. So how how does this semantic, it's not semantic, but it's somehow stylistic, somewhat layout, right? Ah partiall
+
+y at least. Right. Um like the the the sausage. And and then there's the ham and then there's like, ah.
+
+
+
+Speaker 2 24:39
+
+So in organ near the the hand, the sausage, and there are similar styles in drawing as in the pointed out that that's very well organiz
+
+ed.
+
+
+
+Speaker 3 24:52
+
+Um.
+
+
+
+Speaker 2 24:55
+
+See. So so here we don't have like a dissimilarity distance.
+
+
+
+Speaker 1 25:02
+
+Sometimes we have a semantic similarity, but semantic semantic style similarity, not content similarity.
+
+--- PDF page 13 ---
+Speaker 1 25:11
+
+We have style similarity. You know that and and style similarity um is that is diet similarity a good distance measure? Maybe not. Y
+
+eah but we we cannot solve that problem, we cannot solve that problem.
+
+
+
+Speaker 1 25:28
+
+We might have to we might have to think about it differently somehow, but I don't know. Ah you might have to think of what's the g
+
+oal of the study.
+
+
+
+Speaker 2 25:45
+
+We were already thinking that we would never return from the cliffs. I mean, these icons were all there for me in the beginning at le
+
+ast to ﬁnd out whether one could have nicely describable groups of icons like these are faces,
+
+
+
+Speaker 2 26:04
+
+these are humans, these are whatever. But this ah that's unfortunately not as easy as I would hope to do. So um what we thought
+
+and what I think makes sense here is that we get into a smaller glyph sets that have the same design are from the same designer
+
+s,
+
+
+
+Speaker 2 26:26
+
+have the same the sameLanguage, like visual language also, so that we narrow this down alreadyThere.
+
+
+
+Speaker 2 26:35
+
+Because if we match two different styles, as you say, then a, it's discernible. Deﬁnitely, because the two different styles, it will be di
+
+scernible even if it goes down, if it's not,
+
+
+
+Speaker 2 26:48
+
+if there's not a very strong similarity in some other sense there. So that makes sense. Anyway, and it's also very much closer to th
+
+e actual um use case, right? In the use case,
+
+
+
+Speaker 2 27:01
+
+you have an icon and icon set that somehow connects in a way that is from the same, has the same topic, has the same designer
+
+as the same sameLanguage in AWay.
+
+--- PDF page 14 ---
+Speaker 2 27:13
+
+And from there perhaps you can get somewhere so that we ﬁrst never down to a glyph set of twenty. Perhaps that is a similar des
+
+ign. Has one topic. And then from there we could. Yeah. Then then we deﬁnitely need to set the actual goal. I guess it will not tell u
+
+s the goal, but it gets one step closer to that, I hope.
+
+
+
+Speaker 1 27:46
+
+Yeah, yeah. Maybe making it more simple. Don't aim for classifying thirteen thousand icons and and come up with a single measur
+
+e that across all those icons, and it's human calibrated that is too much to aim for, I think so. Um.
+
+
+
+Speaker 2 28:11
+
+Yeah perhaps we can have their categories of icon sets. So very simple. I can set like words, the basic shapes like you know circle
+
+s and rectangles and triangles and stuff.
+
+
+
+Speaker 2 28:24
+
+And then one that's very complex where a lot of humans are in there, like those that we see here, something like this that we have l
+
+ike ah that we deﬁne icon sets with different um attributes that we set that we want to ﬁnd out about where the differences are.
+
+
+
+Speaker 2 28:44
+
+And then within those icon sets, we can then um ask for differences and seeHow people behave like withinThose.
+
+
+
+Speaker 2 28:52
+
+But yeah yeah what people think to be similar.
+
+
+
+Speaker 1 28:57
+
+Yeah and I agree. But what will happen is what I fear. I fear is that, um, if you then have your distance measures and you ﬁnd some
+
+weights such that those distance measures ﬁt as best as possible to the human, um,
+
+
+
+Speaker 1 29:17
+
+distance measures, say, um, then you go to different, I can set, and it will be different ways. Um, um, or, ah, you know, um, possibly
+
+。
+
+Speaker 2 29:31
+
+--- PDF page 15 ---
+Yeah.
+
+
+
+Speaker 1 29:31
+
+And then, how does it generalize then from there? Um ah but we can go this experimental way and and try and see how different th
+
+e weights are um that that give a good ﬁt to the human distance measure. Um.
+
+
+
+Speaker 1 29:53
+
+I don't see any other maybe a way. Yeah. Public. Yeah.
+
+
+
+Speaker 1 30:00
+
+And be alright that most probably we most probably we will have ah different measures for different icon sets. And maybe that's t
+
+he stylistic input in principle.
+
+
+
+Speaker 1 30:14
+
+Or it or it represents to some degree the stylistic inﬂuence and.
+
+
+
+Speaker 1 30:21
+
+Which is not bad, but it's hard to compare it then.
+
+
+
+Speaker 2 30:27
+
+So the generalization, what you want is somebody, you know somebody that designs an icon set, right? And then what we want is,
+
+yeah, here's our measure. You can check if your icons scale well. And then, you know,
+
+
+
+Speaker 2 30:44
+
+if the distances and the thing is, even if to if you have a larger icon set and say, and and some icons are confused, which are sema
+
+ntically similar, you don't care because it's in the family of friendly faces and you know,
+
+
+
+Speaker 2 31:01
+
+of angry faces. And and so if those kind of meld together, ﬁne, right?But ah friendly and angry should not kind of metTogether.
+
+
+
+Speaker 2 31:11
+
+Right? So that's what the distance measure needs to capture and that yeah, that's about faces. But if you have like and.
+
+--- PDF page 16 ---
+Speaker 2 31:25
+
+For other things. I remember we had, ah patrick, you came up with this set at the beginning like this like black and white, like arrow
+
+heart and and all these icons. I don't know what the icon set was from, like from a game or something, right?
+
+
+
+Speaker 1 31:46
+
+How we came up with it. I actually don't remember it.
+
+
+
+Speaker 2 31:50
+
+Um so it came from a game. I think that wherever that was used. Pretty sure. Yeah, I know. it's like ﬁve, six years ago.
+
+
+
+Speaker 1 31:58
+
+No, no, no. it was it ah it was the design of mux. Pretty sure. Now. So it was the。
+
+Speaker 2 32:06
+
+Icons that came from some or he selected it from some game. it was he was from he did not make those icons. No, he did not dr
+
+aw. He wasn't drawing those icons. He he was like, taking them from ah from a game. Yeah. I remember that. That was like, ah like
+
+。
+
+Speaker 1 32:25
+
+And it was a list was destroyed. And that was yeah, that was exactly. There was a yeah yes, exactly. Yes. A lightning bolt. Yeah, exa
+
+ctly. So there was some something that was yeah, yeah, yeah.
+
+
+
+Speaker 2 32:42
+
+But he came from again anyway. And and could you please ah look at the the icon sets that you chose that you started from you y
+
+ou showed them at the beginning. There was a slide that showed the icon sets. Can we go to that um slide?
+
+
+
+Speaker 2 33:03
+
+Yeah, yeah, yeah. We have like some that are not too big, right? And and where it's really important, like the hazard pictograms, it's
+
+really nice if they would be differentiated, right? Or the medical devices, the safety signs,
+
+
+
+Speaker 2 33:22
+
+--- PDF page 17 ---
+um it's really important, right? Um and then, ah the usp medication pictogram is probably also important. Um but ah these ah aras
+
+ah as AAC. Pictograms are like, wow, these are really big. Open emoji. Open emoji. Okay.
+
+
+
+Speaker 2 33:40
+
+Um these are really, really big. I ﬁnd even if you onlyFocus on the right side, those seem to beImportant.
+
+
+
+Speaker 2 33:51
+
+Ah pictograms, right? Very important pictograms where differentiation, there should be no misunderstanding about which medica
+
+l device is this or something like that, right? So um we could look at that and then see as a goal, um which.
+
+
+
+Speaker 2 34:13
+
+Ah maybe if you if you try to ﬁnd a way to a distance measure and and match it to the human perception, um that's good. We can d
+
+o that and have a study with all those on the right, say, and the selected candidates from that,
+
+
+
+Speaker 2 34:35
+
+and um then calibrate our measure. But my concern, and maybe I'm wrong. That would be good is that um ah the weights would
+
+be similar across those. Not too different. Um and we can then calibrate to each of the datasets,
+
+
+
+Speaker 2 34:57
+
+then compute like an.
+
+
+
+Speaker 1 35:00
+
+Average measure and then check how bad is the average measure measure to the optimized measure? And that would be a really
+
+great result of the thesis. it can do that, but maybe that's too much work.
+
+
+
+Speaker 1 35:14
+
+I don't know if that can be done, but ah I think that will be a result right? Either the average measure across the different ah data s
+
+ets is ah is effective compared to the individual measures, then that would be good result,
+
+
+
+Speaker 1 35:30
+
+perfect result. If it's not defective, we know that.
+
+--- PDF page 18 ---
+Speaker 1 35:36
+
+It's not. So we already know it's not so easy. But but we can say no, we have to ﬁnd as a result of thesis, yes, we can have individual
+
+measures that are effective if you calibrate with humans,
+
+
+
+Speaker 1 35:51
+
+but generalizing that it's it's diﬃcult, right? That would be also good. it's not your fault, right? If if that would be the result, right? B
+
+ut we at least arrive at can you generalize or not? Or even if I can say if to ah you,
+
+
+
+Speaker 1 36:09
+
+ah all we have or then the way forward would be not in your thesis, but the futureWork would beOkay.
+
+
+
+Speaker 1 36:17
+
+That different types, stylistic types, as in the quality of icon sets. And if you have measures in those stylistic types, um okay. Which
+
+you you design a new icon set look,
+
+
+
+Speaker 1 36:31
+
+um ah to which one is it most similar of those example I can set. And then take that measure, try that measure and see it could be
+
+a good ﬁt, right? Or is it between those two?
+
+
+
+Speaker 1 36:45
+
+Then take an average of those two measures that be good for those two icon sets, right? And I think there are not too many differ
+
+ent, ah so that many differentStyles, but but maybe there are more like like ﬁll ﬁeld styles,
+
+
+
+Speaker 1 37:02
+
+and then there are more line styles and black and white styles and and and and soOn.
+
+
+
+Speaker 1 37:09
+
+Maybe that that helps a little bit to organize that space. Having different measures. And and maybe there could be even an algorit
+
+hm that kind of ﬁrst checks um your new icon set to the already calibrated icon sets to which is it most similar in some sense?
+
+
+
+Speaker 1 37:29
+
+Right? And then use that measure instead of like have one global measure for all. I can set that that that we can imagine. And I thi
+
+--- PDF page 19 ---
+nk that's a good way forward from here. But and what you mean is all at once. Yes.
+
+
+
+Speaker 2 37:46
+
+But what you mean is in the tests that the people should, ah.
+
+
+
+Speaker 2 37:54
+
+State a similarity between the different icons.
+
+
+
+Speaker 1 37:59
+
+Or we we we can say we, but we can if if it's mostly about ah ah mostly about um the different, we can we can focus on one thing,
+
+scalability, right? Then ah we we can just do that and and then just set the yes, no, because if people really have to rate the similari
+
+ty between them   。
+
+Speaker 1 38:31
+
+Um yeah dora is cooking something and it's burned. Okay then. But now, yeah, but this is the working. Yeah       。
+
+Speaker 2 38:43
+
+Yeah. So the scalability。
+
+Speaker 1 38:44
+
+You have to have one goal. Yes. Let's let's just ﬁrst look at scalability. I don't see any. Let's see. Let's say I can. Designers would um
+
+aim for having a set that it has reasonable differences at a normal scale, at a good scale.
+
+
+
+Speaker 1 39:04
+
+And then, ah the interesting aspect is how it does it scale? And then let's let's look within one egg I can family. And then calibrate i
+
+t to a human scaling the perception,
+
+
+
+Speaker 1 39:20
+
+and then see if we can come up with a weight for our distance measures, different distance measures thatEmulate or approximat
+
+e or model um the human distance measure within the different icon sets weInvestigate.
+
+
+
+Speaker 1 39:39
+
+--- PDF page 20 ---
+But I don't know if would it be possible to run the study on um a sub sample of those icon sets on the right here, say.
+
+
+
+Speaker 2 39:52
+
+I mean 。
+
+Speaker 1 39:52
+
+                                    。
+That's it. Or if that's just too much
+
+
+
+Speaker 2 39:58
+
+Where we have to think about how.
+
+
+
+Speaker 1 40:00
+
+We want to present the scaling. So ah what what steps do we need? So how many steps people should assess or should they use
+
+a slider and say, that is the point where I can no longer identify it?
+
+
+
+Speaker 1 40:16
+
+Ah what's the what's the the best result? And that factors into how many slides we have to show to the people on proliﬁc or in, in
+
+or not, not on proliﬁc and with the people. So, and then it,
+
+
+
+Speaker 1 40:31
+
+that kind of factors in how many icons we actually can show. Um and so here we have eighty eighty three.
+
+
+
+Speaker 1 40:40
+
+So that's one hundred and sixty. So that would be three hundred, three hundred and sixty icons if we focus on the right side.
+
+
+
+Speaker 1 40:51
+
+And then we want to crash all of them with people. That's you know that's yeah that's like subway.
+
+
+
+Speaker 2 40:59
+
+Of course. Of course we have to select subsets right for the nine.
+
+--- PDF page 21 ---
+Speaker 1 41:03
+
+So do that. Yeah. So so dora, do you remember how many ah.
+
+
+
+Speaker 1 41:10
+
+In how many slides we showed in the in the rose charts? Hundred and twenty. What was that? The reasonable. That was a reasona
+
+ble size. Yeah people to look at at, to assess and to put some value in. Yeah.
+
+
+
+Speaker 1 41:28
+
+Um I think if we go in that direction saying we want to show one hundred and twenty icons and then we, we, we let I don't know wi
+
+th that we, so the。
+
+Speaker 1 41:42
+
+The, the whether they should do a slider on their own or the weather, we show them different sizes that we have to think about. I d
+
+on't know what is the best, what's the best approach here.
+
+
+
+Speaker 2 41:58
+
+Maybe you have to test, right? Both slider takes time because people go back and forth, back and forth and so on. But showing m
+
+any different conditions like to narrow it down to a reasonable scale. That's also a long process, right? And you probably have to h
+
+ave to balance it for order.
+
+
+
+Speaker 1 42:21
+
+So I mean 。
+
+Speaker 2 42:23
+
+If we can be random   。
+
+Speaker 1 42:24
+
+If we have one icon and then decreasing sizes of that icon, so with ah with, ah, um and then they have to pick which one they can't
+
+see. They can't identify anymore.
+
+
+
+Speaker 3 42:41
+
+Um the problem with that that I see is that they know what the large icon is. And so it might be that they can discern it further as t
+
+--- PDF page 22 ---
+hey actually can discern it because they know what it should be. And the yeah or     。
+
+Speaker 1 43:01
+
+We do it the other way around that that that they have a slide or they cannot ah they cannot see what it is. And then at some point
+
+they see it and then they have to lose leave the slider in that position saying, okay, now I see it.
+
+
+
+Speaker 3 43:19
+
+Or it's like iterative that they have these icons as long as they can't discern it, they press like Plus until they can and then they have
+
+to do next or something like this, something like this.
+
+
+
+Speaker 1 43:32
+
+But it's like, I mean, that's in principle the same thing.
+
+
+
+Speaker 3 43:35
+
+It's in principle the same.
+
+
+
+Speaker 1 43:37
+
+Yeah so if yeah but we can have the sliders having discrete positions thing. Okay now      。
+
+Speaker 2 43:43
+
+But the thing is that.
+
+
+
+Speaker 2 43:49
+
+If you put them next to each other   。
+
+Speaker 1 43:51
+
+It's no you don't put um you don't put them to each other.
+
+
+
+Speaker 2 43:57
+
+Yeah. But where do you put them in the?
+
+--- PDF page 23 ---
+Speaker 1 43:59
+
+No, if you if you have the slider, you start maybe just with a black dot danger. But you.
+
+
+
+Speaker 2 44:06
+
+Yeah 。
+
+Speaker 1 44:07
+
+You put the right slider to the right, then it becomes bigger.
+
+
+
+Speaker 1 44:12
+
+Then it becomes bigger. And then at some point they they they can identify it and then that's the position. But it doesn't like   。
+
+Speaker 2 44:19
+
+Ah okay, you you you don't want to have discernability. You want one identity, viability. That's something different, right? it's true.
+
+
+
+Speaker 3 44:31
+
+That's what I was looking at. Yeah. Yeah.
+
+
+
+Speaker 1 44:33
+
+But but for me, I thought that is the ﬁrst step actually, but we can discuss about it. Of course. Um I think that that's what what wha
+
+t you meant on but done. So. Yeah   。
+
+Speaker 2 44:49
+
+Yeah, yeah. Ability. Yeah. I was thinking really, um ah key just differences between two. I was at ﬁrst thinking, you know.
+
+
+
+Speaker 1 45:00
+
+Like you scale both of them up and down, right? Or you start from towards two dots, scale them up and then you look at them and
+
+then, oh, now I can see they're different, right? They you don't know what they are, but you're right,
+
+
+
+Speaker 1 45:16
+
+the semantics of an icon is important. it's not only that they different, but you need to recognize them as well. So yeah, that recog
+
+--- PDF page 24 ---
+nition and difference is both important, right?
+
+
+
+Speaker 1 45:29
+
+And then we I had the example before between the angry faces and the friendly faces. Ah yeah,That's the that's a different aspect,
+
+Right?
+
+
+
+Speaker 1 45:39
+
+Different aspects are different. Similar. Yeah. Semantic difference, basically  。
+
+Speaker 2 45:44
+
+That's the difference between those two.
+
+
+
+Speaker 2 45:49
+
+There are two laws for that, but I cannot. The one is the there are two laws for that is is ah seeing that there is a difference and kn
+
+owing what it is. So there are two different laws for that, but I have it somewhere. Good.
+
+
+
+Speaker 3 46:10
+
+Okay.
+
+
+
+Speaker 1 46:13
+
+What do we aim for? Is then the question, right? Um ah you're you're right with, I can say it's identiﬁability, but it's very important.
+
+
+
+Speaker 1 46:23
+
+But also differentiability is important. Both is important, both are important, but maybe those are the most important access, righ
+
+t? So that would be two access.
+
+
+
+Speaker 3 46:36
+
+Um.
+
+
+
+Speaker 3 46:42
+
+I mean for um.
+
+--- PDF page 25 ---
+Speaker 4 46:48
+
+Um ah then we would need two tests. So would it suﬃce to have once? I mean, for patrick's test, we actually don't. And only need t
+
+he scaling up,
+
+
+
+Speaker 4 46:59
+
+but also like a list of all icons in the set so that people can actually select which one it is. They think it is. And the question is whet
+
+her people then won't go to be sure and go even higher than they needed to be.
+
+
+
+Speaker 5 47:23
+
+You could do it as a tool to alternative force choice where you show them only one scale and they can. They decide, I know what it
+
+is. I don't. And at some point, if you repeat that in random order with different icons and different sizes, you get like a point or a sc
+
+ale where they mostly know what it is and mostly don't.
+
+
+
+Speaker 1 47:50
+
+But remember, um the people do they do, they need to be able to remember those icons then by name or ah how how to do that, ri
+
+ght? Um how would they say, yes, it's this icon. If you have those nine hazard pictograms,
+
+
+
+Speaker 1 48:10
+
+they can learn those maybe right at the beginning and then say, yeah, it's this one or this one, but if it's more impossible, it's almos
+
+t impossible. So you have to ah show them the existing icons,
+
+
+
+Speaker 1 48:28
+
+ah so they can select from those, otherwise they have to remember those from memory.
+
+
+
+Speaker 1 48:40
+
+It's diﬃcult, really diﬃcult.
+
+
+
+Speaker 4 48:47
+
+Another possibility that came to my mind, which is not about scaling actually, but one could ask people for similarity in a way that
+
+we have like one target icon in the center and then one another one to the left and another one to the right,
+
+
+
+Speaker 4 49:01
+
+--- PDF page 26 ---
+and they select which one is more similar to the center, one. That would be a possibility without scaling. Then we don't have the s
+
+caling part, but we have some kind of a similarity measure. Yeah    。
+
+Speaker 3 49:12
+
+Yeah.
+
+
+
+Speaker 1 49:21
+
+That would, for example, if you have those faces, angry and friendly faces, it would create those clusters, very obviously. Um deﬁni
+
+   。
+tely
+
+
+
+Speaker 3 49:29
+
+Yeah   。
+
+Speaker 4 49:33
+
+But then we don't have this the yeah the discernability in there.
+
+
+
+Speaker 3 49:37
+
+But yeah   。
+
+Speaker 1 49:39
+
+I mean  。
+
+Speaker 2 49:41
+
+We we we could make two tests, two pilots, and one was scalped, one was identiﬁability and one was discernability.
+
+
+
+Speaker 2 49:55
+
+I mean it in principle, we could do two small talk pilots.
+
+
+
+Speaker 1 50:00
+
+And see what is more worth while to pursue.
+
+--- PDF page 27 ---
+Speaker 2 50:08
+
+I wouldn't. I would have even problems how to set up the test, right? Identiﬁability. Ah would be you have the slider and your scale
+
+and then you have all your icons around. And then at some point you say you, you,
+
+
+
+Speaker 2 50:27
+
+you look at them, right? And then you scale it up. And then if somebody, ah it's this one, right? So, um but then if you're wrong, wha
+
+t does that mean? Right? You missed. Okay. Ah so you didn't select the right one. Good, good,
+
+
+
+Speaker 2 50:47
+
+okay?
+
+
+
+Speaker 2 50:51
+
+You could say scale up until you feel safe to select which one it is, so that would scale up more.
+
+
+
+Speaker 2 51:01
+
+But is that is that a good? Is that a good measure for discernability? I'm wondering, right? Or identify identify the ability, right? Ah i
+
+t's this one, okay? it's now another one. You do the same with another one.
+
+
+
+Speaker 2 51:25
+
+Um and you know, and then, yeah. Ah but but what does it mean? How do we create a measure from that? That? That's my questio
+
+n right now. We have then, you know,
+
+
+
+Speaker 2 51:39
+
+ah which icons people matched well and which icons people don't match well or only match at a larger scale or whatever, that wo
+
+uld be the result of the study, right? So how what do we do with that?
+
+
+
+Speaker 2 51:56
+
+How do we create something of that?
+
+
+
+Speaker 3 51:59
+
+I mean from the from the icons that don't need to upscale a lot to be identiﬁed. I guess those are very pregnant. We don't do. We k
+
+now that these have good quality for discernability and those where you have to scale very often,
+
+--- PDF page 28 ---
+Speaker 3 52:15
+
+although so we need a large scale from them. They are too either too complicated or too similar to some other icon. I guess that'
+
+s all that you can say more or less than that. Yeah.
+
+
+
+Speaker 2 52:28
+
+Yeah. Yeah. And but but how to create a measure from that? The goal is kind of this measure in the end.
+
+
+
+Speaker 3 52:34
+
+Right? Yeah. True. Yeah.
+
+
+
+Speaker 2 52:37
+
+How to do that. Yeah.
+
+
+
+Speaker 1 52:39
+
+I mean, isn't the measure if so, if we if we see for each icon?
+
+
+
+Speaker 1 52:47
+
+Yeah. Okay for I can I have an idea for the identiﬁability. So if we have this identiﬁability score, then we could look for a linear comb
+
+ination of the other seven.
+
+
+
+Speaker 1 53:04
+
+Ah that would be a principle that would deliver the weights. Um but II don't know how we do it with discriminability. I mean, we hav
+
+e to differ. We have the difference between two eigens concerning the other seven scales as well.
+
+
+
+Speaker 2 53:52
+
+Yeah, I don't think we solved this now. And let's think about it. And at least we have two two things. The one is ah so maybe not tw
+
+o things, but it's like with respect to scalable,
+
+
+
+Speaker 2 54:05
+
+we are interested in maybe we're interested in scalability. Maybe maybe not. That's if we have a ﬁxed size, we could then use anot
+
+her ﬁxed size or whatever. But if you have a ﬁxed size, and the question is,
+
+--- PDF page 29 ---
+Speaker 2 54:21
+
+is this a good icon set or not?
+
+
+
+Speaker 2 54:27
+
+And and good means that I can buy it identiﬁable and discernible or discriminate discriminate them. The the the these are the two
+
+things okay?
+
+
+
+Speaker 2 54:43
+
+So far we got and now we have to.
+
+
+
+Speaker 2 54:50
+
+Develop a study task from that, or or how if you do a study looking at these kinds of.
+
+
+
+Speaker 1 55:00
+
+What can what can we do with the results? What do the results of the study tell us? Um and how can we use that for future icon se
+
+ts? For the design of future icon sets of ah better maybe even for the evaluation of future icon sets.
+
+
+
+Speaker 1 55:18
+
+This is how far we got. And I don't think we get any further today and we have to kind of think about that. That that's my my feelin
+
+g right now. Yeah.
+
+
+
+Speaker 1 55:34
+
+And we decided, I think we will focus on small icon sets or small samples of large icon sets to make it simple. Um but we have to
+
+revisit really the question.
+
+
+
+Speaker 1 55:50
+
+And what we can do with the results. And the the question maybe is discernability and identiﬁability. That. But that should be also i
+
+n the literature already like captured.
+
+
+
+Speaker 1 56:04
+
+Then how do we turn this into a study and what do we do with the result of the study? That's the main challenge I think because y
+
+--- PDF page 30 ---
+ou want to use the results for something, because otherwise they're not very useful.
+
+
+
+Speaker 1 56:21
+
+If you just evaluate an existing icon set, and then we say, yeah, and some of the icons are well discernible, others areWell identiﬁab
+
+le. That's not. What can we do withThat?
+
+
+
+Speaker 1 56:35
+
+Nothing but ah, ah so um.
+
+
+
+Speaker 1 56:42
+
+Even if it's very basic, what we get out of this in the end.
+
+
+
+Speaker 1 56:48
+
+It should have some at least a guideline for designing items. That's the minimum. I would say if we investigate some icon sets and
+
+and and get something out of, we have a recommendation. And the ideal thing would be,
+
+
+
+Speaker 1 57:05
+
+we have a measure somehow that right? That would be. But that seems to me now that we talked about it for so long, it seems t
+
+o be a very hard thing. I yeah. And it's not at all.
+
+
+
+Speaker 1 57:19
+
+Ah your fault your fault ah that you implemented already a lot. And that brought us to the core of the problemSomehow.
+
+
+
+Speaker 1 57:29
+
+Right? But what you did so far, and that's very valuable. So don't worry about it. it's not your fault at all. If you don't come to a good,
+
+good, easy result in it, easy. it will not be an easy result.
+
+
+
+Speaker 1 57:43
+
+it will be ambiguous in any way, but we have to ah come to a conclusion. What is worthwhile investigating and how. Um and I don't
+
+think we get to that right now, but maybe we will discuss in our round at some point about it.
+
+
+
+Speaker 1 57:59
+
+--- PDF page 31 ---
+And you can discuss with dora and patrick and maybe you're in.
+
+
+
+Speaker 1 58:04
+
+And she also can join in um and and think about it and and then come up with something where the results of the study means so
+
+mething.
+
+
+
+Speaker 1 58:18
+
+I'm not sure what right now exactly. But yeah, that's the goal. And don't be too too ambitious be. I think it's better to have a small r
+
+esult. Like here's a guideline, how design and I can set.
+
+
+
+Speaker 1 58:34
+
+And maybe there are already guidelines, but one that's motivated by the study. And maybe also what you did already by the cluste
+
+ring and all these things that comes out of both. Maybe.
+
+
+
+Speaker 1 58:50
+
+And that will be a great result for your thesis. But don't be over ambitious. Like use three thousand icons and try to ﬁnd like AMea
+
+sure that's calibrated for all of thoseSets.
+
+
+
+Speaker 1 59:06
+
+I don't think it's going to work. So. Okay. Um maybe these are my ﬁnal words for today. Okay. Thanks a lot. Yeah, thank you. it's ver
+
+y interesting. it's very challenging, right? it's it's like how how to get to result.
+
+
+
+Speaker 1 59:25
+
+That is meaningful in the end. That's the greatest, largest, biggest challenge right now, I think. And I hope um we ﬁnd something e
+
+ven we we don't come to a conclusion. I think we we kind of,
+
+
+
+Speaker 1 59:42
+
+um but we kind of broke the problem apart. So we we now have a at least know.
+
+
+
+Speaker 1 59:52
+
+Why it's not so easy, tractable, right? And that that's very valuable and if that's a result of these is great.
+
+--- PDF page 32 ---
+Speaker 1 1:00:00
+
+I'm happy with that too.
+
+
+
+Speaker 2 1:00:03
+
+Good then.
+
+
+
+Speaker 1 1:00:04
+
+Um I believe, and you can stay if you want. So hey, I have to work on something else. Um we were in our group talk at some point.
+
+
+
+Speaker 1 1:00:14
+
+Once you have thought about it a little more and then maybe we have another meeting in one or two weeks to ah nail it. I would sa
+
+y we never made one hundred percent. But anyway, let's try that.
+
+
+
+Speaker 1 1:00:30
+
+Thank you a lot for your presentation today. And I think it was a very a good and inspiring discussion. So let's see. Yeah. Bye bye ti
+
+me. Bye.
+
+
+
+Speaker 3 1:00:47
+
+Okay, good. Um so what would be the next steps? I guess what we should look into are the icon sets, those on the right side that
+
+we narrow down each of those to how many should we do? Ten or should we go up to twenty?
+
+
+
+Speaker 4 1:01:07
+
+The GHHGHS has it once has only nine.
+
+
+
+Speaker 3 1:01:13
+
+So yeah, okay. Yeah. So we don't have to narrow.
+
+
+
+Speaker 2 1:01:16
+
+So if we if the I think the question is should we mix them really up or not? Also using two, two.
+
+
+
+Speaker 2 1:01:29
+
+--- PDF page 33 ---
+So let me. Can you show them? This is again.
+
+
+
+Speaker 3 1:01:33
+
+Start with the icons. No, I don't think that we should mix the nerves. We should take some of each. The question is how many betw
+
+een ten and twenty something um that yeah the question is some that distinguish very well and some that don't.
+
+
+
+Speaker 3 1:01:54
+
+And um perhaps even perhaps, we can also say just like those that are closest to each other, that are most similar visually and of t
+
+hose from each of these. And we in our study, we always have matches from within one set. I don't would would like to to mix the
+
+m up between between exactly.
+
+
+
+Speaker 2 1:02:21
+
+So, so that, and and okay, so we choose twenty of each, let's say we ah.
+
+
+
+Speaker 2 1:02:32
+
+Let's say we do.
+
+
+
+Speaker 2 1:02:37
+
+So how many do we have? Six. So we don't use the the hazard pictograms or do we use them? I don't know. Um and then we have
+
+twenty of each of the other ones. That's kind of hundred hundred slides to show. And then the question is, do we do scalability or
+
+do we do comparison?
+
+
+
+Speaker 3 1:03:07
+
+I guess for ﬁrst I would say identiﬁcation, identibility, identiﬁability, we called it, I think, identiﬁer.
+
+
+
+Speaker 2 1:03:14
+
+Okay. Yeah, okay.
+
+
+
+Speaker 3 1:03:16
+
+Then let's let's start with that. And then it's actually a hundred slides. Because if we would have comparison, then we would have t
+
+o like have more of that, right? Because we need combinations that not each with even each with each actually within those twent
+
+y and   。
+
+--- PDF page 34 ---
+Speaker 4 1:03:36
+
+Those twenty one.
+
+
+
+Speaker 2 1:03:37
+
+So I would totally random.
+
+
+
+Speaker 4 1:03:41
+
+For each participant or do we ﬁx?
+
+
+
+Speaker 2 1:03:43
+
+Maybe ah may i. What what I would say is maybe we could, um if you can show us the links or if you can give us the links again ah
+
+of of the of the icon sets, everyone can ah can look it up and pick out the twenty likes. And then we ﬁnd a we ﬁnd a common groun
+
+d   。
+
+Speaker 3 1:04:07
+
+But that that might be a good idea. Yeah but yeah we do our homework for next week. Each of us yeah selects the twenty that the
+
+y ﬁnd most sensible.
+
+
+
+Speaker 2 1:04:18
+
+Yeah um ah and the question yeah. And especially the question is what what what guides to that? So is it. Should we focus on how
+
+so should we choose similar ones?
+
+
+
+Speaker 2 1:04:30
+
+Should we choose what we think are representable icons of that icon set? Should we choose ones that are already seen quite diff
+
+erent to us um in in? And then of course if it is a different in terms of semantics,
+
+
+
+Speaker 2 1:04:45
+
+it's always a different in terms of.
+
+
+
+Speaker 2 1:04:49
+
+Of the icon itself. There's so so many questions   。
+
+--- PDF page 35 ---
+Speaker 3 1:04:54
+
+So many players and so many questions. Deﬁnitely. I mean, these are our factors and be in your thesis, all of.
+
+
+
+Speaker 1 1:05:00
+
+These factors should be mentioned at least I think the question is that right? If it's a representative, if you say it's a representative
+
+sample, that means more or less that we have more the more different ones, right?
+
+
+
+Speaker 1 1:05:16
+
+But since we want to have discernability, or at some point at least discernability also for identiﬁability is it's it's important to know
+
+where the differences are. So.
+
+
+
+Speaker 1 1:05:31
+
+It might be interesting to really have those that are closest visually.
+
+
+
+Speaker 2 1:05:34
+
+Or what we also could do is we have a look, we we could show ah the small sample sets in ah in in in the web APP, right? Yes.
+
+
+
+Speaker 3 1:05:47
+
+I was in principle also thinking the and all we can have A.
+
+
+
+Speaker 2 1:05:52
+
+So maybe you could view, maybe you could have, ah um that would be cool if you could make for every of the ﬁves, you could sho
+
+w them and maybe make screenshots of where they are in the two dimensional space.
+
+
+
+Speaker 2 1:06:09
+
+And then we already can see. And then we can do a kind of a educated sampling of that. Everyone maybe ah makes their choices
+
+and then we we on the next meeting we agree. But what we want compare.
+
+
+
+Speaker 1 1:06:25
+
+Yeah, that would be a possibility. Yeah.
+
+--- PDF page 36 ---
+Speaker 3 1:06:28
+
+What I will do, then I will, ah, ah remove these ones or should I just comment out from the quarter? Should I just remove them? The
+
+bigger ones?
+
+
+
+Speaker 1 1:06:39
+
+Um yeah I think for now you can leave it in because in your in your view, you can ﬁlter by source, right? Yes. Yeah. Then we simply, a
+
+h you ﬁlter so that you see only each of these separately without any and other, and make a screenshot of each. So that we have li
+
+ke the view of only those for each set.
+
+
+
+Speaker 2 1:07:05
+
+Yes   。
+
+Speaker 1 1:07:06
+
+That's I think that would be that's a good idea. And then we can you can have a look at those like yeah, only one. Oh no, that's that's
+
+just one one ﬁfty.
+
+
+
+Speaker 3 1:07:22
+
+But I think this is broken.
+
+
+
+Speaker 1 1:07:26
+
+Yeah. Okay, I see. Okay. Yeah 。
+
+Speaker 2 1:07:29
+
+It doesn't matter. Have a look at it and and where we have to see the embedding of of each of them individually of each icon set. A
+
+nd then we we we we we simply and either we can discuss it in our group or everyone draws the twenty he likes. And then we we a
+
+gree on the ﬁnal twenty. Yeah.
+
+
+
+Speaker 1 1:07:53
+
+Yeah.
+
+
+
+Speaker 2 1:07:54
+
+And then we prepare the, the, the but and then we prepare the, the, the upscaling and downscaling.
+
+--- PDF page 37 ---
+Speaker 1 1:08:02
+
+Um we can have a ﬁrst pilot. I think that's that.
+
+
+
+Speaker 1 1:08:11
+
+Yeah, yeah, yeah. I think that would be the next step for for the ﬁrst study. And then we will see how we do this. The similarity to so
+
+rt of similarity.
+
+
+
+Speaker 2 1:08:23
+
+And I found the two, the two or no, no, I've closed it again. Ah.
+
+
+
+Speaker 2 1:08:31
+
+So it's a very professional, that's where where is it?
+
+
+
+Speaker 2 1:08:43
+
+The professional law that's notifying that there is a difference and.
+
+
+
+Speaker 2 1:08:53
+
+And then get, then there is so so stone. But so stone is usually more. But that that means making a choice. So which one is which?
+
+Um but I think that's not precisely identiﬁability because then you're just making a choice. Which one is different to the other or or
+
+or which one is different.
+
+
+
+Speaker 2 1:09:22
+
+But it's not that, but that's not identiﬁability yet, I guess. But but that I'm not sure about it. Maybe I have to to to to read it.
+
+
+
+Speaker 2 1:09:34
+
+Again.
+
+
+
+Speaker 1 1:09:38
+
+Yeah because of this   。
+
+Speaker 2 1:09:39
+
+--- PDF page 38 ---
+This principle is principle in principle identiﬁability meaning recognizing the semantics or recognizing or is identiﬁability meaning I
+
+so I see now clearly the shape and what the shape shape is, or is it or is it?
+
+
+
+Speaker 1 1:10:01
+
+Philosophy colors   。
+
+Speaker 2 1:10:02
+
+Or is it is it identifying the transcendent meaning of the shape?
+
+
+
+Speaker 2 1:10:12
+
+Which would be kind of semantics. Ah there are so many words. Yeah, so many.
+
+
+
+Speaker 1 1:10:25
+
+Yeah, yeah, yeah. Okay.
+
+
+
+Speaker 2 1:10:29
+
+I have to I also have to have to go then yeah to the university. So so next next you say, ah it is on you. You are sending out the the s
+
+creenshots. Yeah and then everyone will choose. And then we ﬁnd a common ground. And I don't know. We we also have to think a
+
+bout coming ground.
+
+
+
+Speaker 1 1:10:51
+
+You said that at the usual slot where we meet eptizam, you have another meeting now.
+
+
+
+Speaker 1 1:10:58
+
+So when can we meet? Okay     。
+
+Speaker 2 1:11:00
+
+Let me check.
+
+
+
+Speaker 2 1:11:04
+
+Ah that that was it was tuesdays at eleven.
+
+--- PDF page 39 ---
+Speaker 1 1:11:09
+
+Yeah.
+
+
+
+Speaker 2 1:11:18
+
+That's tomorrow. Yeah   。
+
+Speaker 1 1:11:21
+
+Yeah.
+
+
+
+Speaker 2 1:11:21
+
+I could go out to   。
+
+Speaker 1 1:11:23
+
+Ah wouldn't do tomorrow, but like next week.
+
+
+
+Speaker 2 1:11:26
+
+Yeah. Okay. Okay. Then and next week, then then let's keep it. I can I I'm now the the lab classes are kind of set up and I'm and II co
+
+uld. And usually next week I have two people in the webcast so I don't need to be there. So next week should work.
+
+
+
+Speaker 1 1:11:47
+
+Okay. Then let's say next week at eleven, tuesday, and we will compare our results.
+
+
+
+Speaker 2 1:11:55
+
+Okay, then see you. Yeah 。
+
+Speaker 1 1:11:58
+
+Thank you for your work.
+

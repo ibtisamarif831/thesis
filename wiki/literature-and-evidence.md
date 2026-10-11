@@ -99,7 +99,7 @@ The main human-authored syntheses are:
 - `notes/human_to_computer_glyph_feature_mapping.md` — current conceptual boundary.
 - `notes/feature_literature_evidence_pass_2026-07-28.md` — feature-level evidence scope, page mapping,
   and registry coverage.
-- `notes/literature_mapping_deep_pass_2026-07-08.md` — latest local-literature audit and safe claim.
+- `notes/literature_mapping_deep_pass_2026-07-08.md` — July 8 local-literature audit and safe claim.
 - `notes/paper_feature_review.md` — paper-by-paper feature and distinguishability review.
 - `notes/feature_visual_categorization_tables.md` — visual categorization mappings.
 - `notes/feature_extraction_taxonomies.md` — feature taxonomy context.
@@ -112,7 +112,7 @@ Prefer the latest deep-pass and human-to-computer mapping over older proposal la
 python code/extract_paper_text.py
 ```
 
-This requires `pdfplumber`, which is not installed in every local Python environment. The current Windows `python` runtime in the verified workspace raises `ModuleNotFoundError: pdfplumber`; use the configured bundled dependency runtime or install the missing package before regeneration.
+This requires `pdfplumber`, which is not installed in every local Python environment. An earlier Windows `python` check raised `ModuleNotFoundError: pdfplumber`; this is historical environment evidence rather than a current macOS runtime check; use the configured bundled dependency runtime or install the missing package before regeneration.
 
 Extracted text is a search aid, not a substitute for the original PDF when quoting, checking tables, or establishing page-specific evidence.
 

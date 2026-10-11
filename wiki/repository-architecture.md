@@ -16,7 +16,8 @@
 | `icon_data/normalized_256/` | Generated normalized PNGs used by analysis. |
 | `icon_data/analysis/` | Canonical table, features, reports, similarity outputs, and dashboard artifacts. |
 | `papers/` | Local thesis literature PDFs and extracted text. |
-| `notes/` | Literature mapping, feature taxonomy, and research notes. |
+| `notes/` | Literature mapping, feature taxonomy, research notes, and the preserved meeting PDF/page-marked transcript in `notes/meetings/`. |
+| `web/`, `functions/`, `migrations/` | Public nomination UI, recognition usability assets/APIs, and additive D1 schemas. |
 | `tasks/` | Current plan and repo-local tickets. |
 | `wiki/` | Organized operational and conceptual documentation. |
 | `.agents/`, `.claude/` | Local agent skills/configuration; not thesis data. |
@@ -36,7 +37,7 @@
 | `code/extract_mcdougall_icons.py` | Crop individual stimuli from appendix page renderings. | McDougall extracted PNG folder |
 | `code/extract_mcdougall_metadata.py` | OCR and validate McDougall appendix ratings. | McDougall ratings and review CSVs |
 | `code/download_*.py` | Acquire selected remote datasets. | Dataset-specific folders and metadata |
-| `code/evaluation/` | Evaluation specifications and future human-computer comparison scripts. | Currently documentation only |
+| `code/evaluation/` | Evaluation specifications and implemented two-rater benchmark builder/evaluator. | Rating sheet, mask overlays, feature release gate; final human-computer analysis remains future work |
 
 ## Data and Generated-Output Boundaries
 
@@ -76,8 +77,8 @@ Keep transformations testable and mostly pure; keep filesystem writes near orche
 | Question | Inspect first |
 |---|---|
 | Why is an icon in or out of the canonical table? | `is_canonical_icon()` in `build_icon_dataset.py` |
-| What does a feature mean? | `dashboard_data.json` feature sections, then `extract_icon_features.py` |
-| Is a feature active? | `DASHBOARD_FEATURE_SECTIONS` and exclusion rules in `build_analysis_dashboard.py` |
+| What does a feature mean? | `code/thesis_pipeline/features/registry.py`, then extractor implementation and generated feature sections |
+| Is a feature active? | Registry status/preset and the generator's resolved seven-representative contract |
 | How is distance calculated? | `compute_icon_similarity.py` and `similarity_metadata.json` |
 | Why does the dashboard look or behave this way? | `write_index_html()` in `build_analysis_dashboard.py` |
 | What is in the current generated run? | The corresponding generated JSON/CSV report |

@@ -10,7 +10,7 @@ python code/evaluation/evaluate_feature_v2_benchmark.py
 python code/build_analysis_dashboard.py
 ```
 
-The benchmark builder deterministically freezes 50 rows per family plus 100 strict-red cases and writes side-by-side mask overlays. The evaluator never enables the pilot with incomplete ratings.
+The benchmark builder deterministically freezes 50 rows per family plus 100 strict-red cases and writes side-by-side mask overlays. The evaluator never enables the feature-validation release with incomplete ratings; the separate usability prototype is not this release gate.
 
 [Wiki home](README.md) · [Pipeline](pipeline.md) · [Verification](verification-and-troubleshooting.md)
 
@@ -63,8 +63,10 @@ This script has no command-line options.
 
 ### Similarity
 
+The checked-in reports cover a historical 1,038-row cohort. Do not run the dense default on all 28,749 current feature rows. Use an intentionally prepared bounded input:
+
 ```powershell
-python code/compute_icon_similarity.py
+python code/compute_icon_similarity.py --features PATH_TO_BOUNDED_STUDY_FEATURES.csv --output-dir tmp/study-similarity
 ```
 
 Options:
@@ -99,11 +101,16 @@ python -m http.server 8877 --directory dist/dashboard
 
 Open `http://127.0.0.1:8877/` for static UI verification. Deploy the configured Cloudflare Pages project, including its Functions bundle and D1 binding, with `npx wrangler pages deploy`. The live URL is `https://glyph-perception-dashboard.pages.dev/`. The public folder is ignored by Git and must be rebuilt locally before each deployment.
 
-Apply the study-selection schema and refresh its server-side icon allow-list after an intentional dataset-scope change:
+Apply additive migrations for normal deployment:
 
 ```powershell
 npx wrangler d1 migrations apply glyph-study-selections --remote
-npx wrangler d1 execute glyph-study-selections --remote --file tmp/study_selection_icons.sql
+```
+
+The builder also emits `tmp/study_selection_icons.sql`, which begins with `DELETE FROM study_icons`. The following catalog seed is **initial provisioning only** on an empty isolated database; it must not be rerun against existing nominations or pilot records. A future scope change needs a separately reviewed non-destructive catalog migration. Initial empty-database seed only:
+
+```powershell
+npx wrangler d1 execute NAME_OF_EMPTY_ISOLATED_DATABASE --remote --file tmp/study_selection_icons.sql
 ```
 
 Export current reviewer selections without exposing them publicly:
@@ -114,7 +121,9 @@ curl -fsS -H "Authorization: Bearer $STUDY_ADMIN_KEY" https://glyph-perception-d
 
 Keep `STUDY_SUBMIT_KEY` and `STUDY_ADMIN_KEY` in Cloudflare Pages secrets and a password manager, never in repository files. Rotate them with `npx wrangler pages secret put <NAME> --project-name glyph-perception-dashboard`.
 
-Serve it with:
+Controlled recognition operations (including required record-preserving migration 0003) and separate production/preview bindings are documented in [Icon-recognition pilot](icon-recognition-pilot.md).
+
+Serve the full local analysis interface with:
 
 ```powershell
 python code/serve_analysis_dashboard.py --port 8765

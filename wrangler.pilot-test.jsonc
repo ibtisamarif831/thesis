@@ -1,0 +1,13 @@
+{
+  "$schema": "./node_modules/wrangler/config-schema.json",
+  "name": "glyph-pilot-local-test",
+  "pages_build_output_dir": "./dist/dashboard",
+  "compatibility_date": "2026-09-18",
+  "d1_databases": [{
+    "binding": "STUDY_SELECTION_DB",
+    "database_name": "glyph-pilot-local-test",
+    "database_id": "00000000-0000-4000-8000-000000000001",
+    "preview_database_id": "STUDY_SELECTION_DB",
+    "migrations_dir": "migrations"
+  }]
+}

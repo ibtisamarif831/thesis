@@ -6,7 +6,7 @@
 
 **Title:** Perception of Glyphs
 
-The supervisor-defined objective is to develop and run user studies that determine when a set of glyphs remains discernible as its display size is reduced. Size reduction is therefore the primary experimental condition, not an optional extension.
+The supervisor-guided direction is to investigate size-dependent identification or discrimination within small, coherent icon sets. Size is central; the exact task definition, final protocol and useful research outcome remain open decisions in the [meeting evidence](meeting-decisions-and-status.md).
 
 The computational work supports that objective by organizing literature-grounded visual properties into measurable feature families. Those measurements help select controlled glyph sets and explain why particular glyphs remain distinguishable or become confused at smaller sizes.
 
@@ -15,7 +15,7 @@ The intended comparison has two sides:
 1. **Computer side:** values derived from visible pixels, summarized through literature-mapped visual families and pairwise distances to support stimulus selection and interpretation.
 2. **Human side:** identification and discrimination across decreasing pixel sizes, with accuracy, confusion, confidence, and response time as candidate outcomes.
 
-The final analysis should estimate the smallest size at which each glyph set remains reliably discernible, then explain which visible families predict that threshold, where they do not, and what non-visual factors may explain the remaining difference.
+A candidate final analysis would estimate size-dependent performance or thresholds under an approved rule, then test associations with the measured families and limits of generalization. Study-grounded design guidance is a bounded intended outcome; a universal predictive measure is not guaranteed. The existing usability prototype's chosen size does not estimate such a threshold.
 
 ## What This Repository Is
 
@@ -27,7 +27,8 @@ This is an empirical and computational thesis workspace. It contains:
 - literature-mapped active visual families;
 - similarity, clustering, feature-review, and dashboard tooling;
 - literature PDFs, extracted text, and mapping notes;
-- a planned evaluation and human-study layer.
+- internal research-group nominations and an implemented recognition usability prototype;
+- a planned final evaluation and human-computer comparison layer.
 
 It is not primarily a generic icon library, semantic image-understanding system, or clustering demonstration.
 
@@ -86,7 +87,7 @@ See [Evaluation and human study](evaluation-and-human-study.md) for proposed mea
 
 Completed work includes dataset assembly, full-corpus normalization and feature extraction, active-family correction, similarity preprocessing on the earlier pilot, dashboard feature views, literature extraction, and evaluation-layer documentation.
 
-The main missing thesis layer is the size-controlled human study and the statistical join between participant responses and computer-side scores. The size conditions, final stimulus sets, study protocol, response schema, and threshold-analysis scripts remain in the active backlog.
+The main missing thesis layer is the size-controlled human study and the statistical join between participant responses and computer-side scores. The final size conditions, consensus stimuli, approved research protocol, final response/analysis specification and threshold-analysis scripts remain in the active backlog. Usability sessions and private exports are implemented, but production has only synthetic verification records.
 
 Authoritative status files:
 

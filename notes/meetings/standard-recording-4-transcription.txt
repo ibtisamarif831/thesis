@@ -1,0 +1,728 @@
+=== PDF page 1 ===
+Standard recording 4 - Transcription
+Speaker 1 00:00
+
+Understood the icon that is also in the small ones. But because I knew like the conﬁguration, where should white parts be? I mean,
+
+I used this ah skillset, not the skill set, the icon set,
+
+
+
+Speaker 1 00:15
+
+where there's like background and there's medical ﬁgures on top of it. And there, I often simply looked at whether white space sh
+
+ould be somewhere like more on the bottom or the top or more the center,
+
+
+
+Speaker 1 00:31
+
+and could identify it this way.
+
+
+
+Speaker 1 00:36
+
+The question is whether this is what we want to test, but that's actually the the goal to say a given and I can set.
+
+
+
+Speaker 1 00:50
+
+Is it really that we want.
+
+
+
+Speaker 2 00:55
+
+Because I don't know what I was thinking because this thing also happened with me. I ran into small trial myself. And icons that ar
+
+e like, for example,
+
+
+
+Speaker 2 01:08
+
+there was a parking symbol which is kind of straightforward and it was fast to pick the scaling size. And then there was another i
+
+con which had three different components. And that one took me more scaling. Uh huh.
+
+
+
+Speaker 2 01:26
+
+So II was thinking like, yeah, we'll have ah data. Ah all the conﬁdence score and all that. What if we can from the eye can see like w
+
+hat'sThe average scaling or something at which participants have the their dataOn?
+
+
+
+Speaker 2 01:46
+
+And then maybe we can explore ah their feature families and features for the icons, because we already have them calculated and
+
+=== PDF page 2 ===
+might see some kind of correlation,
+
+
+
+Speaker 2 01:59
+
+um like which factors made made the icon look you know take take more time or take more scaling something like this. But it's ju
+
+st a rough idea, because also for the ah currently it's using just CSS pixels. And I checked,
+
+
+
+Speaker 2 02:16
+
+there is no like veriﬁed view of calibrating your you know screen screen size. So everything is same. On the whole, everyParticipan
+
+t screen, it's going to change with the resolution, ofCourse.
+
+
+
+Speaker 2 02:32
+
+And so the doing the exact size thing might be hard because there's one way you can have a credit card on the screen and then cal
+
+ibrate that. But it's you know from the designer S perspective as well. it's kind of um constraint,
+
+
+
+Speaker 2 02:53
+
+big constraint, I think like it's kind of hacky way. But deﬁnitely that was I was thinking, you know maybe we can have the pilot stud
+
+y maybe and try to see the data of the icons, features, values,
+
+
+
+Speaker 2 03:12
+
+maybe that might give us some inside, but yes, I'm not sure it's gonna work that wayOr otherwise we can change the study asWell
+
+.
+
+
+
+Speaker 1 03:25
+
+Yeah.
+
+
+
+Speaker 1 03:28
+
+I think it might be better to not have like about twenty at the same time if we say we reduce this to a line of ﬁve, but if I can, um an
+
+d maybe even I mean, those twenty ah twenty trials are not that much.
+
+
+
+Speaker 1 03:45
+
+So we we could increase the the number of trials have only ﬁve at the same time compared to the one icon that we currently have.
+
+Um and it's only twenty.
+
+=== PDF page 3 ===
+Speaker 1 04:01
+
+Or yeah, I mean the selection, we, we can use the, ah for a selection mechanism. Um, your, um.
+
+
+
+Speaker 1 04:10
+
+Metrics already. So let's say we have some where the metrics are very similar and some where the metrics are very different.
+
+
+
+Speaker 1 04:19
+
+Well, because that's also what we want to ﬁnd out about um.
+
+
+
+Speaker 1 04:27
+
+So if we only show ﬁve, then we can have more iterations, because in principle, um one has only to decide among those ﬁve which
+
+one it is.
+
+
+
+Speaker 1 04:42
+
+And it it makes each trial so much faster.
+
+
+
+Speaker 1 04:47
+
+And you don't have to set too, too too much.
+
+
+
+Speaker 2 04:50
+
+Um and what else?
+
+
+
+Speaker 1 04:53
+
+Yeah, please. What I also found is that I didn't scale too much.
+
+
+
+Speaker 1 05:00
+
+So with four, it was almost never identiﬁable. And and so it was always between like six pixels. And I think from the statistics that I
+
+saw in your and your program, it was at late at most fourteen.
+
+
+
+Speaker 1 05:17
+
+=== PDF page 4 ===
+So it would also be viable to and not let the user choose but to have this as a variable and like iterate them through. So that one is
+
+possible, one possibly, or there is the possibility to ﬁnd out at which rate it actually is,
+
+
+
+Speaker 1 05:36
+
+because with one trial it might be too few data to actually get any reliableInformation.
+
+
+
+Speaker 1 05:47
+
+So that might also be a possibility so that it's really for each child only. The question, is it one, two, three or ﬁve? And you don't hav
+
+e to ﬁddle with the um with some kind of controls because it takes time. it's simply for the sake of time and making the the um ta
+
+sk as simple as possible.
+
+
+
+Speaker 2 06:14
+
+Yeah because it's going to be hundred icons in the ﬁnal study. So hundred, like you can say maybe thirty, forty minutes per person t
+
+oo much.
+
+
+
+Speaker 1 06:23
+
+Yeah, deﬁnitely, deﬁnitely.
+
+
+
+Speaker 1 06:28
+
+Um we had it was always two pixels. So if it was like, let's have a look at your football again. Um that don't have it open, but it's her
+
+e anywhere. Discord.
+
+
+
+Speaker 2 06:48
+
+I can also share my screen as well.
+
+
+
+Speaker 1 06:50
+
+Or you can share your screen even better.
+
+
+
+Speaker 2 06:52
+
+Can you give me the presentation rights? Yep.
+
+
+
+Speaker 2 07:04
+
+=== PDF page 5 ===
+So.
+
+
+
+Speaker 2 07:10
+
+So let's say we create pilot for this one. Yeah, it's four, four, two, two pixel increments.
+
+
+
+Speaker 1 07:21
+
+Um it would be between six and fourteen would be ﬁve sizes. So if we have like twenty icons, ﬁve sizes, um a hundred trials already
+
+, that would be, I think that would be ﬁne because each trial is about, I don't know,
+
+
+
+Speaker 1 07:40
+
+two or three seconds. it won't be so much. I mean, Plus I look at the one I can I think there actually it doesn't have to be three sec
+
+onds. it could be. it could be less than that.
+
+
+
+Speaker 2 07:58
+
+So maybe two seconds or two.
+
+
+
+Speaker 1 08:01
+
+Yeah, two or one and a half would, I think would suﬃce because it's not usually it's not that complex.
+
+
+
+Speaker 1 08:10
+
+Yeah then you look at that you have like a second perhaps to to for you. So for the decision, and then um they get the one and that'
+
+s it.
+
+
+
+Speaker 1 08:23
+
+Think it could be ready really quick.
+
+
+
+Speaker 2 08:28
+
+So then we'll have ah one point ﬁve second and then line    。
+
+Speaker 1 08:35
+
+Of ﬁve. So just one line of ﬁve with this one icon as one, two icons or perhaps yeah yeah two icons that are similar regarding the m
+
+etrics that we had already about these and two that are dissimilar, a larger threshold.
+
+=== PDF page 6 ===
+Speaker 1 08:55
+
+And we do this like for yeah for this twenty Plus each of these ranges, so six to to fourteen. And then I think that that's something
+
+that we can deﬁnitely try and I think that might help. And we actually have the a good estimation of the threshold, of the pixel thres
+
+hold, I think.
+
+
+
+Speaker 2 09:22
+
+Because professor foolish mentioned that the direction, it it would be nice to have something you know for the from the designer'
+
+s perspective. So I'm also not thinking in this this site more so. Yeah, I think.
+
+
+
+Speaker 2 09:42
+
+Yeah we'll have some some more ideas.
+
+
+
+Speaker 1 09:46
+
+Um yeah so we need some kind of yeah the the goal is some kind of guideline as to how icons and when an icon set should be co
+
+nstructed.
+
+
+
+Speaker 1 10:03
+
+The the problem that I have with that is that the design space is so huge. Like if it's a normal visualization, it's rather easy. You hav
+
+e perhaps a bar chart and you compare this to a rose chart,
+
+
+
+Speaker 1 10:16
+
+and then there is a clear recommendation you can do. But um perhaps some tweaks for the for the rose chart so that you have lik
+
+e there the guideline, if you want to use those charts, then do this. And that is, but for icons,
+
+
+
+Speaker 1 10:30
+
+yeah  。
+
+Speaker 2 10:31
+
+It's so opening knitted. Like。
+
+Speaker 2 10:34
+
+=== PDF page 7 ===
+I don't know   。
+
+Speaker 1 10:36
+
+But maybe we can we can paint it.
+
+
+
+Speaker 2 10:39
+
+Like you know it's visual visual design, sorry. Visualization or computer vision. Um opinion backed guidelines, you know something
+
+like this instead of designers own opinion because it's all opinionated anyway we ﬁnd.
+
+
+
+Speaker 1 10:56
+
+And yeah, I mean, what we can ﬁnd, and I guess we will ﬁnd a ﬁeld search for it, is that it's less complex. So with less components,
+
+it's easier to distinguish than with more components. But that that thing, I can already see more conﬁdence.
+
+
+
+Speaker 2 11:15
+
+My brain goes wash. I'm like, which one was it?
+
+
+
+Speaker 1 11:21
+
+That's true. Yeah so this is something that we can deﬁnitively ah see. Perhaps we can also see this correlation that I think profess
+
+or polish also mentioned, um since that was like one of the hypotheses we had in the other study,
+
+
+
+Speaker 1 11:41
+
+so that we can distinguish certain shapes or that yeah yeah that we can group elements that are so have certain shapes. So if it's
+
+more elongated,
+
+
+
+Speaker 1 11:53
+
+then these will be rather confused with other things that are elongated than things that are more round or um very compact. Um
+
+but IMean, yeah that's also something that common sense tells us,Right?
+
+
+
+Speaker 1 12:11
+
+Um so yeah perhaps we can ﬁnd something that, yeah but it's also but it's also more common sense. Things use different kind of
+
+shapes.
+
+=== PDF page 8 ===
+Speaker 1 12:30
+
+You're right.
+
+
+
+Speaker 1 12:34
+
+To make them more distinguishable? No.
+
+
+
+Speaker 1 12:43
+
+Yeah perhaps we can ﬁnd something between those with a black background versus those with a white background, whether ther
+
+e is a difference that might be interesting, an interesting ﬁnding.
+
+
+
+Speaker 1 12:57
+
+There might be something, and perhaps also the more abstract ones versus the ones with more meaning. So things where you rea
+
+lly can see what it's about, but that these are more easily to distinguish than those where it's really only abstracts.
+
+
+
+Speaker 1 13:18
+
+That might be also something that we can ﬁnd.
+
+
+
+Speaker 2 13:23
+
+So things I will change. Five grid icons start from pixel number six and till fourteen. Um reduce the time. Yeah mainly these things.
+
+And then, and also   。
+
+Speaker 1 13:43
+
+Ah what you could what you could think about yeah press you so        。
+
+Speaker 2 13:48
+
+One more thing. Ah so currently we're making ah pilot study force is is a trial one. We mean pilot study from each single dataset. S
+
+o this ﬁve one should also be the same right? From one that I said, create one pilot, study ﬁve icons, line thing and randomize them
+
+between twenty. Okay?
+
+
+
+Speaker 1 14:10
+
+Yeah, I would like that. And one thing that I would ask you to do also because that might um so help or might simplify things for s
+
+ome people at least, and is if you allow a keyboard input, so that if we have those ﬁve icons,
+
+=== PDF page 9 ===
+Speaker 1 14:27
+
+and then the numbers from one to ﬁve um are mapped to the icons. So if I press one, then I mean item number one. So it might al
+
+so yeah simplify your input and make things faster. All the participants. Okay.
+
+
+
+Speaker 2 14:43
+
+And um the icons appearing. Um so ﬁve icons trials will be twenty, right? Still twenty trials and the size is ah no more control butto
+
+ns.
+
+
+
+Speaker 1 15:00
+
+To increase the size。
+
+Speaker 2 15:03
+
+No and no increase of size, we set the size. And so in total it would be a hundred trials for one.
+
+
+
+Speaker 3 15:11
+
+Looks like each 。
+
+Speaker 2 15:12
+
+Icon will be shown once for each size. So as with twenty, yeah. So each icon will be shown ﬁve times. One for for one time for each
+
+job.
+
+
+
+Speaker 1 15:25
+
+Should we be all random or stage one with smaller size and stage two     。
+
+Speaker 3 15:30
+
+Stage three I would randomize.
+
+
+
+Speaker 2 15:45
+
+What we can also try to ﬁnd out, though I'm not a hundred percent sure whether that.
+
+
+
+Speaker 2 15:57
+
+=== PDF page 10 ===
+Makes such so much of a difference, but it might be they can also talk to   。
+
+Speaker 3 16:02
+
+Patrick and and professor forge about this.
+
+
+
+Speaker 2 16:05
+
+First is there might be also difference whether one knows the icon set or not. But if you're familiar with an icon set, you know what
+
+to look for.
+
+
+
+Speaker 2 16:17
+
+If it, yeah. So um the question is whether we ﬁrst want to have the user have a look at all of the icons that are there so that he kno
+
+ws which icons are there or we deliberately don't.
+
+
+
+Speaker 3 16:33
+
+So that it's really。
+
+Speaker 2 16:37
+
+                             。
+At least at ﬁrst a real search
+
+
+
+Speaker 1 16:40
+
+Because if we think about it, kind of makes sense to have the user you know some kind of a familiarity, because if someone is do
+
+wnloading a dataset or icon set, he will probably know what to look for. Like he he knows the domain maybe or he he has some ki
+
+nd of knowledge.
+
+
+
+Speaker 3 17:00
+
+Deﬁnitely. Yeah.
+
+
+
+Speaker 4 17:01
+
+But maybe you    。
+
+Speaker 1 17:02
+
+Can discuss it with more but patrick and then yeah, we can add this stuff as well.
+
+=== PDF page 11 ===
+Speaker 3 17:08
+
+Yeah 。
+
+Speaker 2 17:09
+
+That might also be like something that we could try    。
+
+Speaker 3 17:11
+
+Like against each other. So yeah.
+
+
+
+Speaker 2 17:17
+
+We show them, and for another child we don't.
+
+
+
+Speaker 3 17:20
+
+Um so that would also be a possibility   。
+
+Speaker 2 17:25
+
+How much difference it makes to know that I can set.
+
+
+
+Speaker 3 17:35
+
+                                          。
+Okay, cool. We're really, really nice. Yeah
+
+
+
+Speaker 2 17:38
+
+                                                                                  。
+I'm looking forward to it. it was it was already already pretty cool. But it's like
+
+
+
+Speaker 3 17:44
+
+Yeah 。
+
+Speaker 2 17:44
+
+It takes too much time for each trial.
+
+=== PDF page 12 ===
+Speaker 3 17:47
+
+There's also   。
+
+Speaker 1 17:48
+
+The keyboard one is really good keyboard thing we can label one, two, three, four, click, click, click. it's gonna be make things faste
+
+r.
+
+
+
+Speaker 3 17:57
+
+Yeah, I think so. I hope so. Perfect.
+
+
+
+Speaker 2 18:01
+
+                                                              。
+It might also like increase the the errors. Of course, that one
+
+
+
+Speaker 3 18:05
+
+It's too quick somewhere where he doesn't want to. But yeah       。
+
+Speaker 2 18:11
+
+It's it's worth a try. Deﬁnitely.
+
+
+
+Speaker 3 18:12
+
+Okay, perfect. Thank you.
+
+
+
+Speaker 1 18:16
+
+Thank you. Then we see each other next week. But I will I will probably post things thursday  。
+
+Speaker 3 18:22
+
+Friday maximum perfect. Yeah. Then I can also already have    。
+
+Speaker 2 18:27
+
+A look and give comments.
+
+=== PDF page 13 ===
+Speaker 3 18:28
+
+                                                          。
+Yeah, perfect. Thank you a lot. Good. Then the next tuesday

@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <link rel="icon" href="data:,">
+  <title>Pilot Studio · Icon Recognition</title>
+  <link rel="stylesheet" href="study-selection.css">
+  <style>
+    .studio { max-width:900px; margin:36px auto; }
+    .studio h1 { font-size:32px; margin:12px 0; }
+    .studio .intro { color:var(--muted); font-size:17px; max-width:660px; }
+    .studio-actions { display:flex; flex-wrap:wrap; gap:12px; margin:26px 0 32px; }
+    .studio-actions a { padding:12px 18px; border-radius:7px; font-weight:650; text-decoration:none; background:var(--accent); color:white; }
+    .studio-actions a.secondary { color:var(--accent); background:white; border:1px solid var(--border); }
+    .studio section { background:white; border:1px solid var(--border); border-radius:12px; padding:24px; margin:18px 0; }
+    .studio h2 { margin:0 0 12px; font-size:20px; }
+    .studio li { padding:5px 0; }
+    .studio p:last-child { margin-bottom:0; }
+    .studio a:focus-visible { outline:3px solid #a5b9e1; outline-offset:4px; }
+  </style>
+</head>
+<body>
+  <main class="studio">
+    <a href="index.html" class="back-link">← Analysis dashboard</a>
+    <h1>Pilot Studio</h1>
+    <p class="intro">Create and manage desktop icon-recognition pilots from saved reviewer selections.</p>
+    <nav class="studio-actions" aria-label="Pilot Studio navigation">
+      <a href="study-selection.html?view=pilots">Open pilot administration</a>
+      <a href="study-selection.html?view=results" class="secondary">Submitted icon sets</a>
+      <a href="study-selection.html" class="secondary">Select study icons</a>
+    </nav>
+    <section aria-labelledby="workflow-heading">
+      <h2 id="workflow-heading">Set up a pilot</h2>
+      <ol>
+        <li>Open <strong>Submitted icon sets</strong>, enter your private results access key, and select <strong>Refresh results</strong>.</li>
+        <li>Choose a saved reviewer dataset with exactly 20 icons and select <strong>Create pilot</strong>.</li>
+        <li>Review the icons, name the pilot, and review the fixed sizes (6, 8, 10, 12 and 14 pixels).</li>
+        <li>Use <strong>Copy participant link</strong> to share the invitation. Use the separate <strong>Pilot results</strong> tab to view results, export responses, close the pilot, or delete a closed pilot and its results.</li>
+      </ol>
+    </section>
+    <section aria-labelledby="participants-heading">
+      <h2 id="participants-heading">Taking part</h2>
+      <p>Participants open the invitation provided by the study administrator on a desktop or laptop. Each session includes three practice trials, 100 randomized recorded trials, and optional reflections. A target appears for 1.5 seconds, followed by five numbered options at an assigned size. Participants answer using keys 1–5 or the mouse.</p>
+      <p>This pilot checks task design and usability. Its results do not establish validation of the seven computational features.</p>
+    </section>
+  </main>
+</body>
+</html>

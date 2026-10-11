@@ -35,6 +35,7 @@ Boundary for future work:
 | Query type | Start here | Then check |
 |---|---|---|
 | Full repository orientation and workflows | `wiki/README.md` | Relevant topic page, then the linked script/artifact |
+| Original large meeting, agreed homework, current nomination/pilot evidence | `wiki/meeting-decisions-and-status.md` | `notes/meetings/standard-recording-2-transcription.pdf` and adjacent page-marked text |
 | Thesis framing, research questions, current progress | `THESIS_STATUS.md`, `agent.md`, `THESIS_CHECKLIST.md` | `tasks/current-thesis-next-steps.md`, `papers/` |
 | Thesis/Overleaf document writing | `THESIS_DOCUMENT_HANDOFF.md`, `.codex/skills/thesis-writing/SKILL.md` | Separate nested repository `6a8416f0e3507a1361793e2c/` |
 | Which icon sets exist locally | `icon_data/MANIFEST.md` | `icon_data/iconsets/README.md`, `data/10 icons.md` |
@@ -45,6 +46,7 @@ Boundary for future work:
 | Current thesis presentation and review record | `wiki/progress-presentation.md` | Live Google Slides `Progress Presentation`; local PPTX files may predate native edits |
 | Visual feature extraction | `code/extract_icon_features.py` | `icon_data/analysis/features.csv`, `features_metadata.json`, `feature_failures.json` |
 | Similarity / nearest-neighbor analysis | `code/compute_icon_similarity.py` | `icon_data/analysis/similarity/` |
+| Recognition usability pilot, invitations, participant data, D1 deployment | `wiki/icon-recognition-pilot.md` | `web/pilot/`, `functions/api/pilot*.js`, migration `0002` and record-preserving attempt-table migration `0003`; never rerun the destructive catalog seed during deployment |
 | Thesis evaluation layers | `code/evaluation/evaluation_layers.md` | `tasks/current-thesis-next-steps.md`, `THESIS_STATUS.md` |
 | Feature visual reports | `code/visualize_icon_features.py` | `icon_data/analysis/visualizations/` if present |
 | Metadata enrichment for clustering | `code/build_clustering_metadata_sample.py` | `icon_data/analysis/clustering_metadata_sample.csv`, `clustering_metadata_missing_report.json` |
@@ -65,11 +67,11 @@ Boundary for future work:
 - Current dataset size: **28,749** canonical rows in `dataset.csv`.
 - Normalized PNGs are generated under `icon_data/normalized_256/`; this directory is large/generated and may be ignored by git.
 - Canonical dataset metadata contains non-ASCII labels; keep JSON/CSV reads and writes explicitly UTF-8. Serialize repository-relative paths with POSIX `/` separators before hashing so `icon_id` values remain stable across Windows and macOS/Linux.
-- Current visual-feature corpus: **28,749** rows in `icon_data/analysis/features.csv`, with **110 raw numeric image-feature columns** plus 23 metadata columns under feature schema v2. Thesis analysis uses **seven representative measurements**, one per literature-informed family. The other extractor columns remain only for traceability and reproducibility. The two-rater release gate is still pending, so the pilot is blocked.
+- Current visual-feature corpus: **28,749** rows in `icon_data/analysis/features.csv`, with **110 raw numeric image-feature columns** plus 23 metadata columns under feature schema v2. Thesis analysis uses **seven representative measurements**, one per literature-informed family. The other extractor columns remain only for traceability and reproducibility. The two-rater feature-validation release gate is still pending; the separate recognition usability prototype does not satisfy it.
 - Current feature extraction failures: `[]` in `icon_data/analysis/feature_failures.json`.
 - Current Feature Groups Complexity representative: `canny_edge_density`. Grayscale quadtree variability remains in the raw export for traceability but is not part of thesis analysis after cross-source visual-audit failures.
 - The interactive dashboard is generated under `icon_data/analysis/analysis_dashboard/`.
-- The deployable edition is generated under ignored `dist/dashboard/`; it contains only the five scoped sets, keeps AI/provider execution disabled, and must be rebuilt before upload to `https://glyph-perception-dashboard.pages.dev/`. Its separate access-controlled Study Icon Selection workflow stores pseudonymous 5 × 20 internal reviewer nominations in EU-jurisdiction D1; do not call these participant responses.
+- The deployable edition is generated under ignored `dist/dashboard/`; it contains only the five scoped sets, keeps AI/provider execution disabled, and must be rebuilt before upload to `https://glyph-perception-dashboard.pages.dev/`. Its separate access-controlled Study Icon Selection workflow uses a compact dataset dropdown, synchronized full-width Grid and per-set seven-feature PCA Smart map views, and a review/submission dialog. It stores pseudonymous reviewer nominations with 1–100 total icons and at most 20 per source set in EU-jurisdiction D1, and provides screenshot export, an admin-key-protected Submissions tab with guarded submission deletion, a separate Pilot results tab with guarded deletion of closed pilots and their sessions/responses, and CSV export; do not call these participant responses or the feature map an AI embedding.
 - Current dashboard source scope: **5 sets / 649 canonical icons** — AIGA/DOT Symbol Signs, OCHA Humanitarian Icons, Universal Symbols Healthcare Webfont, ISO 7010 Safety Signs, and ISO 15223 Medical Device Symbols. The canonical 13-set corpus is unchanged.
 - Current generated Metadata/Combined dashboard sample: **50** rows in `icon_data/analysis/analysis_dashboard/dashboard_data.json`, up to 10 random icons from each included set using fixed `RANDOM_SEED = 42`.
 - Feature Groups and Image/AI Clustering draw from **397 quality-eligible rows** within those five sets; 252 of their 649 feature rows are excluded for uncertain foreground masks. Feature Review correlation data and Feature Values use all 649 selected-source feature rows.
@@ -80,14 +82,14 @@ Boundary for future work:
   - k/cut values 3, 5, 7, and 10;
   - a Color By selector for cluster, set, or numeric image feature, although the current image-overlay renderer does not visibly apply the selected color;
   - filtering by icon set;
-  - a collapsible left Clustering controls sidebar and compact right-side cluster information: **Show heatmap** plus one entry per assigned cluster; each cluster entry opens a dedicated fullscreen modal with cluster statistics and a complete seven-representative icon-value table;
+  - a collapsible left Clustering controls sidebar and compact right-side cluster information: one entry per assigned cluster; the former heatmap control is removed; each cluster entry opens a dedicated fullscreen modal with cluster statistics and a complete seven-representative icon-value table;
   - distribution-aware icon inspection in manual and AI plots: hover and clicked-icon detail compare each representative value with the current shared-sample median, middle 50% range, percentile, and min–max position; lasso detail compares the selected-group median with the same shared-sample baseline for all seven representatives;
   - a fullscreen Feature Groups detail workflow with one configured literature-backed representative per family, per-icon values, the average of the shown scores, and All/B/W/Red/Colored cohorts; a reproducible technical-quality gate excludes uncertain masks and any row lacking identity/path or a finite representative, writes `feature_group_quality_audit.json`, and keeps valid low/zero values; configured defaults divide each eligible representative-value range into 10 equal-width bins and randomly draw up to two icons per bin, flag low-information cohorts, sort low-to-high by the representative value, and can be refreshed with **Randomize icons**; Image and AI Clustering use the unique composite of all seven family samples, up to 140 icons for All, and Randomize replaces only the active family's contribution; selecting exactly three current-sample icons opens a separate fullscreen comparison modal across all seven representatives;
   - a Feature Values tab restricted to the seven configured Feature Groups representative features, one per visual family, with searchable low/mean-nearest/high examples and correlation context.
   - a strict seven-feature dashboard allow-list: Feature Groups shows the configured representative for each family as read-only, and Clustering controls, Color-by choices, selected-icon details, Feature Values, retained correlation data, and browser payloads expose only those seven representatives. Other raw extractor columns are retained for reproducibility and are not an alternate thesis analysis profile.
   - explicit OpenRouter image-embedding clustering for the exact shared family/cohort sample, with side-by-side plots, agreement metrics, hash-keyed embedding cache, and saved run history. The server-only default model is `voyageai/voyage-multimodal-3.5`.
-  - manual-style AI Clustering inspection with synchronized method/k controls, a collapsible analysis sidebar, selected-icon seven-feature detail, modal heatmap/per-cluster details, and a post-hoc seven-feature between-cluster separation ranking; every AI cluster opens the same statistics-and-icon-value table used by Image Clustering. The paired feature-vs-AI plots and agreement cross-table open from a dedicated fullscreen comparison button. The ranking is descriptive and must not be called model attribution because image embeddings receive pixels only.
-  - interpretable cluster profiles in both Image and AI Clustering: neutral high/low labels, signed-z heatmaps, size-weighted between-cluster variance contribution, and size-independent separation strength. Manual metrics use selected feature space directly; AI reports actual full-embedding metrics separately from post-hoc seven-feature metrics. Old saved AI runs are enriched from hash-matched cached embeddings without provider calls or database writes.
+  - manual-style AI Clustering inspection with synchronized method/k controls, a collapsible analysis sidebar, selected-icon seven-feature detail, per-cluster feature statistics, and a post-hoc seven-feature between-cluster separation ranking; every AI cluster opens the same statistics-and-icon-value table used by Image Clustering. The paired feature-vs-AI plots and agreement cross-table open from a dedicated fullscreen comparison button. The ranking is descriptive and must not be called model attribution because image embeddings receive pixels only.
+  - interpretable cluster profiles in both Image and AI Clustering: neutral high/low labels, signed standardized feature differences in cluster tables, size-weighted between-cluster variance contribution, and size-independent separation strength. Manual metrics use selected feature space directly; AI reports actual full-embedding metrics separately from post-hoc seven-feature metrics. Old saved AI runs are enriched from hash-matched cached embeddings without provider calls or database writes.
   - expanded cluster statistics in both modes: full-cluster/sample/filter-visible icon counts and set composition, plus raw per-feature `N`, mean, median, population standard deviation, minimum, maximum, overall mean, and signed standardized difference. Manual Image uses its selected features; AI always profiles the seven current representatives post hoc. Metadata/Combined expose icon statistics only.
   - one shared 5.5%-of-axis-span image scale for manual Image, primary AI, and modal feature-versus-AI plots, keeping icon density visually comparable across clustering views.
 - Existing similarity outputs in `icon_data/analysis/similarity/` remain based on the earlier 1,038-row pilot. Do not run the current quadratic pairwise implementation directly on all 28,749 rows without a scalable rewrite.
@@ -111,7 +113,7 @@ python code/extract_icon_features.py --workers 12 --executor process
 python code/compute_icon_similarity.py
 ```
 
-The verified Windows Python has NumPy/Pandas/Pillow and pytest, but currently lacks `pdfplumber`. Matplotlib and OpenCV remain optional for selected workflows. Current similarity, dashboard, and PCA helpers do not require `sklearn`. `code/visualize_icon_features.py` writes a summary-only report if `matplotlib` is missing. See `wiki/commands-and-scripts.md` and `wiki/verification-and-troubleshooting.md` for current commands and dependency notes.
+An earlier Windows runtime check found NumPy/Pandas/Pillow and pytest but lacked `pdfplumber`; do not treat that snapshot as the current macOS environment. Matplotlib and OpenCV remain optional for selected workflows. Current similarity, dashboard, and PCA helpers do not require `sklearn`. `code/visualize_icon_features.py` writes a summary-only report if `matplotlib` is missing. See `wiki/commands-and-scripts.md` and `wiki/verification-and-troubleshooting.md` for current commands and dependency notes.
 
 For full dashboard verification, including the local API:
 
@@ -330,7 +332,7 @@ Core research questions:
 4. Which feature families most influence perceived distinguishability, similarity, or confusability between glyphs?
 5. How should semantic meaning, familiarity, and cultural/historical knowledge be separated from computable visual features in the analysis?
 
-Avoid broad claims that the pipeline fully measures perception or semantic understanding. The current repo supports literature-backed visual feature extraction, feature-family organization, similarity/confusability reports, and dashboard exploration. Human-study data collection and statistical comparison against those computed scores still need to be added.
+Avoid broad claims that the pipeline fully measures perception or semantic understanding. The current repo supports literature-backed visual feature extraction, feature-family organization, similarity/confusability reports, and dashboard exploration. Recognition usability collection/storage and private exports are implemented, with only synthetic production verification. Research participant collection and statistical comparison still remain.
 
 ## Known Gaps And Missing Pieces
 
@@ -345,7 +347,8 @@ Current important gaps:
 - The dashboard has no dendrogram visualization; hierarchical clustering is exposed as precomputed cuts/labels.
 - The dashboard Color By control is not currently applied to the visible icon-image overlays.
 - The current dashboard filters only by icon set; older documentation that mentions category/style filters is stale.
-- The dashboard is a computational visualization only; it does not include quantitative human-study results yet.
+- The analysis dashboard is computational; separate usability response summaries exist, but there are no research participant results or completed human-computer comparisons.
+- On 2026-09-29, supervisor-associated nominations contain 100 and 80 icons; `ibtisam` has a separately documented 100-icon computational nomination. Compare these and record consensus rather than treating submissions as final stimuli. The preserved meeting transcript leaves operational identification and result interpretation unresolved.
 - `icon_data/iconsets/README.md` is older and incomplete compared with `icon_data/MANIFEST.md`; prefer the manifest.
 - `tasks/current-thesis-next-steps.md` is the current task tracker; old weekly plans were removed because they contradicted the current thesis direction.
 
@@ -395,3 +398,7 @@ Check working tree before editing:
 ```bash
 git status --short
 ```
+
+## Controlled pilot routing update — 2026-10-11
+
+Only `icon-recognition-controlled-v2` is runnable: five options, assigned 6/8/10/12/14 CSS px, 1.5-second large target, three practice + 100 recorded trials. Apply migration 0003 before serving it; old invitations return 410 and historical records remain exportable. The current local source is newer than the historical production snapshots. See `wiki/icon-recognition-pilot.md`.

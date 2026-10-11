@@ -1,0 +1,20 @@
+{
+  "status": "submitted_verified_in_production",
+  "submission_id": "866d8245-c24a-40ec-addd-3537a256d701",
+  "reviewer_code": "ibtisam",
+  "created_at": "2026-09-28T22:58:28.739Z",
+  "selected_icon_count": 100,
+  "submission_sha256": "26b99d9351ceacdc304fa496e72d823a66f2ad2f30cc4013e488c54ac6d5771d",
+  "verified_at": "2026-09-28T23:15:30.514858+00:00",
+  "verified_per_set_counts": {
+    "02_aiga_dot_symbol_signs": 20,
+    "04_ocha_humanitarian_icons": 20,
+    "09_universal_symbols_healthcare_webfont": 20,
+    "11_iso_7010_safety_signs": 20,
+    "12_iso_15223_medical_device_symbols": 20
+  },
+  "existing_submission_records_unchanged": true,
+  "submission_route": "Authenticated Wrangler administrative D1 import",
+  "previous_reviewer_code": "researcher-assisted",
+  "updated_at": "2026-09-28T23:14:54.825Z"
+}

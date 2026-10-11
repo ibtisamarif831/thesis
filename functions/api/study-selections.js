@@ -24,11 +24,13 @@ function sameOrigin(request) {
 function validSelections(value) {
   if (!value || typeof value !== "object" || Array.isArray(value)) return false;
   if (Object.keys(value).sort().join("|") !== [...REQUIRED_SETS].sort().join("|")) return false;
-  return REQUIRED_SETS.every((setId) => {
+  const validSets = REQUIRED_SETS.every((setId) => {
     const ids = value[setId];
-    return Array.isArray(ids) && ids.length === 20 && new Set(ids).size === 20
+    return Array.isArray(ids) && ids.length <= 20 && new Set(ids).size === ids.length
       && ids.every((id) => typeof id === "string" && id.length >= 12 && id.length <= 100);
   });
+  const ids = REQUIRED_SETS.flatMap((setId) => value[setId] || []);
+  return validSets && ids.length >= 1 && ids.length <= 100 && new Set(ids).size === ids.length;
 }
 
 async function validateCatalog(db, selections) {
@@ -46,7 +48,7 @@ async function validateCatalog(db, selections) {
     ).bind(...chunk).all();
     for (const row of result.results || []) found.set(row.icon_id, row.set_id);
   }
-  return ids.length === 100 && ids.every((id) => found.get(id) === expected.get(id));
+  return ids.length >= 1 && ids.length <= 100 && ids.every((id) => found.get(id) === expected.get(id));
 }
 
 function selectionInsert(db, submissionId, rows) {
@@ -73,13 +75,11 @@ export async function onRequestPost(context) {
     return json({ error: "Invalid JSON request." }, 400);
   }
   const reviewerCode = String(payload.reviewer_code || "").trim().toLowerCase();
-  const rationale = String(payload.rationale || "").trim();
   if (!/^[a-z0-9][a-z0-9_-]{2,39}$/.test(reviewerCode)) {
     return json({ error: "Use a 3-40 character anonymous reviewer code containing letters, numbers, hyphens, or underscores." }, 400);
   }
-  if (rationale.length > 2000) return json({ error: "Rationale must be 2,000 characters or fewer." }, 400);
-  if (payload.selection_version !== "five-sets-20-v1" || !validSelections(payload.selections)) {
-    return json({ error: "Select exactly 20 unique icons from each of the five datasets." }, 400);
+  if (payload.selection_version !== "five-sets-up-to-20-v2" || !validSelections(payload.selections)) {
+    return json({ error: "Select at least one icon, with no more than 20 unique icons from any dataset." }, 400);
   }
   if (!(await validateCatalog(env.STUDY_SELECTION_DB, payload.selections))) {
     return json({ error: "One or more selected icons are not in the approved five-dataset catalog." }, 400);
@@ -92,8 +92,8 @@ export async function onRequestPost(context) {
   const now = new Date().toISOString();
   const statements = [
     env.STUDY_SELECTION_DB.prepare(
-      "INSERT INTO study_submissions (submission_id,reviewer_code,selection_version,rationale,created_at,updated_at) VALUES (?,?,?,?,?,?) ON CONFLICT(reviewer_code) DO UPDATE SET selection_version=excluded.selection_version,rationale=excluded.rationale,updated_at=excluded.updated_at"
-    ).bind(submissionId, reviewerCode, payload.selection_version, rationale, existing?.created_at || now, now),
+      "INSERT INTO study_submissions (submission_id,reviewer_code,selection_version,created_at,updated_at) VALUES (?,?,?,?,?) ON CONFLICT(reviewer_code) DO UPDATE SET selection_version=excluded.selection_version,updated_at=excluded.updated_at"
+    ).bind(submissionId, reviewerCode, payload.selection_version, existing?.created_at || now, now),
     env.STUDY_SELECTION_DB.prepare("DELETE FROM study_selections WHERE submission_id=?").bind(submissionId),
   ];
   const rows = [];
@@ -108,7 +108,7 @@ export async function onRequestPost(context) {
     ok: true,
     submission_id: submissionId,
     reviewer_code: reviewerCode,
-    selected_icon_count: 100,
+    selected_icon_count: rows.length,
     updated_at: now,
     replaced_previous_submission: Boolean(existing),
   });

@@ -9,6 +9,8 @@ The wiki explains the system; it does not replace generated metadata or executab
 | Need | Page |
 |---|---|
 | Understand the thesis and its boundaries | [Thesis overview](thesis-overview.md) |
+| Read the complete meeting evidence and verified current decisions | [Meeting decisions and current state](meeting-decisions-and-status.md) |
+| Review the new meeting and revised pilot action items | [Recording 4 summary and tasks](../notes/meetings/standard-recording-4-summary-and-tasks.md) |
 | Continue the separate LaTeX thesis document | [Thesis document handoff](../THESIS_DOCUMENT_HANDOFF.md) |
 | Use the repository-local thesis-writing skill | [Local thesis-writing skill](../.codex/skills/thesis-writing/SKILL.md) |
 | Find a directory, script, input, or output | [Repository architecture](repository-architecture.md) |
@@ -21,6 +23,7 @@ The wiki explains the system; it does not replace generated metadata or executab
 | Change dashboard generation or its JSON/CSV contract | [Dashboard implementation](dashboard-implementation.md) |
 | Trace claims to the local papers and research notes | [Literature and evidence](literature-and-evidence.md) |
 | Locate the live presentation and its verified claim boundaries | [Progress presentation](progress-presentation.md) |
+| Administer the saved desktop recognition usability pilot | [Icon-recognition pilot](icon-recognition-pilot.md) |
 | Understand the planned human study and comparison | [Evaluation and human study](evaluation-and-human-study.md) |
 | Review the working path from glyph selection to study design | [Current state and user-study plan](../user%20studio/current-state-and-user-study-plan.md) |
 | Find runnable commands and script parameters | [Commands and scripts](commands-and-scripts.md) |
@@ -46,13 +49,14 @@ flowchart LR
     E --> G
     G --> H["Clustering and feature review UI"]
     E --> I["Computer-side study scores"]
-    J["Human responses — planned"] --> K["Human-computer agreement analysis"]
+    U["Recognition usability prototype; synthetic checks"] --> J["Research human responses — pending"]
+    J --> K["Human-computer agreement analysis — pending"]
     I --> K
 ```
 
 ## Current Snapshot
 
-Verified on **2026-09-18** from the current CSV/JSON artifacts and dashboard/public-bundle generators:
+Verified on **2026-09-29** from the current CSV/JSON artifacts and dashboard/public-bundle generators:
 
 | Item | Current value |
 |---|---:|
@@ -73,12 +77,20 @@ Verified on **2026-09-18** from the current CSV/JSON artifacts and dashboard/pub
 | Feature Groups comparison | Exactly 3 selected sample icons; all 7 representative values in a separate fullscreen modal |
 | Generated dashboard rows | 50 for Metadata/Combined projections |
 | Generated dashboard sampling | Up to 10 random icons per included set, seed 42 |
-| Public dashboard | Live at `https://glyph-perception-dashboard.pages.dev/`; 649 normalized images, five source sets, attribution/licenses, read-only AI, and an access-controlled 5 × 20 study-stimulus selection workflow backed by EU-jurisdiction D1 |
-| AI Clustering experiment | Exact shared Feature Groups sample; explicit OpenRouter image-embedding run; inspectable AI plot with collapsible analysis sidebar, descriptive cluster entries, actual embedding-space contribution, modal post-hoc heatmap/per-cluster details, complete seven-value icon tables, modal feature-vs-AI comparison, and tracked SQLite cache/history |
+| Public dashboard | Live at `https://glyph-perception-dashboard.pages.dev/`; 649 normalized images, five source sets, attribution/licenses, read-only AI, and an access-controlled partial study-stimulus selection and separate anonymous recognition usability pilot backed by EU-jurisdiction D1 |
+| AI Clustering experiment | Exact shared Feature Groups sample; explicit OpenRouter image-embedding run; inspectable AI plot with collapsible analysis sidebar, descriptive cluster entries, actual embedding-space contribution, per-cluster feature statistics, complete seven-value icon tables, modal feature-vs-AI comparison, and tracked SQLite cache/history |
 | Dashboard variants | Image, metadata, combined |
 | Dashboard cluster values | 3, 5, 7, 10 |
-| Human-response dataset | Not implemented yet |
-| Stimulus-selection submissions | Implemented for internal reviewers; exactly 20 icons per set, 100 total, with pseudonymous reviewer code and protected CSV export. This is not participant-response collection. |
+| Human-response collection | Recognition usability pilot implemented; synthetic verification only, no research participant dataset or human-computer comparison |
+| Historical deployed recognition protocol (2026-09-29) | 20 frozen same-set icons; 3 practice and 20 recorded trials; 3-second exposure at 128 CSS pixels; immutable configurable enlargement levels; separate private results/exports |
+| Recognition preview isolation | Separate EU D1 and test secrets; production nominations verified independently |
+| Nomination snapshot (2026-09-29 D1 read) | Supervisor-associated entries: 100 and 80; algorithm-assisted `ibtisam`: 100. Smaller `test*` entries: 17 additional rows. Consensus remains pending. |
+| Production usability evidence (2026-09-29 D1 read) | Two closed synthetic smoke-test pilots; one ended synthetic session; one answered practice attempt; zero recorded attempts. |
+| Stimulus-selection submissions | Implemented for internal reviewers; compact dataset dropdown, full-width synchronized Grid and per-set seven-feature PCA Smart map, modal review/submission, 1–100 icons total with at most 20 per set, pseudonymous reviewer code, an admin-only Submissions tab with guarded deletion, a separate Pilot results tab, screenshot export, and protected CSV export. This is not participant-response collection. |
+
+Pilot administration update verified on **2026-10-06** from the current API, UI and isolated D1 tests: closed pilots can be deleted with their sessions and responses, including unfinished sessions after an explicit warning; reviewer submissions are retained. The dated counts above remain the earlier snapshot.
+
+Controlled-pilot source update on **2026-10-11**: five answer options, 6/8/10/12/14 assigned CSS-pixel sizes, 1.5-second target exposure, three practice plus 100 randomized recorded trials and keyboard answers. The previous runnable workflow is removed; saved records remain exportable. Migration 0003 is required. This is a local implementation, not a refreshed production snapshot; see [pilot operations](icon-recognition-pilot.md).
 
 Recheck these values with the recipes in [Verification and troubleshooting](verification-and-troubleshooting.md) before making current-state claims.
 

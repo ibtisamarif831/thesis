@@ -7,21 +7,27 @@ import csv
 import hashlib
 import html
 import json
+import math
 import shutil
 import sqlite3
 from collections import Counter
 from pathlib import Path
 
-from build_analysis_dashboard import DASHBOARD_SETS, DASHBOARD_SET_IDS
+import numpy as np
+
+from build_analysis_dashboard import DASHBOARD_FEATURE_SECTIONS, DASHBOARD_SETS, DASHBOARD_SET_IDS
+from thesis_pipeline.clustering import pca_2d, standardize
 
 
 ROOT = Path(__file__).resolve().parents[1]
 SOURCE_DIR = ROOT / "icon_data" / "analysis" / "analysis_dashboard"
 OUTPUT_DIR = ROOT / "dist" / "dashboard"
 DATASET_PATH = ROOT / "icon_data" / "analysis" / "dataset.csv"
+FEATURES_PATH = ROOT / "icon_data" / "analysis" / "features.csv"
 AI_DATABASE_PATH = ROOT / "icon_data" / "analysis" / "ai_clustering" / "ai_clustering.sqlite3"
 STUDY_SELECTION_SOURCE_DIR = ROOT / "web" / "study-selection"
 STUDY_SELECTION_SEED_PATH = ROOT / "tmp" / "study_selection_icons.sql"
+STUDY_FEATURE_IDS = tuple(section["representative_feature_id"] for section in DASHBOARD_FEATURE_SECTIONS)
 
 SOURCE_DETAILS = (
     {
@@ -150,7 +156,45 @@ def credits_html(counts: Counter) -> str:
     return """<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><link rel="icon" href="data:,"><title>Data sources and licenses</title><style>body{font:16px/1.55 system-ui,sans-serif;max-width:900px;margin:40px auto;padding:0 20px;color:#18202f}a{color:#3156a3}section{border-top:1px solid #d9dee8;padding:16px 0}small{font-weight:400;color:#5d6675}.notice{background:#fff6d8;border:1px solid #ead28b;padding:14px;border-radius:8px}</style></head><body><p><a href="index.html">Back to dashboard</a></p><h1>Data sources and licenses</h1><p>This public research dashboard contains normalized 256 x 256 derivatives from five scoped source collections. Dataset names describe provenance and do not imply endorsement by AIGA, DOT, UN OCHA, ISO, or upstream maintainers.</p><p class="notice"><strong>Reuse note:</strong> the local AIGA and OCHA snapshots do not contain standalone license files. Their images are included here for the thesis demonstration with source attribution; verify upstream file-level terms before redistributing them elsewhere.</p>""" + "".join(cards) + "</body></html>"
 
 
+def build_study_feature_layouts(rows: list[dict[str, str]]) -> dict[str, tuple[float, float]]:
+    scoped_ids = {row["icon_id"] for row in rows}
+    with FEATURES_PATH.open(newline="", encoding="utf-8") as handle:
+        feature_rows = {
+            row["icon_id"]: row
+            for row in csv.DictReader(handle)
+            if row["icon_id"] in scoped_ids
+        }
+    missing = scoped_ids - feature_rows.keys()
+    if missing:
+        raise ValueError(f"Missing study feature rows for {len(missing)} icons")
+
+    layouts: dict[str, tuple[float, float]] = {}
+    for set_id, _ in DASHBOARD_SETS:
+        set_rows = [row for row in rows if row["set_id"] == set_id]
+        matrix = np.array(
+            [[float(feature_rows[row["icon_id"]][feature_id]) for feature_id in STUDY_FEATURE_IDS] for row in set_rows],
+            dtype=float,
+        )
+        if not np.isfinite(matrix).all():
+            raise ValueError(f"Non-finite study features found for {set_id}")
+        standardized, _, _ = standardize(matrix)
+        coordinates = pca_2d(standardized)
+        for row, coordinate in zip(set_rows, coordinates, strict=True):
+            x, y = (float(coordinate[0]), float(coordinate[1]))
+            if not math.isfinite(x) or not math.isfinite(y):
+                raise ValueError(f"Non-finite study layout coordinate for {row['icon_id']}")
+            layouts[row["icon_id"]] = (round(x, 6), round(y, 6))
+    return layouts
+
+
 def write_study_selection_assets(rows: list[dict[str, str]]) -> None:
+    feature_layouts = build_study_feature_layouts(rows)
+    scoped_ids = {row["icon_id"] for row in rows}
+    with FEATURES_PATH.open(newline="", encoding="utf-8") as handle:
+        study_features = {
+            r["icon_id"]: {f: float(r[f]) for f in STUDY_FEATURE_IDS}
+            for r in csv.DictReader(handle) if r["icon_id"] in scoped_ids
+        }
     rows_by_set: dict[str, list[dict[str, str]]] = {set_id: [] for set_id, _ in DASHBOARD_SETS}
     for row in rows:
         rows_by_set[row["set_id"]].append(
@@ -158,11 +202,20 @@ def write_study_selection_assets(rows: list[dict[str, str]]) -> None:
                 "icon_id": row["icon_id"],
                 "label": row.get("label", ""),
                 "normalized_path": row["normalized_path"].removeprefix("icon_data/"),
+                "features": study_features[row["icon_id"]],
+                "feature_x": feature_layouts[row["icon_id"]][0],
+                "feature_y": feature_layouts[row["icon_id"]][1],
             }
         )
     data = {
-        "selection_version": "five-sets-20-v1",
-        "required_per_set": 20,
+        "selection_version": "five-sets-up-to-20-v2",
+        "minimum_total": 1,
+        "maximum_per_set": 20,
+        "layout": {
+            "type": "per-set-feature-pca",
+            "feature_ids": list(STUDY_FEATURE_IDS),
+            "description": "Per-dataset PCA of the seven standardized thesis feature measurements.",
+        },
         "sets": [
             {
                 "set_id": set_id,
@@ -225,7 +278,7 @@ def main() -> None:
         "  <title>Analysis Icon Clustering Dashboard</title>",
         1,
     )
-    public_note = '<div style="padding:8px 20px;background:#eef5ff;border-bottom:1px solid #cbd8eb;font:13px system-ui,sans-serif">Public thesis edition · five scoped datasets · <a href="study-selection.html">Select study icons</a> · <a href="credits.html">Data sources and licenses</a></div>'
+    public_note = '<div style="padding:8px 20px;background:#eef5ff;border-bottom:1px solid #cbd8eb;font:13px system-ui,sans-serif">Public thesis edition · five scoped datasets · <a href="study-selection.html">Select study icons</a> · <a href="pilot-studio.html">Pilot Studio</a> · <a href="credits.html">Data sources and licenses</a></div>'
     marker = "<main id=\"clusteringView\""
     if marker not in index:
         raise ValueError("Could not insert the public-edition notice")
@@ -243,6 +296,9 @@ def main() -> None:
         copied += 1
 
     write_study_selection_assets(rows)
+    for source in (ROOT / "web" / "pilot").iterdir():
+        if source.is_file():
+            shutil.copy2(source, OUTPUT_DIR / ("pilot.html" if source.name == "index.html" else source.name))
 
     ai_archive = export_compatible_ai_runs({record["icon_id"] for record in payload["feature_group_records"]})
     (OUTPUT_DIR / "public_data" / "ai_clustering.json").write_text(
@@ -263,12 +319,19 @@ def main() -> None:
     )
     files = [path for path in OUTPUT_DIR.rglob("*") if path.is_file()]
     manifest = {
-        "deployment_mode": "static_dashboard_with_study_selection_api",
+        "deployment_mode": "static_dashboard_with_study_selection_and_pilot_api",
+        "recognition_pilot": {"protocol_version": "icon-recognition-controlled-v2", "practice_trials": 3, "recorded_trials": 100, "exposure_ms": 1500, "target_px": 128, "candidate_count": 5, "assigned_sizes": [6, 8, 10, 12, 14], "required_migration": "0003_controlled_pilot_trials.sql"},
         "dashboard_sets": [{"set_id": set_id, "set_name": name, "image_count": counts[set_id]} for set_id, name in DASHBOARD_SETS],
         "normalized_image_count": copied,
         "compatible_saved_ai_runs": len(ai_archive["runs"]),
         "excluded_incompatible_ai_runs": ai_archive["excluded_incompatible_run_count"],
-        "study_selection": {"selection_version": "five-sets-20-v1", "required_per_set": 20, "total_required": 100},
+        "study_selection": {
+            "selection_version": "five-sets-up-to-20-v2",
+            "minimum_total": 1,
+            "maximum_per_set": 20,
+            "maximum_total": 100,
+            "smart_map": "per-set-feature-pca",
+        },
         "file_count_before_manifest": len(files),
         "bytes_before_manifest": sum(path.stat().st_size for path in files),
         "dashboard_data_sha256": hashlib.sha256((OUTPUT_DIR / "dashboard_data.json").read_bytes()).hexdigest(),

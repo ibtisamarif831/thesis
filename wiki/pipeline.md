@@ -2,7 +2,7 @@
 
 ## Schema-v2 extraction and release gate
 
-The feature stage now performs robust alpha/opaque-border foreground extraction, writes mask diagnostics per icon, computes ten versioned v2 channels, and preserves schema-v1 columns. Run a small `--per-set-limit` extraction first, inspect uncertain masks and extremes, then run the complete corpus. After extraction, build the frozen rating sheet and overlays with `code/evaluation/build_feature_v2_benchmark.py`; evaluate completed two-rater judgments with `code/evaluation/evaluate_feature_v2_benchmark.py`. A missing or failed rating gate keeps the pilot disabled even when engineering generation succeeds.
+The feature stage now performs robust alpha/opaque-border foreground extraction, writes mask diagnostics per icon, computes ten versioned v2 channels, and preserves schema-v1 columns. Run a small `--per-set-limit` extraction first, inspect uncertain masks and extremes, then run the complete corpus. After extraction, build the frozen rating sheet and overlays with `code/evaluation/build_feature_v2_benchmark.py`; evaluate completed two-rater judgments with `code/evaluation/evaluate_feature_v2_benchmark.py`. A missing or failed rating gate keeps the feature-validation release disabled even when engineering generation succeeds. The separate recognition usability prototype has no feature-validation authority and does not satisfy this gate.
 
 [Wiki home](README.md) · [Feature system](feature-system.md) · [Commands](commands-and-scripts.md)
 
@@ -132,7 +132,7 @@ A local HTTP server is required for reliable JSON, JavaScript, and image loading
 
 ## Optional Local AI Clustering Experiment
 
-After dashboard generation, `code/serve_analysis_dashboard.py` can run the fifth dashboard view. An explicit browser request passes only validated shared-sample IDs and the existing feature result to the local service. The server resolves and hashes normalized images, reuses matching model/icon/hash embeddings, sends only missing PNG pixels to OpenRouter, L2-normalizes returned vectors, applies the current k-means or single-linkage hierarchical family, computes label-independent agreement, and stores the run. This is an exploratory comparison layer rather than human validation or ground truth.
+After dashboard generation, `code/serve_analysis_dashboard.py` can run the AI Clustering view (four analysis views are visible; Feature Review is hidden). An explicit browser request passes only validated shared-sample IDs and the existing feature result to the local service. The server resolves and hashes normalized images, reuses matching model/icon/hash embeddings, sends only missing PNG pixels to OpenRouter, L2-normalizes returned vectors, applies the current k-means or single-linkage hierarchical family, computes label-independent agreement, and stores the run. This is an exploratory comparison layer rather than human validation or ground truth.
 
 ## Planned Evaluation Stages
 
@@ -144,7 +144,7 @@ The remaining end-to-end path is:
 4. Join responses using stable `icon_id` or pair IDs.
 5. Analyze correlation, prediction, agreement, and mismatch.
 
-These stages are specified but not yet implemented. Do not present the current dashboard or clusters as a completed human-computer evaluation.
+Internal nominations and a separate recognition usability response store/exports are implemented, with only synthetic verification records. Final consensus, approved participant protocol, study-specific computer exports, human-computer joins and analysis remain unfinished. Do not present the dashboard, clusters or prototype as a completed human-computer evaluation.
 
 ## Reproducibility Rules
 

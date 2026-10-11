@@ -101,9 +101,17 @@ The public static bundle does not copy this database. Its generated `public_data
 
 ## Study Selection Contract
 
-`study_selection_data.json` contains the 649-icon public selection catalog grouped by the five configured set IDs, with only `icon_id`, label, and public normalized path. Its selection protocol identifier is `five-sets-20-v1` and it requires exactly 20 unique icons per set.
+`study_selection_data.json` contains the 649-icon public selection catalog grouped by the five configured set IDs, with `icon_id`, label, public normalized path, and a `features` object containing exactly the seven representative numeric values. Its current selection protocol identifier is `five-sets-up-to-20-v2`; reviewers submit 1–100 total icons with at most 20 per set. Per-set `feature_x`/`feature_y` coordinates and the seven-feature PCA layout metadata are also serialized.
 
-The D1 schema stores one pseudonymous submission row and 100 ordered selection rows per reviewer code. `study_icons` is the authoritative server-side allow-list seeded from the same canonical rows. `study_submissions` records protocol version, optional rationale, and timestamps. `study_selections` records stable set/icon IDs and within-set selection order. These are internal stimulus-selection records, not participant responses and not evidence of human perception.
+The D1 schema stores one pseudonymous submission row and 1–100 ordered selection rows per reviewer code. `study_icons` is the authoritative server-side allow-list seeded from the same canonical rows. `study_submissions` records protocol version and timestamps; the legacy rationale column is not populated by the current UI. The researcher-authorized `ibtisam` administrative nomination stores algorithm-assisted provenance there; current result exports omit that column, so consult its local audit. `study_selections` records stable set/icon IDs and within-set selection order. These are internal stimulus-selection records, not participant responses and not evidence of human perception.
+
+## Meeting and nomination audit artifacts
+
+`notes/meetings/standard-recording-2-transcription.pdf` preserves the original 39-page meeting source; the adjacent `.txt` is its page-marked extraction. [Meeting decisions](meeting-decisions-and-status.md) maps timestamps to agreed homework and unresolved choices. `icon_data/analysis/study_selections/2026-09-29-researcher-assisted/` preserves `ibtisam`'s computational nomination, feature values, reasons, reproduction script and verified receipt. Its historical directory name remains unchanged after the reviewer code rename. These are source/selection evidence, not participant research data.
+
+## Recognition pilot contract
+
+[Icon-recognition pilot](icon-recognition-pilot.md) defines `recognition_pilots`, `recognition_sessions`, and `recognition_attempts`, their JSON payloads, session credential hashing, attempt uniqueness and protected exports. Migration `0002` creates the tables; `0003_controlled_pilot_trials.sql` preserves and rebuilds attempts with indices 0–102. New schedules hold assigned size and five candidate IDs. Controlled response JSON adds assigned size, selected position, choice onset, derived response time and input method. Frozen image/icon IDs and provenance are independent of later reviewer edits. Browser pending saves live in sessionStorage until acknowledged. Recorded correctness is computed on the server and exposed only to administrators; practice feedback is returned to its session. These are usability-task records, distinct from the feature-v2 benchmark and final-study response schema.
 
 ## Schema-Change Checklist
 

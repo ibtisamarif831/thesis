@@ -1,0 +1,284 @@
+{
+  "selection_kind": "algorithm-assisted research-group nomination; not an independent human rating",
+  "features_sha256": "b09f6fb4b0b702a54e87bc71158f191e787f1dc9a48d07c93c1734c4828ef08b",
+  "catalog_sha256": "ad74823c77f4b22bab62d7234bbec91e651146a7f6653688fb9df9894e1c7729",
+  "orientation_confidence_threshold": 0.2,
+  "distance": "RMS of equal-weight per-set scalar midrank percentile differences and axial angle differences/(pi/2); constant scalars omitted; orientation omitted pairwise if either confidence is low",
+  "sampling": "4 disjoint pairs within lowest quartile of candidate distances, diversified by distance to previous choices; one remaining medoid; 11 greedy farthest-point additions",
+  "tie_break": "ascending icon_id",
+  "supervisor_choices_used": false,
+  "human_visual_review_performed": false,
+  "limitations": [
+    "Measured closeness is not human confusability",
+    "Technical mask checks do not establish measurement validity",
+    "Not final consensus stimuli or pilot approval",
+    "Pairwise omission of undefined orientation can compare different channel subsets"
+  ],
+  "sets": [
+    {
+      "set_id": "02_aiga_dot_symbol_signs",
+      "source_count": 80,
+      "candidate_count": 77,
+      "exclusions": {
+        "uncertain_mask": 0,
+        "invalid_features": 0,
+        "invisible_on_white": 3,
+        "duplicate_image": 0
+      },
+      "selected_count": 20,
+      "defined_orientation_count": 10,
+      "close_pair_cutoff": 0.31283293519252314,
+      "coverage_radius": 0.25296886749645237,
+      "scalar_feature_ranges": {
+        "canny_edge_density": {
+          "pool_min": 0.0100555419921875,
+          "pool_max": 0.0471343994140625,
+          "selected_min": 0.011810302734375,
+          "selected_max": 0.0471343994140625
+        },
+        "enclosure_score_v2": {
+          "pool_min": 0.19601368849426562,
+          "pool_max": 0.9902057845979775,
+          "selected_min": 0.29361706764295675,
+          "selected_max": 0.8329774844720497
+        },
+        "solid_fill_ratio_v2": {
+          "pool_min": 0.44165405950579933,
+          "pool_max": 0.9084311999484723,
+          "selected_min": 0.44165405950579933,
+          "selected_max": 0.8852202467995588
+        },
+        "horizontal_symmetry_v2": {
+          "pool_min": 0.1742671009771987,
+          "pool_max": 1.0,
+          "selected_min": 0.4519829668234397,
+          "selected_max": 1.0
+        },
+        "mean_saturation_v2": {
+          "pool_min": 0.0,
+          "pool_max": 1.0,
+          "selected_min": 0.0,
+          "selected_max": 0.654905378818512
+        },
+        "local_texture_variation_v2": {
+          "pool_min": 0.007937501184642315,
+          "pool_max": 0.27345359325408936,
+          "selected_min": 0.019389061257243156,
+          "selected_max": 0.20955638587474823
+        }
+      }
+    },
+    {
+      "set_id": "04_ocha_humanitarian_icons",
+      "source_count": 359,
+      "candidate_count": 207,
+      "exclusions": {
+        "uncertain_mask": 152,
+        "invalid_features": 0,
+        "invisible_on_white": 0,
+        "duplicate_image": 0
+      },
+      "selected_count": 20,
+      "defined_orientation_count": 18,
+      "close_pair_cutoff": 0.3068867384901131,
+      "coverage_radius": 0.2908006052055854,
+      "scalar_feature_ranges": {
+        "canny_edge_density": {
+          "pool_min": 0.008148193359375,
+          "pool_max": 0.0522918701171875,
+          "selected_min": 0.008148193359375,
+          "selected_max": 0.0522918701171875
+        },
+        "enclosure_score_v2": {
+          "pool_min": 0.2487640380859375,
+          "pool_max": 0.9912817028985508,
+          "selected_min": 0.3056640625,
+          "selected_max": 0.9903025072674418
+        },
+        "solid_fill_ratio_v2": {
+          "pool_min": 0.4244563002482309,
+          "pool_max": 0.9305320945945946,
+          "selected_min": 0.4859633071700294,
+          "selected_max": 0.9241157945736433
+        },
+        "horizontal_symmetry_v2": {
+          "pool_min": 0.18733301901618735,
+          "pool_max": 1.0,
+          "selected_min": 0.19020063558317127,
+          "selected_max": 1.0
+        },
+        "mean_saturation_v2": {
+          "pool_min": 0.0,
+          "pool_max": 0.0,
+          "selected_min": 0.0,
+          "selected_max": 0.0
+        },
+        "local_texture_variation_v2": {
+          "pool_min": 0.011548507958650589,
+          "pool_max": 0.2889520227909088,
+          "selected_min": 0.011548507958650589,
+          "selected_max": 0.24953961372375488
+        }
+      }
+    },
+    {
+      "set_id": "09_universal_symbols_healthcare_webfont",
+      "source_count": 144,
+      "candidate_count": 45,
+      "exclusions": {
+        "uncertain_mask": 99,
+        "invalid_features": 0,
+        "invisible_on_white": 0,
+        "duplicate_image": 0
+      },
+      "selected_count": 20,
+      "defined_orientation_count": 15,
+      "close_pair_cutoff": 0.30928294125063566,
+      "coverage_radius": 0.2131055554944038,
+      "scalar_feature_ranges": {
+        "canny_edge_density": {
+          "pool_min": 0.0133819580078125,
+          "pool_max": 0.0560455322265625,
+          "selected_min": 0.0133819580078125,
+          "selected_max": 0.0560455322265625
+        },
+        "enclosure_score_v2": {
+          "pool_min": 0.2208549839167095,
+          "pool_max": 0.7951047207446809,
+          "selected_min": 0.2208549839167095,
+          "selected_max": 0.7951047207446809
+        },
+        "solid_fill_ratio_v2": {
+          "pool_min": 0.3926555220608386,
+          "pool_max": 0.8994646357023534,
+          "selected_min": 0.3926555220608386,
+          "selected_max": 0.8994646357023534
+        },
+        "horizontal_symmetry_v2": {
+          "pool_min": 0.17390582177560004,
+          "pool_max": 1.0,
+          "selected_min": 0.17390582177560004,
+          "selected_max": 1.0
+        },
+        "mean_saturation_v2": {
+          "pool_min": 0.0,
+          "pool_max": 0.0,
+          "selected_min": 0.0,
+          "selected_max": 0.0
+        },
+        "local_texture_variation_v2": {
+          "pool_min": 0.06290506571531296,
+          "pool_max": 0.3076251447200775,
+          "selected_min": 0.10344377160072327,
+          "selected_max": 0.3076251447200775
+        }
+      }
+    },
+    {
+      "set_id": "11_iso_7010_safety_signs",
+      "source_count": 37,
+      "candidate_count": 37,
+      "exclusions": {
+        "uncertain_mask": 0,
+        "invalid_features": 0,
+        "invisible_on_white": 0,
+        "duplicate_image": 0
+      },
+      "selected_count": 20,
+      "defined_orientation_count": 0,
+      "close_pair_cutoff": 0.25295322719000274,
+      "coverage_radius": 0.12422599874998833,
+      "scalar_feature_ranges": {
+        "canny_edge_density": {
+          "pool_min": 0.0318145751953125,
+          "pool_max": 0.0666656494140625,
+          "selected_min": 0.0318145751953125,
+          "selected_max": 0.0666656494140625
+        },
+        "enclosure_score_v2": {
+          "pool_min": 0.4846180928111588,
+          "pool_max": 0.5344117853139013,
+          "selected_min": 0.4846180928111588,
+          "selected_max": 0.5344117853139013
+        },
+        "solid_fill_ratio_v2": {
+          "pool_min": 0.8358402844249966,
+          "pool_max": 0.850386245777118,
+          "selected_min": 0.8358402844249966,
+          "selected_max": 0.850386245777118
+        },
+        "horizontal_symmetry_v2": {
+          "pool_min": 0.9654040749350472,
+          "pool_max": 1.0,
+          "selected_min": 0.9654040749350472,
+          "selected_max": 1.0
+        },
+        "mean_saturation_v2": {
+          "pool_min": 0.0,
+          "pool_max": 0.0,
+          "selected_min": 0.0,
+          "selected_max": 0.0
+        },
+        "local_texture_variation_v2": {
+          "pool_min": 0.19055652618408203,
+          "pool_max": 0.4380297362804413,
+          "selected_min": 0.19055652618408203,
+          "selected_max": 0.4380297362804413
+        }
+      }
+    },
+    {
+      "set_id": "12_iso_15223_medical_device_symbols",
+      "source_count": 29,
+      "candidate_count": 28,
+      "exclusions": {
+        "uncertain_mask": 1,
+        "invalid_features": 0,
+        "invisible_on_white": 0,
+        "duplicate_image": 0
+      },
+      "selected_count": 20,
+      "defined_orientation_count": 14,
+      "close_pair_cutoff": 0.29296854532148486,
+      "coverage_radius": 0.10143010324169743,
+      "scalar_feature_ranges": {
+        "canny_edge_density": {
+          "pool_min": 0.0137786865234375,
+          "pool_max": 0.0451202392578125,
+          "selected_min": 0.0137786865234375,
+          "selected_max": 0.0451202392578125
+        },
+        "enclosure_score_v2": {
+          "pool_min": 0.21593865913746332,
+          "pool_max": 0.9885197697697697,
+          "selected_min": 0.21593865913746332,
+          "selected_max": 0.9885197697697697
+        },
+        "solid_fill_ratio_v2": {
+          "pool_min": 0.44415519170605827,
+          "pool_max": 0.9391196790056414,
+          "selected_min": 0.44415519170605827,
+          "selected_max": 0.9391196790056414
+        },
+        "horizontal_symmetry_v2": {
+          "pool_min": 0.3268249780123131,
+          "pool_max": 1.0,
+          "selected_min": 0.3268249780123131,
+          "selected_max": 1.0
+        },
+        "mean_saturation_v2": {
+          "pool_min": 0.0,
+          "pool_max": 0.0,
+          "selected_min": 0.0,
+          "selected_max": 0.0
+        },
+        "local_texture_variation_v2": {
+          "pool_min": 0.05026310682296753,
+          "pool_max": 0.559219479560852,
+          "selected_min": 0.05026310682296753,
+          "selected_max": 0.559219479560852
+        }
+      }
+    }
+  ]
+}

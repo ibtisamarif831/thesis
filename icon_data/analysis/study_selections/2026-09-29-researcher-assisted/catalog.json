@@ -1,0 +1,4587 @@
+{
+  "source": "Authenticated production D1 study_icons catalog, verified against local generated paths on 2026-09-29",
+  "feature_ids": [
+    "canny_edge_density",
+    "enclosure_score_v2",
+    "principal_axis_orientation_v2",
+    "solid_fill_ratio_v2",
+    "horizontal_symmetry_v2",
+    "mean_saturation_v2",
+    "local_texture_variation_v2"
+  ],
+  "sets": [
+    {
+      "set_id": "02_aiga_dot_symbol_signs",
+      "set_name": "AIGA/DOT Symbol Signs",
+      "icons": [
+        {
+          "icon_id": "45c3be26acc9e457",
+          "label": "20 airtransportation",
+          "normalized_path": "normalized_256/02_aiga_dot_symbol_signs/20_airtransportation__45c3be26acc9.png",
+          "feature_x": 0.128493,
+          "feature_y": 1.658245
+        },
+        {
+          "icon_id": "3612784fdc4aa3be",
+          "label": "Aiga arrivingflights",
+          "normalized_path": "normalized_256/02_aiga_dot_symbol_signs/aiga_arrivingflights__3612784fdc4a.png",
+          "feature_x": 0.965347,
+          "feature_y": -0.251969
+        },
+        {
+          "icon_id": "80b2d92acb1f6d71",
+          "label": "Aiga baggage check in",
+          "normalized_path": "normalized_256/02_aiga_dot_symbol_signs/aiga_baggage_check_in__80b2d92acb1f.png",
+          "feature_x": -2.016288,
+          "feature_y": -0.713367
+        },
+        {
+          "icon_id": "5cc0ec603e237840",
+          "label": "Aiga baggagelockers",
+          "normalized_path": "normalized_256/02_aiga_dot_symbol_signs/aiga_baggagelockers__5cc0ec603e23.png",
+          "feature_x": -0.56432,
+          "feature_y": -0.996317
+        },
+        {
+          "icon_id": "40e393bed618cc42",
+          "label": "Aiga bar",
+          "normalized_path": "normalized_256/02_aiga_dot_symbol_signs/aiga_bar__40e393bed618.png",
+          "feature_x": -0.454377,
+          "feature_y": 1.28931
+        },
+        {
+          "icon_id": "dd259e27900bf9f3",
+          "label": "Aiga bar reduced",
+          "normalized_path": "normalized_256/02_aiga_dot_symbol_signs/aiga_bar_reduced__dd259e27900b.png",
+          "feature_x": -0.389684,
+          "feature_y": 1.548581
+        },
+        {
+          "icon_id": "0d671d32bec85d0c",
+          "label": "Aiga BarberShop",
+          "normalized_path": "normalized_256/02_aiga_dot_symbol_signs/aiga_barbershop__0d671d32bec8.png",
+          "feature_x": 2.819054,
+          "feature_y": -1.044955
+        },
+        {
+          "icon_id": "49837c7b86763fe5",
+          "label": "Aiga BarberShop BeautySalon",
+          "normalized_path": "normalized_256/02_aiga_dot_symbol_signs/aiga_barbershop_beautysalon__49837c7b8676.png",
+          "feature_x": 1.897515,
+          "feature_y": -0.747238
+        },
+        {
+          "icon_id": "e628a386ba47d4cb",
+          "label": "Aiga BeautySalon",
+          "normalized_path": "normalized_256/02_aiga_dot_symbol_signs/aiga_beautysalon__e628a386ba47.png",
+          "feature_x": 2.801432,
+          "feature_y": -0.984297
+        },
+        {
+          "icon_id": "5e385afcc791cef6",
+          "label": "Aiga bus",
+          "normalized_path": "normalized_256/02_aiga_dot_symbol_signs/aiga_bus__5e385afcc791.png",
+          "feature_x": -1.351926,
+          "feature_y": -1.297858
+        },
+        {
+          "icon_id": "cf87e7ba473875c5",
+          "label": "Aiga bus trans",
+          "normalized_path": "normalized_256/02_aiga_dot_symbol_signs/aiga_bus_trans__cf87e7ba4738.png",
+          "feature_x": -1.232984,
+          "feature_y": -0.496167
+        },
+        {
+          "icon_id": "cba3c54a651b13c2",
+          "label": "Aiga carrental",
+          "normalized_path": "normalized_256/02_aiga_dot_symbol_signs/aiga_carrental__cba3c54a651b.png",
+          "feature_x": -0.382137,
+          "feature_y": 0.197594
+        },
+        {
+          "icon_id": "4b6dc51334050530",
+          "label": "Aiga cashier",
+          "normalized_path": "normalized_256/02_aiga_dot_symbol_signs/aiga_cashier__4b6dc5133405.png",
+          "feature_x": -0.420878,
+          "feature_y": -0.922646
+        },
+        {
+          "icon_id": "0b5e70af0684900a",
+          "label": "Aiga coatcheck",
+          "normalized_path": "normalized_256/02_aiga_dot_symbol_signs/aiga_coatcheck__0b5e70af0684.png",
+          "feature_x": 0.154541,
+          "feature_y": 0.533242
+        },
+        {
+          "icon_id": "b36cda40d4e7f68a",
+          "label": "Aiga coffeeshop",
+          "normalized_path": "normalized_256/02_aiga_dot_symbol_signs/aiga_coffeeshop__b36cda40d4e7.png",
+          "feature_x": -0.849085,
+          "feature_y": 0.343332
+        },
+        {
+          "icon_id": "79a746e1ce3aea8f",
+          "label": "Aiga currencyexchange",
+          "normalized_path": "normalized_256/02_aiga_dot_symbol_signs/aiga_currencyexchange__79a746e1ce3a.png",
+          "feature_x": 1.676905,
+          "feature_y": -2.50258
+        },
+        {
+          "icon_id": "f1209f1a3da4b4eb",
+          "label": "Aiga customs",
+          "normalized_path": "normalized_256/02_aiga_dot_symbol_signs/aiga_customs__f1209f1a3da4.png",
+          "feature_x": 1.529118,
+          "feature_y": 0.467243
+        },
+        {
+          "icon_id": "a33b58d3f4327fa1",
+          "label": "Aiga departingflights",
+          "normalized_path": "normalized_256/02_aiga_dot_symbol_signs/aiga_departingflights__a33b58d3f432.png",
+          "feature_x": 0.983975,
+          "feature_y": 1.494057
+        },
+        {
+          "icon_id": "7f5e1062793c8e1d",
+          "label": "Aiga downarrow",
+          "normalized_path": "normalized_256/02_aiga_dot_symbol_signs/aiga_downarrow__7f5e1062793c.png",
+          "feature_x": -0.358169,
+          "feature_y": 1.259081
+        },
+        {
+          "icon_id": "81cdfb4479630d2b",
+          "label": "Aiga drinkingfountain",
+          "normalized_path": "normalized_256/02_aiga_dot_symbol_signs/aiga_drinkingfountain__81cdfb447963.png",
+          "feature_x": 1.181341,
+          "feature_y": 1.016497
+        },
+        {
+          "icon_id": "39344638f6049ace",
+          "label": "Aiga elevator",
+          "normalized_path": "normalized_256/02_aiga_dot_symbol_signs/aiga_elevator__39344638f604.png",
+          "feature_x": 0.158077,
+          "feature_y": -3.22399
+        },
+        {
+          "icon_id": "96955357c8bb7589",
+          "label": "Aiga escalator",
+          "normalized_path": "normalized_256/02_aiga_dot_symbol_signs/aiga_escalator__96955357c8bb.png",
+          "feature_x": 2.307459,
+          "feature_y": -0.225452
+        },
+        {
+          "icon_id": "19d523b4ad794653",
+          "label": "Aiga escalator down",
+          "normalized_path": "normalized_256/02_aiga_dot_symbol_signs/aiga_escalator_down__19d523b4ad79.png",
+          "feature_x": 1.967398,
+          "feature_y": -0.674042
+        },
+        {
+          "icon_id": "da1cc0b972f266c1",
+          "label": "Aiga escalator down mirror",
+          "normalized_path": "normalized_256/02_aiga_dot_symbol_signs/aiga_escalator_down_mirror__da1cc0b972f2.png",
+          "feature_x": 1.521547,
+          "feature_y": -0.563934
+        },
+        {
+          "icon_id": "cb84e329bdddd496",
+          "label": "Aiga escalator mirror",
+          "normalized_path": "normalized_256/02_aiga_dot_symbol_signs/aiga_escalator_mirror__cb84e329bddd.png",
+          "feature_x": 1.878916,
+          "feature_y": -0.175506
+        },
+        {
+          "icon_id": "71d9b56ddfc7f71c",
+          "label": "Aiga escalator up",
+          "normalized_path": "normalized_256/02_aiga_dot_symbol_signs/aiga_escalator_up__71d9b56ddfc7.png",
+          "feature_x": 1.928353,
+          "feature_y": -0.696156
+        },
+        {
+          "icon_id": "7a833deb4dabbc17",
+          "label": "Aiga escalator up mirror",
+          "normalized_path": "normalized_256/02_aiga_dot_symbol_signs/aiga_escalator_up_mirror__7a833deb4dab.png",
+          "feature_x": 1.458163,
+          "feature_y": -0.582159
+        },
+        {
+          "icon_id": "13a78b0fc670a3e7",
+          "label": "Aiga exit",
+          "normalized_path": "normalized_256/02_aiga_dot_symbol_signs/aiga_exit__13a78b0fc670.png",
+          "feature_x": -1.707744,
+          "feature_y": 0.846989
+        },
+        {
+          "icon_id": "9b352ee9d3ea7f71",
+          "label": "Aiga Exit Green",
+          "normalized_path": "normalized_256/02_aiga_dot_symbol_signs/aiga_exit_green__9b352ee9d3ea.png",
+          "feature_x": -3.690374,
+          "feature_y": 0.56613
+        },
+        {
+          "icon_id": "cfb5182dc1998eb7",
+          "label": "Aiga fire extinguisher",
+          "normalized_path": "normalized_256/02_aiga_dot_symbol_signs/aiga_fire_extinguisher__cfb5182dc199.png",
+          "feature_x": 0.560973,
+          "feature_y": 1.476649
+        },
+        {
+          "icon_id": "5f9147febc575092",
+          "label": "Aiga firstaid",
+          "normalized_path": "normalized_256/02_aiga_dot_symbol_signs/aiga_firstaid__5f9147febc57.png",
+          "feature_x": -1.277764,
+          "feature_y": 1.047453
+        },
+        {
+          "icon_id": "15f1b4324f271e4f",
+          "label": "Aiga FirstAid Red",
+          "normalized_path": "normalized_256/02_aiga_dot_symbol_signs/aiga_firstaid_red__15f1b4324f27.png",
+          "feature_x": -3.113634,
+          "feature_y": 1.255778
+        },
+        {
+          "icon_id": "a8caa064219d1a01",
+          "label": "Aiga forwardandleftarrow",
+          "normalized_path": "normalized_256/02_aiga_dot_symbol_signs/aiga_forwardandleftarrow__a8caa064219d.png",
+          "feature_x": 0.418001,
+          "feature_y": 1.605659
+        },
+        {
+          "icon_id": "eeb6b3cdd0343f66",
+          "label": "Aiga forwardandrightarrow",
+          "normalized_path": "normalized_256/02_aiga_dot_symbol_signs/aiga_forwardandrightarrow__eeb6b3cdd034.png",
+          "feature_x": 0.814064,
+          "feature_y": 1.510264
+        },
+        {
+          "icon_id": "9f76b8dc9f07a76c",
+          "label": "Aiga groundtransportation",
+          "normalized_path": "normalized_256/02_aiga_dot_symbol_signs/aiga_groundtransportation__9f76b8dc9f07.png",
+          "feature_x": 0.706326,
+          "feature_y": -1.457296
+        },
+        {
+          "icon_id": "517100f01a1d3fad",
+          "label": "Aiga heliport",
+          "normalized_path": "normalized_256/02_aiga_dot_symbol_signs/aiga_heliport__517100f01a1d.png",
+          "feature_x": 0.693497,
+          "feature_y": -0.500313
+        },
+        {
+          "icon_id": "d166e71133e07068",
+          "label": "Aiga hotelinformation",
+          "normalized_path": "normalized_256/02_aiga_dot_symbol_signs/aiga_hotelinformation__d166e71133e0.png",
+          "feature_x": 0.45285,
+          "feature_y": -1.335164
+        },
+        {
+          "icon_id": "453de2a0ac7e4646",
+          "label": "Aiga immigration",
+          "normalized_path": "normalized_256/02_aiga_dot_symbol_signs/aiga_immigration__453de2a0ac7e.png",
+          "feature_x": 1.234198,
+          "feature_y": 0.330743
+        },
+        {
+          "icon_id": "68f89210db68f8ec",
+          "label": "AIGA information",
+          "normalized_path": "normalized_256/02_aiga_dot_symbol_signs/aiga_information__68f89210db68.png",
+          "feature_x": -0.879778,
+          "feature_y": -1.794534
+        },
+        {
+          "icon_id": "a92f8680959133bd",
+          "label": "Aiga leftanddownarrow",
+          "normalized_path": "normalized_256/02_aiga_dot_symbol_signs/aiga_leftanddownarrow__a92f86809591.png",
+          "feature_x": 0.814064,
+          "feature_y": 1.510264
+        },
+        {
+          "icon_id": "28786d99b5925991",
+          "label": "Aiga leftarrow",
+          "normalized_path": "normalized_256/02_aiga_dot_symbol_signs/aiga_leftarrow__28786d99b592.png",
+          "feature_x": 0.124718,
+          "feature_y": 1.650467
+        },
+        {
+          "icon_id": "e383e6a5a9c495a3",
+          "label": "Aiga litterdisposal",
+          "normalized_path": "normalized_256/02_aiga_dot_symbol_signs/aiga_litterdisposal__e383e6a5a9c4.png",
+          "feature_x": 1.757353,
+          "feature_y": 0.743653
+        },
+        {
+          "icon_id": "7616bb30c75b6877",
+          "label": "Aiga lostandfound",
+          "normalized_path": "normalized_256/02_aiga_dot_symbol_signs/aiga_lostandfound__7616bb30c75b.png",
+          "feature_x": 1.262142,
+          "feature_y": 0.662704
+        },
+        {
+          "icon_id": "a7d66717384d32a7",
+          "label": "Aiga mail",
+          "normalized_path": "normalized_256/02_aiga_dot_symbol_signs/aiga_mail__a7d66717384d.png",
+          "feature_x": -0.146946,
+          "feature_y": -2.08665
+        },
+        {
+          "icon_id": "22dd7014ca4e0926",
+          "label": "Aiga mail white",
+          "normalized_path": "normalized_256/02_aiga_dot_symbol_signs/aiga_mail_white__22dd7014ca4e.png",
+          "feature_x": -1.576832,
+          "feature_y": 1.20511
+        },
+        {
+          "icon_id": "7abd603477625b0b",
+          "label": "Aiga No Entry Red",
+          "normalized_path": "normalized_256/02_aiga_dot_symbol_signs/aiga_no_entry_red__7abd60347762.png",
+          "feature_x": -3.06745,
+          "feature_y": -0.089684
+        },
+        {
+          "icon_id": "72e30cf0259cc441",
+          "label": "Aiga no parking",
+          "normalized_path": "normalized_256/02_aiga_dot_symbol_signs/aiga_no_parking__72e30cf0259c.png",
+          "feature_x": -0.260893,
+          "feature_y": -1.419535
+        },
+        {
+          "icon_id": "377b58bad9dc2a21",
+          "label": "Aiga No Smoking Red",
+          "normalized_path": "normalized_256/02_aiga_dot_symbol_signs/aiga_no_smoking_red__377b58bad9dc.png",
+          "feature_x": -1.225259,
+          "feature_y": -1.554054
+        },
+        {
+          "icon_id": "91e01065df8070b4",
+          "label": "Aiga nodogs",
+          "normalized_path": "normalized_256/02_aiga_dot_symbol_signs/aiga_nodogs__91e01065df80.png",
+          "feature_x": -0.537562,
+          "feature_y": -2.579422
+        },
+        {
+          "icon_id": "c712f8a41903fe28",
+          "label": "Aiga NoDogs Red",
+          "normalized_path": "normalized_256/02_aiga_dot_symbol_signs/aiga_nodogs_red__c712f8a41903.png",
+          "feature_x": -1.654802,
+          "feature_y": -1.452988
+        },
+        {
+          "icon_id": "0e14f4458e64764c",
+          "label": "Aiga noentry",
+          "normalized_path": "normalized_256/02_aiga_dot_symbol_signs/aiga_noentry__0e14f4458e64.png",
+          "feature_x": -1.679031,
+          "feature_y": -0.067997
+        },
+        {
+          "icon_id": "d3a0982f1bf0c15d",
+          "label": "Aiga noparking",
+          "normalized_path": "normalized_256/02_aiga_dot_symbol_signs/aiga_noparking__d3a0982f1bf0.png",
+          "feature_x": -0.260812,
+          "feature_y": -1.419684
+        },
+        {
+          "icon_id": "adbab0e201beefba",
+          "label": "Aiga NoParking Red",
+          "normalized_path": "normalized_256/02_aiga_dot_symbol_signs/aiga_noparking_red__adbab0e201be.png",
+          "feature_x": -1.697264,
+          "feature_y": -1.096588
+        },
+        {
+          "icon_id": "b968762ee8180718",
+          "label": "Aiga nosmoking",
+          "normalized_path": "normalized_256/02_aiga_dot_symbol_signs/aiga_nosmoking__b968762ee818.png",
+          "feature_x": -0.592716,
+          "feature_y": -3.024769
+        },
+        {
+          "icon_id": "dbacbbee1b8418a3",
+          "label": "Aiga nursery",
+          "normalized_path": "normalized_256/02_aiga_dot_symbol_signs/aiga_nursery__dbacbbee1b84.png",
+          "feature_x": -0.010191,
+          "feature_y": 0.571224
+        },
+        {
+          "icon_id": "32d08149ef2bc303",
+          "label": "Aiga parking",
+          "normalized_path": "normalized_256/02_aiga_dot_symbol_signs/aiga_parking__32d08149ef2b.png",
+          "feature_x": -0.836812,
+          "feature_y": 0.491607
+        },
+        {
+          "icon_id": "5c000c0625ba1fb6",
+          "label": "Aiga railtransportation",
+          "normalized_path": "normalized_256/02_aiga_dot_symbol_signs/aiga_railtransportation__5c000c0625ba.png",
+          "feature_x": -0.808204,
+          "feature_y": -0.897399
+        },
+        {
+          "icon_id": "67e21585d8368692",
+          "label": "Aiga railtransportation 25",
+          "normalized_path": "normalized_256/02_aiga_dot_symbol_signs/aiga_railtransportation_25__67e21585d836.png",
+          "feature_x": -0.798213,
+          "feature_y": 0.055619
+        },
+        {
+          "icon_id": "9741497fa74a6912",
+          "label": "Aiga railtransportation 25 white",
+          "normalized_path": "normalized_256/02_aiga_dot_symbol_signs/aiga_railtransportation_25_white__9741497fa74a.png",
+          "feature_x": -1.63511,
+          "feature_y": 2.001398
+        },
+        {
+          "icon_id": "7ab893955ce53d32",
+          "label": "Aiga restaurant",
+          "normalized_path": "normalized_256/02_aiga_dot_symbol_signs/aiga_restaurant__7ab893955ce5.png",
+          "feature_x": 0.342384,
+          "feature_y": 0.618178
+        },
+        {
+          "icon_id": "2be691e9e2767ce5",
+          "label": "Aiga restaurant 2",
+          "normalized_path": "normalized_256/02_aiga_dot_symbol_signs/aiga_restaurant_2__2be691e9e276.png",
+          "feature_x": 0.387625,
+          "feature_y": 0.61723
+        },
+        {
+          "icon_id": "56fca77111ffbd13",
+          "label": "Aiga rightanddownarrow",
+          "normalized_path": "normalized_256/02_aiga_dot_symbol_signs/aiga_rightanddownarrow__56fca77111ff.png",
+          "feature_x": 0.418001,
+          "feature_y": 1.605659
+        },
+        {
+          "icon_id": "d8304814c8c214ff",
+          "label": "Aiga rightarrow",
+          "normalized_path": "normalized_256/02_aiga_dot_symbol_signs/aiga_rightarrow__d8304814c8c2.png",
+          "feature_x": 0.124718,
+          "feature_y": 1.650467
+        },
+        {
+          "icon_id": "09c29f2f131b680a",
+          "label": "Aiga shops",
+          "normalized_path": "normalized_256/02_aiga_dot_symbol_signs/aiga_shops__09c29f2f131b.png",
+          "feature_x": 0.342393,
+          "feature_y": -2.541394
+        },
+        {
+          "icon_id": "a775dde68401f18c",
+          "label": "Aiga stairs",
+          "normalized_path": "normalized_256/02_aiga_dot_symbol_signs/aiga_stairs__a775dde68401.png",
+          "feature_x": 2.781281,
+          "feature_y": 2.419294
+        },
+        {
+          "icon_id": "7356c61eeb1541c5",
+          "label": "Aiga taxi",
+          "normalized_path": "normalized_256/02_aiga_dot_symbol_signs/aiga_taxi__7356c61eeb15.png",
+          "feature_x": -1.39401,
+          "feature_y": -0.366614
+        },
+        {
+          "icon_id": "32e2a077d1fc979a",
+          "label": "Aiga telephone",
+          "normalized_path": "normalized_256/02_aiga_dot_symbol_signs/aiga_telephone__32e2a077d1fc.png",
+          "feature_x": 0.133719,
+          "feature_y": 0.84363
+        },
+        {
+          "icon_id": "1c1aa60214ea9790",
+          "label": "Aiga ticketpurchase",
+          "normalized_path": "normalized_256/02_aiga_dot_symbol_signs/aiga_ticketpurchase__1c1aa60214ea.png",
+          "feature_x": 0.829494,
+          "feature_y": 0.520151
+        },
+        {
+          "icon_id": "54f11c59f9368886",
+          "label": "Aiga toiletsq men",
+          "normalized_path": "normalized_256/02_aiga_dot_symbol_signs/aiga_toiletsq_men__54f11c59f936.png",
+          "feature_x": -1.12947,
+          "feature_y": 0.411978
+        },
+        {
+          "icon_id": "8d956b8fd66bfd40",
+          "label": "Aiga uparrow",
+          "normalized_path": "normalized_256/02_aiga_dot_symbol_signs/aiga_uparrow__8d956b8fd66b.png",
+          "feature_x": -0.358169,
+          "feature_y": 1.259081
+        },
+        {
+          "icon_id": "d7796777d41886a0",
+          "label": "Aiga waitingroom",
+          "normalized_path": "normalized_256/02_aiga_dot_symbol_signs/aiga_waitingroom__d7796777d418.png",
+          "feature_x": 1.505654,
+          "feature_y": 0.086745
+        },
+        {
+          "icon_id": "575e76a069516a8f",
+          "label": "Aiga watertransportation",
+          "normalized_path": "normalized_256/02_aiga_dot_symbol_signs/aiga_watertransportation__575e76a06951.png",
+          "feature_x": -0.509719,
+          "feature_y": 0.350103
+        },
+        {
+          "icon_id": "20975ff5f9cc4caf",
+          "label": "BSicon lBUS",
+          "normalized_path": "normalized_256/02_aiga_dot_symbol_signs/bsicon_lbus__20975ff5f9cc.png",
+          "feature_x": -1.138388,
+          "feature_y": -0.270896
+        },
+        {
+          "icon_id": "a731ae58d6d66351",
+          "label": "BSicon lBUS white",
+          "normalized_path": "normalized_256/02_aiga_dot_symbol_signs/bsicon_lbus_white__a731ae58d6d6.png",
+          "feature_x": -2.038754,
+          "feature_y": 1.598121
+        },
+        {
+          "icon_id": "c4a09fba92005581",
+          "label": "BSicon PASSPORT",
+          "normalized_path": "normalized_256/02_aiga_dot_symbol_signs/bsicon_passport__c4a09fba9200.png",
+          "feature_x": 1.235495,
+          "feature_y": 0.331963
+        },
+        {
+          "icon_id": "6f7a2c6a268cf895",
+          "label": "BSicon RENTALCAR",
+          "normalized_path": "normalized_256/02_aiga_dot_symbol_signs/bsicon_rentalcar__6f7a2c6a268c.png",
+          "feature_x": -0.417777,
+          "feature_y": 0.218867
+        },
+        {
+          "icon_id": "e64d4e32ce5a8902",
+          "label": "Smoking AIGA symbol",
+          "normalized_path": "normalized_256/02_aiga_dot_symbol_signs/smoking_aiga_symbol__e64d4e32ce5a.png",
+          "feature_x": 1.910364,
+          "feature_y": 0.955799
+        },
+        {
+          "icon_id": "951be4fa343dfcc3",
+          "label": "Toilet women",
+          "normalized_path": "normalized_256/02_aiga_dot_symbol_signs/toilet_women__951be4fa343d.png",
+          "feature_x": -0.760745,
+          "feature_y": 0.796107
+        },
+        {
+          "icon_id": "addb113096d7709e",
+          "label": "Toilets unisex",
+          "normalized_path": "normalized_256/02_aiga_dot_symbol_signs/toilets_unisex__addb113096d7.png",
+          "feature_x": 1.162943,
+          "feature_y": -0.535462
+        },
+        {
+          "icon_id": "3c565e2bb89eeee5",
+          "label": "Translink Qld bus icon with roundel 2022",
+          "normalized_path": "normalized_256/02_aiga_dot_symbol_signs/translink_qld_bus_icon_with_roundel_2022__3c565e2bb89e.png",
+          "feature_x": -2.145622,
+          "feature_y": -1.033186
+        }
+      ]
+    },
+    {
+      "set_id": "04_ocha_humanitarian_icons",
+      "set_name": "OCHA Humanitarian Icons",
+      "icons": [
+        {
+          "icon_id": "1dbfa7824219b1be",
+          "label": "abduction kidnapping",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/abduction_kidnapping__1dbfa7824219.png",
+          "feature_x": -0.039155,
+          "feature_y": 0.964958
+        },
+        {
+          "icon_id": "be6faf870910b02c",
+          "label": "about",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/about__be6faf870910.png",
+          "feature_x": 1.939991,
+          "feature_y": 1.134305
+        },
+        {
+          "icon_id": "1fbf9d60526c0768",
+          "label": "add",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/add__1fbf9d60526c.png",
+          "feature_x": -0.169124,
+          "feature_y": 1.568715
+        },
+        {
+          "icon_id": "3846c3bc0cdaa713",
+          "label": "add document",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/add_document__3846c3bc0cda.png",
+          "feature_x": 0.370954,
+          "feature_y": -0.385969
+        },
+        {
+          "icon_id": "a754e61c95e4fe18",
+          "label": "advocacy",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/advocacy__a754e61c95e4.png",
+          "feature_x": -0.410375,
+          "feature_y": 1.739686
+        },
+        {
+          "icon_id": "a3f9acad014dd8c6",
+          "label": "affected population",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/affected_population__a3f9acad014d.png",
+          "feature_x": 1.91863,
+          "feature_y": -0.453045
+        },
+        {
+          "icon_id": "7077cdcc94cf4878",
+          "label": "agile",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/agile__7077cdcc94cf.png",
+          "feature_x": 2.00516,
+          "feature_y": 1.595899
+        },
+        {
+          "icon_id": "a09e21ebdedab5a7",
+          "label": "agriculture",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/agriculture__a09e21ebdeda.png",
+          "feature_x": 3.805297,
+          "feature_y": -0.939276
+        },
+        {
+          "icon_id": "816b86edbeb4132c",
+          "label": "airport",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/airport__816b86edbeb4.png",
+          "feature_x": -0.039527,
+          "feature_y": 1.13695
+        },
+        {
+          "icon_id": "bb7408292c419c34",
+          "label": "airport affected",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/airport_affected__bb7408292c41.png",
+          "feature_x": 1.682363,
+          "feature_y": 1.214012
+        },
+        {
+          "icon_id": "d879928d5d662c7b",
+          "label": "airport closed",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/airport_closed__d879928d5d66.png",
+          "feature_x": 2.292686,
+          "feature_y": 0.380554
+        },
+        {
+          "icon_id": "dced7e945687618c",
+          "label": "airport destroyed",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/airport_destroyed__dced7e945687.png",
+          "feature_x": 2.039397,
+          "feature_y": 0.710018
+        },
+        {
+          "icon_id": "1b15aa32b97e99c0",
+          "label": "airport military",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/airport_military__1b15aa32b97e.png",
+          "feature_x": -0.796864,
+          "feature_y": 1.721629
+        },
+        {
+          "icon_id": "5606829325a28d03",
+          "label": "airport not affected",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/airport_not_affected__5606829325a2.png",
+          "feature_x": 1.787448,
+          "feature_y": 1.059262
+        },
+        {
+          "icon_id": "b9de8a34c070b448",
+          "label": "alert",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/alert__b9de8a34c070.png",
+          "feature_x": -1.694576,
+          "feature_y": 1.221239
+        },
+        {
+          "icon_id": "b7d9a21d03ad49ad",
+          "label": "analysis",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/analysis__b7d9a21d03ad.png",
+          "feature_x": 0.413017,
+          "feature_y": -1.089232
+        },
+        {
+          "icon_id": "18383e2129c8408b",
+          "label": "arrest detention",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/arrest_detention__18383e2129c8.png",
+          "feature_x": 0.54089,
+          "feature_y": -1.432166
+        },
+        {
+          "icon_id": "8f61498c403f2947",
+          "label": "assault",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/assault__8f61498c403f.png",
+          "feature_x": 3.279663,
+          "feature_y": 0.791904
+        },
+        {
+          "icon_id": "fcda1531085a0ba5",
+          "label": "assembly point",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/assembly_point__fcda1531085a.png",
+          "feature_x": 2.056358,
+          "feature_y": 0.404063
+        },
+        {
+          "icon_id": "3e11b44e18229d29",
+          "label": "assessment",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/assessment__3e11b44e1822.png",
+          "feature_x": -1.496698,
+          "feature_y": -2.954196
+        },
+        {
+          "icon_id": "ac5a5d931d0bb127",
+          "label": "attack",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/attack__ac5a5d931d0b.png",
+          "feature_x": 0.946219,
+          "feature_y": 0.179298
+        },
+        {
+          "icon_id": "9717e25f4ef2d9d3",
+          "label": "bacteria",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/bacteria__9717e25f4ef2.png",
+          "feature_x": 1.367722,
+          "feature_y": -2.400066
+        },
+        {
+          "icon_id": "bdd745c2d8c16514",
+          "label": "blanket",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/blanket__bdd745c2d8c1.png",
+          "feature_x": -2.278466,
+          "feature_y": -0.21557
+        },
+        {
+          "icon_id": "3b1a1187c76d2513",
+          "label": "blog",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/blog__3b1a1187c76d.png",
+          "feature_x": -1.557398,
+          "feature_y": -1.39628
+        },
+        {
+          "icon_id": "e9d53d00d7ddb27c",
+          "label": "boat",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/boat__e9d53d00d7dd.png",
+          "feature_x": -0.965139,
+          "feature_y": 0.865819
+        },
+        {
+          "icon_id": "3b5b7189558717b0",
+          "label": "bookmark",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/bookmark__3b5b71895587.png",
+          "feature_x": -3.188709,
+          "feature_y": 1.038908
+        },
+        {
+          "icon_id": "971db43104c2be50",
+          "label": "border closed",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/border_closed__971db43104c2.png",
+          "feature_x": 1.402085,
+          "feature_y": -1.058808
+        },
+        {
+          "icon_id": "21cd17017298cd14",
+          "label": "border crossing",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/border_crossing__21cd17017298.png",
+          "feature_x": 1.049362,
+          "feature_y": 0.01041
+        },
+        {
+          "icon_id": "932af6d0685fa252",
+          "label": "borehole",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/borehole__932af6d0685f.png",
+          "feature_x": 0.474461,
+          "feature_y": 0.757912
+        },
+        {
+          "icon_id": "a71a9f685a222d66",
+          "label": "bottled water",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/bottled_water__a71a9f685a22.png",
+          "feature_x": -1.770268,
+          "feature_y": 0.005999
+        },
+        {
+          "icon_id": "96efa84abf46b3de",
+          "label": "bridge",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/bridge__96efa84abf46.png",
+          "feature_x": 0.326896,
+          "feature_y": -0.461853
+        },
+        {
+          "icon_id": "460c2174eba3949a",
+          "label": "bridge affected",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/bridge_affected__460c2174eba3.png",
+          "feature_x": 0.081334,
+          "feature_y": 0.903246
+        },
+        {
+          "icon_id": "6f467e370375ad8a",
+          "label": "bridge closed",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/bridge_closed__6f467e370375.png",
+          "feature_x": 0.577769,
+          "feature_y": 0.207095
+        },
+        {
+          "icon_id": "d138c4c104f3a785",
+          "label": "bridge destroyed",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/bridge_destroyed__d138c4c104f3.png",
+          "feature_x": 0.376859,
+          "feature_y": 0.474774
+        },
+        {
+          "icon_id": "e0b937854c78230b",
+          "label": "bridge not affected",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/bridge_not_affected__e0b937854c78.png",
+          "feature_x": 0.172927,
+          "feature_y": 0.763849
+        },
+        {
+          "icon_id": "597a893297e709dd",
+          "label": "bucket",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/bucket__597a893297e7.png",
+          "feature_x": -0.542213,
+          "feature_y": 0.15535
+        },
+        {
+          "icon_id": "27f9f33f5a2b3012",
+          "label": "buddhist temple",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/buddhist_temple__27f9f33f5a2b.png",
+          "feature_x": 1.052085,
+          "feature_y": -0.858321
+        },
+        {
+          "icon_id": "2a560b7cd2d9862a",
+          "label": "building",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/building__2a560b7cd2d9.png",
+          "feature_x": -1.445648,
+          "feature_y": -1.160578
+        },
+        {
+          "icon_id": "08d3da8ba9974ed7",
+          "label": "building closed",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/building_closed__08d3da8ba997.png",
+          "feature_x": -1.386222,
+          "feature_y": -1.673959
+        },
+        {
+          "icon_id": "f7ce5773fb8e052e",
+          "label": "building facility affected",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/building_facility_affected__f7ce5773fb8e.png",
+          "feature_x": -1.683602,
+          "feature_y": -1.221408
+        },
+        {
+          "icon_id": "0bc024cae070cc1b",
+          "label": "building facility destroyed",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/building_facility_destroyed__0bc024cae070.png",
+          "feature_x": -1.49307,
+          "feature_y": -1.521952
+        },
+        {
+          "icon_id": "a2d4f891006b2053",
+          "label": "building facility not affected",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/building_facility_not_affected__a2d4f891006b.png",
+          "feature_x": -1.620225,
+          "feature_y": -1.325548
+        },
+        {
+          "icon_id": "5eafbd9c46e9f61e",
+          "label": "bus",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/bus__5eafbd9c46e9.png",
+          "feature_x": -1.621718,
+          "feature_y": -1.97046
+        },
+        {
+          "icon_id": "1ab237a6af822011",
+          "label": "calendar",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/calendar__1ab237a6af82.png",
+          "feature_x": -1.310412,
+          "feature_y": -1.803782
+        },
+        {
+          "icon_id": "7ec398ff09ac8543",
+          "label": "camp coordination and camp management",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/camp_coordination_and_camp_management__7ec398ff09ac.png",
+          "feature_x": 1.305697,
+          "feature_y": -1.205459
+        },
+        {
+          "icon_id": "419fcc4f4a0d15e4",
+          "label": "car",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/car__419fcc4f4a0d.png",
+          "feature_x": -1.947898,
+          "feature_y": 0.178625
+        },
+        {
+          "icon_id": "b3f82ed91b159a80",
+          "label": "carjacking",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/carjacking__b3f82ed91b15.png",
+          "feature_x": 0.254889,
+          "feature_y": -0.512904
+        },
+        {
+          "icon_id": "a2849a77c6027ed0",
+          "label": "case management",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/case_management__a2849a77c602.png",
+          "feature_x": -1.400468,
+          "feature_y": -2.085224
+        },
+        {
+          "icon_id": "5ff081db06c207dd",
+          "label": "cash transfer",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/cash_transfer__5ff081db06c2.png",
+          "feature_x": 0.681681,
+          "feature_y": -1.116296
+        },
+        {
+          "icon_id": "f83c74d4dd3de121",
+          "label": "cell tower",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/cell_tower__f83c74d4dd3d.png",
+          "feature_x": 2.637488,
+          "feature_y": -2.02803
+        },
+        {
+          "icon_id": "1c51d643ded6e874",
+          "label": "chart",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/chart__1c51d643ded6.png",
+          "feature_x": -1.177598,
+          "feature_y": 1.727844
+        },
+        {
+          "icon_id": "231b8a3f8268881f",
+          "label": "chat",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/chat__231b8a3f8268.png",
+          "feature_x": -1.218769,
+          "feature_y": 2.222392
+        },
+        {
+          "icon_id": "22fb6ea232dd962d",
+          "label": "checkpoint",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/checkpoint__22fb6ea232dd.png",
+          "feature_x": 1.852817,
+          "feature_y": 0.982262
+        },
+        {
+          "icon_id": "8c8fe82ab42c58d3",
+          "label": "child care child friendly",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/child_care_child_friendly__8c8fe82ab42c.png",
+          "feature_x": 0.355166,
+          "feature_y": 0.88625
+        },
+        {
+          "icon_id": "47e3bd73efa382ae",
+          "label": "child combatant",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/child_combatant__47e3bd73efa3.png",
+          "feature_x": 1.496234,
+          "feature_y": -0.088363
+        },
+        {
+          "icon_id": "4c1e7b0088d25b08",
+          "label": "child protection",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/child_protection__4c1e7b0088d2.png",
+          "feature_x": 0.779983,
+          "feature_y": 0.354695
+        },
+        {
+          "icon_id": "7ac2ba0da1448168",
+          "label": "children",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/children__7ac2ba0da144.png",
+          "feature_x": 1.297107,
+          "feature_y": -0.732671
+        },
+        {
+          "icon_id": "c9e4fa22bc2a7d6a",
+          "label": "church",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/church__c9e4fa22bc2a.png",
+          "feature_x": 1.177947,
+          "feature_y": -0.280549
+        },
+        {
+          "icon_id": "137eeebdee24eb53",
+          "label": "civil military coordination",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/civil_military_coordination__137eeebdee24.png",
+          "feature_x": 2.153007,
+          "feature_y": -2.421426
+        },
+        {
+          "icon_id": "483ec0cd8c82a61d",
+          "label": "clinic",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/clinic__483ec0cd8c82.png",
+          "feature_x": -1.721411,
+          "feature_y": -0.770187
+        },
+        {
+          "icon_id": "9b8db9ceca7b745d",
+          "label": "clothing",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/clothing__9b8db9ceca7b.png",
+          "feature_x": -1.846098,
+          "feature_y": 0.823318
+        },
+        {
+          "icon_id": "6e0d4fcc0f2a575e",
+          "label": "cold wave",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/cold_wave__6e0d4fcc0f2a.png",
+          "feature_x": 2.193793,
+          "feature_y": -0.417718
+        },
+        {
+          "icon_id": "24a03b56084ec7f0",
+          "label": "communal latrine",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/communal_latrine__24a03b56084e.png",
+          "feature_x": 2.771041,
+          "feature_y": -1.227984
+        },
+        {
+          "icon_id": "ded26fef294285a1",
+          "label": "community building",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/community_building__ded26fef2942.png",
+          "feature_x": -1.430301,
+          "feature_y": -1.197784
+        },
+        {
+          "icon_id": "5786f314791a3349",
+          "label": "community engagement",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/community_engagement__5786f314791a.png",
+          "feature_x": 3.094981,
+          "feature_y": -0.763361
+        },
+        {
+          "icon_id": "c717fb6948d4373d",
+          "label": "computer",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/computer__c717fb6948d4.png",
+          "feature_x": 1.054759,
+          "feature_y": -1.404861
+        },
+        {
+          "icon_id": "3f7239a92c820040",
+          "label": "confinement",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/confinement__3f7239a92c82.png",
+          "feature_x": -0.815947,
+          "feature_y": -1.813899
+        },
+        {
+          "icon_id": "15eae1fecd0afd94",
+          "label": "conflict",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/conflict__15eae1fecd0a.png",
+          "feature_x": 2.002343,
+          "feature_y": -0.383092
+        },
+        {
+          "icon_id": "8a0d055967c1fa67",
+          "label": "coordinated assessement",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/coordinated_assessement__8a0d055967c1.png",
+          "feature_x": 1.391831,
+          "feature_y": -0.635855
+        },
+        {
+          "icon_id": "827a06d7d1a63dd1",
+          "label": "coordination",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/coordination__827a06d7d1a6.png",
+          "feature_x": 2.116332,
+          "feature_y": -0.970089
+        },
+        {
+          "icon_id": "46f16d10f5e6d6d5",
+          "label": "copy",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/copy__46f16d10f5e6.png",
+          "feature_x": -0.824928,
+          "feature_y": -0.995128
+        },
+        {
+          "icon_id": "786bfbb67f300c8a",
+          "label": "country",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/country__786bfbb67f30.png",
+          "feature_x": -0.356984,
+          "feature_y": 1.664317
+        },
+        {
+          "icon_id": "5fb96a680c16e296",
+          "label": "covid 19",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/covid_19__5fb96a680c16.png",
+          "feature_x": -0.404826,
+          "feature_y": 0.028423
+        },
+        {
+          "icon_id": "4f78ac391bcce711",
+          "label": "cyclone",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/cyclone__4f78ac391bcc.png",
+          "feature_x": -0.131512,
+          "feature_y": 1.130039
+        },
+        {
+          "icon_id": "fd46387c8add6704",
+          "label": "damaged affected",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/damaged_affected__fd46387c8add.png",
+          "feature_x": -2.312353,
+          "feature_y": 0.501427
+        },
+        {
+          "icon_id": "d90a53fc6a52fc3e",
+          "label": "dangerous area",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/dangerous_area__d90a53fc6a52.png",
+          "feature_x": 0.276368,
+          "feature_y": -0.537993
+        },
+        {
+          "icon_id": "e6fa7ad07cdc064f",
+          "label": "data",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/data__e6fa7ad07cdc.png",
+          "feature_x": -1.260281,
+          "feature_y": -2.851828
+        },
+        {
+          "icon_id": "bd0846cac643fbd3",
+          "label": "dead",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/dead__bd0846cac643.png",
+          "feature_x": 2.014075,
+          "feature_y": 0.306203
+        },
+        {
+          "icon_id": "5e3b9d9f5106cdb5",
+          "label": "debris management",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/debris_management__5e3b9d9f5106.png",
+          "feature_x": 0.533986,
+          "feature_y": 0.395325
+        },
+        {
+          "icon_id": "ca23afbda277bc1a",
+          "label": "deployment",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/deployment__ca23afbda277.png",
+          "feature_x": 1.568238,
+          "feature_y": 1.497971
+        },
+        {
+          "icon_id": "9936e5d24a9d04e4",
+          "label": "destroyed",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/destroyed__9936e5d24a9d.png",
+          "feature_x": -1.913636,
+          "feature_y": -1.048019
+        },
+        {
+          "icon_id": "6841a2502ed1d6fe",
+          "label": "detergent",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/detergent__6841a2502ed1.png",
+          "feature_x": -2.443246,
+          "feature_y": 0.700403
+        },
+        {
+          "icon_id": "9628a35aba74c3ab",
+          "label": "diplomatic mission",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/diplomatic_mission__9628a35aba74.png",
+          "feature_x": -1.980941,
+          "feature_y": -0.679467
+        },
+        {
+          "icon_id": "9aa76e1c2ac046a2",
+          "label": "distribution site",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/distribution_site__9aa76e1c2ac0.png",
+          "feature_x": -1.626665,
+          "feature_y": -0.914943
+        },
+        {
+          "icon_id": "99ecaad15ea16c98",
+          "label": "doctor",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/doctor__99ecaad15ea1.png",
+          "feature_x": 1.586611,
+          "feature_y": 0.507376
+        },
+        {
+          "icon_id": "3ee6ebc731d8e10f",
+          "label": "document",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/document__3ee6ebc731d8.png",
+          "feature_x": -2.304154,
+          "feature_y": -1.322126
+        },
+        {
+          "icon_id": "7ab1784d29fe4429",
+          "label": "down",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/down__7ab1784d29fe.png",
+          "feature_x": -0.677419,
+          "feature_y": 1.718669
+        },
+        {
+          "icon_id": "f29e44fba07b073d",
+          "label": "download",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/download__f29e44fba07b.png",
+          "feature_x": -0.129416,
+          "feature_y": 0.431337
+        },
+        {
+          "icon_id": "ed5fe56c4b108d43",
+          "label": "drought",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/drought__ed5fe56c4b10.png",
+          "feature_x": 3.247196,
+          "feature_y": -0.109319
+        },
+        {
+          "icon_id": "923f97d8add3610f",
+          "label": "drowned",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/drowned__923f97d8add3.png",
+          "feature_x": 2.246562,
+          "feature_y": 0.135542
+        },
+        {
+          "icon_id": "daa1fde0ba6f8545",
+          "label": "early recovery",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/early_recovery__daa1fde0ba6f.png",
+          "feature_x": 1.595269,
+          "feature_y": 2.589763
+        },
+        {
+          "icon_id": "edfa3e2542af43be",
+          "label": "earthmound",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/earthmound__edfa3e2542af.png",
+          "feature_x": -2.568404,
+          "feature_y": 0.660521
+        },
+        {
+          "icon_id": "d3540cffc32f571d",
+          "label": "earthquake",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/earthquake__d3540cffc32f.png",
+          "feature_x": -1.903919,
+          "feature_y": 0.580157
+        },
+        {
+          "icon_id": "2677bfaad3ac779e",
+          "label": "education",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/education__2677bfaad3ac.png",
+          "feature_x": -2.531206,
+          "feature_y": -1.011149
+        },
+        {
+          "icon_id": "159d8268e9d3a830",
+          "label": "elderly",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/elderly__159d8268e9d3.png",
+          "feature_x": 1.298211,
+          "feature_y": 0.694403
+        },
+        {
+          "icon_id": "252594db039d92a6",
+          "label": "email",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/email__252594db039d.png",
+          "feature_x": -1.785594,
+          "feature_y": -2.523961
+        },
+        {
+          "icon_id": "3b5dfa86d4d488d4",
+          "label": "emergency telecommunications",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/emergency_telecommunications__3b5dfa86d4d4.png",
+          "feature_x": 1.813196,
+          "feature_y": -0.302304
+        },
+        {
+          "icon_id": "cfe619b95fb327f9",
+          "label": "environment",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/environment__cfe619b95fb3.png",
+          "feature_x": -0.823731,
+          "feature_y": 1.910298
+        },
+        {
+          "icon_id": "71bd84f092815ba6",
+          "label": "epidemic",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/epidemic__71bd84f09281.png",
+          "feature_x": 0.319903,
+          "feature_y": -0.280313
+        },
+        {
+          "icon_id": "463861ba40ca24a5",
+          "label": "exit cancel",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/exit_cancel__463861ba40ca.png",
+          "feature_x": -0.032362,
+          "feature_y": 0.300141
+        },
+        {
+          "icon_id": "1d0649bdf4219223",
+          "label": "famine",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/famine__1d0649bdf421.png",
+          "feature_x": 2.391271,
+          "feature_y": -0.226593
+        },
+        {
+          "icon_id": "8aed7ac6380b4e7e",
+          "label": "favourite",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/favourite__8aed7ac6380b.png",
+          "feature_x": -2.411023,
+          "feature_y": 0.656706
+        },
+        {
+          "icon_id": "2181c490d374168d",
+          "label": "fax",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/fax__2181c490d374.png",
+          "feature_x": -1.069792,
+          "feature_y": -0.472277
+        },
+        {
+          "icon_id": "56df7dbd2a8d3703",
+          "label": "ferry",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/ferry__56df7dbd2a8d.png",
+          "feature_x": 0.98245,
+          "feature_y": -1.82902
+        },
+        {
+          "icon_id": "4d2bd40212e53ce3",
+          "label": "film",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/film__4d2bd40212e5.png",
+          "feature_x": -0.713941,
+          "feature_y": 0.804525
+        },
+        {
+          "icon_id": "eacf1a34d52de805",
+          "label": "filter",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/filter__eacf1a34d52d.png",
+          "feature_x": -1.398096,
+          "feature_y": 1.895877
+        },
+        {
+          "icon_id": "de3609112f88f10c",
+          "label": "financing",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/financing__de3609112f88.png",
+          "feature_x": -1.234542,
+          "feature_y": -0.793609
+        },
+        {
+          "icon_id": "0d3aae36086fb6e9",
+          "label": "fire",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/fire__0d3aae36086f.png",
+          "feature_x": -1.892442,
+          "feature_y": 0.281364
+        },
+        {
+          "icon_id": "ad5886b1848bc35a",
+          "label": "fire station",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/fire_station__ad5886b1848b.png",
+          "feature_x": -1.321303,
+          "feature_y": -1.353108
+        },
+        {
+          "icon_id": "fad4fac9890ca0fc",
+          "label": "fishery",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/fishery__fad4fac9890c.png",
+          "feature_x": -1.666301,
+          "feature_y": 1.623218
+        },
+        {
+          "icon_id": "c23f701f443eb9e9",
+          "label": "flash flood",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/flash_flood__c23f701f443e.png",
+          "feature_x": 0.618567,
+          "feature_y": 0.085062
+        },
+        {
+          "icon_id": "22f899d76e919b01",
+          "label": "flood",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/flood__22f899d76e91.png",
+          "feature_x": 0.431921,
+          "feature_y": 0.980762
+        },
+        {
+          "icon_id": "ddc2bf422af90ade",
+          "label": "flour",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/flour__ddc2bf422af9.png",
+          "feature_x": -2.063269,
+          "feature_y": -1.66532
+        },
+        {
+          "icon_id": "cf1c6c91a4829837",
+          "label": "folder",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/folder__cf1c6c91a482.png",
+          "feature_x": -3.636331,
+          "feature_y": 1.84447
+        },
+        {
+          "icon_id": "ccaf59c0ceb35dab",
+          "label": "food",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/food__ccaf59c0ceb3.png",
+          "feature_x": -1.831016,
+          "feature_y": -0.018801
+        },
+        {
+          "icon_id": "1e89a8cf73d7deb4",
+          "label": "food security",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/food_security__1e89a8cf73d7.png",
+          "feature_x": 0.238315,
+          "feature_y": -0.261954
+        },
+        {
+          "icon_id": "e4b469b461cd1c58",
+          "label": "food warehouse",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/food_warehouse__e4b469b461cd.png",
+          "feature_x": -1.317556,
+          "feature_y": -1.353607
+        },
+        {
+          "icon_id": "48547841bb21d3f9",
+          "label": "forced entry",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/forced_entry__48547841bb21.png",
+          "feature_x": 0.521628,
+          "feature_y": -1.832811
+        },
+        {
+          "icon_id": "079bf7462353afd9",
+          "label": "forced recruitment",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/forced_recruitment__079bf7462353.png",
+          "feature_x": 1.897005,
+          "feature_y": -0.287767
+        },
+        {
+          "icon_id": "af923affad8d277c",
+          "label": "fund",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/fund__af923affad8d.png",
+          "feature_x": -1.507664,
+          "feature_y": -0.195808
+        },
+        {
+          "icon_id": "d09343e46608ec67",
+          "label": "gap analysis",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/gap_analysis__d09343e46608.png",
+          "feature_x": -2.67292,
+          "feature_y": -1.209295
+        },
+        {
+          "icon_id": "33532e02cb2eccff",
+          "label": "gas station",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/gas_station__33532e02cb2e.png",
+          "feature_x": -0.054954,
+          "feature_y": -0.09847
+        },
+        {
+          "icon_id": "c87c92cd4864c7b4",
+          "label": "gender",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/gender__c87c92cd4864.png",
+          "feature_x": 0.915317,
+          "feature_y": -0.420791
+        },
+        {
+          "icon_id": "ad6324956cd3cef9",
+          "label": "gender based violence",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/gender_based_violence__ad6324956cd3.png",
+          "feature_x": 3.000588,
+          "feature_y": 0.213719
+        },
+        {
+          "icon_id": "559f0e6add57800d",
+          "label": "go",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/go__559f0e6add57.png",
+          "feature_x": 0.252233,
+          "feature_y": 2.239609
+        },
+        {
+          "icon_id": "d90b6b40958e66ea",
+          "label": "government office",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/government_office__d90b6b40958e.png",
+          "feature_x": 2.779057,
+          "feature_y": -1.441446
+        },
+        {
+          "icon_id": "79608477ab0ca35c",
+          "label": "group",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/group__79608477ab0c.png",
+          "feature_x": -0.931183,
+          "feature_y": 0.808946
+        },
+        {
+          "icon_id": "fe63c4356a534ec2",
+          "label": "handwashing",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/handwashing__fe63c4356a53.png",
+          "feature_x": 1.80241,
+          "feature_y": 1.652362
+        },
+        {
+          "icon_id": "28e55333a2efa775",
+          "label": "harassment intimidation",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/harassment_intimidation__28e55333a2ef.png",
+          "feature_x": 2.253708,
+          "feature_y": 0.088816
+        },
+        {
+          "icon_id": "69f9f1f1b4e9255c",
+          "label": "health",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/health__69f9f1f1b4e9.png",
+          "feature_x": 0.297544,
+          "feature_y": 0.174906
+        },
+        {
+          "icon_id": "4d812f0ca6e9e2be",
+          "label": "health facility",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/health_facility__4d812f0ca6e9.png",
+          "feature_x": -2.626596,
+          "feature_y": 0.275872
+        },
+        {
+          "icon_id": "94862bbc244a3766",
+          "label": "health facility affected",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/health_facility_affected__94862bbc244a.png",
+          "feature_x": -0.279457,
+          "feature_y": 0.79649
+        },
+        {
+          "icon_id": "e0d2e112cc0df560",
+          "label": "health facility destroyed",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/health_facility_destroyed__e0d2e112cc0d.png",
+          "feature_x": -0.040256,
+          "feature_y": 0.438715
+        },
+        {
+          "icon_id": "b435e93c95cb80ed",
+          "label": "health facility not affected",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/health_facility_not_affected__b435e93c95cb.png",
+          "feature_x": -0.211482,
+          "feature_y": 0.689338
+        },
+        {
+          "icon_id": "f4c5c4cf52612845",
+          "label": "health post",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/health_post__f4c5c4cf5261.png",
+          "feature_x": -0.349393,
+          "feature_y": 1.059596
+        },
+        {
+          "icon_id": "314c51a8b5f19c32",
+          "label": "health worker",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/health_worker__314c51a8b5f1.png",
+          "feature_x": -0.68684,
+          "feature_y": 0.351077
+        },
+        {
+          "icon_id": "8da3af5f8bca39ec",
+          "label": "heatwave",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/heatwave__8da3af5f8bca.png",
+          "feature_x": 2.581759,
+          "feature_y": -1.40033
+        },
+        {
+          "icon_id": "57dd75ff5e56e5e9",
+          "label": "heavy rain",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/heavy_rain__57dd75ff5e56.png",
+          "feature_x": -1.143183,
+          "feature_y": 1.444629
+        },
+        {
+          "icon_id": "b6aba031d65ce89d",
+          "label": "helicopter",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/helicopter__b6aba031d65c.png",
+          "feature_x": 0.505462,
+          "feature_y": -0.25328
+        },
+        {
+          "icon_id": "2c178a7f55847c22",
+          "label": "helipad",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/helipad__2c178a7f5584.png",
+          "feature_x": -1.014209,
+          "feature_y": -2.247399
+        },
+        {
+          "icon_id": "385eee5c2ef44c52",
+          "label": "help",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/help__385eee5c2ef4.png",
+          "feature_x": -0.699181,
+          "feature_y": 1.173442
+        },
+        {
+          "icon_id": "fa3b2d1ea0fcaed6",
+          "label": "hidden",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/hidden__fa3b2d1ea0fc.png",
+          "feature_x": 0.573934,
+          "feature_y": 0.63394
+        },
+        {
+          "icon_id": "374984910ec60fcd",
+          "label": "hindu temple",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/hindu_temple__374984910ec6.png",
+          "feature_x": 1.520561,
+          "feature_y": -1.165477
+        },
+        {
+          "icon_id": "33633b8a5a9baaf6",
+          "label": "hospital",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/hospital__33633b8a5a9b.png",
+          "feature_x": -1.324026,
+          "feature_y": 0.564719
+        },
+        {
+          "icon_id": "30e917dd0fe86d77",
+          "label": "hospital bed",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/hospital_bed__30e917dd0fe8.png",
+          "feature_x": -0.077551,
+          "feature_y": -0.305001
+        },
+        {
+          "icon_id": "0774c349294559be",
+          "label": "hotel",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/hotel__0774c3492945.png",
+          "feature_x": -1.066918,
+          "feature_y": -1.705392
+        },
+        {
+          "icon_id": "2559701958991d1d",
+          "label": "house",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/house__255970195899.png",
+          "feature_x": -2.851692,
+          "feature_y": 1.082879
+        },
+        {
+          "icon_id": "5cea9f126476238d",
+          "label": "house affected",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/house_affected__5cea9f126476.png",
+          "feature_x": -0.367027,
+          "feature_y": 1.526789
+        },
+        {
+          "icon_id": "249206c8b4fb9344",
+          "label": "house burned",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/house_burned__249206c8b4fb.png",
+          "feature_x": -0.618799,
+          "feature_y": 0.495616
+        },
+        {
+          "icon_id": "b28627596677d9f0",
+          "label": "house destroyed",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/house_destroyed__b28627596677.png",
+          "feature_x": -0.103309,
+          "feature_y": 1.1368
+        },
+        {
+          "icon_id": "02dc1d2daa6dc7cb",
+          "label": "house lockdown",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/house_lockdown__02dc1d2daa6d.png",
+          "feature_x": 0.066579,
+          "feature_y": 0.909315
+        },
+        {
+          "icon_id": "a4b872f1460af1c7",
+          "label": "house not affected",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/house_not_affected__a4b872f1460a.png",
+          "feature_x": -0.285524,
+          "feature_y": 1.400848
+        },
+        {
+          "icon_id": "9116e17d951d0d69",
+          "label": "humanitarian access",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/humanitarian_access__9116e17d951d.png",
+          "feature_x": -0.097966,
+          "feature_y": 0.34545
+        },
+        {
+          "icon_id": "68248589418e8d1e",
+          "label": "humanitarian programme cycle",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/humanitarian_programme_cycle__68248589418e.png",
+          "feature_x": 2.396078,
+          "feature_y": 0.213154
+        },
+        {
+          "icon_id": "edd7de5f9bac35e0",
+          "label": "idp refugee camp",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/idp_refugee_camp__edd7de5f9bac.png",
+          "feature_x": -0.937555,
+          "feature_y": 1.565069
+        },
+        {
+          "icon_id": "d4c706e0de7a97bd",
+          "label": "indigenous people",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/indigenous_people__d4c706e0de7a.png",
+          "feature_x": 1.82724,
+          "feature_y": 0.520508
+        },
+        {
+          "icon_id": "9bb28ee6b951a5e8",
+          "label": "infant",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/infant__9bb28ee6b951.png",
+          "feature_x": 0.1017,
+          "feature_y": 0.22913
+        },
+        {
+          "icon_id": "b379a0d46ea938c4",
+          "label": "infant formula",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/infant_formula__b379a0d46ea9.png",
+          "feature_x": -2.148383,
+          "feature_y": -0.37073
+        },
+        {
+          "icon_id": "2d14ac2d6a1b3723",
+          "label": "infected",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/infected__2d14ac2d6a1b.png",
+          "feature_x": 0.990372,
+          "feature_y": 0.408824
+        },
+        {
+          "icon_id": "e1ed71e69bca6dc6",
+          "label": "infection control",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/infection_control__e1ed71e69bca.png",
+          "feature_x": -0.748518,
+          "feature_y": -1.464131
+        },
+        {
+          "icon_id": "25643ae3ef46ce68",
+          "label": "information management",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/information_management__25643ae3ef46.png",
+          "feature_x": 1.988894,
+          "feature_y": -0.985067
+        },
+        {
+          "icon_id": "0b56ec1f374766c4",
+          "label": "information technology",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/information_technology__0b56ec1f3747.png",
+          "feature_x": -0.952657,
+          "feature_y": -0.532684
+        },
+        {
+          "icon_id": "8c9aacac702376bf",
+          "label": "infrastructure",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/infrastructure__8c9aacac7023.png",
+          "feature_x": -0.152976,
+          "feature_y": 0.208033
+        },
+        {
+          "icon_id": "9094cbfa29c3592f",
+          "label": "injured",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/injured__9094cbfa29c3.png",
+          "feature_x": -0.737075,
+          "feature_y": 0.847698
+        },
+        {
+          "icon_id": "69fb44a2fb27b517",
+          "label": "innovation",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/innovation__69fb44a2fb27.png",
+          "feature_x": 0.817965,
+          "feature_y": 0.7058
+        },
+        {
+          "icon_id": "c69c379aa86f5de9",
+          "label": "insect infestation",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/insect_infestation__c69c379aa86f.png",
+          "feature_x": 3.103673,
+          "feature_y": 0.676834
+        },
+        {
+          "icon_id": "e7c997857764486b",
+          "label": "internally displaced",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/internally_displaced__e7c997857764.png",
+          "feature_x": 2.550369,
+          "feature_y": 1.445003
+        },
+        {
+          "icon_id": "7522feb520317bad",
+          "label": "internet",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/internet__7522feb52031.png",
+          "feature_x": 0.822923,
+          "feature_y": 0.191946
+        },
+        {
+          "icon_id": "d9e14e1af7a2d40c",
+          "label": "kitchen set",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/kitchen_set__d9e14e1af7a2.png",
+          "feature_x": 1.099007,
+          "feature_y": -1.287875
+        },
+        {
+          "icon_id": "752544ae926bd414",
+          "label": "laboratory",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/laboratory__752544ae926b.png",
+          "feature_x": 1.071092,
+          "feature_y": 1.313373
+        },
+        {
+          "icon_id": "e4d714ad2ad932b3",
+          "label": "landslide mudslide",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/landslide_mudslide__e4d714ad2ad9.png",
+          "feature_x": -0.303278,
+          "feature_y": 1.923831
+        },
+        {
+          "icon_id": "69981fecc4fc5ae3",
+          "label": "laptop",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/laptop__69981fecc4fc.png",
+          "feature_x": 0.055227,
+          "feature_y": 0.948176
+        },
+        {
+          "icon_id": "6b882225f5259158",
+          "label": "latrine cabin",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/latrine_cabin__6b882225f525.png",
+          "feature_x": -2.981677,
+          "feature_y": 0.304854
+        },
+        {
+          "icon_id": "f0adda98f6691fd9",
+          "label": "leadership",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/leadership__f0adda98f669.png",
+          "feature_x": -0.180756,
+          "feature_y": -1.788133
+        },
+        {
+          "icon_id": "f44f908d200882fa",
+          "label": "learning",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/learning__f44f908d2008.png",
+          "feature_x": 1.797722,
+          "feature_y": 0.105709
+        },
+        {
+          "icon_id": "ccf98772a3e0d4b8",
+          "label": "life saving",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/life_saving__ccf98772a3e0.png",
+          "feature_x": -1.27807,
+          "feature_y": -2.004545
+        },
+        {
+          "icon_id": "0c4f9f4461b71dd4",
+          "label": "link",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/link__0c4f9f4461b7.png",
+          "feature_x": 2.603693,
+          "feature_y": 1.439326
+        },
+        {
+          "icon_id": "fb9bfd4f3bfde526",
+          "label": "livelihood",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/livelihood__fb9bfd4f3bfd.png",
+          "feature_x": 1.382279,
+          "feature_y": -1.667165
+        },
+        {
+          "icon_id": "cd228891f803d649",
+          "label": "livestock",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/livestock__cd228891f803.png",
+          "feature_x": -1.346474,
+          "feature_y": 1.634532
+        },
+        {
+          "icon_id": "68a257fe0f697376",
+          "label": "location",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/location__68a257fe0f69.png",
+          "feature_x": -2.010347,
+          "feature_y": 0.404445
+        },
+        {
+          "icon_id": "2016ac27259a011d",
+          "label": "location lockdown",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/location_lockdown__2016ac27259a.png",
+          "feature_x": 0.560984,
+          "feature_y": 0.045719
+        },
+        {
+          "icon_id": "ac8e5818c7fef939",
+          "label": "locust infestation",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/locust_infestation__ac8e5818c7fe.png",
+          "feature_x": 1.300888,
+          "feature_y": 0.35686
+        },
+        {
+          "icon_id": "67d7e18079db53d5",
+          "label": "logistics",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/logistics__67d7e18079db.png",
+          "feature_x": 1.133146,
+          "feature_y": -0.294435
+        },
+        {
+          "icon_id": "3bb7c0484d232335",
+          "label": "map",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/map__3bb7c0484d23.png",
+          "feature_x": 1.027483,
+          "feature_y": 0.090474
+        },
+        {
+          "icon_id": "d8c04307cb3c32ea",
+          "label": "market",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/market__d8c04307cb3c.png",
+          "feature_x": -0.99136,
+          "feature_y": -0.95136
+        },
+        {
+          "icon_id": "f332eed4a69ab308",
+          "label": "market closed",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/market_closed__f332eed4a69a.png",
+          "feature_x": 0.310097,
+          "feature_y": -1.523035
+        },
+        {
+          "icon_id": "33b1bdda91494c7f",
+          "label": "mask",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/mask__33b1bdda9149.png",
+          "feature_x": -2.035611,
+          "feature_y": 1.680058
+        },
+        {
+          "icon_id": "3c98fc34a5d6ad08",
+          "label": "mattress",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/mattress__3c98fc34a5d6.png",
+          "feature_x": -2.958689,
+          "feature_y": 0.15125
+        },
+        {
+          "icon_id": "956b02808ab189f4",
+          "label": "medical supply",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/medical_supply__956b02808ab1.png",
+          "feature_x": -2.845511,
+          "feature_y": 0.7707
+        },
+        {
+          "icon_id": "b0bf4f9aa2a846d3",
+          "label": "medicine",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/medicine__b0bf4f9aa2a8.png",
+          "feature_x": 0.66328,
+          "feature_y": 0.188583
+        },
+        {
+          "icon_id": "e54f309e932a6000",
+          "label": "meeting",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/meeting__e54f309e932a.png",
+          "feature_x": 0.76987,
+          "feature_y": -0.690245
+        },
+        {
+          "icon_id": "50a9d6852fc2352a",
+          "label": "menu",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/menu__50a9d6852fc2.png",
+          "feature_x": -0.371064,
+          "feature_y": 0.075801
+        },
+        {
+          "icon_id": "67eff53d68f2c1e1",
+          "label": "military gate",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/military_gate__67eff53d68f2.png",
+          "feature_x": 1.229653,
+          "feature_y": -2.302148
+        },
+        {
+          "icon_id": "da53adb98b387202",
+          "label": "mine",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/mine__da53adb98b38.png",
+          "feature_x": -0.473445,
+          "feature_y": 1.618314
+        },
+        {
+          "icon_id": "d1bf3b907a5d55fd",
+          "label": "missing",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/missing__d1bf3b907a5d.png",
+          "feature_x": 1.935499,
+          "feature_y": 0.421788
+        },
+        {
+          "icon_id": "0826fa8294b38c15",
+          "label": "mobile clinic",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/mobile_clinic__0826fa8294b3.png",
+          "feature_x": -1.266564,
+          "feature_y": -0.841877
+        },
+        {
+          "icon_id": "ea951b140f98d380",
+          "label": "mobile phone",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/mobile_phone__ea951b140f98.png",
+          "feature_x": -1.920791,
+          "feature_y": -1.836755
+        },
+        {
+          "icon_id": "675c199f595780fc",
+          "label": "monitor",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/monitor__675c199f5957.png",
+          "feature_x": -1.908809,
+          "feature_y": -0.335671
+        },
+        {
+          "icon_id": "9a182ba772bd2fee",
+          "label": "monitoring",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/monitoring__9a182ba772bd.png",
+          "feature_x": 0.083312,
+          "feature_y": -0.621639
+        },
+        {
+          "icon_id": "254c253c7a1c4289",
+          "label": "more options",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/more_options__254c253c7a1c.png",
+          "feature_x": -1.556155,
+          "feature_y": 0.970778
+        },
+        {
+          "icon_id": "4fa3b44786518838",
+          "label": "mosque",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/mosque__4fa3b4478651.png",
+          "feature_x": 0.728645,
+          "feature_y": -0.121083
+        },
+        {
+          "icon_id": "d80e770c3bbf9d61",
+          "label": "mosquito net",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/mosquito_net__d80e770c3bbf.png",
+          "feature_x": 3.0968,
+          "feature_y": -1.151842
+        },
+        {
+          "icon_id": "ceac098f156d55e7",
+          "label": "multi cluster sector",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/multi_cluster_sector__ceac098f156d.png",
+          "feature_x": -0.306066,
+          "feature_y": 1.419717
+        },
+        {
+          "icon_id": "4fac82313621978c",
+          "label": "murder",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/murder__4fac82313621.png",
+          "feature_x": 2.753021,
+          "feature_y": 0.261819
+        },
+        {
+          "icon_id": "a3f4c721b95bd4d6",
+          "label": "national army",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/national_army__a3f4c721b95b.png",
+          "feature_x": 0.857684,
+          "feature_y": -0.372255
+        },
+        {
+          "icon_id": "bf723f83cb26ec13",
+          "label": "needs assessment",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/needs_assessment__bf723f83cb26.png",
+          "feature_x": -1.740164,
+          "feature_y": -1.599775
+        },
+        {
+          "icon_id": "099f4d9e86311aa0",
+          "label": "next item",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/next_item__099f4d9e8631.png",
+          "feature_x": -0.136576,
+          "feature_y": 2.562673
+        },
+        {
+          "icon_id": "822bc30d16cefb7d",
+          "label": "ngo office",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/ngo_office__822bc30d16ce.png",
+          "feature_x": -0.780448,
+          "feature_y": -2.1341
+        },
+        {
+          "icon_id": "25842557e28691cb",
+          "label": "non food items",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/non_food_items__25842557e286.png",
+          "feature_x": 4.102383,
+          "feature_y": -0.684059
+        },
+        {
+          "icon_id": "2f71716533818551",
+          "label": "non food items 2",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/non_food_items_2__2f7171653381.png",
+          "feature_x": -2.092803,
+          "feature_y": 0.367419
+        },
+        {
+          "icon_id": "1096610b13884bff",
+          "label": "not affected",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/not_affected__1096610b1388.png",
+          "feature_x": -2.082888,
+          "feature_y": -0.793028
+        },
+        {
+          "icon_id": "8716ffaa0cdae85d",
+          "label": "not infected",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/not_infected__8716ffaa0cda.png",
+          "feature_x": 0.862004,
+          "feature_y": 1.450414
+        },
+        {
+          "icon_id": "88ad2f8f06b22833",
+          "label": "notification",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/notification__88ad2f8f06b2.png",
+          "feature_x": -1.793609,
+          "feature_y": 0.996755
+        },
+        {
+          "icon_id": "86c8751a45a0af6f",
+          "label": "nutrition",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/nutrition__86c8751a45a0.png",
+          "feature_x": -0.108636,
+          "feature_y": -0.117754
+        },
+        {
+          "icon_id": "9808457eab10b419",
+          "label": "observation tower",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/observation_tower__9808457eab10.png",
+          "feature_x": -0.075473,
+          "feature_y": -1.173223
+        },
+        {
+          "icon_id": "2b79d69b50fb6f61",
+          "label": "oil",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/oil__2b79d69b50fb.png",
+          "feature_x": -2.669542,
+          "feature_y": 1.281831
+        },
+        {
+          "icon_id": "db4bc89785468f23",
+          "label": "oil facility",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/oil_facility__db4bc8978546.png",
+          "feature_x": 0.965757,
+          "feature_y": -0.210633
+        },
+        {
+          "icon_id": "000f48a0d242370d",
+          "label": "out of platform",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/out_of_platform__000f48a0d242.png",
+          "feature_x": 0.642881,
+          "feature_y": -1.907021
+        },
+        {
+          "icon_id": "4a4806f725a0dd1b",
+          "label": "partnership",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/partnership__4a4806f725a0.png",
+          "feature_x": 0.259803,
+          "feature_y": -1.310155
+        },
+        {
+          "icon_id": "2afa2fcef0252161",
+          "label": "pause",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/pause__2afa2fcef025.png",
+          "feature_x": -2.177708,
+          "feature_y": 0.309559
+        },
+        {
+          "icon_id": "2eda2b7ed3b7d8fe",
+          "label": "peacekeeping force",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/peacekeeping_force__2eda2b7ed3b7.png",
+          "feature_x": -0.557355,
+          "feature_y": -0.958938
+        },
+        {
+          "icon_id": "d258d7c37b04786f",
+          "label": "people in need",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/people_in_need__d258d7c37b04.png",
+          "feature_x": 0.891721,
+          "feature_y": -1.064009
+        },
+        {
+          "icon_id": "a38a9ec65900d4a7",
+          "label": "people targeted",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/people_targeted__a38a9ec65900.png",
+          "feature_x": 2.178179,
+          "feature_y": -0.707869
+        },
+        {
+          "icon_id": "7be134ce1fa98216",
+          "label": "people with physical impairments",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/people_with_physical_impairments__7be134ce1fa9.png",
+          "feature_x": 1.443272,
+          "feature_y": 0.946042
+        },
+        {
+          "icon_id": "90989efae74ee9c3",
+          "label": "permanent camp",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/permanent_camp__90989efae74e.png",
+          "feature_x": -0.243895,
+          "feature_y": 0.730564
+        },
+        {
+          "icon_id": "f4d2bd60d63e8d99",
+          "label": "person 1",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/person_1__f4d2bd60d63e.png",
+          "feature_x": -0.506313,
+          "feature_y": 0.466748
+        },
+        {
+          "icon_id": "c0d38d26e8740733",
+          "label": "person 2",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/person_2__c0d38d26e874.png",
+          "feature_x": -0.088758,
+          "feature_y": 0.237263
+        },
+        {
+          "icon_id": "2e2f590305eb3cca",
+          "label": "photo",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/photo__2e2f590305eb.png",
+          "feature_x": -1.355963,
+          "feature_y": -1.173498
+        },
+        {
+          "icon_id": "bbbd1a0b308a6726",
+          "label": "physical closure",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/physical_closure__bbbd1a0b308a.png",
+          "feature_x": -1.049649,
+          "feature_y": -2.341618
+        },
+        {
+          "icon_id": "439873b50eed4285",
+          "label": "plastic sheeting",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/plastic_sheeting__439873b50eed.png",
+          "feature_x": -2.288504,
+          "feature_y": -1.347516
+        },
+        {
+          "icon_id": "2bdce1fc0ced7f32",
+          "label": "police station",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/police_station__2bdce1fc0ced.png",
+          "feature_x": -1.503506,
+          "feature_y": -1.084242
+        },
+        {
+          "icon_id": "9cef07edf20f9058",
+          "label": "policy",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/policy__9cef07edf20f.png",
+          "feature_x": -1.127436,
+          "feature_y": -1.324692
+        },
+        {
+          "icon_id": "3f1c73ee25ca1bb6",
+          "label": "population growth",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/population_growth__3f1c73ee25ca.png",
+          "feature_x": 2.628618,
+          "feature_y": 0.275142
+        },
+        {
+          "icon_id": "213cba4c43c1446e",
+          "label": "population return",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/population_return__213cba4c43c1.png",
+          "feature_x": 2.745666,
+          "feature_y": 1.048917
+        },
+        {
+          "icon_id": "4de69b03ca356dff",
+          "label": "port",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/port__4de69b03ca35.png",
+          "feature_x": 0.22344,
+          "feature_y": 0.427973
+        },
+        {
+          "icon_id": "d5eedde23664df57",
+          "label": "port affected",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/port_affected__d5eedde23664.png",
+          "feature_x": 1.44749,
+          "feature_y": 0.379676
+        },
+        {
+          "icon_id": "b3ae2ede0bbc2360",
+          "label": "port closed",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/port_closed__b3ae2ede0bbc.png",
+          "feature_x": 1.957935,
+          "feature_y": -0.33359
+        },
+        {
+          "icon_id": "49ce1850e8df2808",
+          "label": "port destroyed",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/port_destroyed__49ce1850e8df.png",
+          "feature_x": 1.751062,
+          "feature_y": -0.059003
+        },
+        {
+          "icon_id": "74fb7286baf33ec2",
+          "label": "port not affected",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/port_not_affected__74fb7286baf3.png",
+          "feature_x": 1.540957,
+          "feature_y": 0.23799
+        },
+        {
+          "icon_id": "714e0ea28c0b44d6",
+          "label": "potable water",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/potable_water__714e0ea28c0b.png",
+          "feature_x": -2.795045,
+          "feature_y": 0.172781
+        },
+        {
+          "icon_id": "4ae25c53efc45cb3",
+          "label": "potable water source",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/potable_water_source__4ae25c53efc4.png",
+          "feature_x": -2.492555,
+          "feature_y": -0.273616
+        },
+        {
+          "icon_id": "a3926cebcf1b42fc",
+          "label": "poverty",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/poverty__a3926cebcf1b.png",
+          "feature_x": -1.464855,
+          "feature_y": -0.272329
+        },
+        {
+          "icon_id": "7b0bb620874fe629",
+          "label": "power electricity",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/power_electricity__7b0bb620874f.png",
+          "feature_x": -1.862197,
+          "feature_y": 1.04863
+        },
+        {
+          "icon_id": "553505ea315fff11",
+          "label": "power electricity affected",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/power_electricity_affected__553505ea315f.png",
+          "feature_x": 0.327685,
+          "feature_y": 1.072507
+        },
+        {
+          "icon_id": "47663fecbc89f390",
+          "label": "power electricity not affected",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/power_electricity_not_affected__47663fecbc89.png",
+          "feature_x": 0.414975,
+          "feature_y": 0.939497
+        },
+        {
+          "icon_id": "76b369da1b7311a3",
+          "label": "power outage",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/power_outage__76b369da1b73.png",
+          "feature_x": 0.614282,
+          "feature_y": 0.654567
+        },
+        {
+          "icon_id": "53cbf1ae125924a2",
+          "label": "pregnant",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/pregnant__53cbf1ae1259.png",
+          "feature_x": -0.076349,
+          "feature_y": 0.550343
+        },
+        {
+          "icon_id": "eeda5be903a99ea3",
+          "label": "preparedness",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/preparedness__eeda5be903a9.png",
+          "feature_x": 2.245733,
+          "feature_y": 0.236758
+        },
+        {
+          "icon_id": "58445d60586452b3",
+          "label": "previous item",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/previous_item__58445d605864.png",
+          "feature_x": -0.120081,
+          "feature_y": 1.511366
+        },
+        {
+          "icon_id": "b63953750be2b53b",
+          "label": "print",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/print__b63953750be2.png",
+          "feature_x": -0.498852,
+          "feature_y": -2.171794
+        },
+        {
+          "icon_id": "f1f70569d91a2b89",
+          "label": "protection",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/protection__f1f70569d91a.png",
+          "feature_x": -0.03482,
+          "feature_y": -0.230863
+        },
+        {
+          "icon_id": "6f614d188a09d9ed",
+          "label": "public information",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/public_information__6f614d188a09.png",
+          "feature_x": -0.987965,
+          "feature_y": 0.51444
+        },
+        {
+          "icon_id": "e99d2316326c6272",
+          "label": "radio",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/radio__e99d2316326c.png",
+          "feature_x": -1.149997,
+          "feature_y": -0.922299
+        },
+        {
+          "icon_id": "18bdbdc4bf804bf9",
+          "label": "rebel",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/rebel__18bdbdc4bf80.png",
+          "feature_x": 0.100532,
+          "feature_y": 0.994064
+        },
+        {
+          "icon_id": "6b1a163e3bb3db43",
+          "label": "reconstruction",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/reconstruction__6b1a163e3bb3.png",
+          "feature_x": -0.448534,
+          "feature_y": 0.496118
+        },
+        {
+          "icon_id": "5e0edba359e25f48",
+          "label": "refugee",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/refugee__5e0edba359e2.png",
+          "feature_x": 3.186283,
+          "feature_y": 0.487439
+        },
+        {
+          "icon_id": "150510940d324317",
+          "label": "registration",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/registration__150510940d32.png",
+          "feature_x": -2.191142,
+          "feature_y": -1.98588
+        },
+        {
+          "icon_id": "2e5eeaef022158ae",
+          "label": "relief goods",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/relief_goods__2e5eeaef0221.png",
+          "feature_x": -0.512773,
+          "feature_y": 0.653265
+        },
+        {
+          "icon_id": "fbd87da0c1da9a40",
+          "label": "remote support",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/remote_support__fbd87da0c1da.png",
+          "feature_x": 0.952082,
+          "feature_y": 0.538778
+        },
+        {
+          "icon_id": "d2908bcd850fab66",
+          "label": "remove",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/remove__d2908bcd850f.png",
+          "feature_x": -2.939915,
+          "feature_y": 0.673786
+        },
+        {
+          "icon_id": "a4a4522b422e82b1",
+          "label": "remove document",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/remove_document__a4a4522b422e.png",
+          "feature_x": 0.289201,
+          "feature_y": -0.012841
+        },
+        {
+          "icon_id": "6869f2bb200e3f95",
+          "label": "report",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/report__6869f2bb200e.png",
+          "feature_x": 0.103974,
+          "feature_y": -1.576528
+        },
+        {
+          "icon_id": "3f8aa71a7c187764",
+          "label": "reporting",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/reporting__3f8aa71a7c18.png",
+          "feature_x": 0.754612,
+          "feature_y": 0.715222
+        },
+        {
+          "icon_id": "946f5783ecc3c3d3",
+          "label": "resilence",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/resilence__946f5783ecc3.png",
+          "feature_x": 0.655232,
+          "feature_y": 1.209099
+        },
+        {
+          "icon_id": "26ff58dbe49c4d00",
+          "label": "respiratory",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/respiratory__26ff58dbe49c.png",
+          "feature_x": 0.465786,
+          "feature_y": -1.868836
+        },
+        {
+          "icon_id": "72889889f97db0b9",
+          "label": "response",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/response__72889889f97d.png",
+          "feature_x": 1.977908,
+          "feature_y": 1.060173
+        },
+        {
+          "icon_id": "68a878eff1cdbc4a",
+          "label": "return",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/return__68a878eff1cd.png",
+          "feature_x": 0.218026,
+          "feature_y": 2.316164
+        },
+        {
+          "icon_id": "6cbed0ef4d9f7b6e",
+          "label": "rice",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/rice__6cbed0ef4d9f.png",
+          "feature_x": -0.525731,
+          "feature_y": 0.393592
+        },
+        {
+          "icon_id": "350bfdc0b43eac02",
+          "label": "road",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/road__350bfdc0b43e.png",
+          "feature_x": -3.343289,
+          "feature_y": 0.205108
+        },
+        {
+          "icon_id": "1e057fe1d9f74ca4",
+          "label": "road affected",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/road_affected__1e057fe1d9f7.png",
+          "feature_x": 1.539313,
+          "feature_y": 0.423346
+        },
+        {
+          "icon_id": "dae04208f3ec7d94",
+          "label": "road barrier",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/road_barrier__dae04208f3ec.png",
+          "feature_x": 2.044905,
+          "feature_y": -0.998334
+        },
+        {
+          "icon_id": "2300b93c8356cbf8",
+          "label": "road closed",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/road_closed__2300b93c8356.png",
+          "feature_x": 1.643558,
+          "feature_y": -0.537011
+        },
+        {
+          "icon_id": "391abc850730224e",
+          "label": "road destroyed",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/road_destroyed__391abc850730.png",
+          "feature_x": 1.725367,
+          "feature_y": -0.155175
+        },
+        {
+          "icon_id": "57bfe00042932aab",
+          "label": "road not affected",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/road_not_affected__57bfe0004293.png",
+          "feature_x": 1.569623,
+          "feature_y": 0.20114
+        },
+        {
+          "icon_id": "8c91131abeb4ff7a",
+          "label": "roadblock",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/roadblock__8c91131abeb4.png",
+          "feature_x": -0.254032,
+          "feature_y": -0.805127
+        },
+        {
+          "icon_id": "b1fd816a52944306",
+          "label": "robbery",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/robbery__b1fd816a5294.png",
+          "feature_x": 2.034472,
+          "feature_y": 1.004451
+        },
+        {
+          "icon_id": "760754fa4b6fb015",
+          "label": "rule of law and justice",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/rule_of_law_and_justice__760754fa4b6f.png",
+          "feature_x": 2.21341,
+          "feature_y": -0.742586
+        },
+        {
+          "icon_id": "ec9c293ea5664579",
+          "label": "rural",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/rural__ec9c293ea566.png",
+          "feature_x": -0.243362,
+          "feature_y": 1.516922
+        },
+        {
+          "icon_id": "0b785ca3d631c636",
+          "label": "rural exodus",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/rural_exodus__0b785ca3d631.png",
+          "feature_x": 2.045798,
+          "feature_y": 0.179634
+        },
+        {
+          "icon_id": "889282759cb89547",
+          "label": "safety and security",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/safety_and_security__889282759cb8.png",
+          "feature_x": -2.796068,
+          "feature_y": 0.143976
+        },
+        {
+          "icon_id": "b7560d663b6c442f",
+          "label": "salt",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/salt__b7560d663b6c.png",
+          "feature_x": -1.327204,
+          "feature_y": -1.912669
+        },
+        {
+          "icon_id": "a3ff13993ccbf5d8",
+          "label": "sanitation",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/sanitation__a3ff13993ccb.png",
+          "feature_x": 0.312542,
+          "feature_y": 1.692825
+        },
+        {
+          "icon_id": "9f203654c9547f99",
+          "label": "sanitizer",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/sanitizer__9f203654c954.png",
+          "feature_x": -2.485418,
+          "feature_y": 1.183449
+        },
+        {
+          "icon_id": "7ab74b5ed3b116b9",
+          "label": "satellite dish",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/satellite_dish__7ab74b5ed3b1.png",
+          "feature_x": 2.789648,
+          "feature_y": 1.63454
+        },
+        {
+          "icon_id": "b2e6abe051aab5e5",
+          "label": "save",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/save__b2e6abe051aa.png",
+          "feature_x": 0.262302,
+          "feature_y": -0.103958
+        },
+        {
+          "icon_id": "6ac16fe45d47c66d",
+          "label": "scale down operation",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/scale_down_operation__6ac16fe45d47.png",
+          "feature_x": 0.347658,
+          "feature_y": -2.069104
+        },
+        {
+          "icon_id": "a8af9485c3fb76db",
+          "label": "scale up operation",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/scale_up_operation__a8af9485c3fb.png",
+          "feature_x": 0.317629,
+          "feature_y": -0.992525
+        },
+        {
+          "icon_id": "24228e9e11428dcc",
+          "label": "school",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/school__24228e9e1142.png",
+          "feature_x": 0.156171,
+          "feature_y": -0.629457
+        },
+        {
+          "icon_id": "a5a1fbec2816cb0a",
+          "label": "school affected",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/school_affected__a5a1fbec2816.png",
+          "feature_x": 0.595271,
+          "feature_y": -1.590324
+        },
+        {
+          "icon_id": "2c207b5462246b9e",
+          "label": "school closed",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/school_closed__2c207b546224.png",
+          "feature_x": 0.976799,
+          "feature_y": -2.146237
+        },
+        {
+          "icon_id": "8cff56339de2de14",
+          "label": "school destroyed",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/school_destroyed__8cff56339de2.png",
+          "feature_x": 0.830412,
+          "feature_y": -1.945021
+        },
+        {
+          "icon_id": "ef3a52c2924977fa",
+          "label": "school not affected",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/school_not_affected__ef3a52c29249.png",
+          "feature_x": 0.671568,
+          "feature_y": -1.711033
+        },
+        {
+          "icon_id": "0a13e3bf36f05fce",
+          "label": "search",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/search__0a13e3bf36f0.png",
+          "feature_x": -1.288191,
+          "feature_y": 0.034201
+        },
+        {
+          "icon_id": "2069cd54644a13ca",
+          "label": "search and rescue",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/search_and_rescue__2069cd54644a.png",
+          "feature_x": -2.383134,
+          "feature_y": -0.456912
+        },
+        {
+          "icon_id": "13ce3bf4ead47832",
+          "label": "see",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/see__13ce3bf4ead4.png",
+          "feature_x": -2.196584,
+          "feature_y": -0.189207
+        },
+        {
+          "icon_id": "abcec032757381fb",
+          "label": "selected",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/selected__abcec0327573.png",
+          "feature_x": 0.903841,
+          "feature_y": 3.079686
+        },
+        {
+          "icon_id": "cd52bc3365b31e81",
+          "label": "services and tools",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/services_and_tools__cd52bc3365b3.png",
+          "feature_x": 0.977697,
+          "feature_y": 0.650312
+        },
+        {
+          "icon_id": "a808fe837416bac6",
+          "label": "settings",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/settings__a808fe837416.png",
+          "feature_x": -1.254109,
+          "feature_y": 0.147862
+        },
+        {
+          "icon_id": "82440ede5b0df299",
+          "label": "sexual and reproductive health",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/sexual_and_reproductive_health__82440ede5b0d.png",
+          "feature_x": -1.871239,
+          "feature_y": -0.147228
+        },
+        {
+          "icon_id": "d8694903a82b1b66",
+          "label": "sexual violence",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/sexual_violence__d8694903a82b.png",
+          "feature_x": 2.75066,
+          "feature_y": 0.900432
+        },
+        {
+          "icon_id": "fed3dd58eefe50c5",
+          "label": "share",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/share__fed3dd58eefe.png",
+          "feature_x": 0.565448,
+          "feature_y": 0.675254
+        },
+        {
+          "icon_id": "7ce2402e75d62048",
+          "label": "shelter",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/shelter__7ce2402e75d6.png",
+          "feature_x": 1.51646,
+          "feature_y": 0.120438
+        },
+        {
+          "icon_id": "b98dc74f393bdee4",
+          "label": "ship",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/ship__b98dc74f393b.png",
+          "feature_x": 1.086811,
+          "feature_y": -0.951806
+        },
+        {
+          "icon_id": "72fb4d36196ee241",
+          "label": "shower",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/shower__72fb4d36196e.png",
+          "feature_x": 1.491225,
+          "feature_y": 0.808245
+        },
+        {
+          "icon_id": "8ad9fc918285811b",
+          "label": "smartphone",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/smartphone__8ad9fc918285.png",
+          "feature_x": -2.768525,
+          "feature_y": -0.648026
+        },
+        {
+          "icon_id": "15ff4a2dbfe9dfdb",
+          "label": "snow avalanche",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/snow_avalanche__15ff4a2dbfe9.png",
+          "feature_x": 0.09706,
+          "feature_y": 1.417664
+        },
+        {
+          "icon_id": "edd93a05fb5665e5",
+          "label": "snowfall",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/snowfall__edd93a05fb56.png",
+          "feature_x": 1.517715,
+          "feature_y": -1.04183
+        },
+        {
+          "icon_id": "24e31e1cc9f04f07",
+          "label": "soap",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/soap__24e31e1cc9f0.png",
+          "feature_x": -1.233992,
+          "feature_y": 0.211126
+        },
+        {
+          "icon_id": "a29db5886b416bfe",
+          "label": "social distancing",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/social_distancing__a29db5886b41.png",
+          "feature_x": 1.046467,
+          "feature_y": 0.760174
+        },
+        {
+          "icon_id": "afba5e76d919ca97",
+          "label": "solid waste",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/solid_waste__afba5e76d919.png",
+          "feature_x": -1.033252,
+          "feature_y": -1.742775
+        },
+        {
+          "icon_id": "38647e54a5f844bb",
+          "label": "spontaneous site",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/spontaneous_site__38647e54a5f8.png",
+          "feature_x": -0.864643,
+          "feature_y": 0.72186
+        },
+        {
+          "icon_id": "e108ab59d53ccb0e",
+          "label": "spring water",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/spring_water__e108ab59d53c.png",
+          "feature_x": 0.908699,
+          "feature_y": -1.354722
+        },
+        {
+          "icon_id": "61169468185a70bb",
+          "label": "staff management",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/staff_management__61169468185a.png",
+          "feature_x": 1.146908,
+          "feature_y": 0.383025
+        },
+        {
+          "icon_id": "b3f0f9766fb16415",
+          "label": "stop",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/stop__b3f0f9766fb1.png",
+          "feature_x": -2.436925,
+          "feature_y": 0.695556
+        },
+        {
+          "icon_id": "09846ffa63d2ccca",
+          "label": "storm",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/storm__09846ffa63d2.png",
+          "feature_x": -0.92113,
+          "feature_y": 1.760022
+        },
+        {
+          "icon_id": "57904fffd954b9d9",
+          "label": "storm surge",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/storm_surge__57904fffd954.png",
+          "feature_x": 0.782683,
+          "feature_y": -0.418211
+        },
+        {
+          "icon_id": "069fb4366f9cc2dd",
+          "label": "stove",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/stove__069fb4366f9c.png",
+          "feature_x": 0.364196,
+          "feature_y": 0.492434
+        },
+        {
+          "icon_id": "bc74bcf73a677804",
+          "label": "submersible pump",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/submersible_pump__bc74bcf73a67.png",
+          "feature_x": 0.608483,
+          "feature_y": -0.704572
+        },
+        {
+          "icon_id": "eeaf9b8151f23ffa",
+          "label": "sugar",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/sugar__eeaf9b8151f2.png",
+          "feature_x": -0.358846,
+          "feature_y": 0.906789
+        },
+        {
+          "icon_id": "045493f44b51c4e9",
+          "label": "table",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/table__045493f44b51.png",
+          "feature_x": 1.895263,
+          "feature_y": -1.324048
+        },
+        {
+          "icon_id": "2047a86a86553938",
+          "label": "tarpaulin",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/tarpaulin__2047a86a8655.png",
+          "feature_x": -1.553526,
+          "feature_y": 1.489541
+        },
+        {
+          "icon_id": "b2212c22143f3750",
+          "label": "technological disaster",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/technological_disaster__b2212c22143f.png",
+          "feature_x": -0.307575,
+          "feature_y": 1.369831
+        },
+        {
+          "icon_id": "9278461bbab9a290",
+          "label": "temporary camp",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/temporary_camp__9278461bbab9.png",
+          "feature_x": -0.33277,
+          "feature_y": 0.42713
+        },
+        {
+          "icon_id": "5a96afd049a4db5b",
+          "label": "tent",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/tent__5a96afd049a4.png",
+          "feature_x": -2.51504,
+          "feature_y": 1.533429
+        },
+        {
+          "icon_id": "ca038444ce931fd2",
+          "label": "testing",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/testing__ca038444ce93.png",
+          "feature_x": 1.135024,
+          "feature_y": 1.170316
+        },
+        {
+          "icon_id": "c3af4581e34e912a",
+          "label": "toilet",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/toilet__c3af4581e34e.png",
+          "feature_x": -2.179441,
+          "feature_y": 0.577053
+        },
+        {
+          "icon_id": "6ba4ca4a01af21a4",
+          "label": "top ranking",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/top_ranking__6ba4ca4a01af.png",
+          "feature_x": -0.438231,
+          "feature_y": 1.2472
+        },
+        {
+          "icon_id": "35e0d05347445c25",
+          "label": "tornado",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/tornado__35e0d0534744.png",
+          "feature_x": 0.539512,
+          "feature_y": 0.795361
+        },
+        {
+          "icon_id": "f5e1b09d6e19a856",
+          "label": "trade and market",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/trade_and_market__f5e1b09d6e19.png",
+          "feature_x": 1.447073,
+          "feature_y": -0.590692
+        },
+        {
+          "icon_id": "bc27397d886e8ae9",
+          "label": "train",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/train__bc27397d886e.png",
+          "feature_x": -0.997624,
+          "feature_y": -2.437057
+        },
+        {
+          "icon_id": "cf1d3bd7033297ab",
+          "label": "training",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/training__cf1d3bd70332.png",
+          "feature_x": 0.77477,
+          "feature_y": 0.578452
+        },
+        {
+          "icon_id": "d9aa671e7d9368e7",
+          "label": "transition site",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/transition_site__d9aa671e7d93.png",
+          "feature_x": -0.494738,
+          "feature_y": 0.34039
+        },
+        {
+          "icon_id": "495856f0adb912a6",
+          "label": "trending",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/trending__495856f0adb9.png",
+          "feature_x": 1.233309,
+          "feature_y": 2.586802
+        },
+        {
+          "icon_id": "2518c76e563505fe",
+          "label": "truck",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/truck__2518c76e5635.png",
+          "feature_x": -1.016354,
+          "feature_y": -1.602032
+        },
+        {
+          "icon_id": "a68832cd2624c6c3",
+          "label": "tsunami",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/tsunami__a68832cd2624.png",
+          "feature_x": 2.384182,
+          "feature_y": -1.221657
+        },
+        {
+          "icon_id": "b52e08713d8fc2c7",
+          "label": "tunnel",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/tunnel__b52e08713d8f.png",
+          "feature_x": -1.3129,
+          "feature_y": -0.548014
+        },
+        {
+          "icon_id": "f97bd6927248abfb",
+          "label": "un compound office",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/un_compound_office__f97bd6927248.png",
+          "feature_x": -1.269843,
+          "feature_y": -1.426211
+        },
+        {
+          "icon_id": "63c0678c7d3f1b28",
+          "label": "un vehicle",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/un_vehicle__63c0678c7d3f.png",
+          "feature_x": -0.133566,
+          "feature_y": -1.896535
+        },
+        {
+          "icon_id": "7b07a07f403abb77",
+          "label": "university",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/university__7b07a07f403a.png",
+          "feature_x": 2.17775,
+          "feature_y": -1.601351
+        },
+        {
+          "icon_id": "d500c49c606f759e",
+          "label": "up",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/up__d500c49c606f.png",
+          "feature_x": -0.671979,
+          "feature_y": 0.717341
+        },
+        {
+          "icon_id": "de4ec9b30ecd843a",
+          "label": "upload",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/upload__de4ec9b30ecd.png",
+          "feature_x": -0.128817,
+          "feature_y": 0.429588
+        },
+        {
+          "icon_id": "4101310ffa247c9d",
+          "label": "urban",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/urban__4101310ffa24.png",
+          "feature_x": 0.685912,
+          "feature_y": -0.793372
+        },
+        {
+          "icon_id": "dea161688afecfc4",
+          "label": "urban rural",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/urban_rural__dea161688afe.png",
+          "feature_x": 0.014983,
+          "feature_y": 1.131671
+        },
+        {
+          "icon_id": "d40759e66475ae84",
+          "label": "user",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/user__d40759e66475.png",
+          "feature_x": -2.272935,
+          "feature_y": 1.339422
+        },
+        {
+          "icon_id": "8b56c33a174b9ce3",
+          "label": "users",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/users__8b56c33a174b.png",
+          "feature_x": -0.982534,
+          "feature_y": 0.534144
+        },
+        {
+          "icon_id": "1f46dcdb4919d32c",
+          "label": "vaccine",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/vaccine__1f46dcdb4919.png",
+          "feature_x": 1.007459,
+          "feature_y": -0.785263
+        },
+        {
+          "icon_id": "25048360bc8df945",
+          "label": "ventilator",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/ventilator__25048360bc8d.png",
+          "feature_x": -0.584225,
+          "feature_y": 0.51821
+        },
+        {
+          "icon_id": "dffd82d1b8f9f228",
+          "label": "video",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/video__dffd82d1b8f9.png",
+          "feature_x": -2.442471,
+          "feature_y": 0.689525
+        },
+        {
+          "icon_id": "786f25a92056459a",
+          "label": "violent wind",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/violent_wind__786f25a92056.png",
+          "feature_x": 3.259992,
+          "feature_y": -0.829566
+        },
+        {
+          "icon_id": "50d0c27fad763e34",
+          "label": "virus",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/virus__50d0c27fad76.png",
+          "feature_x": -0.88407,
+          "feature_y": 0.01962
+        },
+        {
+          "icon_id": "d156d5fb5085f500",
+          "label": "volcano",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/volcano__d156d5fb5085.png",
+          "feature_x": 0.870095,
+          "feature_y": 0.816814
+        },
+        {
+          "icon_id": "73267ce3a962901c",
+          "label": "walkie talkie",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/walkie_talkie__73267ce3a962.png",
+          "feature_x": -1.078577,
+          "feature_y": -1.049068
+        },
+        {
+          "icon_id": "4b23aef09bc42dd7",
+          "label": "warning error",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/warning_error__4b23aef09bc4.png",
+          "feature_x": -2.585329,
+          "feature_y": 0.118987
+        },
+        {
+          "icon_id": "96845121aa31d3e7",
+          "label": "water sanitation and hygiene",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/water_sanitation_and_hygiene__96845121aa31.png",
+          "feature_x": 0.770783,
+          "feature_y": 1.422659
+        },
+        {
+          "icon_id": "89553807820e0d74",
+          "label": "water source",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/water_source__89553807820e.png",
+          "feature_x": -2.250898,
+          "feature_y": 0.779033
+        },
+        {
+          "icon_id": "96f530fc5f3913f5",
+          "label": "water trucking",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/water_trucking__96f530fc5f39.png",
+          "feature_x": -1.367604,
+          "feature_y": -0.667285
+        },
+        {
+          "icon_id": "0034b9e83f0d951a",
+          "label": "work from home",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/work_from_home__0034b9e83f0d.png",
+          "feature_x": 1.627658,
+          "feature_y": 2.072412
+        },
+        {
+          "icon_id": "bcea14b6c7a0688c",
+          "label": "worm infestation",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/worm_infestation__bcea14b6c7a0.png",
+          "feature_x": -0.526437,
+          "feature_y": 1.36206
+        },
+        {
+          "icon_id": "13c91a98bdfe97db",
+          "label": "zip compressed",
+          "normalized_path": "normalized_256/04_ocha_humanitarian_icons/zip_compressed__13c91a98bdfe.png",
+          "feature_x": -2.45271,
+          "feature_y": 0.31817
+        }
+      ]
+    },
+    {
+      "set_id": "09_universal_symbols_healthcare_webfont",
+      "set_name": "Universal Symbols Healthcare Webfont",
+      "icons": [
+        {
+          "icon_id": "c8e1fa46f71f5718",
+          "label": "accessibility",
+          "normalized_path": "normalized_256/09_universal_symbols_healthcare_webfont/accessibility__c8e1fa46f71f.png",
+          "feature_x": 1.383057,
+          "feature_y": 1.056868
+        },
+        {
+          "icon_id": "80da3bc198d2b9f3",
+          "label": "administration",
+          "normalized_path": "normalized_256/09_universal_symbols_healthcare_webfont/administration__80da3bc198d2.png",
+          "feature_x": 1.356625,
+          "feature_y": 1.534837
+        },
+        {
+          "icon_id": "f67adff43efd12df",
+          "label": "alternative complementary",
+          "normalized_path": "normalized_256/09_universal_symbols_healthcare_webfont/alternative_complementary__f67adff43efd.png",
+          "feature_x": 1.339921,
+          "feature_y": -1.940074
+        },
+        {
+          "icon_id": "6fea82fcc2811170",
+          "label": "ambulance",
+          "normalized_path": "normalized_256/09_universal_symbols_healthcare_webfont/ambulance__6fea82fcc281.png",
+          "feature_x": 1.433878,
+          "feature_y": 0.171175
+        },
+        {
+          "icon_id": "6ff9dd295e18ba9b",
+          "label": "anesthesia",
+          "normalized_path": "normalized_256/09_universal_symbols_healthcare_webfont/anesthesia__6ff9dd295e18.png",
+          "feature_x": 1.570073,
+          "feature_y": 0.374294
+        },
+        {
+          "icon_id": "5e96e6ee1bed5721",
+          "label": "billing",
+          "normalized_path": "normalized_256/09_universal_symbols_healthcare_webfont/billing__5e96e6ee1bed.png",
+          "feature_x": 1.243812,
+          "feature_y": -0.233386
+        },
+        {
+          "icon_id": "737226e892a3f49b",
+          "label": "cardiology",
+          "normalized_path": "normalized_256/09_universal_symbols_healthcare_webfont/cardiology__737226e892a3.png",
+          "feature_x": 1.471911,
+          "feature_y": 0.661879
+        },
+        {
+          "icon_id": "03cb65187e88cba6",
+          "label": "care staff area",
+          "normalized_path": "normalized_256/09_universal_symbols_healthcare_webfont/care_staff_area__03cb65187e88.png",
+          "feature_x": 1.557431,
+          "feature_y": -0.409909
+        },
+        {
+          "icon_id": "bf6bb12d6272bd03",
+          "label": "cath lab",
+          "normalized_path": "normalized_256/09_universal_symbols_healthcare_webfont/cath_lab__bf6bb12d6272.png",
+          "feature_x": 1.275252,
+          "feature_y": -0.042028
+        },
+        {
+          "icon_id": "bf9857071daccae9",
+          "label": "chapel",
+          "normalized_path": "normalized_256/09_universal_symbols_healthcare_webfont/chapel__bf9857071dac.png",
+          "feature_x": 1.661981,
+          "feature_y": 1.788898
+        },
+        {
+          "icon_id": "22e623e627facf23",
+          "label": "coffee shop",
+          "normalized_path": "normalized_256/09_universal_symbols_healthcare_webfont/coffee_shop__22e623e627fa.png",
+          "feature_x": 1.594591,
+          "feature_y": 0.854606
+        },
+        {
+          "icon_id": "6b13efd50758286d",
+          "label": "dental",
+          "normalized_path": "normalized_256/09_universal_symbols_healthcare_webfont/dental__6b13efd50758.png",
+          "feature_x": 1.755733,
+          "feature_y": 0.847287
+        },
+        {
+          "icon_id": "4657cc12d6ccfe09",
+          "label": "dermatology",
+          "normalized_path": "normalized_256/09_universal_symbols_healthcare_webfont/dermatology__4657cc12d6cc.png",
+          "feature_x": 1.341559,
+          "feature_y": 0.383011
+        },
+        {
+          "icon_id": "dbada631f89a9400",
+          "label": "diabetes education",
+          "normalized_path": "normalized_256/09_universal_symbols_healthcare_webfont/diabetes_education__dbada631f89a.png",
+          "feature_x": 1.406212,
+          "feature_y": 0.341026
+        },
+        {
+          "icon_id": "3a58b66d8b05b63e",
+          "label": "drinking fountain",
+          "normalized_path": "normalized_256/09_universal_symbols_healthcare_webfont/drinking_fountain__3a58b66d8b05.png",
+          "feature_x": 1.671227,
+          "feature_y": 0.508521
+        },
+        {
+          "icon_id": "0f3e82b2e0316a1d",
+          "label": "ear nose throat",
+          "normalized_path": "normalized_256/09_universal_symbols_healthcare_webfont/ear_nose_throat__0f3e82b2e031.png",
+          "feature_x": 1.489804,
+          "feature_y": -0.108695
+        },
+        {
+          "icon_id": "ae70c04ba85e2901",
+          "label": "elevators",
+          "normalized_path": "normalized_256/09_universal_symbols_healthcare_webfont/elevators__ae70c04ba85e.png",
+          "feature_x": 1.211057,
+          "feature_y": -1.197172
+        },
+        {
+          "icon_id": "654f3e0ac2548139",
+          "label": "emergency",
+          "normalized_path": "normalized_256/09_universal_symbols_healthcare_webfont/emergency__654f3e0ac254.png",
+          "feature_x": 1.395986,
+          "feature_y": -0.139082
+        },
+        {
+          "icon_id": "f220892a4f910590",
+          "label": "family practice",
+          "normalized_path": "normalized_256/09_universal_symbols_healthcare_webfont/family_practice__f220892a4f91.png",
+          "feature_x": 1.470391,
+          "feature_y": -1.096369
+        },
+        {
+          "icon_id": "05378ff1c8e8def6",
+          "label": "fire extinguisher",
+          "normalized_path": "normalized_256/09_universal_symbols_healthcare_webfont/fire_extinguisher__05378ff1c8e8.png",
+          "feature_x": 1.678659,
+          "feature_y": 0.820892
+        },
+        {
+          "icon_id": "f49ec6679d749177",
+          "label": "first aid",
+          "normalized_path": "normalized_256/09_universal_symbols_healthcare_webfont/first_aid__f49ec6679d74.png",
+          "feature_x": 1.635763,
+          "feature_y": 1.438098
+        },
+        {
+          "icon_id": "4da9e8587f6a7a7e",
+          "label": "genetics",
+          "normalized_path": "normalized_256/09_universal_symbols_healthcare_webfont/genetics__4da9e8587f6a.png",
+          "feature_x": 1.271547,
+          "feature_y": -2.132109
+        },
+        {
+          "icon_id": "4a8c039921c3bd7d",
+          "label": "gift shop",
+          "normalized_path": "normalized_256/09_universal_symbols_healthcare_webfont/gift_shop__4a8c039921c3.png",
+          "feature_x": 1.107227,
+          "feature_y": -2.361049
+        },
+        {
+          "icon_id": "e8f0a1cc1666633d",
+          "label": "health education",
+          "normalized_path": "normalized_256/09_universal_symbols_healthcare_webfont/health_education__e8f0a1cc1666.png",
+          "feature_x": 1.268431,
+          "feature_y": -2.303887
+        },
+        {
+          "icon_id": "e1e19f398129b606",
+          "label": "health services",
+          "normalized_path": "normalized_256/09_universal_symbols_healthcare_webfont/health_services__e1e19f398129.png",
+          "feature_x": 1.677549,
+          "feature_y": 2.008327
+        },
+        {
+          "icon_id": "11ea7bbb3c0148a7",
+          "label": "hearing assistance",
+          "normalized_path": "normalized_256/09_universal_symbols_healthcare_webfont/hearing_assistance__11ea7bbb3c01.png",
+          "feature_x": 1.315362,
+          "feature_y": -0.519946
+        },
+        {
+          "icon_id": "8e9b24aca08393f7",
+          "label": "hospital",
+          "normalized_path": "normalized_256/09_universal_symbols_healthcare_webfont/hospital__8e9b24aca083.png",
+          "feature_x": 1.583827,
+          "feature_y": 1.498008
+        },
+        {
+          "icon_id": "5d2acea1fe822de3",
+          "label": "i accessibility",
+          "normalized_path": "normalized_256/09_universal_symbols_healthcare_webfont/i_accessibility__5d2acea1fe82.png",
+          "feature_x": -5.559762,
+          "feature_y": 0.331717
+        },
+        {
+          "icon_id": "7658aacd4ef3a3d6",
+          "label": "i administration",
+          "normalized_path": "normalized_256/09_universal_symbols_healthcare_webfont/i_administration__7658aacd4ef3.png",
+          "feature_x": -2.711823,
+          "feature_y": 1.100519
+        },
+        {
+          "icon_id": "3ed5a9cb77d0cad6",
+          "label": "i alternative complementary",
+          "normalized_path": "normalized_256/09_universal_symbols_healthcare_webfont/i_alternative_complementary__3ed5a9cb77d0.png",
+          "feature_x": -3.141743,
+          "feature_y": -1.112834
+        },
+        {
+          "icon_id": "bd7774dcad9acd79",
+          "label": "i ambulance",
+          "normalized_path": "normalized_256/09_universal_symbols_healthcare_webfont/i_ambulance__bd7774dcad9a.png",
+          "feature_x": -0.122199,
+          "feature_y": -0.136838
+        },
+        {
+          "icon_id": "3bd607803334ae70",
+          "label": "i anesthesia",
+          "normalized_path": "normalized_256/09_universal_symbols_healthcare_webfont/i_anesthesia__3bd607803334.png",
+          "feature_x": 0.019105,
+          "feature_y": 0.957398
+        },
+        {
+          "icon_id": "ee8ac0ecc490b24b",
+          "label": "i billing",
+          "normalized_path": "normalized_256/09_universal_symbols_healthcare_webfont/i_billing__ee8ac0ecc490.png",
+          "feature_x": -1.608269,
+          "feature_y": 0.208657
+        },
+        {
+          "icon_id": "dbaf6973f9c41be0",
+          "label": "i cardiology",
+          "normalized_path": "normalized_256/09_universal_symbols_healthcare_webfont/i_cardiology__dbaf6973f9c4.png",
+          "feature_x": -0.304414,
+          "feature_y": 1.702524
+        },
+        {
+          "icon_id": "8897191fe44bb684",
+          "label": "i care staff area",
+          "normalized_path": "normalized_256/09_universal_symbols_healthcare_webfont/i_care_staff_area__8897191fe44b.png",
+          "feature_x": -1.433502,
+          "feature_y": 0.907629
+        },
+        {
+          "icon_id": "f8978aed3acb07b0",
+          "label": "i cath lab",
+          "normalized_path": "normalized_256/09_universal_symbols_healthcare_webfont/i_cath_lab__f8978aed3acb.png",
+          "feature_x": -3.089883,
+          "feature_y": -0.229434
+        },
+        {
+          "icon_id": "3e03f24080582ae7",
+          "label": "i chapel",
+          "normalized_path": "normalized_256/09_universal_symbols_healthcare_webfont/i_chapel__3e03f2408058.png",
+          "feature_x": -0.056301,
+          "feature_y": 2.266939
+        },
+        {
+          "icon_id": "01b3d2f16631c2ed",
+          "label": "i coffee shop",
+          "normalized_path": "normalized_256/09_universal_symbols_healthcare_webfont/i_coffee_shop__01b3d2f16631.png",
+          "feature_x": 0.122051,
+          "feature_y": 2.427309
+        },
+        {
+          "icon_id": "2faf915cd946a094",
+          "label": "i dental",
+          "normalized_path": "normalized_256/09_universal_symbols_healthcare_webfont/i_dental__2faf915cd946.png",
+          "feature_x": 0.721527,
+          "feature_y": 2.504676
+        },
+        {
+          "icon_id": "66cc7c6ebe473f7b",
+          "label": "i dermatology",
+          "normalized_path": "normalized_256/09_universal_symbols_healthcare_webfont/i_dermatology__66cc7c6ebe47.png",
+          "feature_x": -0.429064,
+          "feature_y": 0.675478
+        },
+        {
+          "icon_id": "c62734ba3861f412",
+          "label": "i diabetes education",
+          "normalized_path": "normalized_256/09_universal_symbols_healthcare_webfont/i_diabetes_education__c62734ba3861.png",
+          "feature_x": -0.632737,
+          "feature_y": 1.126034
+        },
+        {
+          "icon_id": "39719b9e379a0e17",
+          "label": "i drinking fountain",
+          "normalized_path": "normalized_256/09_universal_symbols_healthcare_webfont/i_drinking_fountain__39719b9e379a.png",
+          "feature_x": -2.199213,
+          "feature_y": 1.92694
+        },
+        {
+          "icon_id": "99b2b372e99b097d",
+          "label": "i ear nose throat",
+          "normalized_path": "normalized_256/09_universal_symbols_healthcare_webfont/i_ear_nose_throat__99b2b372e99b.png",
+          "feature_x": 0.234937,
+          "feature_y": 0.885181
+        },
+        {
+          "icon_id": "dec92ad3c878eaad",
+          "label": "i elevators",
+          "normalized_path": "normalized_256/09_universal_symbols_healthcare_webfont/i_elevators__dec92ad3c878.png",
+          "feature_x": -0.333329,
+          "feature_y": -0.979947
+        },
+        {
+          "icon_id": "281ec3744536ddf8",
+          "label": "i emergency",
+          "normalized_path": "normalized_256/09_universal_symbols_healthcare_webfont/i_emergency__281ec3744536.png",
+          "feature_x": -0.390773,
+          "feature_y": 0.094262
+        },
+        {
+          "icon_id": "b9967918912be1e2",
+          "label": "i family practice",
+          "normalized_path": "normalized_256/09_universal_symbols_healthcare_webfont/i_family_practice__b9967918912b.png",
+          "feature_x": -3.65947,
+          "feature_y": -0.415499
+        },
+        {
+          "icon_id": "62986812086b095e",
+          "label": "i fire extinguisher",
+          "normalized_path": "normalized_256/09_universal_symbols_healthcare_webfont/i_fire_extinguisher__62986812086b.png",
+          "feature_x": -1.557205,
+          "feature_y": 2.472497
+        },
+        {
+          "icon_id": "324e1c42caef355a",
+          "label": "i first aid",
+          "normalized_path": "normalized_256/09_universal_symbols_healthcare_webfont/i_first_aid__324e1c42caef.png",
+          "feature_x": 0.69226,
+          "feature_y": 1.727164
+        },
+        {
+          "icon_id": "31f94ec85b9130e2",
+          "label": "i genetics",
+          "normalized_path": "normalized_256/09_universal_symbols_healthcare_webfont/i_genetics__31f94ec85b91.png",
+          "feature_x": -3.061071,
+          "feature_y": -2.570067
+        },
+        {
+          "icon_id": "70f46d8c5056c65d",
+          "label": "i gift shop",
+          "normalized_path": "normalized_256/09_universal_symbols_healthcare_webfont/i_gift_shop__70f46d8c5056.png",
+          "feature_x": -1.237924,
+          "feature_y": -1.370459
+        },
+        {
+          "icon_id": "0bc1e8eca284bbb0",
+          "label": "i health education",
+          "normalized_path": "normalized_256/09_universal_symbols_healthcare_webfont/i_health_education__0bc1e8eca284.png",
+          "feature_x": -1.776085,
+          "feature_y": -1.899173
+        },
+        {
+          "icon_id": "bf3dc9f7d43e8167",
+          "label": "i health services",
+          "normalized_path": "normalized_256/09_universal_symbols_healthcare_webfont/i_health_services__bf3dc9f7d43e.png",
+          "feature_x": 0.340432,
+          "feature_y": 3.166229
+        },
+        {
+          "icon_id": "551bcd5a9f4fef12",
+          "label": "i hearing assistance",
+          "normalized_path": "normalized_256/09_universal_symbols_healthcare_webfont/i_hearing_assistance__551bcd5a9f4f.png",
+          "feature_x": -4.80886,
+          "feature_y": -0.760043
+        },
+        {
+          "icon_id": "8e903b782ed48bb8",
+          "label": "i hospital",
+          "normalized_path": "normalized_256/09_universal_symbols_healthcare_webfont/i_hospital__8e903b782ed4.png",
+          "feature_x": 0.299165,
+          "feature_y": 1.131639
+        },
+        {
+          "icon_id": "275db32f170789b5",
+          "label": "i imaging alternative ct",
+          "normalized_path": "normalized_256/09_universal_symbols_healthcare_webfont/i_imaging_alternative_ct__275db32f1707.png",
+          "feature_x": 0.344363,
+          "feature_y": -0.350648
+        },
+        {
+          "icon_id": "76ab071027cabd1f",
+          "label": "i imaging alternative mri",
+          "normalized_path": "normalized_256/09_universal_symbols_healthcare_webfont/i_imaging_alternative_mri__76ab071027ca.png",
+          "feature_x": 0.062556,
+          "feature_y": -1.30564
+        },
+        {
+          "icon_id": "7e60c57b015c1146",
+          "label": "i imaging alternative mri two",
+          "normalized_path": "normalized_256/09_universal_symbols_healthcare_webfont/i_imaging_alternative_mri_two__7e60c57b015c.png",
+          "feature_x": 0.165902,
+          "feature_y": -0.994257
+        },
+        {
+          "icon_id": "fc70071a5bbf9bb5",
+          "label": "i imaging alternative pet",
+          "normalized_path": "normalized_256/09_universal_symbols_healthcare_webfont/i_imaging_alternative_pet__fc70071a5bbf.png",
+          "feature_x": 0.069924,
+          "feature_y": -1.330123
+        },
+        {
+          "icon_id": "6e687582cf57454e",
+          "label": "i imaging root category",
+          "normalized_path": "normalized_256/09_universal_symbols_healthcare_webfont/i_imaging_root_category__6e687582cf57.png",
+          "feature_x": 0.050848,
+          "feature_y": -1.405536
+        },
+        {
+          "icon_id": "e372b378dd85df0c",
+          "label": "i immunizations",
+          "normalized_path": "normalized_256/09_universal_symbols_healthcare_webfont/i_immunizations__e372b378dd85.png",
+          "feature_x": -1.046021,
+          "feature_y": 1.347175
+        },
+        {
+          "icon_id": "abd343275cedee23",
+          "label": "i infectious diseases",
+          "normalized_path": "normalized_256/09_universal_symbols_healthcare_webfont/i_infectious_diseases__abd343275ced.png",
+          "feature_x": -1.35328,
+          "feature_y": -0.866717
+        },
+        {
+          "icon_id": "4e6eb33dee2b707c",
+          "label": "i information us",
+          "normalized_path": "normalized_256/09_universal_symbols_healthcare_webfont/i_information_us__4e6eb33dee2b.png",
+          "feature_x": 0.577944,
+          "feature_y": 0.400486
+        },
+        {
+          "icon_id": "22a4e71cf924b7dd",
+          "label": "i inpatient",
+          "normalized_path": "normalized_256/09_universal_symbols_healthcare_webfont/i_inpatient__22a4e71cf924.png",
+          "feature_x": -2.402556,
+          "feature_y": -1.257922
+        },
+        {
+          "icon_id": "d4240d07a1e75756",
+          "label": "i intensive care",
+          "normalized_path": "normalized_256/09_universal_symbols_healthcare_webfont/i_intensive_care__d4240d07a1e7.png",
+          "feature_x": -2.420004,
+          "feature_y": -0.5895
+        },
+        {
+          "icon_id": "cd8791b9983f4f14",
+          "label": "i internal medicine",
+          "normalized_path": "normalized_256/09_universal_symbols_healthcare_webfont/i_internal_medicine__cd8791b9983f.png",
+          "feature_x": -1.364184,
+          "feature_y": -0.387754
+        },
+        {
+          "icon_id": "bce8a1363361a0e1",
+          "label": "i interpreter services",
+          "normalized_path": "normalized_256/09_universal_symbols_healthcare_webfont/i_interpreter_services__bce8a1363361.png",
+          "feature_x": -1.740229,
+          "feature_y": -1.780745
+        },
+        {
+          "icon_id": "f48e7f2e93921b95",
+          "label": "i kidney",
+          "normalized_path": "normalized_256/09_universal_symbols_healthcare_webfont/i_kidney__f48e7f2e9392.png",
+          "feature_x": 0.202922,
+          "feature_y": 1.169073
+        },
+        {
+          "icon_id": "b00273ddec49089e",
+          "label": "i labor delivery",
+          "normalized_path": "normalized_256/09_universal_symbols_healthcare_webfont/i_labor_delivery__b00273ddec49.png",
+          "feature_x": -0.477004,
+          "feature_y": 0.524453
+        },
+        {
+          "icon_id": "0255276c95128bcd",
+          "label": "i laboratory",
+          "normalized_path": "normalized_256/09_universal_symbols_healthcare_webfont/i_laboratory__0255276c9512.png",
+          "feature_x": -3.177716,
+          "feature_y": -0.815993
+        },
+        {
+          "icon_id": "8420379b66bcec98",
+          "label": "i mammography",
+          "normalized_path": "normalized_256/09_universal_symbols_healthcare_webfont/i_mammography__8420379b66bc.png",
+          "feature_x": -1.280257,
+          "feature_y": 0.529474
+        },
+        {
+          "icon_id": "94c57da7bd24dacc",
+          "label": "i medical library",
+          "normalized_path": "normalized_256/09_universal_symbols_healthcare_webfont/i_medical_library__94c57da7bd24.png",
+          "feature_x": -1.669111,
+          "feature_y": 1.060575
+        },
+        {
+          "icon_id": "49409572af9d9a12",
+          "label": "i medical records",
+          "normalized_path": "normalized_256/09_universal_symbols_healthcare_webfont/i_medical_records__49409572af9d.png",
+          "feature_x": -2.745809,
+          "feature_y": -1.189399
+        },
+        {
+          "icon_id": "d5402667624ce8d1",
+          "label": "i mental health",
+          "normalized_path": "normalized_256/09_universal_symbols_healthcare_webfont/i_mental_health__d5402667624c.png",
+          "feature_x": 0.191557,
+          "feature_y": 0.598678
+        },
+        {
+          "icon_id": "5d17adf5ceb135d5",
+          "label": "i mri pet",
+          "normalized_path": "normalized_256/09_universal_symbols_healthcare_webfont/i_mri_pet__5d17adf5ceb1.png",
+          "feature_x": -1.709801,
+          "feature_y": -0.323201
+        },
+        {
+          "icon_id": "dc2cc73accbc7db7",
+          "label": "i neurology",
+          "normalized_path": "normalized_256/09_universal_symbols_healthcare_webfont/i_neurology__dc2cc73accbc.png",
+          "feature_x": -0.049593,
+          "feature_y": -0.268729
+        },
+        {
+          "icon_id": "ab45fc2620cc66ce",
+          "label": "i no smoking",
+          "normalized_path": "normalized_256/09_universal_symbols_healthcare_webfont/i_no_smoking__ab45fc2620cc.png",
+          "feature_x": 0.517861,
+          "feature_y": -1.257216
+        },
+        {
+          "icon_id": "28f09f15af0ed0e4",
+          "label": "i nursery",
+          "normalized_path": "normalized_256/09_universal_symbols_healthcare_webfont/i_nursery__28f09f15af0e.png",
+          "feature_x": -1.018182,
+          "feature_y": 1.463879
+        },
+        {
+          "icon_id": "a36e415697221bd7",
+          "label": "i nutrition",
+          "normalized_path": "normalized_256/09_universal_symbols_healthcare_webfont/i_nutrition__a36e41569722.png",
+          "feature_x": -3.931572,
+          "feature_y": 0.411049
+        },
+        {
+          "icon_id": "e88a2ed9a41b9ba6",
+          "label": "i oncology",
+          "normalized_path": "normalized_256/09_universal_symbols_healthcare_webfont/i_oncology__e88a2ed9a41b.png",
+          "feature_x": -1.423949,
+          "feature_y": -3.090645
+        },
+        {
+          "icon_id": "fb12dae3fe5affa5",
+          "label": "i ophthalmology",
+          "normalized_path": "normalized_256/09_universal_symbols_healthcare_webfont/i_ophthalmology__fb12dae3fe5a.png",
+          "feature_x": -0.206552,
+          "feature_y": 1.079511
+        },
+        {
+          "icon_id": "0103d975cd842ace",
+          "label": "i outpatient",
+          "normalized_path": "normalized_256/09_universal_symbols_healthcare_webfont/i_outpatient__0103d975cd84.png",
+          "feature_x": -2.838606,
+          "feature_y": 1.254196
+        },
+        {
+          "icon_id": "80a27705be60b57f",
+          "label": "i pathology",
+          "normalized_path": "normalized_256/09_universal_symbols_healthcare_webfont/i_pathology__80a27705be60.png",
+          "feature_x": -3.656652,
+          "feature_y": -1.352244
+        },
+        {
+          "icon_id": "7f001a99a73e35ed",
+          "label": "i pediatrics",
+          "normalized_path": "normalized_256/09_universal_symbols_healthcare_webfont/i_pediatrics__7f001a99a73e.png",
+          "feature_x": -0.890847,
+          "feature_y": 0.724111
+        },
+        {
+          "icon_id": "e0760c68f28e0892",
+          "label": "i pharmacy",
+          "normalized_path": "normalized_256/09_universal_symbols_healthcare_webfont/i_pharmacy__e0760c68f28e.png",
+          "feature_x": 0.101176,
+          "feature_y": -0.212593
+        },
+        {
+          "icon_id": "e91f2f4527df5131",
+          "label": "i physical therapy",
+          "normalized_path": "normalized_256/09_universal_symbols_healthcare_webfont/i_physical_therapy__e91f2f4527df.png",
+          "feature_x": -2.620221,
+          "feature_y": -0.21209
+        },
+        {
+          "icon_id": "dc00f37fcd3db2aa",
+          "label": "i radiology",
+          "normalized_path": "normalized_256/09_universal_symbols_healthcare_webfont/i_radiology__dc00f37fcd3d.png",
+          "feature_x": -1.016314,
+          "feature_y": -0.874045
+        },
+        {
+          "icon_id": "780501241887ce4e",
+          "label": "i registration",
+          "normalized_path": "normalized_256/09_universal_symbols_healthcare_webfont/i_registration__780501241887.png",
+          "feature_x": -3.287964,
+          "feature_y": 1.223868
+        },
+        {
+          "icon_id": "1011e0d2bd4a96a6",
+          "label": "i respiratory",
+          "normalized_path": "normalized_256/09_universal_symbols_healthcare_webfont/i_respiratory__1011e0d2bd4a.png",
+          "feature_x": -0.301326,
+          "feature_y": -0.085574
+        },
+        {
+          "icon_id": "3cc1cf52e10f7ec1",
+          "label": "i restaurant",
+          "normalized_path": "normalized_256/09_universal_symbols_healthcare_webfont/i_restaurant__3cc1cf52e10f.png",
+          "feature_x": -1.636022,
+          "feature_y": 0.975351
+        },
+        {
+          "icon_id": "0f1269028a10d1a1",
+          "label": "i restrooms",
+          "normalized_path": "normalized_256/09_universal_symbols_healthcare_webfont/i_restrooms__0f1269028a10.png",
+          "feature_x": -1.717845,
+          "feature_y": 0.200529
+        },
+        {
+          "icon_id": "6cf83974b645d3a8",
+          "label": "i smoking",
+          "normalized_path": "normalized_256/09_universal_symbols_healthcare_webfont/i_smoking__6cf83974b645.png",
+          "feature_x": -3.786533,
+          "feature_y": 1.234521
+        },
+        {
+          "icon_id": "a4cc6e4609e27918",
+          "label": "i social services",
+          "normalized_path": "normalized_256/09_universal_symbols_healthcare_webfont/i_social_services__a4cc6e4609e2.png",
+          "feature_x": -2.581027,
+          "feature_y": -1.676855
+        },
+        {
+          "icon_id": "aa0c87e09dbe1e9f",
+          "label": "i stairs",
+          "normalized_path": "normalized_256/09_universal_symbols_healthcare_webfont/i_stairs__aa0c87e09dbe.png",
+          "feature_x": -4.697615,
+          "feature_y": 2.595356
+        },
+        {
+          "icon_id": "be7f46d86371c27f",
+          "label": "i surgery",
+          "normalized_path": "normalized_256/09_universal_symbols_healthcare_webfont/i_surgery__be7f46d86371.png",
+          "feature_x": -2.020382,
+          "feature_y": 0.032679
+        },
+        {
+          "icon_id": "97a734d4f33010cb",
+          "label": "i text telephone",
+          "normalized_path": "normalized_256/09_universal_symbols_healthcare_webfont/i_text_telephone__97a734d4f330.png",
+          "feature_x": -1.561678,
+          "feature_y": -0.878046
+        },
+        {
+          "icon_id": "4b4bbdf79d238da8",
+          "label": "i ultrasound",
+          "normalized_path": "normalized_256/09_universal_symbols_healthcare_webfont/i_ultrasound__4b4bbdf79d23.png",
+          "feature_x": 0.203615,
+          "feature_y": -1.044516
+        },
+        {
+          "icon_id": "b0850ebb310e8c1f",
+          "label": "i volume control",
+          "normalized_path": "normalized_256/09_universal_symbols_healthcare_webfont/i_volume_control__b0850ebb310e.png",
+          "feature_x": -3.161465,
+          "feature_y": 1.015782
+        },
+        {
+          "icon_id": "a08d214801605fdc",
+          "label": "i waiting area",
+          "normalized_path": "normalized_256/09_universal_symbols_healthcare_webfont/i_waiting_area__a08d21480160.png",
+          "feature_x": -3.1269,
+          "feature_y": -0.687201
+        },
+        {
+          "icon_id": "5ce4313da8bc182f",
+          "label": "i womens health",
+          "normalized_path": "normalized_256/09_universal_symbols_healthcare_webfont/i_womens_health__5ce4313da8bc.png",
+          "feature_x": -0.560646,
+          "feature_y": 0.610748
+        },
+        {
+          "icon_id": "4eeb438bceeab876",
+          "label": "imaging alternative ct",
+          "normalized_path": "normalized_256/09_universal_symbols_healthcare_webfont/imaging_alternative_ct__4eeb438bceea.png",
+          "feature_x": 1.248769,
+          "feature_y": 0.651601
+        },
+        {
+          "icon_id": "312679cb63509e23",
+          "label": "imaging alternative mri",
+          "normalized_path": "normalized_256/09_universal_symbols_healthcare_webfont/imaging_alternative_mri__312679cb6350.png",
+          "feature_x": 1.26505,
+          "feature_y": -1.141106
+        },
+        {
+          "icon_id": "5c27596777af2edb",
+          "label": "imaging alternative mri two",
+          "normalized_path": "normalized_256/09_universal_symbols_healthcare_webfont/imaging_alternative_mri_two__5c27596777af.png",
+          "feature_x": 1.162817,
+          "feature_y": -0.013206
+        },
+        {
+          "icon_id": "eae2d454d9a181d0",
+          "label": "imaging alternative pet",
+          "normalized_path": "normalized_256/09_universal_symbols_healthcare_webfont/imaging_alternative_pet__eae2d454d9a1.png",
+          "feature_x": 1.321909,
+          "feature_y": -1.991383
+        },
+        {
+          "icon_id": "f81cad447746f54e",
+          "label": "imaging root category",
+          "normalized_path": "normalized_256/09_universal_symbols_healthcare_webfont/imaging_root_category__f81cad447746.png",
+          "feature_x": 1.295769,
+          "feature_y": -1.503563
+        },
+        {
+          "icon_id": "15b4d245c50fdb61",
+          "label": "immunizations",
+          "normalized_path": "normalized_256/09_universal_symbols_healthcare_webfont/immunizations__15b4d245c50f.png",
+          "feature_x": 1.365316,
+          "feature_y": 0.390333
+        },
+        {
+          "icon_id": "71ae7cb673698317",
+          "label": "infectious diseases",
+          "normalized_path": "normalized_256/09_universal_symbols_healthcare_webfont/infectious_diseases__71ae7cb67369.png",
+          "feature_x": 1.403347,
+          "feature_y": -1.001839
+        },
+        {
+          "icon_id": "14811b8cb68bd01b",
+          "label": "information us",
+          "normalized_path": "normalized_256/09_universal_symbols_healthcare_webfont/information_us__14811b8cb68b.png",
+          "feature_x": 1.340547,
+          "feature_y": -0.487794
+        },
+        {
+          "icon_id": "907abc79768cbf3c",
+          "label": "inpatient",
+          "normalized_path": "normalized_256/09_universal_symbols_healthcare_webfont/inpatient__907abc79768c.png",
+          "feature_x": 1.160993,
+          "feature_y": 0.253219
+        },
+        {
+          "icon_id": "c2a7cdc53f4dd23f",
+          "label": "intensive care",
+          "normalized_path": "normalized_256/09_universal_symbols_healthcare_webfont/intensive_care__c2a7cdc53f4d.png",
+          "feature_x": 1.164946,
+          "feature_y": 0.066
+        },
+        {
+          "icon_id": "0d8ced32350b8292",
+          "label": "internal medicine",
+          "normalized_path": "normalized_256/09_universal_symbols_healthcare_webfont/internal_medicine__0d8ced32350b.png",
+          "feature_x": 1.338038,
+          "feature_y": -1.532905
+        },
+        {
+          "icon_id": "518625bddebb2ce2",
+          "label": "interpreter services",
+          "normalized_path": "normalized_256/09_universal_symbols_healthcare_webfont/interpreter_services__518625bddebb.png",
+          "feature_x": 1.262877,
+          "feature_y": -0.84998
+        },
+        {
+          "icon_id": "45104054cfb9b5d6",
+          "label": "kidney",
+          "normalized_path": "normalized_256/09_universal_symbols_healthcare_webfont/kidney__45104054cfb9.png",
+          "feature_x": 1.53265,
+          "feature_y": -0.231166
+        },
+        {
+          "icon_id": "0f7c39d9b1512a06",
+          "label": "labor delivery",
+          "normalized_path": "normalized_256/09_universal_symbols_healthcare_webfont/labor_delivery__0f7c39d9b151.png",
+          "feature_x": 1.328842,
+          "feature_y": 1.300091
+        },
+        {
+          "icon_id": "472177e6d3e5db75",
+          "label": "laboratory",
+          "normalized_path": "normalized_256/09_universal_symbols_healthcare_webfont/laboratory__472177e6d3e5.png",
+          "feature_x": 1.284842,
+          "feature_y": -0.119235
+        },
+        {
+          "icon_id": "3dd2fa730fc93837",
+          "label": "mammography",
+          "normalized_path": "normalized_256/09_universal_symbols_healthcare_webfont/mammography__3dd2fa730fc9.png",
+          "feature_x": 1.2557,
+          "feature_y": 0.360715
+        },
+        {
+          "icon_id": "3a3a4ad5b578a98f",
+          "label": "medical library",
+          "normalized_path": "normalized_256/09_universal_symbols_healthcare_webfont/medical_library__3a3a4ad5b578.png",
+          "feature_x": 1.481505,
+          "feature_y": 0.497066
+        },
+        {
+          "icon_id": "ac34e065e05fd562",
+          "label": "medical records",
+          "normalized_path": "normalized_256/09_universal_symbols_healthcare_webfont/medical_records__ac34e065e05f.png",
+          "feature_x": 1.305212,
+          "feature_y": -1.946951
+        },
+        {
+          "icon_id": "6d2d391dd3cbf408",
+          "label": "mental health",
+          "normalized_path": "normalized_256/09_universal_symbols_healthcare_webfont/mental_health__6d2d391dd3cb.png",
+          "feature_x": 1.548852,
+          "feature_y": -0.316057
+        },
+        {
+          "icon_id": "0f781c968b60df7f",
+          "label": "mri pet",
+          "normalized_path": "normalized_256/09_universal_symbols_healthcare_webfont/mri_pet__0f781c968b60.png",
+          "feature_x": 1.095934,
+          "feature_y": -1.58203
+        },
+        {
+          "icon_id": "85339a667430f099",
+          "label": "neurology",
+          "normalized_path": "normalized_256/09_universal_symbols_healthcare_webfont/neurology__85339a667430.png",
+          "feature_x": 1.384999,
+          "feature_y": -0.150523
+        },
+        {
+          "icon_id": "da4f6e39f736e29e",
+          "label": "no smoking",
+          "normalized_path": "normalized_256/09_universal_symbols_healthcare_webfont/no_smoking__da4f6e39f736.png",
+          "feature_x": 1.361544,
+          "feature_y": -1.292254
+        },
+        {
+          "icon_id": "9f5fedcabc135130",
+          "label": "nursery",
+          "normalized_path": "normalized_256/09_universal_symbols_healthcare_webfont/nursery__9f5fedcabc13.png",
+          "feature_x": 1.541429,
+          "feature_y": 1.622263
+        },
+        {
+          "icon_id": "9b11a175df2735f2",
+          "label": "nutrition",
+          "normalized_path": "normalized_256/09_universal_symbols_healthcare_webfont/nutrition__9b11a175df27.png",
+          "feature_x": 1.455337,
+          "feature_y": -0.685567
+        },
+        {
+          "icon_id": "2c96f635bd8d19f9",
+          "label": "oncology",
+          "normalized_path": "normalized_256/09_universal_symbols_healthcare_webfont/oncology__2c96f635bd8d.png",
+          "feature_x": 1.111566,
+          "feature_y": -1.767783
+        },
+        {
+          "icon_id": "c96d41e034ddbb73",
+          "label": "ophthalmology",
+          "normalized_path": "normalized_256/09_universal_symbols_healthcare_webfont/ophthalmology__c96d41e034dd.png",
+          "feature_x": 1.479079,
+          "feature_y": 0.169495
+        },
+        {
+          "icon_id": "7f19705004c5f9b7",
+          "label": "outpatient",
+          "normalized_path": "normalized_256/09_universal_symbols_healthcare_webfont/outpatient__7f19705004c5.png",
+          "feature_x": 1.618151,
+          "feature_y": 0.735511
+        },
+        {
+          "icon_id": "38dc38503a1c05f4",
+          "label": "pathology",
+          "normalized_path": "normalized_256/09_universal_symbols_healthcare_webfont/pathology__38dc38503a1c.png",
+          "feature_x": 1.444333,
+          "feature_y": -0.922283
+        },
+        {
+          "icon_id": "57e5f3baacf8b0e8",
+          "label": "pediatrics",
+          "normalized_path": "normalized_256/09_universal_symbols_healthcare_webfont/pediatrics__57e5f3baacf8.png",
+          "feature_x": 1.422876,
+          "feature_y": 0.705102
+        },
+        {
+          "icon_id": "3e0b873f1a5b26ca",
+          "label": "pharmacy",
+          "normalized_path": "normalized_256/09_universal_symbols_healthcare_webfont/pharmacy__3e0b873f1a5b.png",
+          "feature_x": 1.371215,
+          "feature_y": 0.369802
+        },
+        {
+          "icon_id": "5f90c29e650ee1e4",
+          "label": "physical therapy",
+          "normalized_path": "normalized_256/09_universal_symbols_healthcare_webfont/physical_therapy__5f90c29e650e.png",
+          "feature_x": 1.414359,
+          "feature_y": -1.114145
+        },
+        {
+          "icon_id": "c66e13f9c11a67b2",
+          "label": "radiology",
+          "normalized_path": "normalized_256/09_universal_symbols_healthcare_webfont/radiology__c66e13f9c11a.png",
+          "feature_x": 1.214799,
+          "feature_y": 0.230386
+        },
+        {
+          "icon_id": "92c0d66f1113106d",
+          "label": "registration",
+          "normalized_path": "normalized_256/09_universal_symbols_healthcare_webfont/registration__92c0d66f1113.png",
+          "feature_x": 1.483021,
+          "feature_y": 0.229272
+        },
+        {
+          "icon_id": "46f627084ca16e2c",
+          "label": "respiratory",
+          "normalized_path": "normalized_256/09_universal_symbols_healthcare_webfont/respiratory__46f627084ca1.png",
+          "feature_x": 1.420933,
+          "feature_y": -0.829773
+        },
+        {
+          "icon_id": "738a67c6ec174491",
+          "label": "restaurant",
+          "normalized_path": "normalized_256/09_universal_symbols_healthcare_webfont/restaurant__738a67c6ec17.png",
+          "feature_x": 1.5264,
+          "feature_y": 0.497404
+        },
+        {
+          "icon_id": "9e56f893a77d2f09",
+          "label": "restrooms",
+          "normalized_path": "normalized_256/09_universal_symbols_healthcare_webfont/restrooms__9e56f893a77d.png",
+          "feature_x": 1.223276,
+          "feature_y": -0.921654
+        },
+        {
+          "icon_id": "1d8fd2bf2777c523",
+          "label": "smoking",
+          "normalized_path": "normalized_256/09_universal_symbols_healthcare_webfont/smoking__1d8fd2bf2777.png",
+          "feature_x": 1.559478,
+          "feature_y": 0.978394
+        },
+        {
+          "icon_id": "368268ab71711739",
+          "label": "social services",
+          "normalized_path": "normalized_256/09_universal_symbols_healthcare_webfont/social_services__368268ab7171.png",
+          "feature_x": 1.230723,
+          "feature_y": -1.138073
+        },
+        {
+          "icon_id": "e0c216d6fdfd0cb4",
+          "label": "stairs",
+          "normalized_path": "normalized_256/09_universal_symbols_healthcare_webfont/stairs__e0c216d6fdfd.png",
+          "feature_x": 1.797777,
+          "feature_y": 1.778491
+        },
+        {
+          "icon_id": "b539cde29b2333bd",
+          "label": "surgery",
+          "normalized_path": "normalized_256/09_universal_symbols_healthcare_webfont/surgery__b539cde29b23.png",
+          "feature_x": 1.418901,
+          "feature_y": -1.147648
+        },
+        {
+          "icon_id": "bcc9cc12c88e11a7",
+          "label": "text telephone",
+          "normalized_path": "normalized_256/09_universal_symbols_healthcare_webfont/text_telephone__bcc9cc12c88e.png",
+          "feature_x": 1.164263,
+          "feature_y": -1.045776
+        },
+        {
+          "icon_id": "af15c5ea9dabc965",
+          "label": "ultrasound",
+          "normalized_path": "normalized_256/09_universal_symbols_healthcare_webfont/ultrasound__af15c5ea9dab.png",
+          "feature_x": 1.19394,
+          "feature_y": 0.019056
+        },
+        {
+          "icon_id": "837e819697ad7b09",
+          "label": "volume control",
+          "normalized_path": "normalized_256/09_universal_symbols_healthcare_webfont/volume_control__837e819697ad.png",
+          "feature_x": 1.68362,
+          "feature_y": 0.960525
+        },
+        {
+          "icon_id": "624b8f37e250ad09",
+          "label": "waiting area",
+          "normalized_path": "normalized_256/09_universal_symbols_healthcare_webfont/waiting_area__624b8f37e250.png",
+          "feature_x": 1.337383,
+          "feature_y": -0.547895
+        },
+        {
+          "icon_id": "740ee4bdd481336d",
+          "label": "womens health",
+          "normalized_path": "normalized_256/09_universal_symbols_healthcare_webfont/womens_health__740ee4bdd481.png",
+          "feature_x": 1.481167,
+          "feature_y": 0.309042
+        }
+      ]
+    },
+    {
+      "set_id": "11_iso_7010_safety_signs",
+      "set_name": "ISO 7010 Safety Signs",
+      "icons": [
+        {
+          "icon_id": "d6d03492bf008216",
+          "label": "ISO 7010 W001",
+          "normalized_path": "normalized_256/11_iso_7010_safety_signs/iso_7010_w001__d6d03492bf00.png",
+          "feature_x": -0.42232,
+          "feature_y": -2.267274
+        },
+        {
+          "icon_id": "9d2b879b70f65e10",
+          "label": "ISO 7010 W002",
+          "normalized_path": "normalized_256/11_iso_7010_safety_signs/iso_7010_w002__9d2b879b70f6.png",
+          "feature_x": 1.742874,
+          "feature_y": 4.615739
+        },
+        {
+          "icon_id": "017f18f80c2b6bb0",
+          "label": "ISO 7010 W003",
+          "normalized_path": "normalized_256/11_iso_7010_safety_signs/iso_7010_w003__017f18f80c2b.png",
+          "feature_x": -0.110975,
+          "feature_y": -1.283915
+        },
+        {
+          "icon_id": "fe817e0b4fe2f905",
+          "label": "ISO 7010 W004",
+          "normalized_path": "normalized_256/11_iso_7010_safety_signs/iso_7010_w004__fe817e0b4fe2.png",
+          "feature_x": 0.465355,
+          "feature_y": 0.553949
+        },
+        {
+          "icon_id": "c76f1030330c1010",
+          "label": "ISO 7010 W005",
+          "normalized_path": "normalized_256/11_iso_7010_safety_signs/iso_7010_w005__c76f1030330c.png",
+          "feature_x": 0.276154,
+          "feature_y": -0.049979
+        },
+        {
+          "icon_id": "3ae85d1803f6fd0e",
+          "label": "ISO 7010 W006",
+          "normalized_path": "normalized_256/11_iso_7010_safety_signs/iso_7010_w006__3ae85d1803f6.png",
+          "feature_x": 0.190338,
+          "feature_y": -0.31456
+        },
+        {
+          "icon_id": "0e7fba19fbc42fe9",
+          "label": "ISO 7010 W007",
+          "normalized_path": "normalized_256/11_iso_7010_safety_signs/iso_7010_w007__0e7fba19fbc4.png",
+          "feature_x": 0.032527,
+          "feature_y": -0.818333
+        },
+        {
+          "icon_id": "ee0850811e394b6c",
+          "label": "ISO 7010 W008",
+          "normalized_path": "normalized_256/11_iso_7010_safety_signs/iso_7010_w008__ee0850811e39.png",
+          "feature_x": 0.046519,
+          "feature_y": -0.781849
+        },
+        {
+          "icon_id": "ce70d90a77bf5ba9",
+          "label": "ISO 7010 W009",
+          "normalized_path": "normalized_256/11_iso_7010_safety_signs/iso_7010_w009__ce70d90a77bf.png",
+          "feature_x": 0.499095,
+          "feature_y": 0.659197
+        },
+        {
+          "icon_id": "a9cb2fa5661077bd",
+          "label": "ISO 7010 W010",
+          "normalized_path": "normalized_256/11_iso_7010_safety_signs/iso_7010_w010__a9cb2fa56610.png",
+          "feature_x": 0.307959,
+          "feature_y": 0.051211
+        },
+        {
+          "icon_id": "321fe63975f72a70",
+          "label": "ISO 7010 W011",
+          "normalized_path": "normalized_256/11_iso_7010_safety_signs/iso_7010_w011__321fe63975f7.png",
+          "feature_x": 0.198815,
+          "feature_y": -0.296219
+        },
+        {
+          "icon_id": "32563da2888cb9c8",
+          "label": "ISO 7010 W012",
+          "normalized_path": "normalized_256/11_iso_7010_safety_signs/iso_7010_w012__32563da2888c.png",
+          "feature_x": -0.296004,
+          "feature_y": -1.864969
+        },
+        {
+          "icon_id": "d7c62f4eefad9e5d",
+          "label": "ISO 7010 W013",
+          "normalized_path": "normalized_256/11_iso_7010_safety_signs/iso_7010_w013__d7c62f4eefad.png",
+          "feature_x": -10.27862,
+          "feature_y": 1.769449
+        },
+        {
+          "icon_id": "161d8c4c3de951fb",
+          "label": "ISO 7010 W014",
+          "normalized_path": "normalized_256/11_iso_7010_safety_signs/iso_7010_w014__161d8c4c3de9.png",
+          "feature_x": 0.342685,
+          "feature_y": 0.606203
+        },
+        {
+          "icon_id": "b8d532b96649ad9b",
+          "label": "ISO 7010 W015",
+          "normalized_path": "normalized_256/11_iso_7010_safety_signs/iso_7010_w015__b8d532b96649.png",
+          "feature_x": 0.121148,
+          "feature_y": -0.538058
+        },
+        {
+          "icon_id": "f7d82e130ffce18a",
+          "label": "ISO 7010 W016",
+          "normalized_path": "normalized_256/11_iso_7010_safety_signs/iso_7010_w016__f7d82e130ffc.png",
+          "feature_x": 0.094723,
+          "feature_y": 1.48275
+        },
+        {
+          "icon_id": "a550646e3a8c8903",
+          "label": "ISO 7010 W017",
+          "normalized_path": "normalized_256/11_iso_7010_safety_signs/iso_7010_w017__a550646e3a8c.png",
+          "feature_x": 0.174197,
+          "feature_y": -0.366089
+        },
+        {
+          "icon_id": "93ae7d03d236556f",
+          "label": "ISO 7010 W018",
+          "normalized_path": "normalized_256/11_iso_7010_safety_signs/iso_7010_w018__93ae7d03d236.png",
+          "feature_x": 0.301844,
+          "feature_y": 0.039986
+        },
+        {
+          "icon_id": "3fc360c5c4e56a82",
+          "label": "ISO 7010 W019",
+          "normalized_path": "normalized_256/11_iso_7010_safety_signs/iso_7010_w019__3fc360c5c4e5.png",
+          "feature_x": 0.832123,
+          "feature_y": 1.735727
+        },
+        {
+          "icon_id": "4d2d85998cba96ef",
+          "label": "ISO 7010 W020",
+          "normalized_path": "normalized_256/11_iso_7010_safety_signs/iso_7010_w020__4d2d85998cba.png",
+          "feature_x": 0.380952,
+          "feature_y": -0.494631
+        },
+        {
+          "icon_id": "2663a2a83e8e54b1",
+          "label": "ISO 7010 W021",
+          "normalized_path": "normalized_256/11_iso_7010_safety_signs/iso_7010_w021__2663a2a83e8e.png",
+          "feature_x": 0.078812,
+          "feature_y": -0.670516
+        },
+        {
+          "icon_id": "672c5ac5c05045ac",
+          "label": "ISO 7010 W022",
+          "normalized_path": "normalized_256/11_iso_7010_safety_signs/iso_7010_w022__672c5ac5c050.png",
+          "feature_x": 0.044724,
+          "feature_y": -1.385269
+        },
+        {
+          "icon_id": "969d2464f703154e",
+          "label": "ISO 7010 W024",
+          "normalized_path": "normalized_256/11_iso_7010_safety_signs/iso_7010_w024__969d2464f703.png",
+          "feature_x": 0.092609,
+          "feature_y": -0.618973
+        },
+        {
+          "icon_id": "9198bbcd6bccdff0",
+          "label": "ISO 7010 W025",
+          "normalized_path": "normalized_256/11_iso_7010_safety_signs/iso_7010_w025__9198bbcd6bcc.png",
+          "feature_x": 0.212557,
+          "feature_y": -0.24622
+        },
+        {
+          "icon_id": "569ca78170ef30ad",
+          "label": "ISO 7010 W026",
+          "normalized_path": "normalized_256/11_iso_7010_safety_signs/iso_7010_w026__569ca78170ef.png",
+          "feature_x": 0.377896,
+          "feature_y": 0.274038
+        },
+        {
+          "icon_id": "fdd505a2101b6cd5",
+          "label": "ISO 7010 W027",
+          "normalized_path": "normalized_256/11_iso_7010_safety_signs/iso_7010_w027__fdd505a2101b.png",
+          "feature_x": 0.26309,
+          "feature_y": -0.094416
+        },
+        {
+          "icon_id": "70f95fbb8f91b253",
+          "label": "ISO 7010 W028",
+          "normalized_path": "normalized_256/11_iso_7010_safety_signs/iso_7010_w028__70f95fbb8f91.png",
+          "feature_x": 0.092038,
+          "feature_y": -0.629102
+        },
+        {
+          "icon_id": "0c2fc4eef9275cc9",
+          "label": "ISO 7010 W029",
+          "normalized_path": "normalized_256/11_iso_7010_safety_signs/iso_7010_w029__0c2fc4eef927.png",
+          "feature_x": 0.929581,
+          "feature_y": 2.033319
+        },
+        {
+          "icon_id": "0f8cade296175730",
+          "label": "ISO 7010 W030",
+          "normalized_path": "normalized_256/11_iso_7010_safety_signs/iso_7010_w030__0f8cade29617.png",
+          "feature_x": 0.37819,
+          "feature_y": 0.070885
+        },
+        {
+          "icon_id": "5942b680f6726c6b",
+          "label": "ISO 7010 W031",
+          "normalized_path": "normalized_256/11_iso_7010_safety_signs/iso_7010_w031__5942b680f672.png",
+          "feature_x": 0.585472,
+          "feature_y": 0.748785
+        },
+        {
+          "icon_id": "8eb2ae5e436bf3d9",
+          "label": "ISO 7010 W032",
+          "normalized_path": "normalized_256/11_iso_7010_safety_signs/iso_7010_w032__8eb2ae5e436b.png",
+          "feature_x": 0.62935,
+          "feature_y": 0.847363
+        },
+        {
+          "icon_id": "395681962a31584b",
+          "label": "ISO 7010 W033",
+          "normalized_path": "normalized_256/11_iso_7010_safety_signs/iso_7010_w033__395681962a31.png",
+          "feature_x": -0.270528,
+          "feature_y": -2.130483
+        },
+        {
+          "icon_id": "d8b035da8f412942",
+          "label": "ISO 7010 W034",
+          "normalized_path": "normalized_256/11_iso_7010_safety_signs/iso_7010_w034__d8b035da8f41.png",
+          "feature_x": -0.142092,
+          "feature_y": -1.659316
+        },
+        {
+          "icon_id": "1e157882b7150c13",
+          "label": "ISO 7010 W035",
+          "normalized_path": "normalized_256/11_iso_7010_safety_signs/iso_7010_w035__1e157882b715.png",
+          "feature_x": -0.006517,
+          "feature_y": -1.239934
+        },
+        {
+          "icon_id": "5d96dfc9b1190032",
+          "label": "ISO 7010 W036",
+          "normalized_path": "normalized_256/11_iso_7010_safety_signs/iso_7010_w036__5d96dfc9b119.png",
+          "feature_x": 1.212313,
+          "feature_y": 2.649775
+        },
+        {
+          "icon_id": "cb42c40961b71681",
+          "label": "ISO 7010 W037",
+          "normalized_path": "normalized_256/11_iso_7010_safety_signs/iso_7010_w037__cb42c40961b7.png",
+          "feature_x": 0.317824,
+          "feature_y": -0.193128
+        },
+        {
+          "icon_id": "b8170c7e62df15a5",
+          "label": "ISO 7010 W038",
+          "normalized_path": "normalized_256/11_iso_7010_safety_signs/iso_7010_w038__b8170c7e62df.png",
+          "feature_x": 0.305292,
+          "feature_y": -0.195142
+        }
+      ]
+    },
+    {
+      "set_id": "12_iso_15223_medical_device_symbols",
+      "set_name": "ISO 15223 Medical Device Symbols",
+      "icons": [
+        {
+          "icon_id": "5a286c323372c8bb",
+          "label": "atmospheric pressure limitation",
+          "normalized_path": "normalized_256/12_iso_15223_medical_device_symbols/atmospheric_pressure_limitation__5a286c323372.png",
+          "feature_x": 0.152181,
+          "feature_y": 0.281654
+        },
+        {
+          "icon_id": "64db4392b1af7f94",
+          "label": "authorized representative in the european community",
+          "normalized_path": "normalized_256/12_iso_15223_medical_device_symbols/authorized_representative_in_the_european_community__64db4392b1af.png",
+          "feature_x": -1.497657,
+          "feature_y": -0.478392
+        },
+        {
+          "icon_id": "f1c82e0e3033e0f2",
+          "label": "batch code",
+          "normalized_path": "normalized_256/12_iso_15223_medical_device_symbols/batch_code__f1c82e0e3033.png",
+          "feature_x": -1.369295,
+          "feature_y": 0.266619
+        },
+        {
+          "icon_id": "4ce46f5f8d9a06ef",
+          "label": "catalogue number",
+          "normalized_path": "normalized_256/12_iso_15223_medical_device_symbols/catalogue_number__4ce46f5f8d9a.png",
+          "feature_x": -0.872883,
+          "feature_y": 1.212027
+        },
+        {
+          "icon_id": "dc257e448d984cff",
+          "label": "caution",
+          "normalized_path": "normalized_256/12_iso_15223_medical_device_symbols/caution__dc257e448d98.png",
+          "feature_x": 0.834635,
+          "feature_y": 1.009168
+        },
+        {
+          "icon_id": "f6aa07dce193fa26",
+          "label": "ce",
+          "normalized_path": "normalized_256/12_iso_15223_medical_device_symbols/ce__f6aa07dce193.png",
+          "feature_x": 4.022776,
+          "feature_y": 1.030479
+        },
+        {
+          "icon_id": "3fa390e2e0a734b8",
+          "label": "ce bsi",
+          "normalized_path": "normalized_256/12_iso_15223_medical_device_symbols/ce_bsi__3fa390e2e0a7.png",
+          "feature_x": 3.420396,
+          "feature_y": -0.346917
+        },
+        {
+          "icon_id": "760732f0c2150ee2",
+          "label": "consult instructions for use",
+          "normalized_path": "normalized_256/12_iso_15223_medical_device_symbols/consult_instructions_for_use__760732f0c215.png",
+          "feature_x": -0.893312,
+          "feature_y": 0.502558
+        },
+        {
+          "icon_id": "0db27129c0b71a97",
+          "label": "do not re use",
+          "normalized_path": "normalized_256/12_iso_15223_medical_device_symbols/do_not_re_use__0db27129c0b7.png",
+          "feature_x": -0.425926,
+          "feature_y": 1.004644
+        },
+        {
+          "icon_id": "cad61736ae362480",
+          "label": "do not use if package is damaged",
+          "normalized_path": "normalized_256/12_iso_15223_medical_device_symbols/do_not_use_if_package_is_damaged__cad61736ae36.png",
+          "feature_x": -1.172673,
+          "feature_y": 0.032657
+        },
+        {
+          "icon_id": "1b8210d261f93090",
+          "label": "fluid path",
+          "normalized_path": "normalized_256/12_iso_15223_medical_device_symbols/fluid_path__1b8210d261f9.png",
+          "feature_x": 0.999246,
+          "feature_y": -2.686109
+        },
+        {
+          "icon_id": "1b2eb29c58f4c349",
+          "label": "humidity limitation",
+          "normalized_path": "normalized_256/12_iso_15223_medical_device_symbols/humidity_limitation__1b2eb29c58f4.png",
+          "feature_x": 0.016212,
+          "feature_y": 0.131981
+        },
+        {
+          "icon_id": "e56869f80c3514ce",
+          "label": "in vitro diagnostic medical device",
+          "normalized_path": "normalized_256/12_iso_15223_medical_device_symbols/in_vitro_diagnostic_medical_device__e56869f80c35.png",
+          "feature_x": -0.688081,
+          "feature_y": 1.426586
+        },
+        {
+          "icon_id": "e6e2d33ceb0e83af",
+          "label": "latex",
+          "normalized_path": "normalized_256/12_iso_15223_medical_device_symbols/latex__e6e2d33ceb0e.png",
+          "feature_x": -0.540802,
+          "feature_y": 0.339519
+        },
+        {
+          "icon_id": "34bbb8f93e681581",
+          "label": "liquid filter with pore size",
+          "normalized_path": "normalized_256/12_iso_15223_medical_device_symbols/liquid_filter_with_pore_size__34bbb8f93e68.png",
+          "feature_x": -0.864008,
+          "feature_y": 0.711236
+        },
+        {
+          "icon_id": "62cb4e396fd4e927",
+          "label": "lower limit of temperature",
+          "normalized_path": "normalized_256/12_iso_15223_medical_device_symbols/lower_limit_of_temperature__62cb4e396fd4.png",
+          "feature_x": 3.212414,
+          "feature_y": -1.011775
+        },
+        {
+          "icon_id": "2025769ba3ca4366",
+          "label": "manufacture date",
+          "normalized_path": "normalized_256/12_iso_15223_medical_device_symbols/manufacture_date__2025769ba3ca.png",
+          "feature_x": 0.873444,
+          "feature_y": 1.015378
+        },
+        {
+          "icon_id": "306ad85560fbabc4",
+          "label": "manufacturer",
+          "normalized_path": "normalized_256/12_iso_15223_medical_device_symbols/manufacturer__306ad85560fb.png",
+          "feature_x": 1.971957,
+          "feature_y": 2.659049
+        },
+        {
+          "icon_id": "d9f590abaff7b509",
+          "label": "md",
+          "normalized_path": "normalized_256/12_iso_15223_medical_device_symbols/md__d9f590abaff7.png",
+          "feature_x": -1.729603,
+          "feature_y": -0.129733
+        },
+        {
+          "icon_id": "253bbbd8ac801157",
+          "label": "non pyrogenic",
+          "normalized_path": "normalized_256/12_iso_15223_medical_device_symbols/non_pyrogenic__253bbbd8ac80.png",
+          "feature_x": 1.477491,
+          "feature_y": -2.534183
+        },
+        {
+          "icon_id": "0dbe74d0ea5067c3",
+          "label": "serial number",
+          "normalized_path": "normalized_256/12_iso_15223_medical_device_symbols/serial_number__0dbe74d0ea50.png",
+          "feature_x": -1.342282,
+          "feature_y": 0.321718
+        },
+        {
+          "icon_id": "397929e89a5a2bf0",
+          "label": "sterile",
+          "normalized_path": "normalized_256/12_iso_15223_medical_device_symbols/sterile__397929e89a5a.png",
+          "feature_x": -1.71978,
+          "feature_y": -0.368755
+        },
+        {
+          "icon_id": "0368ddb907e94299",
+          "label": "sterilized using aseptic processing techniques",
+          "normalized_path": "normalized_256/12_iso_15223_medical_device_symbols/sterilized_using_aseptic_processing_techniques__0368ddb907e9.png",
+          "feature_x": -2.070727,
+          "feature_y": -0.871132
+        },
+        {
+          "icon_id": "9875309b29ecca62",
+          "label": "sterilized using ethylene oxide",
+          "normalized_path": "normalized_256/12_iso_15223_medical_device_symbols/sterilized_using_ethylene_oxide__9875309b29ec.png",
+          "feature_x": -2.335887,
+          "feature_y": -1.255597
+        },
+        {
+          "icon_id": "d0268aa624c97425",
+          "label": "sterilized using irradiation",
+          "normalized_path": "normalized_256/12_iso_15223_medical_device_symbols/sterilized_using_irradiation__d0268aa624c9.png",
+          "feature_x": -2.117679,
+          "feature_y": -0.934272
+        },
+        {
+          "icon_id": "b566cf363514b2ce",
+          "label": "sterilized using steam or dry heat",
+          "normalized_path": "normalized_256/12_iso_15223_medical_device_symbols/sterilized_using_steam_or_dry_heat__b566cf363514.png",
+          "feature_x": -2.160579,
+          "feature_y": -0.92765
+        },
+        {
+          "icon_id": "9379e0b95c9e1e64",
+          "label": "temperature limit",
+          "normalized_path": "normalized_256/12_iso_15223_medical_device_symbols/temperature_limit__9379e0b95c9e.png",
+          "feature_x": 2.443052,
+          "feature_y": -0.716927
+        },
+        {
+          "icon_id": "d176e3613fd2e8ca",
+          "label": "udi",
+          "normalized_path": "normalized_256/12_iso_15223_medical_device_symbols/udi__d176e3613fd2.png",
+          "feature_x": -0.790432,
+          "feature_y": 1.337173
+        },
+        {
+          "icon_id": "6a91c0067e17cc77",
+          "label": "upper limit of temperature",
+          "normalized_path": "normalized_256/12_iso_15223_medical_device_symbols/upper_limit_of_temperature__6a91c0067e17.png",
+          "feature_x": 3.167802,
+          "feature_y": -1.021004
+        }
+      ]
+    }
+  ]
+}

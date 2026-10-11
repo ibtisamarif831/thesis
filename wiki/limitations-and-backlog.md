@@ -5,13 +5,15 @@
 ## Thesis-Level Gaps
 
 - No finalized human-study stimulus subset.
-- No complete participant protocol.
-- No implemented response schemas or collection workflow.
+- An implemented usability-task protocol exists; final research task/conditions, exposure controls and approval remain unfinished.
+- The [recognition usability pilot](icon-recognition-pilot.md) has anonymous response storage and a task-design workflow; final-study response schemas and analysis remain unfinished.
 - No collected human identification/perception scores.
 - No joined human-computer statistical analysis.
 - No implemented quasi-Hamming-style channel-difference explanation.
 
 These are essential to the thesis objective. The existing computer pipeline and dashboard do not substitute for them.
+
+Received nominations are not a consensus set. The `ibtisam` entry is algorithm-assisted and must not be counted as an independent human rater. The recognition prototype shows a large target before smaller candidates, creating exposure/memory effects; the new controlled version assigns candidate sizes but does not yet provide calibrated physical thresholds or an approved final-study analysis. See [meeting decisions](meeting-decisions-and-status.md).
 
 ## Data and Metadata Gaps
 
@@ -25,7 +27,7 @@ These are essential to the thesis objective. The existing computer pipeline and 
 
 ## Feature-System Limitations
 
-- Schema-v2 engineering measurements are implemented, but the frozen two-rater benchmark is not yet rated; the all-family pilot release gate therefore remains blocked.
+- Schema-v2 engineering measurements are implemented, but the frozen two-rater benchmark is not yet rated; the all-family feature-validation pilot release gate therefore remains blocked. The separate task-design pilot does not satisfy or change it.
 - Opaque full-scene or nonuniform-background masks are explicitly flagged uncertain and require overlay review rather than automatic acceptance.
 
 - Active metrics are proxies, not direct measurements of human perception.
@@ -52,7 +54,7 @@ These are essential to the thesis objective. The existing computer pipeline and 
 - Current filtering is by icon set only; category/style filters described in older docs are absent.
 - UI state is not shareable by URL and resets on reload.
 - The app is generated as a large inline HTML/CSS/JS string inside a large Python script.
-- No participant-response or human-computer comparison view exists.
+- Private recognition-pilot summaries/exports exist; a final-study participant analysis or human-computer comparison view remains unfinished.
 
 ## Engineering Limitations
 
@@ -63,7 +65,7 @@ These are essential to the thesis objective. The existing computer pipeline and 
 - Several large scripts combine multiple responsibilities.
 - Dense pairwise similarity and hierarchical clustering are quadratic and are not safe to run over all 28,749 icons without a scalable redesign.
 - Dependency availability varies by local runtime.
-- `extract_paper_text.py` currently fails under the verified Windows Python because `pdfplumber` is absent.
+- An earlier Windows runtime check lacked `pdfplumber`; this is historical environment evidence, not a check of the current macOS runtime.
 - Static visualizations degrade to summary-only when Matplotlib is missing.
 - Some generated/output documentation contains older macOS-specific runtime paths.
 
@@ -75,13 +77,13 @@ The active implementation sequence is maintained in `tasks/tickets/`. The curren
 2. Representative family-feature selection — done; browse and document candidate stimuli next.
 3. Per-icon family score and pairwise family-distance exports.
 4. Controlled groups and matched pairs.
-5. Pilot human identification/similarity study.
-6. Response schemas and comparison analysis.
+5. Review the implemented recognition usability prototype and conduct the approved human pilot; decide whether a separate similarity/discrimination task is needed.
+6. Complete final-study schemas, computer-score joins and comparison analysis; usability storage/exports are already implemented.
 
 Supporting work should include:
 
 - fix or remove nonfunctional Color By UI;
-- reconcile dashboard README with current controls;
+- keep the dashboard README and wiki aligned with current controls;
 - add category/style filters only if still useful and specified;
 - add a dendrogram if hierarchical structure needs explanation;
 - continue the staged [review, feature pipeline, and dashboard refactoring plan](../tasks/review-feature-dashboard-refactoring-plan.md); the characterized shared registry slice is complete, while explicit populations/profiles, pure services, modular browser state/UI, and transactional orchestration remain;

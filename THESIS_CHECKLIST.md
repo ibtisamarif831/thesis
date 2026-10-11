@@ -1,103 +1,58 @@
-# 🎓 Thesis Completion Dashboard & Checklist
+# Thesis completion checklist
 
-Welcome to your thesis workspace! This interactive checklist is designed to help you organize your workflow, maintain momentum, and complete your thesis as efficiently as possible.
+Reviewed: 2026-09-29. Use [Thesis status](THESIS_STATUS.md), [current tasks](tasks/current-thesis-next-steps.md), and [meeting decisions and verified evidence](wiki/meeting-decisions-and-status.md) for current state. This replaces the obsolete June–July calendar; no new completion dates are inferred.
 
-Based on the reference papers in this repository, the thesis is about **how humans identify and perceive icons/glyphs, how those visual factors can be organized into computer-measurable feature families, and how human-study scores compare with computer-derived visual feature scores**.
+The thesis investigates size-dependent icon identification or discrimination within coherent source sets, using literature-informed computer measurements to support stimulus selection and later human-computer comparison. The final task definition and result remain subject to supervisor agreement.
 
-Working thesis statement:
+## Computational foundation
 
-> This thesis investigates how visual factors identified in glyph/icon perception literature can be organized into computer-measurable feature families, and compares those computational feature scores with human identification/perception scores to determine which visual factors influence agreement, mismatch, distinguishability, and confusability between humans and computer-based glyph analysis.
+- [x] Preserve the 13-source canonical corpus and provenance: 28,749 rows.
+- [x] Normalize images and extract features for all canonical rows; verified feature failures are zero.
+- [x] Organize seven literature-informed families and configure one representative per family.
+- [x] Keep semantic meaning, familiarity and culture outside image-derived feature families.
+- [x] Implement dashboard inspection and within-source Grid/Smart map nomination tools.
+- [x] Implement feature-v2 benchmark tooling and mask overlays.
+- [ ] Obtain two independent completed benchmark ratings and pass every feature release gate.
+- [ ] Export final-study per-icon and pairwise scores with the chosen transformations and provenance. Existing 1,038-row similarity reports are historical, not this export.
 
-Scope boundary:
+## Nominations and consensus
 
-- Use visual features that can be computed from the glyph image.
-- Keep semantic meaning, historical/cultural knowledge, familiarity, metaphor, and learnability outside the active computer-vision feature families.
-- Treat metadata as context or a study/control variable, not as computer-based semantic understanding.
+- [x] Receive two supervisor-associated submissions: `droa` 100 icons and `pr77` 80.
+- [x] Save `ibtisam`'s 100-icon algorithm-assisted nomination, with method and receipt.
+- [ ] Compare supervisor selections and the computational nomination separately.
+- [ ] Classify the smaller `test*` records before analysis; do not infer identity or delete them automatically.
+- [ ] Agree and freeze a final same-set stimulus subset, recording stable IDs and reasons.
+- [ ] Include suitable close and distant comparisons without claiming feature closeness proves human confusability.
 
----
+## Research decisions and protocol
 
-## ⚡ Fast-Track Strategy (How to Finish Quickly)
-1. **Scope Narrowly:** Focus on comparing literature-derived visual feature families with human identification/perception scores for the same glyph/icon stimuli.
-2. **Reuse Existing Tools:** Use the existing feature extraction, dashboard, and similarity pipeline as the computer-measurement side of the study.
-3. **Keep The Boundary Clear:** Do not treat semantic meaning, familiarity, or historical/cultural interpretation as computer-vision features.
-4. **Draft Iteratively:** Write the methodology and literature review while refining the feature families and study protocol.
+- [ ] Agree a concise research question and useful result, such as study-grounded design guidance.
+- [ ] Define visual matching, semantic identification or pairwise discrimination as the primary task; keep their outcomes distinct.
+- [ ] Define size conditions, exposure policy and controls for memory/large-image priming.
+- [ ] Specify rendering, interpolation, background, CSS/physical-pixel interpretation and display requirements.
+- [ ] Define sampling, trial order, repetitions, stopping rules, exclusions and missingness.
+- [ ] Decide whether confidence, latency and retrospective qualitative explanations belong in the final study.
+- [ ] Document the analysis and participant-count rationale after design agreement.
+- [ ] Obtain required institutional approval and review consent/privacy materials before research recruitment.
 
----
+## Usability prototype and human evidence
 
-## 📅 Roadmap & Milestones
+- [x] Implement anonymous matching sessions, progressive saves, interruption recovery, private summaries and exports.
+- [x] Keep usability records separate from nominations and the two-rater measurement benchmark.
+- [x] Verify engineering deployment using clearly labeled synthetic pilots.
+- [ ] Review the existing prototype with supervisors: the controlled version shows a large target first, then five fixed-size candidates over 100 recorded trials. Its assigned CSS sizes do not by themselves establish a calibrated threshold.
+- [ ] Run an approved human usability pilot and refine the protocol.
+- [ ] Collect the research participant dataset. Current production checks contain only one synthetic answered practice trial and zero recorded attempts.
+- [ ] Join exact stimulus IDs to computer measurements and analyze size effects, confusions, uncertainty and agreement/mismatch.
+- [ ] Test set-specific versus pooled predictions only where the design supports it; do not guarantee global weights or causal feature attribution.
 
-```mermaid
-gantt
-    title Thesis Fast-Track Timeline
-    dateFormat  YYYY-MM-DD
-    section Phase 1: Foundation
-    Literature Review & Proposal   :active, 2026-06-01, 14d
-    section Phase 2: Design
-    Methodology & Pilot Design     : 2026-06-15, 10d
-    section Phase 3: Build
-    Implementation / Tooling       : 2026-06-25, 15d
-    section Phase 4: Evaluate
-    User Study & Data Analysis     : 2026-07-10, 10d
-    section Phase 5: Writing
-    Thesis Writing & Refinements   : 2026-07-20, 20d
-```
+## Thesis writing
 
----
+- [x] Preserve the Introduction first draft and bibliography in the separate Overleaf repository.
+- [ ] Review the Introduction, final research questions and chapter structure with supervisors.
+- [ ] Replace Related Work, Abstract, Conclusion and Appendix placeholders and add approved methodology/results/discussion chapters.
+- [ ] Compile the latest thesis sources and check citations, references and layout. The existing 13-page PDF predates the latest source commit.
+- [ ] Replace the template submission-date placeholder with a confirmed date.
+- [ ] Complete final editing and supervisor review.
 
-## 📋 Comprehensive Checklist
-
-### 🔍 Phase 1: Literature Review & Problem Definition
-- [ ] **Read and summarize the core repository papers:**
-  - [ ] *A Systematic Review of Experimental Studies on Data Glyphs* (Establish the landscape and common experimental designs).
-  - [ ] *Glyph-based Visualization Foundations, Design Guidelines...* (Learn design taxonomies).
-  - [ ] *The Influence of Contour on Similarity Perception of Star Glyphs* (Understand how visual attributes like contours affect search/similarity tasks).
-  - [ ] *Forsythe - Measuring Icon Complexity Automated* & *Garcia - Development/Validation of Icons Abstractness* (Understand visual complexity metrics: edge count, compression ratio, perimeter-to-area ratio, etc.).
-  - [ ] *Glyph Visualization: A Fail-Safe Design Scheme Based on Quasi-Hamming Distances* (Analyze mathematical error correction/optimization in glyph spacing).
-  - [ ] *Taxonomy-Based Glyph Design with a Case Study...* (Domain-specific glyph application workflow).
-- [ ] **Define your exact thesis question & contribution:**
-  - *Goal:* Write a 1-page summary explaining the literature-derived visual feature families, the computer-measured scores, the human-study scores, and the comparison method.
-- [ ] **Draft Chapter 1 (Introduction) & Chapter 2 (Literature Review):**
-  - *Tip:* Use references directly from the papers' bibliographies to trace relevant work.
-
-### 📐 Phase 2: Methodology & Design
-- [ ] **Define the active visual feature families:**
-  - [ ] Complexity.
-  - [ ] Shape/silhouette.
-  - [ ] Stroke/structure.
-  - [ ] Density/fill.
-  - [ ] Balance/layout.
-  - [ ] Color/contrast.
-  - [ ] Texture.
-- [ ] **Design the human study:**
-  - [ ] Select glyph/icon stimuli from the local datasets.
-  - [ ] Decide what human scores will be recorded, such as identification accuracy, confidence, perceived similarity, perceived complexity, or confusability.
-  - [ ] Ensure the same stimuli have computer-derived visual feature-family scores.
-- [ ] **Write a study protocol / pilot test plan:**
-  - Run a quick pilot test with 1-2 peers to catch confusing instructions, ambiguous stimuli, and data-logging issues before launching the main study.
-
-### 💻 Phase 3: Implementation & Development
-- [ ] **Set up development environment in this repository:**
-  - Create `/src` for code, `/data` for datasets, and `/docs` for draft chapters.
-- [ ] **Build the prototype / metrics calculator / stimulus generator:**
-  - Focus on a Minimum Viable Product (MVP) that outputs clean data: participant responses and the matching computer-derived visual feature-family scores.
-- [ ] **Automate data logging:**
-  - Ensure all experimental runs or metric computations are automatically saved to file to prevent manual data-entry errors.
-
-### 📊 Phase 4: Evaluation & Analysis
-- [ ] **Collect data:**
-  - Recruit participants and record human identification/perception scores for the selected glyph/icon stimuli.
-- [ ] **Perform statistical analysis:**
-  - Compare human scores with computer-derived feature-family scores using correlations, regression, agreement/mismatch analysis, or cluster/nearest-neighbor comparisons.
-- [ ] **Create visualizations:**
-  - Generate plots showing which visual feature families align with or diverge from human identification/perception.
-
-### ✍️ Phase 5: Writing & Finalization
-- [ ] **Draft the remaining chapters:**
-  - [ ] Chapter 3: Methodology (Describe the software/experimental setup).
-  - [ ] Chapter 4: Results (Present data and visualizations).
-  - [ ] Chapter 5: Discussion & Future Work (Interpret what the results mean).
-  - [ ] Chapter 6: Conclusion.
-- [ ] **Self-Edit & Format:**
-  - Verify citation formatting (e.g., APA/IEEE).
-  - Double-check figure numbers, table numbers, and appendix references.
-- [ ] **Submit to supervisor for final review.**
+The two Git repositories remain separate. Commit or push only when explicitly authorized; this documentation audit does neither.

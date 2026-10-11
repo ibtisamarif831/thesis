@@ -10,55 +10,104 @@
 <body>
   <header class="site-header">
     <div>
-      <a href="index.html" class="back-link">← Analysis dashboard</a>
+      <a href="index.html" class="back-link">← Analysis dashboard</a> · <a href="pilot-studio.html" class="back-link">Pilot Studio</a>
       <h1>Study Icon Selection</h1>
-      <p>Choose exactly 20 icons from each dataset for the first study pilot.</p>
     </div>
-    <div class="overall-progress" aria-live="polite"><strong id="overallCount">0 / 100</strong><span>selected</span></div>
+    <p>Choose up to 20 icons from each dataset for the first study pilot.</p>
   </header>
 
-  <section class="study-guidance">
-    <strong>Selection guidance</strong>
-    <p>Make an independent, educated selection. Consider both coverage of the dataset’s visual range and icons that appear visually close or potentially confusable. The research group will compare submissions and agree on the final stimulus set.</p>
-  </section>
+  <nav class="compact-toolbar" aria-label="Study controls">
+    <div class="view-tabs" aria-label="Study workflow">
+      <button id="selectionViewTab" type="button" class="active" aria-selected="true">Select</button>
+      <button id="resultsViewTab" type="button" aria-selected="false">Submissions</button>
+      <button id="pilotViewTab" type="button" aria-selected="false">Pilot results</button>
+    </div>
+    <div id="selectionNavigation" class="selection-navigation">
+      <label class="dataset-picker"><span>Dataset</span><select id="datasetSelect" aria-label="Icon dataset"></select></label>
+      <div class="view-switch" role="group" aria-label="Icon layout">
+        <button id="gridViewButton" type="button" class="active" aria-pressed="true">Grid</button>
+        <button id="mapViewButton" type="button" aria-pressed="false">Smart map</button>
+      </div>
+      <div id="overallProgress" class="overall-progress" aria-live="polite"><strong id="overallCount">0 / 100</strong><span>selected</span></div>
+      <button id="reviewButton" type="button">Review &amp; submit</button>
+    </div>
+  </nav>
 
-  <nav id="datasetTabs" class="dataset-tabs" aria-label="Icon datasets"></nav>
-
-  <main>
-    <section class="toolbar" aria-label="Icon controls">
+  <main id="selectionMain">
+    <section id="gridToolbar" class="toolbar" aria-label="Icon controls">
       <label>Find an icon <input id="searchInput" type="search" placeholder="Search label or ID"></label>
       <label class="toggle"><input id="selectedOnly" type="checkbox"> Show selected only</label>
       <button id="clearDataset" type="button" class="secondary">Clear this dataset</button>
     </section>
+    <section id="mapActions" class="map-actions" aria-label="Smart map controls" hidden>
+      <button id="resetMapButton" type="button" class="secondary">Reset view</button>
+      <button id="downloadMapButton" type="button" class="secondary">Save PNG</button>
+    </section>
     <div id="datasetHeading" class="dataset-heading"></div>
     <div id="iconGrid" class="icon-grid" aria-live="polite"></div>
+    <section id="mapPanel" class="map-panel" hidden>
+      <div id="smartMap" class="smart-map" aria-label="Interactive feature-space icon map"></div>
+      <p>Icons are positioned using a per-dataset 2D PCA projection of the seven thesis feature measurements. Nearby icons have similar measured visual profiles; this is not evidence of human-perceived similarity.</p>
+    </section>
   </main>
 
-  <section class="submission-panel">
-    <div>
-      <h2>Review and submit</h2>
-      <p id="completionMessage">Select 20 icons in every dataset before submitting.</p>
-      <button id="reviewButton" type="button" class="secondary">Review selected icons</button>
-    </div>
-    <form id="submissionForm">
-      <label>Anonymous reviewer code
-        <input id="reviewerCode" name="reviewer_code" required minlength="3" maxlength="40" pattern="[A-Za-z0-9][A-Za-z0-9_-]{2,39}" placeholder="e.g. reviewer-01" autocomplete="off">
-      </label>
-      <label>Shared access code
-        <input id="accessCode" name="access_code" type="password" required autocomplete="off">
-      </label>
-      <label>Optional selection rationale
-        <textarea id="rationale" name="rationale" maxlength="2000" rows="3" placeholder="What guided your choices?"></textarea>
-      </label>
-      <button id="submitButton" type="submit" disabled>Submit 100 selections</button>
-      <p id="submitStatus" class="status" aria-live="polite"></p>
-    </form>
-  </section>
+  <main id="resultsView" class="results-view" hidden>
+    <section class="results-toolbar">
+      <div>
+        <h2>Submitted selections</h2>
+        <p>Enter the private results key to load the latest responses from the database.</p>
+      </div>
+      <form id="resultsAccessForm">
+        <label>Results access key
+          <input id="resultsAccessKey" type="password" required autocomplete="off">
+        </label>
+        <button id="refreshResultsButton" type="submit">Refresh results</button>
+      </form>
+    </section>
+    <p id="resultsStatus" class="results-status" aria-live="polite">Results have not been loaded.</p>
+    <section id="resultsSummary" class="results-summary" hidden></section>
+    <div id="resultsList" class="results-list"></div>
+  </main>
 
-  <dialog id="reviewDialog">
-    <div class="dialog-header"><h2>Your 100 selected icons</h2><button id="closeReview" type="button" class="secondary">Close</button></div>
-    <div id="reviewContent"></div>
+  <main id="pilotView" class="results-view" hidden>
+    <section class="results-toolbar">
+      <div>
+        <h2>Pilot results</h2>
+        <p>Manage saved pilots, participant invitations, results, and exports.</p>
+      </div>
+      <form id="pilotAccessForm">
+        <label>Results access key
+          <input id="pilotAccessKey" type="password" required autocomplete="off">
+        </label>
+        <button id="refreshPilotsButton" type="submit">Refresh pilots</button>
+      </form>
+    </section>
+    <p id="pilotStatus" class="results-status" aria-live="polite">Pilots have not been loaded. Use your private administrator key.</p>
+    <section id="pilotAdminPanel"></section>
+    <p>Create a pilot from a 20-icon dataset in the <a href="study-selection.html?view=results">Submissions tab</a>.</p>
+  </main>
+
+  <dialog id="reviewDialog" class="review-dialog">
+    <div class="dialog-shell">
+      <div class="dialog-header">
+        <div><h2>Review and submit</h2><p id="completionMessage">Select at least one icon to submit.</p></div>
+        <button id="closeReview" type="button" class="secondary" aria-label="Close review">Close</button>
+      </div>
+      <div id="reviewContent" class="dialog-body"></div>
+      <form id="submissionForm" class="dialog-footer">
+        <label>Anonymous reviewer code
+          <input id="reviewerCode" name="reviewer_code" required minlength="3" maxlength="40" pattern="[A-Za-z0-9][A-Za-z0-9_-]{2,39}" placeholder="e.g. reviewer-01" autocomplete="off">
+        </label>
+        <label>Shared access code
+          <input id="accessCode" name="access_code" type="password" required autocomplete="off">
+        </label>
+        <button id="submitButton" type="submit">Submit selections</button>
+        <p id="submitStatus" class="status" aria-live="polite"></p>
+      </form>
+    </div>
   </dialog>
+  <script src="assets/plotly.min.js"></script>
   <script src="study-selection.js"></script>
+<script src="pilot-admin.js" defer></script>
 </body>
 </html>

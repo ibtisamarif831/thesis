@@ -9,5 +9,17 @@
       "database_name": "glyph-study-selections",
       "database_id": "9573db9f-5393-47a6-8fa9-7170ee730706"
     }
-  ]
+  ],
+  "env": {
+    "preview": {
+      "d1_databases": [
+        {
+          "binding": "STUDY_SELECTION_DB",
+          "database_name": "glyph-recognition-pilot-preview",
+          "database_id": "1f508f10-062a-4fd3-bdbc-d41ec5fa5f4a",
+          "migrations_dir": "migrations"
+        }
+      ]
+    }
+  }
 }
